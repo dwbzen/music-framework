@@ -1,0 +1,180 @@
+// ****************************************************************************
+// Command Lines:
+//	mongoimport --type json --collection songs --db test --file songs.json
+//	mongoimport --type json --collection temp --db test --file songs.json
+//
+// Queries/Updates:
+// db.songs.find( {"album" : "Sargeant Pepper's Lonely Hearts Club Band"}, {"name" : 1, "track" : 1} )
+// db.songs.update( {"name" : "Lovely Rita" }, {$set: {"track":10} })
+//
+// JSON format for Songs (Guitar Fake Book)
+// As simple as it can be for fast transcription.
+// A Song is comprised of Sections.
+// A Section is a named set of Measure that is treated as a functional whole.
+// For example, "intro", "verse1", "coda", "bridge" could designate Sections. 
+// The name must be unique within the Song.
+// Melodies
+// A melody has a "name" followed by a "timeSignature" and "key"
+// This is followed by an array of "measure" elements.
+// Each measure is an array of "melody" which has both a "pitch" and "duration"
+// and a pair of booleans if the note is tied to the next note and/or the previous note.
+// The timeSignature structure has beatsPerMeasure, beatType, divisions (per beatType)
+// beatType = 1 (whole note), 2 (half), 4 (quarter) etc. specifies the note value that has the beat
+// divisions is #divisions per beatType
+// For example:  "timeSignature" : { "beatsPerMeasure" : 3, "beatType" : 4, "divisions" : 16 }
+//   represents 3/4 time signature where a quarter note has 16 divisions - that is, 16th notes.
+// The number of divisions must accomodate the shortest duration note needed and also tuplets
+//  since note duration is expressed in units of divisions.
+// If no time signature is specified, the default 
+//	 "timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 96 } is used.
+//
+// Key specifies an octave neutral pitch, such as C, F, Bb, G#, and Major or Minor.
+// For example, "key" : { "pitch" : Bb, "mode" : "minor" }   note that "mode" is not case sensitive.
+// If no key is specified, the default "key" : { "pitch" : C, "mode" : "major" } is used.
+// Each bar is an array of "note" which has  a "pitch", a "duration" and an optional "type"
+// "type", "dot", and "tuplet" are elements of "notation"
+// "type" is whole, half quarter, eighth, 16th, 32nd, 64th.
+// "dot" : n is the number of dots following the note.
+// "tuplet" : <m/n> specifies m notes in the time of n (as 3/2 for a triplet)
+//
+// "pitch" is a letter A-G followed by an optional accidental: # for sharp, b for flat,
+//   and an octave number 0 - 8 (where C/4 = middle C). Octaves start at "C".
+//   A pitch of "0" indicates no pitch sounding - i.e. a rest.
+//
+// "duration" is given terms of basic units (divisions).
+// The "duration" is redundant and can be omitted since it is implied by the time signature and note "type"
+// For example, in 2/2 time with 192 divisions, "type" : "eighth" has a duration of 48 (half = 192, quarter = 96, eighth = 48)
+//
+// Given a  "timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 96 }
+//  a quarter note has "duration" : 24, an eighth note 12, 16th 6, 32nd 3 and 64th 1.
+//  in a triplet of 8th notes, each would have a "duration" : 8 (3 in the time of 2 =  (2 x 12) /3 )
+// Specifying notes as triplets is done with the "notations" elements "type" and "tuplet"
+// Indicating ties to next/previous note as a notations "tie" : start | stop | continue (in keeping with MusicXML)
+//
+// Here an example.
+// Penny Lane (8 measures). The time signature is cut common time, i.e. 2/2 (instead of 4/4).
+// Directions in the music specify Ragtime feeling, so 4 eighth notes are to be played as a quarter + eighth triplet.
+// The melody is transcribed as written, i.e. as 8th notes instead of triplets
+// NOTE that it is perfectly legal to omit measures if there is a cary-over, thus avoiding same chord appearing consecutively.
+// 
+//
+{ "name" : "Penny Lane", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
+  "year" : 1967, "album" : "Magical Mystery Tour",
+  "sections" : 
+  [
+  	{ "name" : "verse-1",
+  		"measures" :
+  		[
+	  		{ "number" : 1,
+			   		"key" : { "name" : "Bb-Major", "mode" : "MAJOR" },
+		 			"timeSignature" : { "beatsPerMeasure" : 2, "beatType" : 2, "divisions" : 192 },
+			  		"harmony" : [ { "chord" : "0", "beat" : 1 } ],
+			  		"melody" : [ 
+	  		 		 	{ "pitch" : "0", "notations" : { "type" : "eighth", "tuplet" : "3/2" } },
+	  		 		 	{ "pitch" : "Bb4", "notations" : { "type" : "eighth", "tuplet" : "3/2" } },
+	  		 		 	{ "pitch" : "C5",  "notations" : { "type" : "eighth", "tuplet" : "3/2"} }
+	  		 		 ]
+			},
+			{ "number" : 2, 
+					"harmony" : [ { "chord" : "Bb", "beat" : 1 },  { "chord" : "Gm", "beat" : 2 } ] },
+				  	"melody" : [ 
+				  		{ "pitch" : "D5", "notations" : { "type" : "eighth" } },
+	  					{ "pitch" : "C5",  "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "A4",  "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "A4",  "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "G4",  "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "F4",  "notations" : { "type" : "eighth" } } 
+	  			    ]
+	  		},
+			{ "number" : 3, 
+					"harmony" : [ { "chord" : "Cm7", "beat" : 1 }, { "chord" : "F7", "beat" : 2 } ]	},
+					"melody" : [ 
+						{ "pitch" : "G4", "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "F4",  "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "Eb4", "notations" : { "type" : "eighth", "tie" : "start" } },
+	  			   		{ "pitch" : "Eb4", "notations" : { "type" : "eighth", "tie" : "stop" } },
+	  			    	{ "pitch" : "F4",  "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "C5",  "notations" : { "type" : "eighth" } } 
+	  			    ] 
+	  		},
+			{ "number" : 4, 
+					"harmony" : [ { "chord" : "Bb", "beat" : 1 },  { "chord" : "Gm", "beat" : 2 } ] },
+					"melody" : [ 
+						{ "pitch" : "D5", "notations" : { "type" : "eighth" } },
+	  					{ "pitch" : "C5",  "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "A4",  "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "F4",  "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "Ab4", "notations" : { "type" : "eighth", "tie" : "start" } } 
+	  			    ] 
+	  		},
+			{ "number" : 5, 
+					"harmony" : [ { "chord" : "Bbm7", "beat" : 1 } ] },
+					"melody" : [ 
+						{ "pitch" : "Ab4","notations" : { "type" : "half", "tie" : "continue" } },
+	  			    	{ "pitch" : "Ab4", "notations" : { "type" : "eighth", "tie" : "stop" } },
+	  			    	{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "C5",  "notations" : { "type" : "eighth" } } 
+	  			    ] 
+	  		},
+			{ "number" : 6, 
+					"harmony" : [ { "chord" : "Gm7-5", "beat" : 1 } ] },
+					"melody" : [ 
+						{ "pitch" : "C5", "notations" : { "type" : "eighth" } },
+	 			   		{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
+	  			    	{ "pitch" : "Bb4", "notations" : { "type" : "quarter" } },
+	  			    	{ "pitch" : "Bb4", "notations" : { "type" : "quarter" } },
+	   			    	{ "pitch" : "C5",  "notations" : { "type" : "eighth" } },
+	   			    	{ "pitch" : "Db5", "notations" : { "type" : "eighth", "tie" : "start" } } 
+	   			    ] 
+	   		},
+			{ "number" : 7, 
+					"harmony" : [ { "chord" : "Gb", "beat" : 1 } ] },
+					"melody" : [ 
+						{ "pitch" : "Db5", "notations" : { "type" : "half", "tie" : "stop" } },
+						{ "pitch" : "0",    "notations" : { "type" : "eighth" } },
+	 			    	{ "pitch" : "Bb4",  "notations" : { "type" : "eighth" } },
+	   			    	{ "pitch" : "C5",   "notations" : { "type" : "eighth" } },
+	   			    	{ "pitch" : "Db5",  "notations" : { "type" : "eighth", "tie" : "start" } } 
+	   			    ] 
+	   		},
+			{ "number" : 8, 
+					"harmony" : [ { "chord" : "F7", "beat" : 1 } ] }
+	   				"melody" : [ 
+	   					{ "pitch" : "Db5","notations" : { "type" : "eighth", "tie" : "stop" } },
+	 			    	{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
+	 			    	{ "pitch" : "C5",  "notations" : { "type" : "quarter" } },
+						{ "pitch" : "0",   "notations" : { "type" : "half" } } 
+					] 
+			}
+	]
+}
+// Harmonies (chords)
+// JSON for Adding chord changes can be done independently of the associated
+// melody (i.e. in a separate file), or can be included in the song with the melody.
+// Either way, the beginning sections are the same: "name" through "measures"
+//
+// In "measure" instead of notes, there is a "harmony" array.
+// A chord is specified using the standard chord symbol (see chord_formulas.json for details).
+// The root is assumed to be the pitch of the chord symbol.
+// For example the root of "Ebm7" is "Eb". The lowest note to play (inversion)
+// is specified using a slash chord as in "Ebm7/Gb"
+// Duration is not specified, but the beat in the measure where the chord appears is specified.
+// If the chord is sounded on a particular beat, the beat number is given : 1, 2 and so on
+// If it's sounded off the beat, the beat is given as <beat number>, <division> 
+// For example, given "timeSignature" : { "beatsPerMeasure" : 2, "beatType" : 2, "divisions" : 192 }
+// which is 2/2 time, a chord sounding on the first beat is "beat" : 1, the second beat "beat" : 2 and so forth.
+// No "division" is needed when the chord appears on the beat.
+// If the chord change is on the 2nd quarter note say, the beat would be: "beat" : 1, "division" : 48 
+// The harmony of the first 8 measures of "Penny Lane" follows. Note that the "0" chord is no chord sounding
+// as in the first pickup measure of the song.
+// See "Penny Lane.json"
+//
+// The same thing can be achieved by embedding each "harmony" array in the measure along with the melody.
+// See "Fixing A Hole.json"
+//

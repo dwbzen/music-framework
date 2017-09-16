@@ -1,0 +1,61 @@
+{ "name" : "Penny Lane", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
+  "year" : 1967, "album" : "Magical Mystery Tour",
+  "sections" : 
+  [
+  	{ "name" : "verse-1",
+  		"measures" :
+  		[
+	  		{ "number" : 1,
+			   		"key" : { "name" : "Bb-Major", "mode" : "MAJOR" },
+		 			"timeSignature" : { "beatsPerMeasure" : 2, "beatType" : 2, "divisions" : 192 },
+			  		"harmony" : [ { "chord" : "0", "beat" : 1 } ]
+			},
+			{ "number" : 2, "harmony" : [ { "chord" : "Bb", "beat" : 1 },  { "chord" : "Gm", "beat" : 2 } ] 	},
+			{ "number" : 3, "harmony" : [ { "chord" : "Cm7", "beat" : 1 }, { "chord" : "F7", "beat" : 2 } ]		},
+			{ "number" : 4, "harmony" : [ { "chord" : "Bb", "beat" : 1 },  { "chord" : "Gm", "beat" : 2 } ] 	},
+			{ "number" : 5, "harmony" : [ { "chord" : "Bbm7", "beat" : 1 } ] },
+			{ "number" : 6, "harmony" : [ { "chord" : "Gm7-5", "beat" : 1 } ] },
+			{ "number" : 7, "harmony" : [ { "chord" : "Gb", "beat" : 1 } ] },
+			{ "number" : 8, "harmony" : [ { "chord" : "F7", "beat" : 1 } ] }
+		]
+	},
+	{ "name" : "verse-2-3-4",
+		"measures" :
+		[
+			{ "number" : 1, "harmony" : [ { "chord" : "Bb", "beat" : 1 },  { "chord" : "Gm", "beat" : 2 } ] },
+			{ "number" : 2, "harmony" : [ { "chord" : "Cm7", "beat" : 1 }, { "chord" : "F7", "beat" : 2 } ]	},
+			{ "number" : 3, "harmony" : [ { "chord" : "Bb", "beat" : 1 },  { "chord" : "Gm", "beat" : 2 } ] },
+			{ "number" : 4, "harmony" : [ { "chord" : "Bbm7", "beat" : 1 } ] },
+			{ "number" : 5, "harmony" : [ { "chord" : "Gm7-5", "beat" : 1 } ] },
+			{ "number" : 6, "harmony" : [ { "chord" : "Gb", "beat" : 1 } ] },
+			{ "number" : 7, "harmony" : [ { "chord" : "F7", "beat" : 1 } ] },
+			{ "number" : 8, "harmony" : [ { "chord" : "Eb", "beat" : 1 } ] }
+		]
+	},
+	{ "name" : "chorus",
+		"measures" :
+		[
+			{ "number" : 1, "harmony" : [ { "chord" : "Ab", "beat" : 1 } ] },
+			{ "number" : 2, "harmony" : [ { "chord" : "Cm", "beat" : 1 } ] },
+			{ "number" : 3, "harmony" : [ { "chord" : "Eb", "beat" : 1 } ] },
+			{ "number" : 4, "harmony" : [ { "chord" : "Ab", "beat" : 1 } ] },
+			{ "number" : 5, "harmony" : [ { "chord" : "Cm", "beat" : 1 } ] },
+			{ "number" : 6, "harmony" : [ { "chord" : "Db", "beat" : 1 } ] },
+			{ "number" : 7, "harmony" : [ { "chord" : "Cdim7", "beat" : 1 }, { "chord" : "F7", "beat" : 2 } ] }
+		]
+	},
+	{ "name" : "coda",
+		"measures" :
+		[
+			{ "number" : 1, "harmony" : [ { "chord" : "Cdim7", "beat" : 1 }, { "chord" : "F7", "beat" : 2 } ] },
+			{ "number" : 2, "harmony" : [ { "chord" : "Bb", "beat" : 1 } ] },
+			{ "number" : 3, "harmony" : [ { "chord" : "Dm", "beat" : 1 } ] },
+			{ "number" : 4, "harmony" : [ { "chord" : "Eb", "beat" : 1 } ] },
+			{ "number" : 6, "harmony" : [ { "chord" : "Bb", "beat" : 1 } ] },
+			{ "number" : 7, "harmony" : [ { "chord" : "Dm", "beat" : 1 } ] },
+			{ "number" : 8, "harmony" : [ { "chord" : "Eb", "beat" : 1 } ] },
+			{ "number" : 10, "harmony" : [ { "chord" : "Bb", "beat" : 1 } ] }
+		]
+	}
+  ]
+}
