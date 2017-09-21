@@ -1,4 +1,4 @@
-package music.junit;
+package junit;
 
 import org.junit.Test;
 import org.mongodb.morphia.Morphia;

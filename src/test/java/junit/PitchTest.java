@@ -1,4 +1,4 @@
-package music.junit;
+package junit;
 
 import java.util.Map;
 import java.util.TreeMap;

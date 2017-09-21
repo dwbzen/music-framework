@@ -1,4 +1,4 @@
-package music.test;
+package test;
 
 import music.element.Interval;
 

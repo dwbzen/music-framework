@@ -1,4 +1,4 @@
-package music.junit;
+package junit;
 
 import java.util.ArrayList;
 import java.util.List;

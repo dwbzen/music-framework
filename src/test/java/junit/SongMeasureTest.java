@@ -1,4 +1,4 @@
-package music.junit;
+package junit;
 
 import static org.junit.Assert.assertTrue;
 

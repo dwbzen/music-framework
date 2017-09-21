@@ -1,4 +1,4 @@
-package music.junit;
+package junit;
 
 import junit.framework.TestCase;
 import music.action.PitchScaler;
