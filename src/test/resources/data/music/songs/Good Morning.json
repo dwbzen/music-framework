@@ -1,0 +1,108 @@
+{ "name" : "Good Morning", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
+  "year" : 1967, "album" : "Sgt. Pepper's Lonely Hearts Club Band", "track" : 11,
+    "sections" : 
+  	[
+  		{ "name" : "intro", "number" : 10, "repeat" : 1, "next" : [ "verse" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "A-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }  ]
+				},
+				{ "number" : 2, "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }  ]	},
+				{ "number" : 3, "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }  ]	},
+				{ "number" : 4, "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }  ]	}
+			]
+		},
+  		{ "name" : "verse", "number" : 20, "repeat" : 3, "next" : [ "link1", "link2", "coda" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "A-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 5, "beatType" : 4, "divisions" : 240 },
+				  		"harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "G", "beat" : 4 }  ]
+				},
+				{ "number" : 2, "harmony" : [ { "chord" : "A", "beat" : 4 }  ]	},
+				{ "number" : 3, "harmony" : [ { "chord" : "G", "beat" : 4 }  ]	},
+		  		{ "number" : 4,
+			 			"timeSignature" : { "beatsPerMeasure" : 3, "beatType" : 4, "divisions" : 144 },
+				  		"harmony" : [ { "chord" : "G", "beat" : 1 }  ]
+				},
+		  		{ "number" : 5,
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "A", "beat" : 1 }  ]
+				},
+		  		{ "number" : 6,
+			 			"timeSignature" : { "beatsPerMeasure" : 5, "beatType" : 4, "divisions" : 240 },
+				  		"harmony" : [ { "chord" : "D", "beat" : 1 }  ]
+				},
+		  		{ "number" : 7,
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "E", "beat" : 1 }, { "chord" : "E7", "beat" : 1 }  ]
+				},
+		  		{ "number" : 8,
+			 			"timeSignature" : { "beatsPerMeasure" : 3, "beatType" : 4, "divisions" : 144 },
+				  		"harmony" : [ { "chord" : "A", "beat" : 1 }  ]
+				},
+				{ "number" : 9,  "goto" : "3rd time, coda", "harmony" : [ { "chord" : "G", "beat" : 4 }  ]	},
+		  		{ "number" : 10,
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "A", "beat" : 1 },  { "chord" : "D", "beat" : 3 } ]
+				},
+				{ "number" : 11, "harmony" : [ { "chord" : "A", "beat" : 4 }  ]	}
+			]
+		},
+  		{ "name" : "link1", "number" : 30, "repeat" : 1, "next" : [ "verse" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "A-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 5, "beatType" : 4, "divisions" : 240 },
+				  		"harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "G", "beat" : 4 }  ]
+				},
+				{ "number" : 2, "harmony" : [ { "chord" : "A", "beat" : 4 }  ]	},
+				{ "number" : 3, "harmony" : [ { "chord" : "G", "beat" : 4 }  ]	},
+		  		{ "number" : 4,
+			 			"timeSignature" : { "beatsPerMeasure" : 3, "beatType" : 4, "divisions" : 144 },
+				  		"harmony" : [ { "chord" : "G", "beat" : 1 }  ]
+				},
+		  		{ "number" : 5,
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }   ]
+				},
+		  		{ "number" : 6,  "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }   ]	},
+		  		{ "number" : 7,  "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }   ]	},
+		  		{ "number" : 8,  "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }   ]	},
+		  		{ "number" : 9,  "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }   ]	},
+		  		{ "number" : 10, "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }   ]	},
+		  		{ "number" : 11, "harmony" : [ { "chord" : "A", "beat" : 1 }   ]	}
+			]
+		},
+  		{ "name" : "link2", "number" : 40, "repeat" : 1, "next" : [ "verse" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "A-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }  ]
+				},
+		  		{ "number" : 2,  "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }   ]	},
+		  		{ "number" : 2,  "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }   ]	},
+		  		{ "number" : 4, "harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }   ]	},
+		  		{ "number" : 5, "harmony" : [ { "chord" : "A", "beat" : 1 }   ]	}
+			]
+		},
+  		{ "name" : "coda", "number" : 50, "repeat" : 1, "next" : [ "verse" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "A-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "A", "beat" : 1 }, { "chord" : "D", "beat" : 3 }  ]
+				},
+		  		{ "number" : 2,  "harmony" : [ { "chord" : "A", "beat" : 1 }   ]	}
+			]
+		}	
+  	]
+}

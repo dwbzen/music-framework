@@ -1,0 +1,89 @@
+{ "name" : "She's Leaving Home", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
+  "year" : 1967, "album" : "Sgt. Pepper's Lonely Hearts Club Band", "track" : 6,
+    "sections" :
+    [
+      	{ "name" : "intro", "repeat" : 1, "next" : [ "verse" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "E-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 3, "beatType" : 4, "divisions" : 144 },
+				  		"harmony" : [ { "chord" : "E", "beat" : 1 } ]
+				},
+				{ "number" : 4, "harmony" : [ { "chord" : "E", "beat" : 1 } ] }
+			]
+		},
+      	{ "name" : "verse", "repeat" : 2, "next" : [ "signo", "signo" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "E-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 3, "beatType" : 4, "divisions" : 144 },
+				  		"harmony" : [ { "chord" : "E", "beat" : 1 } ]
+				},
+				{ "number" : 2, "harmony" : [ { "chord" : "Bm", "beat" : 1 } ] 		},
+				{ "number" : 3, "harmony" : [ { "chord" : "F#m7", "beat" : 1 } ] 	},
+				{ "number" : 5, "harmony" : [ { "chord" : "C#m7", "beat" : 1 } ]	},
+				{ "number" : 7, "harmony" : [ { "chord" : "F#7", "beat" : 1 } ] 	},
+				{ "number" : 9, "harmony" : [ { "chord" : "B11", "beat" : 1 } ] 	},
+				{ "number" : 11, "harmony" : [ { "chord" : "B9", "beat" : 1 } ] 	},
+				{ "number" : 13, "harmony" : [ { "chord" : "B11", "beat" : 1 } ] 	},
+				{ "number" : 15, "harmony" : [ { "chord" : "B9", "beat" : 1 } ] 	}
+			]
+		},
+      	{ "name" : "signo", "repeat" : 3, "next" : [ "chorus", "chorus", "chorus" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "E-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 3, "beatType" : 4, "divisions" : 144 },
+				  		"harmony" : [ { "chord" : "E", "beat" : 1 } ]
+				},
+				{ "number" : 2, "harmony" : [ { "chord" : "Bm", "beat" : 1 } ] 	},
+				{ "number" : 3, "harmony" : [ { "chord" : "F#m7", "beat" : 1 } ] 	},
+				{ "number" : 5, "harmony" : [ { "chord" : "C#m", "beat" : 1 } ] 	},
+				{ "number" : 7, "harmony" : [ { "chord" : "F#7", "beat" : 1 } ] 	},
+				{ "number" : 9, "harmony" : [ { "chord" : "B11", "beat" : 1 } ] 	},
+				{ "number" : 11, "harmony" : [ { "chord" : "B9", "beat" : 1 } ] 	},
+				{ "number" : 13, "harmony" : [ { "chord" : "B11", "beat" : 1 } ] 	},
+				{ "number" : 15, "harmony" : [ { "chord" : "B9", "beat" : 1 } ] 	},
+				{ "number" : 16, "harmony" : [ { "chord" : "B7", "beat" : 1 } ] 	}
+			]
+		},
+      	{ "name" : "chorus", "repeat" : 3, "next" : [ "verse", "signo", "signo" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "E-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 3, "beatType" : 4, "divisions" : 144 },
+				  		"harmony" : [ { "chord" : "E", "beat" : 1 } ]
+				},
+				{ "number" : 2, "harmony" : [ { "chord" : "E", "beat" : 1 } ] 	},
+				{ "number" : 11, "harmony" : [ { "chord" : "Bm6", "beat" : 1 } ] 	},
+				{ "number" : 13, "harmony" : [ { "chord" : "C#m", "beat" : 1 } ] 	},
+				{ "number" : 15, "harmony" : [ { "chord" : "F#7", "beat" : 1 } ] 	},
+				{ "number" : 17, "harmony" : [ { "chord" : "C#m", "beat" : 1 } ] 	},
+				{ "number" : 19, "harmony" : [ { "chord" : "F#7", "beat" : 1 } ] 	}
+			]
+		},
+      	{ "name" : "coda", "repeat" : 0,
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "E-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 3, "beatType" : 4, "divisions" : 144 },
+				  		"harmony" : [ { "chord" : "C#m", "beat" : 1 } ]
+				},
+				{ "number" : 3, "harmony" : [ { "chord" : "F#7", "beat" : 1 } ] 	},
+				{ "number" : 5, "harmony" : [ { "chord" : "C#m7", "beat" : 1 } ] 	},
+				{ "number" : 7, "harmony" : [ { "chord" : "F#7", "beat" : 1 } ] 	},
+				{ "number" : 9, "harmony" : [ { "chord" : "F#7", "beat" : 1 }, { "chord" : "C#m", "beat" : 2 } ] 	},
+				{ "number" : 12, "harmony" : [ { "chord" : "Cm", "beat" : 1 }, { "chord" : "F#7", "beat" : 2 } ] 	},
+				{ "number" : 14, "harmony" : [ { "chord" : "A", "beat" : 1 } ] 	},
+				{ "number" : 16, "harmony" : [ { "chord" : "E", "beat" : 1 } ] 	}
+			]
+		}
+	]
+}
+		
+		

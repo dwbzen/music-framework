@@ -1,0 +1,76 @@
+{ "name" : "Lovely Rita", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
+  "year" : 1967, "album" : "Sgt. Pepper's Lonely Hearts Club Band",  "track" : 10, 
+  "performanceKey" :  { "name" : "E-Major", "mode" : "MAJOR" },
+    "sections" : 
+  	[
+  		{ "name" : "intro-one", "repeat" : 1, "next" : [ "intro-two" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "Eb-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "Bb", "beat" : 1 } ]
+				},
+				{ "number" : 2, "harmony" : [ { "chord" : "Ab", "beat" : 1 } ] },
+				{ "number" : 3, "harmony" : [ { "chord" : "Eb", "beat" : 1 } ] },
+				{ "number" : 4, "harmony" : [ { "chord" : "Bb", "beat" : 1 } ] }
+			]
+		},
+  		{ "name" : "intro-two", "repeat" : 1, "next" : [ "verse" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "Eb-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Db", "beat" : 3 }, { "chord" : "Ab", "beat" : 4 } ]
+				},
+				{ "number" : 2, "harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Bb", "beat" : 3 } ] },
+				{ "number" : 3, "harmony" : [ { "chord" : "Cm", "beat" : 1 }, { "chord" : "F7", "beat" : 3 } ] },
+				{ "number" : 4, "harmony" : [ { "chord" : "Bb7", "beat" : 1 }, { "chord" : "Fm7", "beat" : 2 }, 
+											  { "chord" : "Bb7", "beat" : 3 }, { "chord" : "Fm7", "beat" : 4 } ] }
+			]
+		},
+  		{ "name" : "verse", "repeat" : 2, "next" : [ "verse", "coda" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "Eb-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Ab", "beat" : 3 } ]
+				},
+				{ "number" : 2, "harmony" : [ { "chord" : "Db", "beat" : 1 }, { "chord" : "Gb", "beat" : 3 } ] },
+				{ "number" : 3, "harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Bb7", "beat" : 3 } ] },
+				{ "number" : 4, "harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Ab", "beat" : 3 } ] },
+				{ "number" : 5, "harmony" : [ { "chord" : "Db", "beat" : 1 }, { "chord" : "Gb", "beat" : 3 } ] },
+				{ "number" : 6, "harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Bb7", "beat" : 3 } ] },
+				{ "number" : 7, "harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Cm", "beat" : 2 }, 
+											  { "chord" : "F7", "beat" : 3 }, { "chord" : "Bb7", "beat" : 4 } ] },
+				{ "number" : 8, "harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Db", "beat" : 3 }, { "chord" : "Ab", "beat" : 4 } ] },
+				{ "number" : 9, "harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Bb", "beat" : 3 } ] },
+				{ "number" : 10, "goto" : "2nd time, coda", "harmony" : [ { "chord" : "Cm", "beat" : 1 }, { "chord" : "F7", "beat" : 3 } ] },
+				{ "number" : 11, "harmony" : [ { "chord" : "Bb", "beat" : 1 }, { "chord" : "Ab", "beat" : 3 } ] },
+				{ "number" : 12, "harmony" : [ { "chord" : "Gm", "beat" : 1 }, { "chord" : "Fm", "beat" : 3 } ] },
+				{ "number" : 13, "harmony" : [ { "chord" : "Fm7", "beat" : 1 } ] },
+				{ "number" : 14, "harmony" : [ { "chord" : "Bb", "beat" : 1 }  ] }				
+			]
+		},
+		{ "name" : "coda", "repeat" : 0,
+			"measures" :
+			[
+				{ "number" : 1, 
+						"key" : { "name" : "Eb-Major", "mode" : "MAJOR" },
+						"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+						"harmony" : [ { "chord" : "Bb7", "beat" : 1 },  { "chord" : "Fm7", "beat" : 3 } ] 	},
+				{ "number" : 2, "harmony" : [ { "chord" : "Ab", "beat" : 1 } ]  },
+				{ "number" : 3, "harmony" : [ { "chord" : "Eb", "beat" : 1 } ] },
+				{ "number" : 4, "harmony" : [ { "chord" : "Bb", "beat" : 1 } ] },
+				{ "number" : 5, "harmony" : [ { "chord" : "Bb7", "beat" : 1 } ] },
+				{ "number" : 6, "harmony" : [ { "chord" : "Ab", "beat" : 1 } ] },
+				{ "number" : 7, "harmony" : [ { "chord" : "Eb", "beat" : 1 } ] },
+				{ "number" : 8, "harmony" : [ { "chord" : "Bb", "beat" : 1 } ] },
+				{ "number" : 9, "harmony" : [ { "chord" : "Ab7sus4", "beat" : 1 } ] },
+				{ "number" : 10, "harmony" : [ { "chord" : "Eb", "beat" : 1 } ] }
+			]
+		}
+	]
+}
