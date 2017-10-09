@@ -10,12 +10,6 @@ import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bson.Document;
-import org.mongodb.morphia.Morphia;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCursor;
 
 import math.Matrix;
 import music.action.ScaleManager;
@@ -32,13 +26,9 @@ import music.element.Pitch;
 import music.element.PitchClass;
 import music.element.PitchRange;
 import music.element.Scale;
-import music.element.ScaleFormula;
-import music.element.ScaleType;
 import music.element.Score;
 import music.element.ScorePartEntity;
 import music.instrument.Instrument;
-import util.mongo.Find;
-import util.music.FileDataSource;
 
 /**
  * A KeyTransformer alters all pitches by "rounding" up or down to the
@@ -75,8 +65,6 @@ public class ScaleTransformer extends Transformer {
 	 */
 	static Pitch B3 = new Pitch("B3");
 	static Pitch D4 = new Pitch("D4");
-	
-	private Morphia morphia = new Morphia();
 	
 	private Scale transformScale = null;
 	private String scaleName = null;
@@ -130,10 +118,10 @@ public class ScaleTransformer extends Transformer {
 	}
 	
 	/*
-	 * Initialize those pesky percussion staff fake pitches - 2,3,4 and 5 line (#lines is the key)
+	 * Initialize those pesky percussion staff fake pitches - 1, 2,3,4 and 5 line (#lines is the key)
 	 */
 	static {
-		for(int nlines=2; nlines<=5; nlines++) {
+		for(int nlines=1; nlines<=5; nlines++) {
 			List<Pitch> pitchList = new ArrayList<Pitch>();
 			pitchList.add(new Pitch("E4"));
 			pitchList.add(new Pitch("G4"));
@@ -613,7 +601,7 @@ public class ScaleTransformer extends Transformer {
 	 *  It is not necessary to map every pitch in the Chromatic range C0 to C9.
 	 *  For these types of scales the discrete mapping is done, well, discretely.
 	 *  
-	 *  Handles 5-line percussion staff and 2- line percussion staff
+	 *  Handles 5-line, 2-line, and 1-line percussion staffs
 	 *  
 	 */
 	protected void createTransformMapsForUnpitched() {
@@ -629,6 +617,10 @@ public class ScaleTransformer extends Transformer {
 			else if(p.compareTo(pitchRange.getHigh()) > 0) {
 				transformMapUP.put(p, pitchRange.getHigh());
 				transformMapDOWN.put(p, pitchRange.getHigh());
+			}
+			else if(instrument.getPitchClass().equals(PitchClass.DISCRETE_1LINE)) {
+				transformMapUP.put(p, E4);
+				transformMapDOWN.put(p, E4);
 			}
 			else if(instrument.getPitchClass().equals(PitchClass.DISCRETE_2LINE)) {
 				// B3 to D4 for PitchClass.DISCRETE_2LINE

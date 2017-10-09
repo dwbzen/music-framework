@@ -72,6 +72,8 @@ public interface IScaleFormula extends Serializable, IMapped<String> {
 	
 	/**
 	 * Creates a List of Pitch for a Scale with a given formula and root
+	 * A Scale may consist of a single note. In that case the formula is [0].
+	 * 
 	 * @param formula an int[] scale formula
 	 * @param root root Pitch of the scale
 	 * @param key optional associated Key. If != null, it determines accidental preference - # or b
@@ -87,15 +89,17 @@ public interface IScaleFormula extends Serializable, IMapped<String> {
 			(key != null && key.getSignature() != null && key.getSignature().length > 0) ? key.getSignature()[0].getAlteration() : 0;
 		for(int i: formula) {
 			next = new Pitch(current);
-			next.increment(i);
-			int alt = next.getAlteration();
-			if(alt != 0 && alt != preference) {
-				/*
-				 * amounts to getting the enharmonic equivalent
-				 * so D# same as Eb (preference -1)
-				 * Db same as C# (preference 1)
-				 */
-				next.setEnharmonicEquivalent();
+			if( i > 0) {
+				next.increment(i);
+				int alt = next.getAlteration();
+				if(alt != 0 && alt != preference) {
+					/*
+					 * amounts to getting the enharmonic equivalent
+					 * so D# same as Eb (preference -1)
+					 * Db same as C# (preference 1)
+					 */
+					next.setEnharmonicEquivalent();
+				}
 			}
 			plist.add(next);
 			current = next;
@@ -186,6 +190,10 @@ public interface IScaleFormula extends Serializable, IMapped<String> {
 	public static final int[] UNPITCHED_2_STEPS = {3 };	// B, D  for 2-line percussion
 	public static final ScaleFormula UNPITCHED_2_SCALE_FORMULA = 
 			new ScaleFormula("2-Line Unpitched Percussion", "unpitched", UNPITCHED_2_STEPS);
+	
+	public static final int[] UNPITCHED_1_STEPS = {0 };	// E4  for single-line percussion
+	public static final ScaleFormula UNPITCHED_1_SCALE_FORMULA = 
+			new ScaleFormula("1-Line Unpitched Percussion", "unpitched", UNPITCHED_1_STEPS);
 	
 	/**
 	 * { "name" : "Hirajoshi Japan" , "groups" : [ "hirajoshi"] , "formula" : [ 2 , 1 , 4 , 1 , 4] , "size" : 5}

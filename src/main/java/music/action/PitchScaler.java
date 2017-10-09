@@ -48,6 +48,9 @@ public class PitchScaler extends Scaler {
 	 * where m = (stepRange - 1 ) / maxVal
 	 * and x is the number to scale (which must satisfy minval <= x <= maxVal)
 	 * 
+	 * An instrument with a single-note range, such as Cymbals or Snare Drum,
+	 * is special cased since the step range is 0.
+	 * 
 	 * @param num a Number in the range [maxVal, minVal]
 	 * @return a Pitch in the PitchRange of the associated Instrument suitably rounded
 	 */
@@ -57,7 +60,8 @@ public class PitchScaler extends Scaler {
 			drange = maxVal  - minVal ;
 		}
 		PitchRange pr = instrument.getPitchRange();
-		int stepRange = pr.getStepRange() - 1;
+		int sr = pr.getStepRange();
+		int stepRange =sr == 0 ? 0 : sr - 1;
 		double m = stepRange/drange.doubleValue();
 		double d = m * ( num.doubleValue() - minVal.doubleValue());
 		p = round(d);

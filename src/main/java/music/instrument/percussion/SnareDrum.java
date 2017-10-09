@@ -26,7 +26,7 @@ public class SnareDrum extends Instrument {
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(40);
 		setMidiProgram(40);
-		setPitchClass(PitchClass.UNPITCHED);
+		setPitchClass(PitchClass.DISCRETE_1LINE);
 	}
 
 	@Override

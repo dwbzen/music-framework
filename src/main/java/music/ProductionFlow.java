@@ -56,7 +56,7 @@ import util.music.RhythmScaleFactory;
  *  -analyze	: display score analysis upon completion
  *  -rand		: random data selection
  *  -xml		: create musicXML scores
- *  -file		: output XML file
+ *  -file		: output MusicXML file
  * 
  * Analysis usage: ProductionFlow -measures 20 -analyze -analyzeFile "C:\\data\\music\\testScore.csv" -rand
  * This will create a Score instance and analyze pitches and durations.

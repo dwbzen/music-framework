@@ -269,7 +269,7 @@ public class MusicXMLHelper {
 					StaffDetails _staffDetails = new StaffDetails();
 					_staffDetails.setNumber(BigInteger.ONE);
 					_staffDetails.setPrintObject(YesNo.YES);
-					if(instrument.getPitchClass()==PitchClass.UNPITCHED) {
+					if(instrument.getPitchClass()==PitchClass.UNPITCHED || instrument.getPitchClass()==PitchClass.DISCRETE_1LINE) {
 						_staffDetails.setStaffLines(BigInteger.ONE);
 					}
 					else if(instrument.getPitchClass()==PitchClass.DISCRETE_2LINE) {
@@ -356,6 +356,7 @@ public class MusicXMLHelper {
 		com.audiveris.proxymusic.Step _step = null;
 		switch(pitchClass) {
 		case UNPITCHED:
+		case DISCRETE_1LINE:
 		case DISCRETE_2LINE:
 			octave = note.getPitch().getOctave();
 			_step = getStep(note);

@@ -289,6 +289,8 @@ public class Scale implements IJson, INameable  {
 			new Scale("3-Line Unpitched Percussion", DISCRETE, ScaleType.DISCRETE_3LINE, Pitch.E, IScaleFormula.UNPITCHED_3_SCALE_FORMULA);
 	public static final Scale UNPITCHED_2_STEP_SCALE =
 			new Scale("2-Line Unpitched Percussion", DISCRETE, ScaleType.DISCRETE_2LINE, Pitch.B, IScaleFormula.UNPITCHED_2_SCALE_FORMULA);
+	public static final Scale UNPITCHED_1_STEP_SCALE =
+			new Scale("1-Line Unpitched Percussion", DISCRETE, ScaleType.DISCRETE_1LINE, Pitch.E, IScaleFormula.UNPITCHED_1_SCALE_FORMULA);
 	
 	static int[] chromaticSteps = {1,1,1,1,1,1,1,1,1,1,1};
 	static int[] fullRangeChromaticSteps = new int[Pitch.C0.difference(Pitch.C9) ];		// 108 pitches

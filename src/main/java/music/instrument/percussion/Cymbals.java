@@ -26,7 +26,7 @@ public class Cymbals extends Instrument {
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(49);	// Crash Cymbals 1
 		setMidiProgram(49);
-		setPitchClass(PitchClass.UNPITCHED);
+		setPitchClass(PitchClass.DISCRETE_1LINE);
 	}
 	
 	@Override
