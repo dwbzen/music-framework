@@ -1,16 +1,15 @@
 package music.element.song;
 
-import music.action.SongAnalyzer;
-import music.action.SongAnalyzer.KeyType;
-import music.element.Key;
-import music.element.Pitch;
-import music.element.Scale;
-
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Property;
 import org.mongodb.morphia.annotations.Transient;
 
+import music.action.SongAnalyzer;
+import music.action.SongAnalyzer.KeyType;
+import music.element.Key;
+import music.element.Pitch;
+import music.element.Scales;
 import util.IJson;
 import util.INameable;
 
@@ -65,7 +64,7 @@ public class Harmony implements IJson, INameable {
 		else if(keyType.equals(KeyType.FORMULA_INTERVAL)) {
 			if(harmonyChord != null && originalKey != null) {
 				int step = harmonyChord.getRoot().getChromaticScaleDegree(originalKey);
-				key = Scale.getScaleDegreeFromChromaticStep(originalKey, step) +  
+				key = Scales.getScaleDegreeFromChromaticStep(originalKey, step) +  
 							"_" + harmonyChord.getChordFormula().getSymbol();
 			}
 			else {

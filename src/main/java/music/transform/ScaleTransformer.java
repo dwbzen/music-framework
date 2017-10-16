@@ -26,6 +26,7 @@ import music.element.Pitch;
 import music.element.PitchClass;
 import music.element.PitchRange;
 import music.element.Scale;
+import music.element.Scales;
 import music.element.Score;
 import music.element.ScorePartEntity;
 import music.instrument.Instrument;
@@ -60,11 +61,7 @@ public class ScaleTransformer extends Transformer {
 	static Pitch B4 = new Pitch("B4");
 	static Pitch D5 = new Pitch("D5");
 	static Pitch F5 = new Pitch("F5");
-	/**
-	 * For 2-line percussion staff
-	 */
-	static Pitch B3 = new Pitch("B3");
-	static Pitch D4 = new Pitch("D4");
+
 	
 	private Scale transformScale = null;
 	private String scaleName = null;
@@ -490,7 +487,7 @@ public class ScaleTransformer extends Transformer {
 	 * Creates transform maps - transformMapUP and transformMapDOWN  for pitched instruments. 
 	 */
 	protected void createTransformMaps() {
-		if(transformScale.getMode() != null && transformScale.getMode().equals(Scale.DISCRETE)) {
+		if(transformScale.getMode() != null && transformScale.getMode().equals(Scales.DISCRETE)) {
 			createTransformMapsForUnpitched();
 			return;
 		}
@@ -503,7 +500,7 @@ public class ScaleTransformer extends Transformer {
 		diffMod12 = new Matrix<Integer>(12, scaleSize);
 		diffRaw = new Matrix<Integer>(12, scaleSize);
 	
-		List<Pitch> chromaticPitches =  Scale.CHROMATIC_12TONE_SCALE.getPitches();
+		List<Pitch> chromaticPitches =  Scales.CHROMATIC_12TONE_SCALE.getPitches();
 		int irow = 0; int icol = 0;
 		// Mod base 12 of the pitch difference (source note to scale note)
 		for(Pitch pitch : chromaticPitches) {
@@ -570,7 +567,7 @@ public class ScaleTransformer extends Transformer {
 		 * finally expand the two transform maps and the octave adjust map
 		 * to cover the entire pitch range of C0 to C9
 		 */
-		Scale cscale = Scale.FULL_RANGE_CHROMATIC_SCALE;
+		Scale cscale = Scales.FULL_RANGE_CHROMATIC_SCALE;
 		for(Pitch p : cscale.getPitches()) {
 			Pitch pNeutral = new Pitch(p.getStep(), -1, p.getAlteration());
 			int octaveAdj = octaveAdjustMapTemp.get(pNeutral);
@@ -606,7 +603,7 @@ public class ScaleTransformer extends Transformer {
 	 */
 	protected void createTransformMapsForUnpitched() {
 		PitchRange pitchRange = instrument.getPitchRange();		// not real pitches - just lines on a percussion staff
-		for(Pitch p : Scale.FULL_RANGE_CHROMATIC_SCALE.getPitches()) {
+		for(Pitch p : Scales.FULL_RANGE_CHROMATIC_SCALE.getPitches()) {
 			int rangeStep = p.getRangeStep();
 			Pitch mappedUp = null;
 			Pitch mappedDown = null;
@@ -625,17 +622,17 @@ public class ScaleTransformer extends Transformer {
 			else if(instrument.getPitchClass().equals(PitchClass.DISCRETE_2LINE)) {
 				// B3 to D4 for PitchClass.DISCRETE_2LINE
 				switch(rangeStep) {
-				case 47:	// B3
-					mappedUp = mappedDown = B3;
+				case 52:	// E4
+					mappedUp = mappedDown = E4;
 					break;
-				case 48:	// C4
-				case 49:	// C#4 or Db4
-					mappedUp = D4;
-					mappedDown = B3;
+				case 53:	// F4
+				case 54:	// F#4 or Gb4
+					mappedUp = G4;
+					mappedDown = E4;
 					break;
-				case 50:	// D4
+				case 55:	// G4
 				default:
-					mappedUp = mappedDown = D4;
+					mappedUp = mappedDown = G4;
 				}
 				transformMapUP.put(p, mappedUp);
 				transformMapDOWN.put(p, mappedDown);

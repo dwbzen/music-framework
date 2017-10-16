@@ -9,6 +9,7 @@ import music.element.Pitch;
 import music.element.Scale;
 import music.element.ScaleFormula;
 import music.element.ScaleType;
+import music.element.Scales;
 
 import org.apache.log4j.Logger;
 import org.bson.Document;
@@ -92,13 +93,13 @@ public class ScaleExporter {
 		String mode = null;
 		String name = formula.getName().toLowerCase();
 		if(name.equalsIgnoreCase("major")) {
-			mode = Scale.MAJOR;
+			mode = Scales.MAJOR;
 		}
 		else if(name.indexOf("minor") >= 0) {
-			mode = Scale.MINOR;
+			mode = Scales.MINOR;
 		}
 		else if(name.indexOf("mode") >= 0) {
-			mode = Scale.MODE;
+			mode = Scales.MODE;
 		}
 		return mode;
 	}

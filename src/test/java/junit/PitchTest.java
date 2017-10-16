@@ -8,6 +8,7 @@ import music.element.Alteration;
 import music.element.Key;
 import music.element.Pitch;
 import music.element.Scale;
+import music.element.Scales;
 import music.element.Step;
 
 public class PitchTest extends TestCase {
@@ -52,7 +53,7 @@ public class PitchTest extends TestCase {
 	}
 	
 	public static void testChromaticHash() {
-		Scale cscale = Scale.FULL_RANGE_CHROMATIC_SCALE;
+		Scale cscale = Scales.FULL_RANGE_CHROMATIC_SCALE;
 		Map<Pitch, Integer> pitchHash = new TreeMap<Pitch, Integer>();
 		for(Pitch p : cscale.getPitches()) {
 			pitchHash.put(p, p.getRangeStep());
@@ -69,7 +70,7 @@ public class PitchTest extends TestCase {
 		assertEquals(23, pitchHash.get(cflat2).intValue());
 		assertEquals(23,  pitchHash.get(b1).intValue());
 		
-		for(Pitch tp : Scale.CHROMATIC_12TONE_SCALE.getPitches()) {
+		for(Pitch tp : Scales.CHROMATIC_12TONE_SCALE.getPitches()) {
 			assertTrue(pitchHash.containsKey(tp));
 			System.out.println(tp + " index: " + pitchHash.get(tp));
 		}

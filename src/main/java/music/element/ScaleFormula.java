@@ -182,19 +182,19 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 		String mode = null;
 		String name = getName().toLowerCase();
 		if(name.indexOf("major") >= 0) {
-			mode = Scale.MAJOR;
+			mode = Scales.MAJOR;
 		}
 		else if(name.indexOf("minor") >= 0) {
-			mode = Scale.MINOR;
+			mode = Scales.MINOR;
 		}
 		else if(name.indexOf("mode") >= 0) {
-			mode = Scale.MODE;
+			mode = Scales.MODE;
 		}
 		else if(formula.length == 5) {
-			mode = Scale.PENTATONIC;
+			mode = Scales.PENTATONIC;
 		}
 		else if(formula.length == 6) {
-			mode = Scale.HEXATONIC;
+			mode = Scales.HEXATONIC;
 		}
 		return mode;
 	}

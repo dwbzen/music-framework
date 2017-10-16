@@ -8,6 +8,7 @@ import music.element.Pitch;
 import music.element.Scale;
 import music.element.ScaleFormula;
 import music.element.ScaleType;
+import music.element.Scales;
 import music.element.Step;
 
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class ScaleTest extends TestCase {
 	
 	@Test
 	public void testScaleMapping() {
-		Scale gmajor = Scale.G_MAJOR;
+		Scale gmajor = Scales.G_MAJOR;
 		System.out.println(gmajor.toJSON());
 		DBObject dbObject = morphia.toDBObject(gmajor);
 		Scale scale = morphia.fromDBObject(null, Scale.class, dbObject);

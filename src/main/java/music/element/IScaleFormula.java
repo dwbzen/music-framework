@@ -187,7 +187,7 @@ public interface IScaleFormula extends Serializable, IMapped<String> {
 	public static final ScaleFormula UNPITCHED_3_SCALE_FORMULA = 
 			new ScaleFormula("3-Line Unpitched Percussion", "unpitched", UNPITCHED_3_STEPS);
 
-	public static final int[] UNPITCHED_2_STEPS = {3 };	// B, D  for 2-line percussion
+	public static final int[] UNPITCHED_2_STEPS = {3 };	// E, G  for 2-line percussion
 	public static final ScaleFormula UNPITCHED_2_SCALE_FORMULA = 
 			new ScaleFormula("2-Line Unpitched Percussion", "unpitched", UNPITCHED_2_STEPS);
 	

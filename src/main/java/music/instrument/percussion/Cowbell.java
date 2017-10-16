@@ -25,8 +25,8 @@ public class Cowbell  extends Instrument {
 	private static final long serialVersionUID = -7747656027937632481L;
 	public static final String NAME = "Cowbell";
 	
-	public final static Pitch LOW_RANGE = new Pitch(Step.B, 3);
-	public final static Pitch HIGH_RANGE = new Pitch(Step.D, 4);
+	public final static Pitch LOW_RANGE = new Pitch(Step.E, 4);
+	public final static Pitch HIGH_RANGE = new Pitch(Step.G, 4);
 	
 	public Cowbell() {
 		this(LOW_RANGE, HIGH_RANGE);

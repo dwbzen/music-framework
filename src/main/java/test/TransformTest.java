@@ -7,13 +7,14 @@ import music.element.Key;
 import music.element.Note;
 import music.element.Pitch;
 import music.element.Scale;
+import music.element.Scales;
 import music.transform.ScaleTransformer;
 import music.transform.ITransformer.Preference;
 
 public class TransformTest {
 
 	public static void main(String... args) {
-		Scale scale = Scale.G_MINOR;
+		Scale scale = Scales.G_MINOR;
 		Preference pref = Preference.Down;
 		Key key = Key.C_MAJOR;
 		List<Pitch> pitches = IScaleFormula.createPitches(IScaleFormula.CHROMATIC_SCALE_FORMULA, key.getRoot(), key);
