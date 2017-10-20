@@ -9,7 +9,7 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import math.JSONObject;
+import mathlib.JSONObject;
 
 import org.apache.activemq.command.ActiveMQMapMessage;
 import org.apache.logging.log4j.LogManager;

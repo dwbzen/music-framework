@@ -1,6 +1,6 @@
 package music.action;
 
-import math.Point2D;
+import mathlib.Point2D;
 import music.element.Duration;
 import music.element.IRhythmScale;
 import music.instrument.Instrument;

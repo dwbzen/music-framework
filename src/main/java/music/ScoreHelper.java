@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import math.Factor;
-import math.MathUtil;
-import math.Partition;
+import mathlib.Factor;
+import mathlib.MathUtil;
+import mathlib.Partition;
 import music.element.Duration;
 import music.element.Measure;
 import music.element.Note;

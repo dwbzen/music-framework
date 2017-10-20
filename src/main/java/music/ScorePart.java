@@ -16,11 +16,11 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import math.BaseJSONObject;
-import math.CommandMessage;
-import math.JSONObject;
-import math.Point2D;
-import math.PointSet;
+import mathlib.BaseJSONObject;
+import mathlib.CommandMessage;
+import mathlib.JSONObject;
+import mathlib.Point2D;
+import mathlib.PointSet;
 import music.action.DurationScaler;
 import music.action.ExpressionSelector;
 import music.action.PitchScaler;

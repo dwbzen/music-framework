@@ -12,7 +12,7 @@ import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Property;
 import org.mongodb.morphia.annotations.Transient;
 
-import math.RaggedArray;
+import mathlib.RaggedArray;
 import util.IJson;
 import util.IMapped;
 

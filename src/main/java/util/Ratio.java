@@ -4,7 +4,7 @@ import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Property;
 
-import math.util.IJson;
+import mathlib.util.IJson;
 
 @Embedded
 @Entity(value="Ratio", noClassnameStored=true)

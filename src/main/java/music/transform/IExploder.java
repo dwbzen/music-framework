@@ -3,7 +3,7 @@ package music.transform;
 import java.util.Arrays;
 import java.util.List;
 
-import math.IntegerPair;
+import mathlib.IntegerPair;
 import music.element.Measurable;
 import music.element.Measure;
 

@@ -1,5 +1,5 @@
 package music.element;
-import math.IPoint;
+import mathlib.IPoint;
 
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;

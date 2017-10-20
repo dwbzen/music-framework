@@ -3,10 +3,10 @@ package util.music;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-import math.CommandMessage;
-import math.Point2D;
-import math.PointSet;
-import math.ProbabilityDensityFunction;
+import mathlib.CommandMessage;
+import mathlib.Point2D;
+import mathlib.PointSet;
+import mathlib.ProbabilityDensityFunction;
 import util.Configuration;
 
 /**
