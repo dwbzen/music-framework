@@ -16,7 +16,7 @@ import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Property;
 import org.mongodb.morphia.annotations.Transient;
 
-import math.MathUtil;
+import mathlib.MathUtil;
 import music.action.ExpressionSelector;
 import music.element.rhythm.IRhythmTextureMap;
 import music.transform.ITransformer.Preference;

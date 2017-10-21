@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import math.IntegerPair;
+import mathlib.IntegerPair;
 import music.element.Chord;
 import music.element.Duration;
 import music.element.Measurable;

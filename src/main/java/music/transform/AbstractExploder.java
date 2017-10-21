@@ -3,7 +3,7 @@ package music.transform;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import math.IntegerPair;
+import mathlib.IntegerPair;
 import music.element.PitchRange;
 
 import org.apache.log4j.Logger;

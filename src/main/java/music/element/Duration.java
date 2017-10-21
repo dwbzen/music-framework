@@ -5,8 +5,8 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Property;
 import org.mongodb.morphia.annotations.Transient;
 
-import math.IntegerPair;
-import math.util.IJson;
+import mathlib.IntegerPair;
+import mathlib.util.IJson;
 import util.Ratio;
 
 @Embedded

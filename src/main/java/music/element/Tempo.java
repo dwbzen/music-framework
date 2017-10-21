@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import math.Point;
+import mathlib.Point;
 import music.element.Duration.BeatUnit;
 
 import org.mongodb.morphia.annotations.Embedded;

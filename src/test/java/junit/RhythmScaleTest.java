@@ -3,7 +3,7 @@ package junit;
 import java.util.List;
 
 import junit.framework.TestCase;
-import math.MathUtil;
+import mathlib.MathUtil;
 import music.element.Duration;
 import music.element.IRhythmExpression;
 import music.element.Note;

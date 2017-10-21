@@ -3,9 +3,9 @@ package music.transform;
 import java.util.ArrayList;
 import java.util.List;
 
-import math.Factor;
-import math.IntegerPair;
-import math.Partition;
+import mathlib.Factor;
+import mathlib.IntegerPair;
+import mathlib.Partition;
 import music.ScoreHelper;
 import music.element.Chord;
 import music.element.Duration;
