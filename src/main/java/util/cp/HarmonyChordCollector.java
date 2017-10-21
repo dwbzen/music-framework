@@ -6,6 +6,9 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import mathlib.cp.CollectorStats;
+import mathlib.cp.ICollector;
+import mathlib.cp.MarkovChain;
 import music.element.song.ChordProgression;
 import music.element.song.ChordProgressionComparator;
 import music.element.song.HarmonyChord;

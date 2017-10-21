@@ -20,7 +20,7 @@ import org.mongodb.morphia.annotations.Transient;
 
 import util.IJson;
 import util.INameable;
-import util.cp.ICollectable;
+import mathlib.cp.ICollectable;
 
 /**
  * A HarmonyChord is a chord that has an associated ChordFormula rather than
