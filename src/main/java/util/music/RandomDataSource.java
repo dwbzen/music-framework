@@ -23,6 +23,11 @@ import util.Configuration;
  * sigma=1.5, mu=-2: [-6.0, 2.0]
  * Sigma, mu and domain values can be chosen to skew values in the upper or lower range.
  * Note that there are different PDFs for x and y point values.
+ * 
+ * For Normal distribution, the rangeX, rangeY values are set to the domainX and domainY values
+ * Otherwise, domainX, domainY are not used.
+ * 
+ * @see mathlib.ProbabilityDensityFunction
  * @author donbacon
  *
  */
@@ -33,10 +38,10 @@ public class RandomDataSource  extends DataSource {
 	private PointSet<Double> pointSet;
 	private String startCommand;
 	private String shutdownCommand;
-	private double[] randomRangeX;
-	private double[] randomRangeY;
-	String[] rangesx;
-	String[] rangesy;
+	private Point2D<Double> randomRangeX;
+	private Point2D<Double> randomRangeY;
+	String 	rangesx;
+	String 	rangesy;
 	String[] distributions;
 	ProbabilityDensityFunction PDFx;
 	ProbabilityDensityFunction PDFy;
@@ -53,8 +58,6 @@ public class RandomDataSource  extends DataSource {
 	@Override
 	public void configure() {
 		size=Integer.parseInt(configProperties.getProperty("dataSource.random.size", "100"));
-		randomRangeX = new double[2];
-		randomRangeY = new double[2];
 		parseRanges("rangeX", "rangeY");
 		distributions = configProperties.getProperty("dataSource.random.distribution", "none,none").split(",");
 		String[] mus = configProperties.getProperty("dataSource.random.mu", "0,0").split(",");
@@ -64,14 +67,14 @@ public class RandomDataSource  extends DataSource {
 		for(int i=0; i<2; i++) {
 			dsname.append(distributions[i]);
 			pdfs[i] = null;
-			if(distributions[i].equals("Normal")) {
+			if(distributions[i].equalsIgnoreCase("normal")) {
 				double mu = Double.parseDouble(mus[i]);
 				double sigma = Double.parseDouble(sigmas[i]);
+				parseRanges(i==0 ? "domainX" : null, i==1? "domainY" : null);
 				pdfs[i] = new ProbabilityDensityFunction(mu, sigma);
 			}
 		}
 		dataSetName = dsname.toString();
-		parseRanges("domainX", "domainY");
 		PDFx = pdfs[0];
 		PDFy = pdfs[1];
 		if(PDFx != null) { PDFx.setRange(randomRangeX); }
@@ -79,12 +82,14 @@ public class RandomDataSource  extends DataSource {
 	}
 	
 	private void parseRanges(String keyx, String keyy) {
-		rangesx = configProperties.getProperty("dataSource.random." + keyx, "0.0,1.0").split(",");
-		randomRangeX[0] = Double.parseDouble(rangesx[0]);
-		randomRangeX[1] =  Double.parseDouble(rangesx[1]);
-		rangesy = configProperties.getProperty("dataSource.random." + keyy, "0.0,1.0").split(",");
-		randomRangeY[0] = Double.parseDouble(rangesy[0]);
-		randomRangeY[1] =  Double.parseDouble(rangesy[1]);
+		if(keyx != null) {
+			rangesx = configProperties.getProperty("dataSource.random." + keyx, "[0.0,1.0]");
+			randomRangeX = new Point2D<Double>(rangesx);
+		}
+		if(keyy != null) {
+			rangesy = configProperties.getProperty("dataSource.random." + keyy, "[0.0,1.0]");
+			randomRangeY = new Point2D<Double>(rangesy);
+		}
 	}
 
 	/**
@@ -112,8 +117,8 @@ public class RandomDataSource  extends DataSource {
 		double y;
 		Point2D<Double> point = null;
 		for(int i=0; i<size; i++) {
-			x = (PDFx != null) ? PDFx.randomPDF() : random.nextDouble(randomRangeX[0], randomRangeX[1]);
-			y = (PDFy != null) ? PDFy.randomPDF() :  random.nextDouble(randomRangeY[0], randomRangeY[1]);
+			x = (PDFx != null) ? PDFx.randomPDF() : random.nextDouble(randomRangeX.getX().doubleValue(), randomRangeX.getY().doubleValue());
+			y = (PDFy != null) ? PDFy.randomPDF() :  random.nextDouble(randomRangeY.getX().doubleValue(), randomRangeY.getY().doubleValue());
 			point = new Point2D<Double>(x, y);
 			point.setName(dataSetName);
 			pointSet.add(point);
@@ -148,13 +153,6 @@ public class RandomDataSource  extends DataSource {
 
 	public void setSize(int size) {
 		this.size = size;
-	}
-	
-	public static void main(String... args) {
-	   	Configuration config = Configuration.getInstance("/config.properties");
-    	RandomDataSource ds = new RandomDataSource(config, "Koto");
-    	ds.stream().forEach(s -> System.out.println(s));
-		ds.close();
 	}
 
 }

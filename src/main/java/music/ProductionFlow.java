@@ -376,7 +376,9 @@ public class ProductionFlow implements Runnable {
 	 * MongoDB data source uses queries for configured instruments.
 	 * 
 	 * File data source streams data JSON data from a file.
-	 * Random data source creates point data on the fly.
+	 * Random data source creates point data in real time
+	 * DataSource is set globally in the config.properties file but can be overridden
+	 * for an individual instrument by setting dataSource.<instrument-name>
 	 * All DataSources return data is the same JSON format.
 	 * To give some variety to data sets, DataSource can be configured to select points randomly
 	 * This depends on setting of sequentialSelection (if false, use random selection)
@@ -385,29 +387,29 @@ public class ProductionFlow implements Runnable {
 		log.debug("loadData()");
 		try {
 			for(String instrumentName : instrumentNames) {
-				log.info("loadData for " + instrumentName);
-
+				String instrumentSource = configProperties.getProperty("dataSource." + instrumentName);
+				log.info("loadData for " + instrumentName + " source: " + instrumentSource);
 				MessageProducer producer = producers.get(instrumentName);
 				DataSource ds = null;
-				
-				/********************************************************
-				 * Load source data from a file
-				 ********************************************************/
-				if(dataSourceName.equalsIgnoreCase("file")) {
-					ds = new FileDataSource(configuration, instrumentName);
-				}
 				
 				/**********************************************************
 				 * Load data from random source
 				 **********************************************************/
-				else if(dataSourceName.equalsIgnoreCase("random")) {
+				if(dataSourceName.equalsIgnoreCase("random") || instrumentSource.equalsIgnoreCase("random")) {
 					ds = new RandomDataSource(configuration, instrumentName);
 				}
 				
+				/********************************************************
+				 * Load source data from a file
+				 ********************************************************/
+				else if(dataSourceName.equalsIgnoreCase("file") || instrumentSource.equalsIgnoreCase("file")) {
+					ds = new FileDataSource(configuration, instrumentName);
+				}
+								
 		    	/***************************************************
 		    	 * Load data from MongoDB
 		    	 ***************************************************/
-				else if(dataSourceName.equalsIgnoreCase("mongodb")) {
+				else if(dataSourceName.equalsIgnoreCase("mongodb") || instrumentSource.equalsIgnoreCase("mongodb")) {
 					ds = new MongoDBDataSource(configuration, instrumentName);
 				}
 				ds.stream().forEach(rec ->{

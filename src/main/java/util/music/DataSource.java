@@ -160,7 +160,7 @@ public abstract class DataSource implements IDataSource {
 		@Override
 		public int getAsInt() {
 			// How many records to skip for RANDOM selection
-			return random.nextInt(1, 6);
+			return random.nextInt(2, 10);
 		}
     	
     }
