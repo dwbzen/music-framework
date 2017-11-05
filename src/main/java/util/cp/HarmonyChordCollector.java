@@ -43,8 +43,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	 */
 	private Map<String, IMapped<String>> songMap = null;
 	
-	private MarkovChain<HarmonyChord, ChordProgression> markovChain =
-				new MarkovChain<HarmonyChord, ChordProgression>(new ChordProgressionComparator());
+	private MarkovChain<HarmonyChord, ChordProgression> markovChain;
 	
 	/**
 	 * Factory method.
@@ -52,8 +51,8 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	 * @param keylen
 	 * @return
 	 */
-	public static HarmonyChordCollector getChordProgressionCollector(Songbook songbook, int keylen) {
-		HarmonyChordCollector collector = new HarmonyChordCollector(keylen);
+	public static HarmonyChordCollector getChordProgressionCollector(Songbook songbook, int order) {
+		HarmonyChordCollector collector = new HarmonyChordCollector(order);
 		collector.setSongbook(songbook);
 		return collector;
 	}
@@ -64,14 +63,16 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	 * @param keylen
 	 * @return
 	 */
-	public static HarmonyChordCollector getChordProgressionCollector(Song song, int keylen) {
-		HarmonyChordCollector collector = new HarmonyChordCollector(keylen);
+	public static HarmonyChordCollector getChordProgressionCollector(Song song, int order) {
+		HarmonyChordCollector collector = new HarmonyChordCollector(order);
 		collector.setSong(song);
 		return collector;
 	}
 
-	protected HarmonyChordCollector(int keylen) {
-		this.keylen = keylen;
+	protected HarmonyChordCollector(int order) {
+		this.keylen = order;
+		markovChain =
+				new MarkovChain<HarmonyChord, ChordProgression>(new ChordProgressionComparator(), order);
 	}
 	
 	@Override

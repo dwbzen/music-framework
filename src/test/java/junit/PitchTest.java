@@ -3,6 +3,8 @@ package junit;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.junit.Test;
+
 import junit.framework.TestCase;
 import music.element.Alteration;
 import music.element.Key;
@@ -52,7 +54,8 @@ public class PitchTest extends TestCase {
 	public static void main(String... args) {
 	}
 	
-	public static void testChromaticHash() {
+	@Test
+	public void testChromaticHash() {
 		Scale cscale = Scales.FULL_RANGE_CHROMATIC_SCALE;
 		Map<Pitch, Integer> pitchHash = new TreeMap<Pitch, Integer>();
 		for(Pitch p : cscale.getPitches()) {
@@ -79,7 +82,8 @@ public class PitchTest extends TestCase {
 		System.out.println(eflat + " " + eflat.hashCode());
 	}
 
-	public static void testPitchDifference() {
+	@Test
+	public void testPitchDifference() {
 
 		showDifference(b4, eflat4, -8);
 		showDifference(b4, p3, -1);
@@ -90,7 +94,8 @@ public class PitchTest extends TestCase {
 		showDifference(csharp6, csharp6, 0);
 	}
 	
-	public static void testPitchDifferenceOctaveNeutral() {
+	@Test
+	public void testPitchDifferenceOctaveNeutral() {
 		
 		showDifference(c, a, 9);
 		showDifference(c, eflat, 3);
@@ -99,14 +104,16 @@ public class PitchTest extends TestCase {
 		showDifference(bsharpsharp3, eflatflat3, -11);
 	}
 	
-	public static void testBoundryConditions() {
+	@Test
+	public void testBoundryConditions() {
 		showDifference(c0, c9, 108);
 	}
 	
 	/**
 	 * Tests PitchScaler setKey()
 	 */
-	public static void testPitchDifferenceWithKey() {
+	@Test
+	public void testPitchDifferenceWithKey() {
 		showDifference(BbMajor, -2);
 		showDifference(EbMajor, 3);
 		showDifference(Fmajor, 5);
@@ -135,7 +142,8 @@ public class PitchTest extends TestCase {
 		
 	}
 	
-	public static void testEquality() {
+	@Test
+	public void testEquality() {
 		
 		assertEquals(eflat.compareTo(eflat4), -1);
 		
