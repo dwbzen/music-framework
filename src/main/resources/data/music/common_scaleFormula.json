@@ -1,5 +1,5 @@
-{ "name" : "Major" , "groups" : [ "major"] , "formula" : [ 2 , 2 , 1 , 2 , 2 , 2 , 1] , "size" : 7}
-{ "name" : "Minor" , "alternateNames" : [ "\"Natural minor" , "Melodic minor descending\""] , "groups" : [ "minor"] , "formula" : [ 2 , 1 , 2 , 2 , 1 , 2 , 2] , "size" : 7}
+{ "name" : "Major" , "groups" : [ "major", "diatonic"] , "formula" : [ 2 , 2 , 1 , 2 , 2 , 2 , 1] , "size" : 7}
+{ "name" : "Minor" , "alternateNames" : [ "Natural minor" , "Melodic minor descending"] , "groups" : [ "minor"] , "formula" : [ 2 , 1 , 2 , 2 , 1 , 2 , 2] , "size" : 7}
 { "name" : "Melodic minor ascending" , "groups" : [ "minor"] , "formula" : [ 2 , 1 , 2 , 2 , 2 , 2 , 1] , "size" : 7}
 { "name" : "Harmonic minor" , "groups" : [ "minor"] , "formula" : [ 2 , 1 , 2 , 2 , 1 , 3 , 1] , "size" : 7}
 { "name" : "Chromatic" , "groups" : [ "chromatic"] , "formula" : [ 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1] , "size" : 12}

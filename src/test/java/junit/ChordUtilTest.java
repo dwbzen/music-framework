@@ -27,24 +27,4 @@ public class ChordUtilTest {
 		}
 	}
 
-	@Test
-	public void testCreateHarmonyChord() {
-		HarmonyChord hc = null;
-		Map<String, ChordFormula> formulas = ChordManager.loadChordFormulas("test", "chord_formulas");
-		for(int i=0; i<testCases.length;i++) {
-			String chordName = testCases[i];
-			ChordInfo result = ChordManager.parseChordName(chordName);
-			System.out.println(chordName + ": " + 
-					"name: " + result.getChordName() + 	", root: " + result.getRootNote() +
-					", bass: " + result.getBassNote() + ", symbol: " + result.getChordSymbol());
-			hc = ChordManager.createHarmonyChord(result.getChordName(), formulas, Key.D_MAJOR);
-			if(hc != null) {
-				System.out.println("  Harmony chord: " + hc.getName() + ", " + hc.toJSON());
-				System.out.println("  formula number: " + hc.getChordFormula().computeFormulaNumber());
-			}
-			else {
-				System.err.println("Could not create HarmonyChord for " + result.getChordName() + "\n");
-			}
-		}
-	}
 }

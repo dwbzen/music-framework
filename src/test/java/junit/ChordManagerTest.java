@@ -1,25 +1,19 @@
 package junit;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
+
+import org.apache.log4j.Logger;
+import org.junit.Test;
+import org.mongodb.morphia.Morphia;
 
 import music.element.Key;
 import music.element.Pitch;
 import music.element.song.ChordFormula;
 import music.element.song.ChordManager;
 import music.element.song.HarmonyChord;
-
-import org.apache.log4j.Logger;
-import org.junit.Test;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.query.Query;
-
-import com.mongodb.MongoClient;
-
-import util.Configuration;
 
 public class ChordManagerTest {
 
@@ -31,30 +25,15 @@ public class ChordManagerTest {
 
 	@Test
 	public void testLoadChordFormulas() {
-		Configuration configuration =  Configuration.getInstance(CONFIG_FILENAME);
-		Properties configProperties = configuration.getProperties();
-		String dbname = configProperties.getProperty("mongodb.db.name");
-		chordFormulas = ChordManager.loadChordFormulas(dbname, "chord_formulas");
-		log.warn(chordFormulas.size() + " chords loaded");
-
+		try {
+			chordFormulas = ChordManager.loadChordFormulas("/data/music/chord_formulas.json");
+		} catch (IOException ex) {
+			log.error("Could not load chord formulas " + ex.toString());
+			return;
+		}
+		System.out.println(chordFormulas.size() + " chords loaded");
 	}
 	
-	@Test
-	public void xtestMorphiaQuery() {
-		// This doesn't return anything - why?
-		MongoClient client = new MongoClient("localhost", 27017 );
-		Morphia morphia = new Morphia();
-		morphia.mapPackage("music.element");
-		morphia.mapPackage("music.element.song");
-		Datastore datastore = morphia.createDatastore(client, "test");
-		Query<ChordFormula> query = datastore.createQuery(ChordFormula.class);
-		List<ChordFormula> chordFormulas = query.asList();
-		System.out.println("chord formulas:");
-		for(ChordFormula cf : chordFormulas) {
-			System.out.println(cf.toJSON());
-		}
-
-	}
 	
 	@Test
 	public void testCreateHaronyChords() {

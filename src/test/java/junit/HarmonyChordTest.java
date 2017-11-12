@@ -1,9 +1,9 @@
 package junit;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -17,7 +17,6 @@ import music.element.song.ChordManager;
 import music.element.song.ChordProgression;
 import music.element.song.ChordProgressionComparator;
 import music.element.song.HarmonyChord;
-import util.Configuration;
 
 public class HarmonyChordTest {
 	public static final String CONFIG_FILENAME = "/config.properties";
@@ -85,21 +84,36 @@ public class HarmonyChordTest {
 		HarmonyChord hc4 = new HarmonyChord("Bbm7", chordFormulas);
 
 		System.out.println("D7: " + hc1);
+		assert(hc1.toString().equals("D7 [D, Gb, A, C]"));
+		
 		System.out.println("C: " + hc2);
+		assert(hc2.toString().equals("C [C, E, G]"));
+
 		System.out.println("C#: " + hc3);
+		assert(hc3.toString().equals("C# [C#, F, Ab]"));
+
 		System.out.println("Bbm7: " + hc4);
+		assert(hc4.toString().equals("Bbm7 [Bb, Db, F, Ab]"));
+		
 		// negative test
-		HarmonyChord hc5 = new HarmonyChord("DbX", chordFormulas);
-		System.out.println("DbX: " + hc5);
+		boolean okay = false;
+		try {
+			HarmonyChord hc5 = new HarmonyChord("DbX", chordFormulas);
+		}
+		catch(IllegalArgumentException ex) {
+			okay = true;
+		}
+		assert(okay);
 		
 	}
 	
 	public void loadChordFormulas() {
-		Configuration configuration =  Configuration.getInstance(CONFIG_FILENAME);
-		Properties configProperties = configuration.getProperties();
-		String dbname = configProperties.getProperty("mongodb.db.name");
-		chordFormulas = ChordManager.loadChordFormulas(dbname, "chord_formulas");
-		log.warn(chordFormulas.size() + " chords loaded");
-
+		try {
+			chordFormulas = ChordManager.loadChordFormulas("/data/music/chord_formulas.json");
+		} catch (IOException ex) {
+			log.error("Could not load chord formulas " + ex.toString());
+			return;
+		}
+		System.out.println(chordFormulas.size() + " chords loaded");
 	}
 }

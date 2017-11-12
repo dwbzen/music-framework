@@ -1,26 +1,30 @@
 package util.music;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import org.apache.log4j.Logger;
+import org.mongodb.morphia.Morphia;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 import music.element.Pitch;
 import music.element.Scale;
 import music.element.ScaleFormula;
 import music.element.ScaleType;
 import music.element.Scales;
-
-import org.apache.log4j.Logger;
-import org.bson.Document;
-import org.mongodb.morphia.Morphia;
-
 import util.Configuration;
-import util.mongo.Find;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCursor;
 
 /**
  * Creates a JSON representation for scale formulas in all roots.
@@ -31,60 +35,116 @@ import com.mongodb.client.MongoCursor;
  * @author don_bacon
  *
  */
-public class ScaleExporter {
+public class ScaleExporter implements Consumer<String> {
 	static final org.apache.log4j.Logger log = Logger.getLogger(ScaleExporter.class);
 	private static Morphia morphia = new Morphia();
-	private static List<Pitch> rootPitches = new ArrayList<Pitch>();
+	private StringBuffer stringBuffer = null;
+	static ObjectMapper mapper = new ObjectMapper();
 	
-	public static void main(String... args)  {
-		String[] roots = { "C" };
-		if(args.length != 0) {
-			roots = args;
-		}
+	private List<Pitch> rootPitches = new ArrayList<Pitch>();
+	private Map<String, ScaleFormula> scaleFormulas = new TreeMap<String, ScaleFormula>();
+	
+	public ScaleExporter() {
 		morphia.map(ScaleFormula.class);
 		morphia.map(Scale.class);
+		loadScaleFormulas();
+	}
+	
+	public static void main(String... args)  {
+		String root = "C";
+		Pitch pitch = null;
+		int size = -1;
+		PrintStream ps = System.out;
+    	if(args.length > 0) {
+    		for(int i = 0; i<args.length; i++) {
+    			if(args[i].equalsIgnoreCase("-root")) {
+    				root = args[++i];
+    				pitch = new Pitch(root);
+    			}
+    			else if(args[i].equalsIgnoreCase("-size")) {
+    				size = Integer.parseInt(args[++i]);
+    			}
+    		}
+    	}
+		ScaleExporter exporter = new ScaleExporter();
+		if(pitch != null) { 	exporter.addRoot(pitch); }
+		String exportString = size>0 ? exporter.exportScaleFormulas(size) :exporter.exportScaleFormulas();
+		ps.println(exportString);
+	}
+	
+	public void addRoot(Pitch p) {
+		rootPitches.add(p);
+	}
+	
+	public void loadScaleFormulas() {
+		
 		Configuration configuration = Configuration.getInstance("/config.properties");
 		Properties configProperties = configuration.getProperties();
-		String dbname = configProperties.getProperty("dataSource.mongodb.db.name");
-		String collectionName = configProperties.getProperty("dataSource.mongodb.scaleFormulas");
-		Find find = new Find(dbname, collectionName);
-		find.setLimit(5000);
-		MongoCursor<Document> cursor = find.search();
-		long count = find.getCount();
-		log.info(" count: " + count);
-		Map<String, ScaleFormula> scaleFormulas = new TreeMap<String, ScaleFormula>();
-		if(count > 0) {
-			for(int i=0; i<roots.length; i++) {
-				Pitch p = new Pitch(roots[i]);
-				rootPitches.add(p);
+		String resource =   configProperties.getProperty("dataSource.scaleFormulas");
+		InputStream is = this.getClass().getResourceAsStream("/data/music/" + resource);
+    	Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines();
+    	stream.forEach(s -> accept(s));
+    	stream.close();
+	}
+	
+	/**
+	 * Exports all scale formulas in Mathematica RawJSON format.
+	 * For example: [ {"Major":{"groups":["major"],"formula":[2,2,1,2,2,2,1],"size":7}},
+					  {"Pentatonic minor":{"groups":["pentatonic"],"formula":[3,2,3,2,2],"size":5}} ]
+	 * In Mathematica: { 
+	 * 				"Major" -> {"size" -> 7, "groups" -> {"major"}, "formula" -> {2, 2, 1, 2, 2, 2, 1}}, 
+	 				"Pentatonic minor" -> {"size" -> 5, "groups" -> {"pentatonic"}, "formula" -> {3, 2, 3, 2, 2} }
+	 				   }
+	 * The association key is the scale name.
+	 * Sends output to stdout.
+	 */
+	public String exportScaleFormulas() {
+		stringBuffer = new StringBuffer("[\n");
+		scaleFormulas.keySet().forEach(s ->  exportScaleFormula(scaleFormulas.get(s)));
+		stringBuffer.append("]");
+		return(stringBuffer.toString());
+	}
+	
+	/**
+	 * Exports scale formulas of a given length (size)
+	 * @param size
+	 */
+	public String exportScaleFormulas(int size) {
+		stringBuffer = new StringBuffer("[\n");
+		for(ScaleFormula sf : scaleFormulas.values()) {
+			if(sf.getSize() == size) {
+				exportScaleFormula(sf);
 			}
-			
-			while(cursor.hasNext()) {
-				Document doc = cursor.next();	// int values come back as double unfortunately TODO - how to fix that?
-				DBObject dbObject = new BasicDBObject(doc);
-				ScaleFormula sf = morphia.fromDBObject(find.getDatastore(), ScaleFormula.class, dbObject);
-				scaleFormulas.put(sf.getName(), sf);
-			}
-			find.close();
-			/*
-			 * export the mapped scales
-			 */
-			Map<String, Scale> mappedScales = Scale.getScaleMap();
-			for(Scale scale : mappedScales.values()) {
+		}
+		stringBuffer.append("]");
+		return(stringBuffer.toString());
+	}
+	
+	private void exportScaleFormula(ScaleFormula sf) {
+		stringBuffer.append("{\"" + sf.getName() + "\":{\"groups\":");
+		try {
+			stringBuffer.append(mapper.writeValueAsString(sf.getGroups()));
+			stringBuffer.append(", \"formula\":").append(mapper.writeValueAsString(sf.getFormula()));
+		} catch (JsonProcessingException e) {
+			System.err.println(e.toString());
+		}
+		stringBuffer.append(",\"size\":" + (int)sf.getSize());
+		stringBuffer.append("} },\n");
+	}
+	
+	public void exportScales(String root) {
+		rootPitches.add(new Pitch(root));
+		/*
+		 * Create a scale with the root(s) specified and export
+		 */
+		for(ScaleFormula formula : scaleFormulas.values() ) {
+			String mode = getMode(formula);
+			ScaleType st = getScaleType(formula);
+			log.debug("formula: " + formula.toJSON());
+			for(Pitch pitch : rootPitches) {
+				String name = formula.getName();	// + "-" + pitch.toString();
+				Scale scale = new Scale(name, mode, st, pitch, formula);
 				System.out.println(scale.toJSON());
-			}
-			/*
-			 * Create a scale with the root(s) specified and export
-			 */
-			for(ScaleFormula formula : scaleFormulas.values() ) {
-				String mode = getMode(formula);
-				ScaleType st = getScaleType(formula);
-				log.debug("formula: " + formula.toJSON());
-				for(Pitch pitch : rootPitches) {
-					String name = formula.getName();	// + "-" + pitch.toString();
-					Scale scale = new Scale(name, mode, st, pitch, formula);
-					System.out.println(scale.toJSON());
-				}
 			}
 		}
 	}
@@ -129,5 +189,16 @@ public class ScaleExporter {
 			default: st = ScaleType.CHROMATIC;
 		}
 		return st;
+	}
+
+	@Override
+	/**
+	 * Deserializes a JSON ScaleFormula and adds to scaleFormulas Map
+	 */
+	public void accept(String formulaString) {
+		DBObject dbo = (DBObject) JSON.parse(formulaString);
+		ScaleFormula scaleFormula = morphia.fromDBObject(null, ScaleFormula.class, dbo);
+		scaleFormulas.put(scaleFormula.getName(), scaleFormula);
+		
 	}
 }

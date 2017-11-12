@@ -36,7 +36,7 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 	@Property	protected List<String> groups = new ArrayList<String>();
 	@Property	private double[] formula;
 	@Transient  private int[] _formula;		// because int[] values come back as double[] in Morphia
-	@Property	private double size;
+	@Property	private int size;
 	@Property	protected String description = null;	// optional descriptive text
 	@Property	private List<String> intervals = new ArrayList<String>();	// optional
 	/**
@@ -152,7 +152,7 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 		this.id = id;
 	}
 
-	public double getSize() {
+	public int getSize() {
 		return size;
 	}
 
