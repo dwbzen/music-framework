@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import music.element.ScaleFormula;
+import music.element.IFormula;
 
 public class ScaleFormulaUtil {
 
@@ -49,7 +49,7 @@ public class ScaleFormulaUtil {
 				pitchSet[ind++] = Integer.parseInt(pitches[i]);
 			}
 		}
-		formula = ScaleFormula.pitchSetToFormula(pitchSet);
+		formula = IFormula.pitchSetToFormula(pitchSet);
 		return formula;
 	}
 }

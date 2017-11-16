@@ -2,12 +2,10 @@ package music.element;
 
 import java.io.Serializable;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Property;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import util.IJson;
 
-@Embedded
 public class TimeSignature implements Serializable, IJson {
 
 	private static final long serialVersionUID = 3422423947214684471L;
@@ -16,16 +14,16 @@ public class TimeSignature implements Serializable, IJson {
 	/**
 	 * Time signature beats per measure
 	 */
-	@Property("beats")		private int beats = 4;	// beats per measure. divisions per beat = divisions/beats, 24/3 = 8 for example
+	@JsonProperty("beats")		private int beats = 4;	// beats per measure. divisions per beat = divisions/beats, 24/3 = 8 for example
 	/**
 	 * Time signature beat note (1=whole, 2=half, 4 = quaver, 8 = semiquaver etc.)
 	 * SO time signature is beats/beatNote: 3/4, 6/8, whatever
 	 */
-	@Property("beatNote")	private int beatNote = 4;		// defaults to quarterNote
+	@JsonProperty("beatNote")	private int beatNote = 4;		// defaults to quarterNote
 	/**
 	 * Number of basic units in the measure. Must be >0
 	 */
-	@Property("divisions")	private int divisions = DEFAULT_DIVISIONS_PER_MEASURE;
+	@JsonProperty("divisions")	private int divisions = DEFAULT_DIVISIONS_PER_MEASURE;
 
 	/**
 	 * Defaults to 4/4 time

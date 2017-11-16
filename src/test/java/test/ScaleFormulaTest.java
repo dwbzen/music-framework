@@ -1,49 +1,86 @@
 package test;
 
+import java.io.IOException;
 import java.util.List;
 
-import music.element.IScaleFormula;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import music.element.Key;
+import music.element.Pitch;
 import music.element.ScaleFormula;
 
 public class ScaleFormulaTest {
-	public static void main(String... args) {
-		System.out.println(IScaleFormula.CHROMATIC_SCALE_FORMULA.toJSON());
+	static ObjectMapper mapper = new ObjectMapper();
+	static final Logger log = LogManager.getLogger(ScaleFormula.class);
+	
+	/**
+	 * Test serialization and deserialization
+	 * 
+	 * @param strings
+	 */
+	public static void main(String...strings) {
+		int[] formula = {2 , 2 , 1 , 2 , 2 , 2 , 1};
+		String[] groups = {"major", "diatonic"};
 		
-		ScaleFormula sf =IScaleFormula.MAJOR_SCALE_FORMULA;
-		sf.addGroup("mode");
-		sf.getAlternateNames().add("Ionian mode");
-		System.out.println(sf.toJSON());
+		// { "name" : "Major" , "groups" : [ "major", "diatonic"] , "formula" : [ 2 , 2 , 1 , 2 , 2 , 2 , 1] , "size" : 7}
+		ScaleFormula sf = new ScaleFormula("Major", groups, formula, null );
+		String jstr = sf.toJson();
+		System.out.println(jstr);
+		ScaleFormula scaleFormula = null;
+		try {
+			scaleFormula = mapper.readValue(jstr, ScaleFormula.class);
+		} catch (IOException e) {
+			log.error("Cannot deserialize " + jstr + "\nbecause " + e.toString());
+		}
+		if(scaleFormula != null) {
+			System.out.println(scaleFormula.toJson());
+		}
 		
-		System.out.println(IScaleFormula.HARMONIC_MINOR_SCALE_FORMULA.toJSON());
+		String sfString = 
+				"{ \"name\" : \"Minor\" , \"alternateNames\" : [ \"Natural minor\" , \"Melodic minor descending\"] , \"groups\" : [ \"minor\"] , \"formula\" : [ 2 , 1 , 2 , 2 , 1 , 2 , 2] , \"size\" : 7}";
+		System.out.println(sfString);
+		try {
+			scaleFormula = mapper.readValue(sfString, ScaleFormula.class);
+		} catch (IOException e) {
+			log.error("Cannot deserialize " + sfString + "\nbecause " + e.toString());
+		}
+		if(scaleFormula != null) {
+			System.out.println(scaleFormula.toJson());
+		}
 		
-		sf = IScaleFormula.MELODIC_MINOR_ASCENDING_SCALE_FORMULA;
-		sf.getAlternateNames().add("Melodic minor ascending");
-		System.out.println(IScaleFormula.MELODIC_MINOR_ASCENDING_SCALE_FORMULA.toJSON());
+		/*
+		 * test createPitches with serialization
+		 */
+		Pitch root = Pitch.D;
+		createPitches(scaleFormula, root, null);
 		
-		sf = IScaleFormula.MINOR_SCALE_FORMULA;
-		sf.getAlternateNames().add("Melodic minor descending");
-		sf.getAlternateNames().add("Natural minor");
-		sf.getAlternateNames().add("Aeolian mode");
-		sf.addGroup("mode");
-		System.out.println(sf.toJSON());
-		
-		System.out.println(IScaleFormula.PENTATONIC_MAJOR_SCALE_FORMULA.toJSON());
-		System.out.println(IScaleFormula.PENTATONIC_MINOR_SCALE_FORMULA.toJSON());
-		System.out.println(IScaleFormula.WHOLE_TONE_SCALE_FORMULA.toJSON());
-		System.out.println(IScaleFormula.BLUES_SCALE_FORMULA.toJSON());
-		
-		
-		int[] pitchSet = {0, 1, 3, 4, 6, 7, 9, 10};
-		List<Integer>  formula1 = ScaleFormula.pitchSetToFormula(pitchSet);
-		System.out.println("[0, 1, 3, 4, 6, 7, 9, 10] == " + formula1);
-		
-		int[] pitchSet2 = {0, 2, 4, 5, 7, 9, 11};
-		List<Integer>  formula2 = ScaleFormula.pitchSetToFormula(pitchSet2);
-		System.out.println("[0, 2, 4, 5, 7, 9, 11]  == " +formula2);
-		
-		System.out.println(formula1 + " == " + ScaleFormula.formulaToPitchSet(formula1));
-		System.out.println(formula2 + " == " + ScaleFormula.formulaToPitchSet(formula2));
+		root = new Pitch("F4");
+		Key key = Key.F_MINOR;
+		createPitches(scaleFormula, root, key);
 	}
+	
+	static void createPitches(ScaleFormula sf, Pitch root, Key key) {
+		List<Pitch> scalePitches = (key == null) ? sf.createPitches(root) : sf.createPitches(root, key);
+		try {
+			String pitches = mapper.writeValueAsString(scalePitches);
+			System.out.println("pitches: " + pitches);
+		} catch (JsonProcessingException e) {
+			System.err.println("Cannot serialize because " + e.toString());
+			e.printStackTrace();
+		}
+		StringBuffer sb = new StringBuffer("{ ");
+		for(Pitch p : scalePitches) {
+			sb.append(p.toString()).append(", ");
+		}
+		sb.deleteCharAt(sb.length()-2);
+		sb.append("}");
+		System.out.println(sb);
+	}
+	
 
 
 }

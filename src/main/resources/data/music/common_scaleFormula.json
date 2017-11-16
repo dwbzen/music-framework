@@ -17,7 +17,7 @@
 { "name" : "Aeolian 2# 4# #5" , "groups" : [ "aeolian"] , "formula" : [ 3 , 1 , 2 , 2 , 1 , 2 , 1] , "size" : 7}
 { "name" : "Aeolian Flat 3b 5b 6b 8b" , "groups" : [ "aeolian"] , "formula" : [ 3 , 1 , 2 , 2 , 1 , 2 , 1] , "size" : 7}
 { "name" : "Aeolian Flat b3 b5 b6" , "groups" : [ "aeolian"] , "formula" : [ 3 , 1 , 2 , 2 , 1 , 2 , 1] , "size" : 7}
-{ "name" : "Aeolian Natural Minor" , "alternateNames" : [ "\"Chord Cm9b6sus4 - Gregorian Scale 2" , " Assari Thaat (India)" , " Se (China) Kitmun (Sumarian)" , "Asavari Asc Nats. A to G\""] , "groups" : [ "aeolian"] , "formula" : [ 2 , 1 , 2 , 2 , 1 , 2 , 2] , "size" : 7}
+{ "name" : "Aeolian Natural Minor" , "alternateNames" : [ "Chord Cm9b6sus4 - Gregorian Scale 2" , " Assari Thaat (India)" , " Se (China) Kitmun (Sumarian)" , "Asavari Asc Nats. A to G"] , "groups" : [ "aeolian"] , "formula" : [ 2 , 1 , 2 , 2 , 1 , 2 , 2] , "size" : 7}
 { "name" : "Algerian" , "groups" : [ "algerian"] , "formula" : [ 2 , 1 , 2 , 1 , 1 , 1 , 3 , 1] , "size" : 8}
 { "name" : "All 12 notes except D -2 - 8 flats only naturals are C & F" , "groups" : [ "all"] , "formula" : [ 1 , 1 , 1 , 1 , 1 , 1 , 2 , 1 , 1 , 1 , 1] , "size" : 11}
 { "name" : "All except A - 6th  all flat" , "groups" : [ "all"] , "formula" : [ 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 2 , 1 , 1] , "size" : 11}

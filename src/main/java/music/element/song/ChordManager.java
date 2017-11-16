@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -14,7 +13,6 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
@@ -23,6 +21,7 @@ import com.mongodb.DBObject;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.util.JSON;
 
+import music.element.IFormula;
 import music.element.Key;
 import music.element.Pitch;
 import music.element.Scale;
@@ -68,9 +67,9 @@ public class ChordManager {
 		return chordFormula.computeFormulaNumber();
 	}
 	
-	public static int computeFormulaNumber(int[] formula) {
+	public static int computeFormulaNumber(List<Integer> formula) {
 		int fnum = 0;
-		List<Integer> ps = ScaleFormula.formulaToPitchSet(formula);
+		List<Integer> ps = IFormula.formulaToPitchSet(formula);
 		for(Integer i:ps) {
 			int shiftamt = (i>=12) ? i-12 : i;
 			fnum += (1<<shiftamt);
@@ -234,7 +233,6 @@ public class ChordManager {
 			throw new RuntimeException("File not found: " + inputFile);
 		}
 		String line;
-		int counter = 1;
 		while((line = inputFileReader.readLine()) != null) {
 			String jsonline = line.trim();
 			if(jsonline.startsWith("//") || jsonline.startsWith("/*")) {
@@ -245,8 +243,6 @@ public class ChordManager {
 				log.debug("parsed " + dbObject.toString());
 				ChordFormula cf = morphia.fromDBObject(datastore, ChordFormula.class, (BasicDBObject)dbObject);
 				if(cf != null) {
-					ObjectId id = new ObjectId(new Date(), counter++);
-					cf.setId(id);
 					addChordFormulaToMap(cf, chordFormulasMap);
 				}
 			}
@@ -276,7 +272,7 @@ public class ChordManager {
 			DBObject dbObject = new BasicDBObject(doc);
 			ChordFormula cf = morphia.fromDBObject(datastore, ChordFormula.class, dbObject);
 			String name = cf.getName();
-			int[] formula = cf.getFormula();
+			List<Integer>formula = cf.getFormula();
 			StringBuffer formString = new StringBuffer();
 			for(int n:formula) {
 				formString.append(" " + n);

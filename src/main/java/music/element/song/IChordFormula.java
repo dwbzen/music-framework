@@ -2,9 +2,9 @@ package music.element.song;
 
 import java.util.List;
 
-import music.element.IScaleFormula;
+import music.element.IFormula;
 
-public interface IChordFormula extends IScaleFormula {
+public interface IChordFormula extends IFormula {
 	
 	public int getChordSize();
 	public void setChordSize(int chordSize);

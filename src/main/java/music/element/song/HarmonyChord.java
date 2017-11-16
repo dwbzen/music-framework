@@ -144,7 +144,7 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 		setChordFormula(other.getChordFormula());
 		int fnum = 0;
 		int spellingNumber = 0;
-		if(chordFormula.getSize() > 0) {
+		if(chordFormula.getChordSize() > 0) {
 			chordPitches.addAll(chordFormula.createPitches(root));
 			setChordSpelling();
 			fnum = ChordManager.computeFormulaNumber(chordFormula);

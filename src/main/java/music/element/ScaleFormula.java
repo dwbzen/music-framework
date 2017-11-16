@@ -1,19 +1,22 @@
 package music.element;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import util.IJson;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import mathlib.util.IJson;
 import util.IMapped;
 
 /**
@@ -25,25 +28,22 @@ import util.IMapped;
  * @author don_bacon
  *
  */
-@Entity(value="ScaleFormula", noClassnameStored=true)
 public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
-	private static final long serialVersionUID = 8075575845123712068L;
-	private static Morphia morphia = new Morphia();
 	
-	@Id ObjectId id;
-	@Property	protected String name;
-	@Property	protected List<String> alternateNames = null;
-	@Property	protected List<String> groups = new ArrayList<String>();
-	@Property	private double[] formula;
-	@Transient  private int[] _formula;		// because int[] values come back as double[] in Morphia
-	@Property	private int size;
-	@Property	protected String description = null;	// optional descriptive text
-	@Property	private List<String> intervals = new ArrayList<String>();	// optional
-	/**
-	 * formulaNumber is a 3-byte binary (12 bits) where each bit corresponds to the scale degree-1
-	 * Works for a scale or a chord.
-	 */
-	@Property	private int formulaNumber = 0x0FFF;
+	private static final long serialVersionUID = 8075575845123712068L;
+	static final Logger log = LogManager.getLogger(ScaleFormula.class);
+	static ObjectMapper mapper = new ObjectMapper();
+	
+	protected String name;
+	@JsonInclude(Include.NON_EMPTY)
+	protected List<String> alternateNames = new ArrayList<String>();
+	protected List<String> groups = new ArrayList<String>();
+	private List<Integer> formula = new ArrayList<Integer>();
+	private int size;
+
+	static {
+		mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+	}
 
 	/**
 	 * Create a null ScaleFormula. Used for "silent" chords.
@@ -51,22 +51,19 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 	public ScaleFormula() {
 		name = "0";
 		size = 0;
-		formulaNumber = 0;
 	}
 	
-	public ScaleFormula(String name, String group, int[] frmla, String[] altNames, String[] intvls) {
+	public ScaleFormula(String name, String group, int[] frmla, String[] altNames) {
 		this.name = name;
 		groups.add(group);
 		if(altNames != null && altNames.length > 0 ) { alternateNames = Arrays.asList(altNames); }
-		if(intvls != null && intvls.length > 0) { intervals = Arrays.asList(intvls); }
 		size = frmla.length;
 		setFormula(frmla);
 	}
-	public ScaleFormula(String name, String[] group, int[] frmla, String[] altNames, String[] intvls) {
+	public ScaleFormula(String name, String[] group, int[] frmla, String[] altNames) {
 		this.name = name;
 		if(group != null && group.length > 0) { groups = Arrays.asList(group); }
 		if(altNames != null && altNames.length > 0 ) { alternateNames = Arrays.asList(altNames); }
-		if(intvls != null && intvls.length > 0) { intervals = Arrays.asList(intvls); }
 		size = frmla.length;
 		setFormula(frmla);
 	}
@@ -78,12 +75,9 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 		setFormula(frmla);
 	}
 	
-	private void setFormula(int[] frmla) {
-		formula = new double[frmla.length];
-		_formula = new int[formula.length];
-		for(int i =0; i<size; i++) {
-			formula[i] = frmla[i];
-			_formula[i] = frmla[i];
+	public void setFormula(int[] frmla) {
+		for(int i : frmla) {
+			formula.add(i);
 		}
 	}
 
@@ -103,22 +97,8 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 		return groups;
 	}
 
-	public int[] getFormula() {
-		if(_formula == null) {
-			_formula = new int[formula.length];
-			for(int i=0; i<formula.length; i++) {
-				_formula[i] = (int)formula[i];
-			}
-		}
-		return _formula;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	public List<Integer> getFormula() {
+		return formula;
 	}
 
 	public List<String> getAlternateNames() {
@@ -127,39 +107,11 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 		}
 		return alternateNames;
 	}
-	
-	public List<String> getIntervals() {
-		return intervals;
-	}
-
-	public void setIntervals(List<String> intervals) {
-		this.intervals = intervals;
-	}
-
-	public int getFormulaNumber() {
-		return formulaNumber;
-	}
-
-	public void setFormulaNumber(int formulaNumber) {
-		this.formulaNumber = formulaNumber;
-	}
-
-	public ObjectId getId() {
-		return id;
-	}
-
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
 
 	public int getSize() {
 		return size;
 	}
 
-	public String toJSON() {
-		return morphia.toDBObject(this).toString();
-	}
-	
 	@Override
 	public List<Pitch> createPitches(Pitch root) {
 		return IScaleFormula.createPitches(getFormula(), root, Key.C_MAJOR);
@@ -175,9 +127,10 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 	 * pitch set is: {0, 2, 4, 5, 7, 9, 11}
 	 */
 	public List<Integer> formulaToPitchSet() {
-		return formulaToPitchSet(this._formula);
+		return IFormula.formulaToPitchSet(formula);
 	}
 	
+	@JsonIgnore 
 	public String getMode() {
 		String mode = null;
 		String name = getName().toLowerCase();
@@ -190,18 +143,19 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 		else if(name.indexOf("mode") >= 0) {
 			mode = Scales.MODE;
 		}
-		else if(formula.length == 5) {
+		else if(formula.size() == 5) {
 			mode = Scales.PENTATONIC;
 		}
-		else if(formula.length == 6) {
+		else if(formula.size() == 6) {
 			mode = Scales.HEXATONIC;
 		}
 		return mode;
 	}
 
+	@JsonIgnore 
 	public ScaleType getScaleType() {
 		ScaleType st = null;
-		int n = getFormula().length;
+		int n = getFormula().size();
 		switch(n) {
 			case 1: st = ScaleType.MONOTONIC;
 					break;
@@ -226,31 +180,15 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 		return st;
 	}
 	
-	public static List<Integer> formulaToPitchSet(int[] forml) {
-		List<Integer> pitchSet = new ArrayList<Integer>();
-		pitchSet.add(0);
-		for(int i = 0; i<forml.length; i++) {
-			pitchSet.add(forml[i] + pitchSet.get(i) );
-		}
-		return pitchSet;
-	}
 	
-	public static List<Integer> formulaToPitchSet(List<Integer> forml) {
-		int[] farray = new int[forml.size()];
-		int i = 0;
-		for(Integer n : forml) {
-			farray[i++] = n;
+	public static ScaleFormula deserialize(String formulaString) {
+		ScaleFormula scaleFormula = null;
+		try {
+			scaleFormula = mapper.readValue(formulaString, ScaleFormula.class);
+		} catch (IOException e) {
+			log.error("Cannot deserialize " + formulaString + "\nbecause " + e.toString());
 		}
-		return formulaToPitchSet(farray);
-	}
-	
-	public static  List<Integer> pitchSetToFormula(int[] pitchSet) {
-		List<Integer> psFormula = new ArrayList<Integer>();
-		for(int i = 1; i<pitchSet.length; i++) {
-			psFormula.add(pitchSet[i] - pitchSet[i-1]);
-		}
-		psFormula.add(12 - pitchSet[pitchSet.length-1]);
-		return psFormula;
+		return scaleFormula;
 	}
 
 	/**
@@ -265,10 +203,5 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 		return keyset;
 	}
 
-	@Override
-	public String rollJSON() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

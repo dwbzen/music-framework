@@ -2,15 +2,23 @@ package music.element.song;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import music.element.ScaleFormula;
-
 import org.apache.log4j.Logger;
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import mathlib.util.IJson;
+import music.element.IFormula;
+import music.element.Key;
+import music.element.Pitch;
+import util.IMapped;
+import util.music.MissingElementException;
 
 /**
  * Encapsulates meta-information about a chord:
@@ -46,22 +54,33 @@ import org.mongodb.morphia.annotations.Property;
  * @author don_bacon
  *
  */
-@Entity(value="ChordFormula", noClassnameStored=true)
-public class ChordFormula extends ScaleFormula implements IChordFormula {
+public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 
 	private static final long serialVersionUID = 3941757049122502147L;
 	static final org.apache.log4j.Logger log = Logger.getLogger(ChordFormula.class);
-	private static Morphia morphia = new Morphia();
+	private  ObjectMapper mapper = new ObjectMapper();
 
 	/**
 	 * Number of notes in the chord. Typically size + 1
 	 */
-	@Property	private int chordSize;
+	private int chordSize;
 	/**
 	 * chordSpellingNumber - double word binary, 32 bits, accommodates 2 octave + 8 step span
 	 */
-	@Property	private int spellingNumber = 0xFFFFFFFF;
-	@Property	private List<String> symbols = new ArrayList<String>();
+	private int spellingNumber = 0xFFFFFFFF;
+	private String name;
+	@JsonInclude(Include.NON_EMPTY)
+	private List<String> alternateNames = new ArrayList<String>();
+	private List<String> groups = new ArrayList<String>();
+	private List<Integer> formula = new ArrayList<Integer>();
+	private List<String> symbols = new ArrayList<String>();
+	private String description = null;	// optional descriptive text
+	private List<String> intervals = new ArrayList<String>();
+	/**
+	 * formulaNumber is a 3-byte binary (12 bits) where each bit corresponds to the scale degree-1
+	 * Works for a scale or a chord.
+	 */
+	private int formulaNumber = 0;
 	
 	public static final ChordFormula SILENT = new ChordFormula();
 
@@ -71,12 +90,13 @@ public class ChordFormula extends ScaleFormula implements IChordFormula {
 	 * A silent ChordFormula has a chordSize of 0.
 	 */
 	public ChordFormula() {
-		super();
 		this.chordSize = 0;
 	}
 	
 	public ChordFormula(String name, String group, int[] frmla) {
-		super(name, group, frmla);
+		this.name = name;
+		groups.add(group);
+		setFormula(frmla);
 	}
 	
 	/**
@@ -89,25 +109,11 @@ public class ChordFormula extends ScaleFormula implements IChordFormula {
 	 * @param intvls
 	 */
 	public ChordFormula(String name, String[] altNames, String[] symbls, String group, int[] frmla, String[] intvls) {
-		super(name, group, frmla, altNames, intvls);
+		this(name, group, frmla);
+		if(intvls != null && intvls.length > 0) { intervals = Arrays.asList(intvls); }
+		if(altNames != null && altNames.length > 0 ) { alternateNames = Arrays.asList(altNames); }
 		symbols = Arrays.asList(symbls);
 		chordSize = intvls.length;
-		setFormulaNumber(computeFormulaNumber(frmla));	
-	}
-	/**
-	 * Constructor used for static initialization of common chord formulas
-	 * @param name
-	 * @param altNames
-	 * @param symbls
-	 * @param group
-	 * @param frmla
-	 * @param intvls
-	 */
-	public ChordFormula(String name, String[] altNames, String[] symbls, String[] group, int[] frmla, String[] intvls) {
-		super(name, group, frmla, altNames, intvls);
-		symbols = Arrays.asList(symbls);
-		chordSize = intvls.length;
-		setFormulaNumber(computeFormulaNumber(frmla));
 	}
 	
 	/**
@@ -119,9 +125,10 @@ public class ChordFormula extends ScaleFormula implements IChordFormula {
 	 * @param intvls
 	 */
 	public ChordFormula(String name, String symbls, String group, int[] frmla, String[] intvls) {
-		super(name, group, frmla, null, intvls);
+		this(name, group, frmla);
 		symbols.add(symbls);
 		chordSize = intvls.length;
+		if(intvls != null && intvls.length > 0) { intervals = Arrays.asList(intvls); }
 		setFormulaNumber(computeFormulaNumber(frmla));
 	}
 	
@@ -131,7 +138,7 @@ public class ChordFormula extends ScaleFormula implements IChordFormula {
 
 	public int computeFormulaNumber() {
 		int fnum = 0;
-		List<Integer> ps = formulaToPitchSet(getFormula());
+		List<Integer> ps = IFormula.formulaToPitchSet(getFormula());
 		for(Integer i:ps) {
 			int shiftamt = (i>=12) ? i-12 : i;
 			fnum += (1<<shiftamt);
@@ -141,7 +148,7 @@ public class ChordFormula extends ScaleFormula implements IChordFormula {
 	
 	public int computeSpellingNumber() {
 		int fnum = 0;
-		List<Integer> ps = formulaToPitchSet(getFormula());
+		List<Integer> ps = IFormula.formulaToPitchSet(getFormula());
 		for(Integer i:ps) {
 			fnum += (1<<i);
 		}
@@ -150,16 +157,61 @@ public class ChordFormula extends ScaleFormula implements IChordFormula {
 
 	public static int computeFormulaNumber(int[] formula) {
 		int fnum = 0;
-		List<Integer> ps = formulaToPitchSet(formula);
+		List<Integer> ps = IFormula.formulaToPitchSet(formula);
 		for(Integer i:ps) {
 			int shiftamt = (i>=12) ? i-12 : i;
 			fnum += (1<<shiftamt);
 		}
 		return fnum;
 	}
+
+	public  List<Pitch> createPitches(Pitch root) {
+		return createPitches(root, Key.C_MAJOR);
+	}
+	
+	public  List<Pitch> createPitches(Pitch root, Key key) {
+		if(key == null) {
+			throw new MissingElementException("Missing element: Key", new Throwable("IFormula.createPitches null key"));
+		}
+
+		List<Pitch> plist = new ArrayList<Pitch>();
+		plist.add(root);
+		Pitch current = root;
+		Pitch next = null;
+		int preference = (key.getSignature() != null && key.getSignature().length > 0) ? key.getSignature()[0].getAlteration() : 0;
+		for(int i: formula) {
+			next = new Pitch(current);
+			if( i > 0) {
+				next.increment(i);
+				int alt = next.getAlteration();
+				if(alt != 0 && alt != preference) {
+					/*
+					 * amounts to getting the enharmonic equivalent
+					 * so D# same as Eb (preference -1)
+					 * Db same as C# (preference 1)
+					 */
+					next.setEnharmonicEquivalent();
+				}
+			}
+			plist.add(next);
+			current = next;
+		}
+		return plist;
+	}
+
 	
 	public String toJSON() {
-		return morphia.toDBObject(this).toString();
+		return toJson();
+	}
+	
+	public String toJson() {
+		String result = null;
+		try {
+			result = mapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			log.error(e.toString());
+		}
+		return result;
 	}
 
 	public int getChordSize() {
@@ -194,6 +246,57 @@ public class ChordFormula extends ScaleFormula implements IChordFormula {
 		return (symbols.size()>0) ? symbols.get(0) : "";
 	}
 	
+	public List<String> getIntervals() {
+		return intervals;
+	}
+
+	public void setIntervals(List<String> intervals) {
+		this.intervals = intervals;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getFormulaNumber() {
+		return formulaNumber;
+	}
+
+	public void setFormulaNumber(int formulaNumber) {
+		this.formulaNumber = formulaNumber;
+	}
+	
+	public void setFormula(int[] frmla) {
+		for(int i : frmla) {
+			formula.add(i);
+		}
+		setFormulaNumber(computeFormulaNumber(frmla));
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<String> getAlternateNames() {
+		return alternateNames;
+	}
+
+	public List<String> getGroups() {
+		return groups;
+	}
+
+	public List<Integer> getFormula() {
+		return formula;
+	}
+
 	public String toString() {
 		return getName();
 	}
@@ -202,11 +305,21 @@ public class ChordFormula extends ScaleFormula implements IChordFormula {
 	 * Symbols and Alternate names (if any) comprise the key set.
 	 * In general, a ChordFormula doesn't have an alternate name as a ScaleFormula would.
 	 */
-	@Override
 	public Set<String> keySet() {
-		Set<String> keyset = super.keySet();	// alternateNames
+		Set<String> keyset = new HashSet<String>();
+		if(alternateNames != null && alternateNames.size() > 0) {
+			keyset.addAll(alternateNames);
+		}
 		keyset.addAll(symbols);
 		return keyset;
+	}
+	
+	public static void main(String...strings) {
+		int[] cf = {4, 3, 3, 3};
+		String[] intervals = {"M3", "m3", "m3", "M3"};
+		ChordFormula f = new ChordFormula("Dominant ninth", "9", "extended", cf, intervals);
+		System.out.println(f.toString());
+		System.out.println(f.toJson());
 	}
 	
 }

@@ -3,9 +3,7 @@ package music.element;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Scales may be described according to the intervals they contain: 
@@ -23,12 +21,10 @@ import org.mongodb.morphia.annotations.Property;
  * @author DBacon
  *
  */
-@Embedded
-@Entity("ScaleType")
 public class ScaleType {
 	
-	@Property("name")	private String name;	// hexatonic, pentatonic, chromatic etc.
-	@Property("length")	private int length = 0;		// #notes in the scale (normally 7)
+	@JsonProperty("name")	private String name;	// hexatonic, pentatonic, chromatic etc.
+	@JsonProperty("length")	private int length = 0;		// #notes in the scale (normally 7)
 	
 	public ScaleType() {
 	}

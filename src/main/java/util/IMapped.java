@@ -4,16 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A INameable (which is also an IEntity) that has a (possibly empty) keySet.
+ * A INameable that has a (possibly empty) keySet.
  * The default implementation returns an empty Set<T>.
  * The hierarchy is:
  * 				Serializable
- * 		_____________|________________________
- *      |									 |
- *   IEntity  getId(), setId(ObjectId)		INameable getName(), setName(String)
- *      |____________________________________|
- *      			|
- *  		INameableEntity		
+					|
+		INameable getName(), setName(String)	
  *      			|
  *   		IMapped<T>	T keySet()
  *   
@@ -21,7 +17,7 @@ import java.util.Set;
  *
  * @param <T>
  */
-public interface IMapped<T> extends INameableEntity {
+public interface IMapped<T> extends INameable {
 
 	default Set<T> keySet() {
 		return new HashSet<T>();

@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
 
-import util.IJson;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import mathlib.util.IJson;
 
 
 /**
@@ -34,13 +32,10 @@ import util.IJson;
  * Use copy constructors instead to create new pitches from existing.
  * @see https://en.wikipedia.org/wiki/Scientific_pitch_notation
  */
-@Embedded
-@Entity(value="Pitch", noClassnameStored=true)
-public class Pitch implements Serializable,IJson, Comparable<Pitch> {
+public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 
 	static final org.apache.log4j.Logger log = Logger.getLogger(Pitch.class);
 	private static final long serialVersionUID = 4360957591772707668L;
-	static Morphia morphia = new Morphia();
 
 	/**
 	 * Note for all 12 Steps
@@ -99,18 +94,18 @@ public class Pitch implements Serializable,IJson, Comparable<Pitch> {
 	 */
 	public static final Pitch C9 = new Pitch("C9");
 
-	@Embedded("step")	private Step step;
+	@JsonProperty("step")	private Step step;
 	/**
 	 * octave number in standard scientific notation starting at 0
 	 * if octave < 0, pitch is octave-neutral
 	 */
-	@Property("octave")	private int octave = 0;
-	@Property("alteration") private int alteration = 0;
+	@JsonProperty("octave")	private int octave = 0;
+	@JsonProperty("alteration") private int alteration = 0;
 	
 	/**
 	 * Number of steps away from C0, a number >=0 and <pitchRange
 	 */
-	@Property("rangeStep")	private int rangeStep = 0;
+	@JsonProperty("rangeStep")	private int rangeStep = 0;
 	/**
 	 * Need something to represent a "silent" Pitch, a.k.a. a rest
 	 * This is set arbitrarily to octave 0, alteration 0, Step.SILENT
@@ -125,7 +120,7 @@ public class Pitch implements Serializable,IJson, Comparable<Pitch> {
 	public static int pitchRange = 88;	// Piano range: A0 to C7
 	
 	/**
-	 * Default constructor needed for Morphia mapping
+	 * Default constructor
 	 */
 	public Pitch() {
 	}
@@ -660,11 +655,6 @@ public class Pitch implements Serializable,IJson, Comparable<Pitch> {
 		Pitch C9 = new Pitch("C9");
 		System.out.println(C9 + " " + C9.toJSON());
 
-	}
-	
-	@Override
-	public String toJSON() {
-		return morphia.toDBObject(this).toString();
 	}
 
 }

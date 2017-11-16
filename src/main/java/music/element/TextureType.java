@@ -1,10 +1,5 @@
 package music.element;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-
-@Embedded
-@Entity(value="TextureType", noClassnameStored=true)
 /**
  * @see https://en.wikipedia.org/wiki/Texture_(music)
  * @author don_bacon

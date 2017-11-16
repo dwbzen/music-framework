@@ -7,9 +7,7 @@ import java.util.Map;
 import mathlib.Point;
 import music.element.Duration.BeatUnit;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Encapsulates a tempo and/or metronome marking
@@ -43,14 +41,12 @@ import org.mongodb.morphia.annotations.Property;
  * @author don_bacon
  *
  */
-@Embedded
-@Entity(value="Tempo", noClassnameStored=true)
 public class Tempo implements Serializable, Comparable<Tempo> {
 
 	private static final long serialVersionUID = -2764691813647880595L;
 
-	@Property("bpm")		private Integer beatsPerMinute = 90;			// Moderato default
-	@Property("beatUnit")	private BeatUnit beatUnit = BeatUnit.QUARTER;	// what kind of note or chord gets 1 beat
+	@JsonProperty("bpm")		private Integer beatsPerMinute = 90;			// Moderato default
+	@JsonProperty("beatUnit")	private BeatUnit beatUnit = BeatUnit.QUARTER;	// what kind of note or chord gets 1 beat
 	
 	private static Map<String, Point<Integer>> tempoMarkings = new HashMap<String, Point<Integer>>();
 	

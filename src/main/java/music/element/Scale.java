@@ -5,19 +5,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.bson.types.ObjectId;
 
 import music.element.Key.Mode;
 import music.element.Scales;
-import util.IJson;
+import mathlib.util.IJson;
 import util.INameable;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *  A Scale is a specific realization of a ScaleFormula that has a root (starting note)
@@ -26,25 +21,21 @@ import org.mongodb.morphia.annotations.Transient;
  * @author don_bacon
  *
  */
-@Entity(value="Scale", noClassnameStored=true)
 public class Scale implements IJson, INameable  {
 
 	private static final long serialVersionUID = -6449893042332225583L;
-	
-	private static Morphia morphia = new Morphia();
 
-	@Id ObjectId id;
-	@Property("name")		private String name = null;
-	@Property("mode")		private String mode = null;			// valid values: MAJOR, MINOR, MODE, can be null if N/A
-	@Embedded("type")		private ScaleType scaleType = null;
-	@Embedded("root")		private Pitch root = null;
-	@Property("rootPitch")	private String rootPitch = null; 	// C, C#, Bb etc.
-	@Embedded("key")		private Key key = null;				// if there is an associated Key, could be null
-	@Embedded("pitches")	private List<Pitch> pitches = new ArrayList<Pitch>();
-	@Property("notes")		private String notes = null;		// the toString(this) for readability
-	@Transient				private ScaleFormula scaleFormula = null;
-	@Property("formulaName")	private String formulaName;
-	@Property("description")	private String description;		// optional descriptive text
+	@JsonProperty("name")		private String name = null;
+	@JsonProperty("mode")		private String mode = null;			// valid values: MAJOR, MINOR, MODE, can be null if N/A
+	@JsonProperty("type")		private ScaleType scaleType = null;
+	@JsonProperty("root")		private Pitch root = null;
+	@JsonProperty("rootPitch")	private String rootPitch = null; 	// C, C#, Bb etc.
+	@JsonProperty("key")		private Key key = null;				// if there is an associated Key, could be null
+	@JsonProperty("pitches")	private List<Pitch> pitches = new ArrayList<Pitch>();
+	@JsonProperty("notes")		private String notes = null;		// the toString(this) for readability
+	@JsonIgnore					private ScaleFormula scaleFormula = null;
+	@JsonProperty("formulaName")	private String formulaName;
+	@JsonProperty("description")	private String description;		// optional descriptive text
 	
 	public Scale() {
 	}
@@ -152,7 +143,7 @@ public class Scale implements IJson, INameable  {
 	 */
 	public Scale(String name, String mode, ScaleType type, Pitch root, ScaleFormula formula, Key key, Alteration pref) {
 		this(name, mode, type, root, key);
-		pitches = IScaleFormula.createPitches(formula.getFormula(), root, key, pref);
+		pitches = IFormula.createPitches(formula.getFormula(), root, key, pref);
 		scaleFormula = formula;
 		formulaName = formula.getName();
 	}
@@ -313,14 +304,6 @@ public class Scale implements IJson, INameable  {
 		return notes;
 	}
 
-	public ObjectId getId() {
-		return id;
-	}
-
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
-	
 	public int size() {
 		return pitches.size();
 	}

@@ -1,11 +1,8 @@
 package music.element;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import util.IMapped;
-import util.music.MissingElementException;
 
 /**
  * Predictably, a formula for creating a Scale Or a Chord
@@ -33,79 +30,11 @@ import util.music.MissingElementException;
  * @author DBacon
  *
  */
-public interface IScaleFormula extends Serializable, IMapped<String> {
+public interface IScaleFormula extends IFormula, IMapped<String> {
 	
-	public int[] getFormula();
-	public String getName();
 	public List<String> getGroups();
-	public List<String> getAlternateNames();
-	public String getDescription();
-	
 	public List<Pitch> createPitches(Pitch root);
-	
-	
-	/**
-	 * 
-	 * @param formula the chord formula as int[]
-	 * @param root the root Pitch
-	 * @param key the assigned Key - cannot be null
-	 * @return  List<Pitch>
-	 * @throws util.music.MissingElementException
-	 */
-	public static List<Pitch> createPitches(int[] formula, Pitch root, Key key) {
-		if(key == null) {
-			// this can happen if the "key" is missing in the first measure
-			// looking for something like "key" : { "name" : "Bb-Major" , "mode" : "MAJOR"} }
-			// throw a RuntimeException
-			throw new MissingElementException("Missing element: Key", new Throwable("IScaleFormula.createPitches null key"));
-		}
-		int ap = key.getAlterationPreference();
-		Alteration preference = Alteration.NONE;
-		if(ap < 0) {
-			preference = Alteration.DOWN_ONE;
-		}
-		else if(ap > 0) {
-			preference = Alteration.UP_ONE;
-		}
-		return createPitches(formula, root, key, preference);
-	}
-	
-	/**
-	 * Creates a List of Pitch for a Scale with a given formula and root
-	 * A Scale may consist of a single note. In that case the formula is [0].
-	 * 
-	 * @param formula an int[] scale formula
-	 * @param root root Pitch of the scale
-	 * @param key optional associated Key. If != null, it determines accidental preference - # or b
-	 * @param pref optional Alteration to use (overrides key setting)
-	 * @return List<Pitch>
-	 */
-	public static List<Pitch> createPitches(int[] formula, Pitch root, Key key, Alteration pref) {
-		List<Pitch> plist = new ArrayList<Pitch>();
-		plist.add(root);
-		Pitch current = root;
-		Pitch next = null;
-		int preference = (pref != null) ? pref.value() : 
-			(key != null && key.getSignature() != null && key.getSignature().length > 0) ? key.getSignature()[0].getAlteration() : 0;
-		for(int i: formula) {
-			next = new Pitch(current);
-			if( i > 0) {
-				next.increment(i);
-				int alt = next.getAlteration();
-				if(alt != 0 && alt != preference) {
-					/*
-					 * amounts to getting the enharmonic equivalent
-					 * so D# same as Eb (preference -1)
-					 * Db same as C# (preference 1)
-					 */
-					next.setEnharmonicEquivalent();
-				}
-			}
-			plist.add(next);
-			current = next;
-		}
-		return plist;
-	}
+		
 	
 	/**
 	 * Creates a List of Pitch for a Scale with a given formula and root
@@ -115,12 +44,7 @@ public interface IScaleFormula extends Serializable, IMapped<String> {
 	 * @return
 	 */
 	public static List<Pitch> createPitches(List<Integer> formula, Pitch root, Key key) {
-		int[] array = new int[formula.size()];
-		int index = 0;
-		for(Integer i : formula) {
-			array[index++] = i;
-		}
-		return createPitches(array, root, key);
+		return IFormula.createPitches(formula, root, key);
 	}
 	
 	/**

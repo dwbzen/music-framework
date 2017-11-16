@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -96,15 +97,15 @@ public class ScaleFormulaImport {
 	}
 	
 	private static boolean isSameFormula(ScaleFormula sf, ScaleFormula scaleFormula) {
-		int[] sfForm = sf.getFormula();
-		int[] scaleForm = scaleFormula.getFormula();
+		List<Integer> sfForm = sf.getFormula();
+		List<Integer> scaleForm = scaleFormula.getFormula();
 		boolean same = true;
-		if(sfForm.length != scaleForm.length) {
+		if(sfForm.size() != scaleForm.size()) {
 			same = false;
 		}
 		else {
-			for(int i=0; i<sfForm.length; i++) {
-				if(sfForm[i] != scaleForm[i]) {
+			for(int i=0; i<sfForm.size(); i++) {
+				if(sfForm.get(i) != scaleForm.get(i)) {
 					same = false;
 				}
 			}

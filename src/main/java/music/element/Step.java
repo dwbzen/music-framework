@@ -1,7 +1,6 @@
 package music.element;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
+
 
 /**
  * Defines the step# in the chromatic scale, origin 1
@@ -12,8 +11,6 @@ import org.mongodb.morphia.annotations.Entity;
  * @author don_bacon
  *
  */
-@Embedded
-@Entity(value="Step", noClassnameStored=true)
 public enum Step {
 	C(1),
 	CSHARP(2), DFLAT(2),	/* enharmonic equivalent */

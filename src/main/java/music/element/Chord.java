@@ -6,13 +6,10 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import util.IJson;
+import mathlib.util.IJson;
 
 /**
  * A Chord is a vertical arrangement of Notes
@@ -26,20 +23,18 @@ import util.IJson;
  * @author don_bacon
  *
  */
-@Entity(value="Chord")
 public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeasurableContainer<Note> {
 
 	private static final long serialVersionUID = -573501626988564230L;
-	private static Morphia morphia = new Morphia();
 	/*
 	 * Notes in the Chord sorted in increasing Pitch order
 	 */
-	@Embedded	private SortedSet<Note> notes = new TreeSet<Note>();
-	@Embedded	private Note root = null;
-	@Embedded	private Chord tiedTo = null;		// the Chord this is tied to - occurs after this Chord
-	@Embedded	private Chord tiedFrom = null;		// the Chord this is tied from - occurs before this Chord
-	@Property	private int size = 0;
-	@Transient	private Iterator<Note> iterator = null;
+	@JsonProperty	private SortedSet<Note> notes = new TreeSet<Note>();
+	@JsonProperty	private Note root = null;
+	@JsonProperty	private Chord tiedTo = null;		// the Chord this is tied to - occurs after this Chord
+	@JsonProperty	private Chord tiedFrom = null;		// the Chord this is tied from - occurs before this Chord
+	@JsonProperty	private int size = 0;
+	@JsonIgnore		private Iterator<Note> iterator = null;
 	
 	public Chord() {
 	}
@@ -277,9 +272,4 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		}
 	}
 
-	
-	@Override
-	public String toJSON() {
-		return morphia.toDBObject(this).toString();
-	}
 }

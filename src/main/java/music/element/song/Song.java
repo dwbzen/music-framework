@@ -4,16 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import mathlib.RaggedArray;
-import util.IJson;
+import mathlib.util.IJson;
 import util.IMapped;
 
 /**
@@ -29,28 +24,24 @@ import util.IMapped;
  * @author don_bacon
  *
  */
-@Entity(value="Song", noClassnameStored=true)
 public class Song implements IJson, IMapped<String>, Supplier<ChordProgression>  {
 
 	private static final long serialVersionUID = 8221829976304858453L;
 
-	private static Morphia morphia = new Morphia();
-	
-	@Id ObjectId id;
-	@Property("name")		private String name = null;		// the name is the song title
-	@Property("artist")		private String artist = null;	// As in "The Beatles"
-	@Property("composers")	private List<String> composers = new ArrayList<String>();
-	@Property("year")		private int year;
-	@Property("album")		private String album = null;
-	@Property("track")		private int track = 0;
-	@Embedded("sections")	private List<Section> sections = new ArrayList<Section>();
-	@Embedded				private KeyLite performanceKey = null;	// default Key for performance (could be different than score Key)
-	@Transient				private int index = -1;		// section counter for get()
-	@Transient				private int numberOfMeasures = 0;
-	@Transient				private int numberOfChords = 0;		// a sum of #Harmony in all the Sections in this song.
-	@Transient				private RaggedArray<HarmonyChord, ChordProgression> cpArray = null;
-	@Transient				private boolean originalKey = false;
-	@Transient				private HarmonyChord sectionTerminator = HarmonyChord.TERMINAL_HARMONY_CHORD;
+	@JsonProperty("name")		private String name = null;		// the name is the song title
+	@JsonProperty("artist")		private String artist = null;	// As in "The Beatles"
+	@JsonProperty("composers")	private List<String> composers = new ArrayList<String>();
+	@JsonProperty("year")		private int year;
+	@JsonProperty("album")		private String album = null;
+	@JsonProperty("track")		private int track = 0;
+	@JsonProperty("sections")	private List<Section> sections = new ArrayList<Section>();
+	@JsonProperty				private KeyLite performanceKey = null;	// default Key for performance (could be different than score Key)
+	@JsonIgnore				private int index = -1;		// section counter for get()
+	@JsonIgnore				private int numberOfMeasures = 0;
+	@JsonIgnore				private int numberOfChords = 0;		// a sum of #Harmony in all the Sections in this song.
+	@JsonIgnore				private RaggedArray<HarmonyChord, ChordProgression> cpArray = null;
+	@JsonIgnore				private boolean originalKey = false;
+	@JsonIgnore				private HarmonyChord sectionTerminator = HarmonyChord.TERMINAL_HARMONY_CHORD;
 
 	public String getArtist() {
 		return artist;
@@ -74,15 +65,6 @@ public class Song implements IJson, IMapped<String>, Supplier<ChordProgression> 
 
 	public void setAlbum(String album) {
 		this.album = album;
-	}
-
-	public ObjectId getId() {
-		return id;
-	}
-	
-	@Override
-	public void setId(ObjectId id) {
-		this.id = id;	
 	}
 
 	public List<String> getComposers() {
@@ -174,12 +156,6 @@ public class Song implements IJson, IMapped<String>, Supplier<ChordProgression> 
 	@Override
 	public String toJSON() {
 		return morphia.toDBObject(this).toString();
-	}
-
-	@Override
-	public String rollJSON() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

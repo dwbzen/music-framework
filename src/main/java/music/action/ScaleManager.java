@@ -1,6 +1,7 @@
 package music.action;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -11,28 +12,21 @@ import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bson.Document;
-import org.mongodb.morphia.Morphia;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.util.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import music.element.Pitch;
 import music.element.Scale;
 import music.element.ScaleFormula;
 import music.element.ScaleType;
 import util.Configuration;
-import util.mongo.Find;
 
 public class ScaleManager {
 	static final Logger log = LogManager.getLogger(ScaleManager.class);
 	static final String CONFIG_FILENAME = "/config.properties";
-	
+	private  ObjectMapper mapper = new ObjectMapper();
 	private String dataSourceName;
 	private Properties properties;
-	private Morphia morphia = new Morphia();
 	private Pitch defaultRootPitch = new Pitch("C");
 	
 	public ScaleManager(Properties properties) {
@@ -80,14 +74,9 @@ public class ScaleManager {
 			String mode = null;
 			ScaleType st = null;
 			
-			if(dataSourceName.equalsIgnoreCase("mongodb")) {
-				scaleFormula = findScaleFormula(scaleName);
-			}
-			else  {
-				String resource =  (scaleName.startsWith("Theoretical")) ?   
-						properties.getProperty("dataSource.scaleFormulas.theoretical") : properties.getProperty("dataSource.scaleFormulas");
-				scaleFormula = findScaleFormula(scaleName, resource);
-			}
+			String resource =  (scaleName.startsWith("Theoretical")) ?   
+					properties.getProperty("dataSource.scaleFormulas.theoretical") : properties.getProperty("dataSource.scaleFormulas");
+			scaleFormula = findScaleFormula(scaleName, resource);
 			
 			if(scaleFormula != null) {
 				mode = scaleFormula.getMode();
@@ -122,35 +111,16 @@ public class ScaleManager {
 		Optional<String> optional = stream.filter(s -> s.contains(scaleName)).findFirst();
 		if(optional.isPresent()) {
 			String formulaString = optional.get();
-			DBObject dbo = (DBObject) JSON.parse(formulaString);
-			Morphia morphia = new Morphia();
-			morphia.map(ScaleFormula.class);
-			scaleFormula = morphia.fromDBObject(null, ScaleFormula.class, dbo);
+			try {
+				scaleFormula = mapper.readValue(formulaString, ScaleFormula.class);
+			} catch (IOException e) {
+				log.error("Cannot deserialize " + formulaString + " because " + e.toString());
+			}
 			stream.close();
 		}
 		else {
-    		System.err.println("No such scale: " + scaleName);
+    		log.error("No such scale: " + scaleName);
     	}
-		return scaleFormula;
-	}
-	
-	public ScaleFormula findScaleFormula(String scaleName) {
-		ScaleFormula scaleFormula = null;
-		String dbname = properties.getProperty("dataSource.mongodb.db.name");
-		String collectionName = properties.getProperty("dataSource.mongodb.scaleFormulas");
-		Find find = new Find(dbname, collectionName);
-		String queryString = "name:" + scaleName;
-		find.setQuery(queryString);
-		MongoCursor<Document> cursor = find.search();
-		long count = find.count();
-		log.debug(queryString + " count: " + count);
-		if(count > 0) {
-			morphia.map(ScaleFormula.class);
-			Document doc = cursor.next();
-			DBObject dbObject = new BasicDBObject(doc);	
-			scaleFormula = morphia.fromDBObject(find.getDatastore(), ScaleFormula.class, dbObject);
-		}
-		find.close();
 		return scaleFormula;
 	}
 	

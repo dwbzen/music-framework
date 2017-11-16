@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -12,16 +11,15 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
-
-import util.mongo.Find;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.util.JSON;
+
+import util.mongo.Find;
 
 public class JSONUtil {
 	static final org.apache.log4j.Logger log = Logger.getLogger(JSONUtil.class);
@@ -57,7 +55,6 @@ public class JSONUtil {
 			throw new RuntimeException("File not found: " + inputFile);
 		}
 		String line;
-		int counter = 1;
 		while((line = inputFileReader.readLine()) != null) {
 			String jsonline = line.trim();
 			if(jsonline.startsWith("//") || jsonline.startsWith("/*")) {
@@ -68,10 +65,8 @@ public class JSONUtil {
 				log.debug("parsed " + dbObject.toString());
 				BasicDBObject cf = (BasicDBObject) morphia.fromDBObject(datastore, mappedClass, dbObject);
 				if(cf != null) {
-					ObjectId id = new ObjectId(new Date(), counter++);
 					@SuppressWarnings("unchecked")
 					IMapped<String> iMapped = (IMapped<String>)cf;
-					iMapped.setId(id);
 					addObjectToMap(iMapped, namableMap);
 				}
 			}
