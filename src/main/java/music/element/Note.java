@@ -2,10 +2,8 @@ package music.element;
 
 import java.io.Serializable;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A pitch + Duration. Can also be a rest (no pitch).
@@ -16,17 +14,15 @@ import org.mongodb.morphia.annotations.Transient;
  * @author don_bacon
  *
  */
-@Embedded
-@Entity(value="Note")
 public class Note extends Measurable implements Serializable, Comparable<Note> {
 
 	private static final long serialVersionUID = 1774493820041575241L;
 	
-	@Embedded				private Pitch pitch = null;		// will be null for a rest
-	@Property("rest")		private boolean rest = true;	// set automatically by constructor from Pitch
-	@Transient				private Note tiedTo = null;		// reference to the note this is tied to - occurs after this note
-	@Transient				private Note tiedFrom = null;	//  reference to the note the note this is tied from - occurs before this note
-	@Transient				private IMeasurableContainer<Note>	container = null;	// reference to container (like a Chord) or null
+	@JsonProperty("pitch")	private Pitch pitch = null;		// will be null for a rest
+	@JsonProperty("rest")	private boolean rest = true;	// set automatically by constructor from Pitch
+	@JsonIgnore				private Note tiedTo = null;		// reference to the note this is tied to - occurs after this note
+	@JsonIgnore				private Note tiedFrom = null;	//  reference to the note the note this is tied from - occurs before this note
+	@JsonIgnore				private IMeasurableContainer<Note>	container = null;	// reference to container (like a Chord) or null
 
 	public Note(Pitch p, Duration dur) {
 		setPitch(new Pitch(p));	// also sets rest

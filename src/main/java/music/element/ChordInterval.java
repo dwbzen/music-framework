@@ -5,9 +5,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Encapsulates intervals and interval notation used in chord formation
@@ -31,8 +29,6 @@ import org.mongodb.morphia.annotations.Property;
  * @author don_bacon
  *
  */
-@Embedded
-@Entity(value="interval")
 public class ChordInterval  implements Serializable, Comparable<ChordInterval> {
 
 	private static final long serialVersionUID = 493622549097169989L;
@@ -87,10 +83,10 @@ public class ChordInterval  implements Serializable, Comparable<ChordInterval> {
 		notation.put("#13", 22);	reverseNotation.put(22, "#13");	text.put("#13", "sharp 13th");
 	}
 	
-	@Embedded("root")		private Pitch root = null;
-	@Property("steps")		private int steps = 0;		// 0 through 22
-	@Property("abbreviation")		private String abbreviation = null;	// notation
-	@Property("description")		private String description = null;	// text
+	@JsonProperty("root")			private Pitch root = null;
+	@JsonProperty("steps")			private int steps = 0;		// 0 through 22
+	@JsonProperty("abbreviation")	private String abbreviation = null;	// notation
+	@JsonProperty("description")	private String description = null;	// text
 	
 	/**
 	 * Construct a new ChordInterval.

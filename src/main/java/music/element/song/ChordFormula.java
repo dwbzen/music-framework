@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,7 +19,6 @@ import music.element.IFormula;
 import music.element.Key;
 import music.element.Pitch;
 import util.IMapped;
-import util.music.MissingElementException;
 
 /**
  * Encapsulates meta-information about a chord:
@@ -63,7 +63,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	/**
 	 * Number of notes in the chord. Typically size + 1
 	 */
-	private int chordSize;
+	@JsonProperty("chordSize")	private int chordSize;
 	/**
 	 * chordSpellingNumber - double word binary, 32 bits, accommodates 2 octave + 8 step span
 	 */
@@ -76,6 +76,10 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	private List<String> symbols = new ArrayList<String>();
 	private String description = null;	// optional descriptive text
 	private List<String> intervals = new ArrayList<String>();
+	/**
+	 * The pitches, octave neutral root of "C", derived from the formula
+	 */
+	private List<Pitch> template = new ArrayList<Pitch>();
 	/**
 	 * formulaNumber is a 3-byte binary (12 bits) where each bit corresponds to the scale degree-1
 	 * Works for a scale or a chord.
@@ -97,6 +101,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		this.name = name;
 		groups.add(group);
 		setFormula(frmla);
+		template.addAll(createPitches(Pitch.C));
 	}
 	
 	/**
@@ -169,49 +174,13 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		return createPitches(root, Key.C_MAJOR);
 	}
 	
-	public  List<Pitch> createPitches(Pitch root, Key key) {
-		if(key == null) {
-			throw new MissingElementException("Missing element: Key", new Throwable("IFormula.createPitches null key"));
-		}
-
-		List<Pitch> plist = new ArrayList<Pitch>();
-		plist.add(root);
-		Pitch current = root;
-		Pitch next = null;
-		int preference = (key.getSignature() != null && key.getSignature().length > 0) ? key.getSignature()[0].getAlteration() : 0;
-		for(int i: formula) {
-			next = new Pitch(current);
-			if( i > 0) {
-				next.increment(i);
-				int alt = next.getAlteration();
-				if(alt != 0 && alt != preference) {
-					/*
-					 * amounts to getting the enharmonic equivalent
-					 * so D# same as Eb (preference -1)
-					 * Db same as C# (preference 1)
-					 */
-					next.setEnharmonicEquivalent();
-				}
-			}
-			plist.add(next);
-			current = next;
-		}
-		return plist;
+	public  List<Pitch> createPitches(Pitch root, Key akey) {
+		return IFormula.createPitches(formula, root, akey);
 	}
 
 	
 	public String toJSON() {
 		return toJson();
-	}
-	
-	public String toJson() {
-		String result = null;
-		try {
-			result = mapper.writeValueAsString(this);
-		} catch (JsonProcessingException e) {
-			log.error(e.toString());
-		}
-		return result;
 	}
 
 	public int getChordSize() {
@@ -297,8 +266,23 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		return formula;
 	}
 
+	public List<Pitch> getTemplate() {
+		return template;
+	}
+
 	public String toString() {
-		return getName();
+		StringBuffer sb = new StringBuffer(getName());
+		sb.append(", symbol: " + getSymbol());
+		try {
+			sb.append(", formula: " + mapper.writeValueAsString(getFormula()));
+		} catch (JsonProcessingException e) {
+			System.err.println("Cannot serialize because " + e.toString());
+			e.printStackTrace();
+		}
+		sb.append(", formula#: " + formulaNumber);
+		sb.append(", template: ");
+		template.forEach(p -> sb.append(p.toString()+" "));
+		return sb.toString();
 	}
 	
 	/**
@@ -315,9 +299,9 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	}
 	
 	public static void main(String...strings) {
-		int[] cf = {4, 3, 3, 3};
-		String[] intervals = {"M3", "m3", "m3", "M3"};
-		ChordFormula f = new ChordFormula("Dominant ninth", "9", "extended", cf, intervals);
+		int[] cf = {5, 2, 3, 4};
+		String[] intervals = {"P4", "M2", "m3", "M3"};
+		ChordFormula f = new ChordFormula("9Sus4", "9sus4", "suspended", cf, intervals);
 		System.out.println(f.toString());
 		System.out.println(f.toJson());
 	}

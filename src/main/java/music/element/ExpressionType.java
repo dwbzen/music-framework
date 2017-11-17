@@ -1,10 +1,5 @@
 package music.element;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-
-@Embedded
-@Entity(value="ExpressionType", noClassnameStored=true)
 public class ExpressionType {
 	
 	private TextureType textureType = null;

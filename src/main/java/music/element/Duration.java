@@ -1,16 +1,12 @@
 package music.element;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import mathlib.IntegerPair;
 import mathlib.util.IJson;
 import util.Ratio;
 
-@Embedded
-@Entity(value="Duration",  noClassnameStored=true)
 public class Duration implements IJson, Comparable<Duration> {
 
 	private static final long serialVersionUID = -2806795943905155955L;
@@ -18,17 +14,17 @@ public class Duration implements IJson, Comparable<Duration> {
 	/**
 	 * total units including added dots. In MusicXML: <duration>n</duration>
 	 */
-	@Property("units")		private int durationUnits = 0;
+	@JsonProperty("units")		private int durationUnits = 0;
 	
 	/**
 	 * base units - does not include additional units from added "dots"
 	 */
-	@Property("baseUnits")	private int baseUnits = 0;
+	@JsonProperty("baseUnits")	private int baseUnits = 0;
 	
 	/**
 	 * raw duration value
 	 */
-	@Transient	private double rawDuration = 0.0;
+	@JsonIgnore	private double rawDuration = 0.0;
 
 	/** 
 	 * Beat units are any of the following:
@@ -46,14 +42,14 @@ public class Duration implements IJson, Comparable<Duration> {
 	 * for specifying tuplets ratio[0] in the time of ratio[1]
 	 * Example, triplets would be {3, 2} - 3 notes played in the time of 2
 	 */
-	@Embedded("ratio")		private Ratio ratio = Ratio.ONE_TO_ONE;
-	@Transient				private boolean grace = false;	// grace note or chord
+	@JsonProperty("ratio")	private Ratio ratio = Ratio.ONE_TO_ONE;
+	@JsonIgnore				private boolean grace = false;	// grace note or chord
 	
 	/**
 	 * Number of dots qualifying the note for this duration. Can be calculated
 	 * from duration units and measure divisions
 	 */
-	@Property("dots")		private int dots = 0;
+	@JsonProperty("dots")		private int dots = 0;
 	
 	public Duration(int dur) {
 		durationUnits = dur;
@@ -156,7 +152,7 @@ public class Duration implements IJson, Comparable<Duration> {
 
 	public String toString() {
 		//String s = ((durationUnits == 0) ? rawDuration + " sec." : durationUnits + " div.") + " dots: " + dots;
-		return toJSON();
+		return toJson();
 	}
 	
 	@Override

@@ -5,16 +5,11 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Reference;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import music.ScorePart;
-import util.IJson;
+import mathlib.util.IJson;
 
 /**
  * A Measure is a horizontal arrangement of Note and/or Chord : i.e. a Measurable
@@ -32,56 +27,53 @@ import util.IJson;
  * @author don_bacon
  *
  */
-@Entity(value="Measures", noClassnameStored=false)
 public class Measure implements IJson, Consumer<Measurable> {
 
 	private static final long serialVersionUID = -704281345619181452L;
 	public static final int DEFAULT_DIVISIONS_PER_MEASURE = 16;
 	private static int divisionsPerMeasure = DEFAULT_DIVISIONS_PER_MEASURE;		// default value
-	
-	@Id ObjectId id = new ObjectId();
 
 	/**
 	 * Number of basic units in the measure. Must be >0
 	 */
-	@Property("divisions")	private int divisions;
-	@Embedded				private Key key = Key.C_MAJOR;	// sensible default
+	@JsonProperty("divisions")	private int divisions;
+	@JsonProperty				private Key key = Key.C_MAJOR;	// sensible default
 	/**
 	 * Time signature beats per measure
 	 */
-	@Property("beats")		private int beats = 4;	// beats per measure. divisions per beat = divisions/beats, 24/3 = 8 for example
+	@JsonProperty("beats")		private int beats = 4;	// beats per measure. divisions per beat = divisions/beats, 24/3 = 8 for example
 	/**
 	 * Time signature beat note (1=whole, 2=half, 4 = quaver, 8 = semiquaver etc.)
 	 * SO time signature is beats/beatNote: 3/4, 6/8, whatever
 	 */
-	@Property("beatNote")	private int beatNote = 4;		// defaults to quarterNote
-	@Embedded				private Dynamics dynamics = new Dynamics();		// defaults to mf
-	@Embedded				private Tempo tempo = new Tempo();	// defaults to 90 (Moderato)
+	@JsonProperty("beatNote")	private int beatNote = 4;		// defaults to quarterNote
+	@JsonProperty				private Dynamics dynamics = new Dynamics();		// defaults to mf
+	@JsonProperty				private Tempo tempo = new Tempo();	// defaults to 90 (Moderato)
 	/**
 	 * true if the tempo changes on this measure (from the previous)
 	 */
-	@Property("tempoChange")	private boolean tempoChange = false;
-	@Property("keyChange")		private boolean keyChange = false;
+	@JsonProperty("tempoChange")	private boolean tempoChange = false;
+	@JsonProperty("keyChange")		private boolean keyChange = false;
 	
 	/**
 	 * Refers the the previous measure if there is one or null if not
 	 */
-	@Transient	private Measure lastMeasure = null;
+	@JsonIgnore	private Measure lastMeasure = null;
 	
 	/**
 	 * Refers to the next measure if there is one, or null if not
 	 */
-	@Reference	private Measure nextMeasure = null;
-	
+	@JsonIgnore	private Measure nextMeasure = null;
+	@JsonIgnore	private ScorePart scorePart = null;
+
 	/**
 	 * Measure number, starts at 1
 	 */
-	@Property("number")		private int number = 1;
-	@Embedded	private Label label;
-	@Transient	private ScorePart scorePart = null;
+	@JsonProperty("number")		private int number = 1;
+	@JsonProperty	private Label label;
 	
-	@Embedded	private List<Label> clefs = new ArrayList<Label>();
-	@Embedded	private List<Measurable> measureables = new ArrayList<Measurable>();	// notes & chords in this measure
+	@JsonProperty	private List<Label> clefs = new ArrayList<Label>();
+	@JsonProperty	private List<Measurable> measureables = new ArrayList<Measurable>();	// notes & chords in this measure
 	
 	
 	protected Measure() {

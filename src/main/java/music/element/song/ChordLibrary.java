@@ -3,11 +3,11 @@ package music.element.song;
 import java.util.TreeMap;
 
 /**
- * Loads all the chord formulas into memory. Use when mongoDB collection not available or
- * you just don't want to go to the trouble to install it.
+ * Loads all the chord formulas into memory.
  * All the chords in chords.json (resources/data/music) are available in a map
  * indexed by name, symbol(s) and alternate names.
- * Chord info is hard-coded - this does not reference the JSON file or MongoDB collection.
+ * Chord info is hard-coded - this does not reference the JSON file
+ * TODO - sync with chord_formulas.json
  * 
  * @author don_bacon
  * @see music.element.song.ChordManager loadChordFormulas

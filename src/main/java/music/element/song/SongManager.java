@@ -43,6 +43,8 @@ public class SongManager {
 	private Songbook songbook = null;
 	private Configuration configuration =  null;
 	private Properties configProperties = null;
+	private ChordManager chordManager = null;
+	
 	private String dbname = null;
 	private String host = defaultHost;
 	private int port = defaultPort;
@@ -99,6 +101,8 @@ public class SongManager {
 	}
 	
 	public SongManager(String collection, String filename) {
+		chordManager = new ChordManager();	// also loads chord_formulas
+		
 		Find.morphia.mapPackage("music.element.song");
 		configuration =  Configuration.getInstance(CONFIG_FILENAME);
 		configProperties = configuration.getProperties();
@@ -133,7 +137,7 @@ public class SongManager {
 			log.warn("Nothing found in " + songCollectionName + " collection");
 			//return;
 		}
-		chordFormulas = ChordManager.loadChordFormulas(dbname, chordFormulaCollectionName);
+		chordFormulas = chordManager.getChordFormulas();
 
 		while(cursor.hasNext()) {
 			Document doc = cursor.next();
@@ -188,7 +192,7 @@ public class SongManager {
 						log.debug("0");
 						continue;	// okay to let this go through
 					}
-					HarmonyChord hc = ChordManager.createHarmonyChord(chordName, chordFormulas, key);
+					HarmonyChord hc = chordManager.createHarmonyChord(chordName, key);
 					if(hc != null) {
 						harmony.setHarmonyChord(hc);
 						if(transposedKey != null) {

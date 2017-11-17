@@ -2,17 +2,14 @@ package music.element;
 
 import java.io.Serializable;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Embedded
-@Entity(value="Label", noClassnameStored=true)
+
 public class Label implements Serializable, Comparable<Label> {
 
 	private static final long serialVersionUID = 3903761745238964639L;
-	@Property("number")	private int number = -1;
-	@Property("label")	private String label = null;
+	@JsonProperty("number")	private int number = -1;
+	@JsonProperty("label")	private String label = null;
 	
 	public Label(int n, String l) {
 		this.number = n;

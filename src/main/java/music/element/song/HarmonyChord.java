@@ -5,12 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import music.element.Key;
-import music.element.Pitch;
-
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
@@ -18,9 +14,11 @@ import org.mongodb.morphia.annotations.Property;
 import org.mongodb.morphia.annotations.Reference;
 import org.mongodb.morphia.annotations.Transient;
 
-import util.IJson;
-import util.INameable;
 import mathlib.cp.ICollectable;
+import mathlib.util.IJson;
+import music.element.Key;
+import music.element.Pitch;
+import util.INameable;
 
 /**
  * A HarmonyChord is a chord that has an associated ChordFormula rather than
@@ -41,7 +39,6 @@ import mathlib.cp.ICollectable;
 public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>, ICollectable<Pitch> {
 
 	private static final long serialVersionUID = -5601371412350435601L;
-	private static Morphia morphia = new Morphia();
 	private static boolean includeSpellingInToString = true;
 	static final org.apache.log4j.Logger log = Logger.getLogger(HarmonyChord.class);
 	public static final HarmonyChord SILENT = new HarmonyChord();
@@ -192,11 +189,6 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 		for(Pitch pitch: chordPitches) {
 			spelling.add(pitch.toString());
 		}
-	}
-	
-	@Override
-	public String toJSON() {
-		return morphia.toDBObject(this).toString();
 	}
 	
 	/**

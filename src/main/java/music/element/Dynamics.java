@@ -1,13 +1,8 @@
 package music.element;
 
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
-
-@Embedded
-@Entity(value="Dynamics", noClassnameStored=true)
 public class Dynamics implements Serializable {
 
 	private static final long serialVersionUID = 3305343395503717813L;
@@ -31,7 +26,7 @@ public class Dynamics implements Serializable {
 		"ff", "sffz", "fff", "ffff", "fffff", "ffffff"
 	};
 
-	@Property("dynamic") private Dynamic dynamic = Dynamic.F;
+	@JsonProperty("dynamic") private Dynamic dynamic = Dynamic.F;
 	
 	public Dynamics() {
 		this.dynamic = Dynamic.F;	// sensible default

@@ -1,8 +1,9 @@
 package music.element;
 
 /**
- * All the modes can be derived from any of the diatonic scales by rotation left.
- * major equivalent to Ionian mode. 
+ * All the modes can be derived from any diatonic scale by rotation left
+ * which essentially changes the root.
+ * Diatonic Major scale is equivalent to Ionian mode. 
  * Dorian == MAJOR rotate left 1
  * Phrygian == MAJOR rotate left 2 (Dorian rotate left 1)
  * Lydian == MAJOR rotate left 3  (Phrygian rotate left 1)

@@ -1,9 +1,8 @@
 package music.element;
 import mathlib.IPoint;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A Musical structure that can be added to a Measure.
@@ -12,35 +11,33 @@ import org.mongodb.morphia.annotations.Property;
  * @author don_bacon
  *
  */
-@Embedded
-@Entity(value="Measurable", noClassnameStored=true)
 public abstract class Measurable {
 	
 	/**
 	 * note or chord
 	 */
-	@Property	private String type;
+	@JsonProperty	private String type;
 	
 	/**
 	 * derived from Duration.BeatUnitNames: whole, half, quarter etc.
 	 */
-	@Property("note-type")	protected String noteType = null;
+	@JsonProperty("note-type")	protected String noteType = null;
 	/**
 	 * in pre-determined units defined by Measure, must be >0
 	 * Includes ratio for triplets, and grace note indication
 	 */
-	@Embedded 				protected Duration duration;
-	@Property("voice")		private int voice = 1;
-	@Property("tieType")	protected TieType tieType = TieType.NONE;	// Chords and Notes can be tied together
-	@Property("tupletType")	protected TupletType tupletType = TupletType.NONE;
-	@Embedded				private Dynamics dynamics = null;			// optional Dynamics applies to object only
-	@Embedded("point")		private IPoint point = null;				// optional generating point
-	@Property("seq_id")		protected Integer seq_id = 0;		// a global sequence id starting at 1 (0 = unassigned)
-	@Property				private String name = null;		// optional name
+	@JsonProperty 				protected Duration duration;
+	@JsonProperty("voice")		private int voice = 1;
+	@JsonProperty("tieType")	protected TieType tieType = TieType.NONE;	// Chords and Notes can be tied together
+	@JsonProperty("tupletType")	protected TupletType tupletType = TupletType.NONE;
+	@JsonProperty				private Dynamics dynamics = null;			// optional Dynamics applies to object only
+	@JsonProperty("point")		private IPoint point = null;				// optional generating point
+	@JsonIgnore					protected Integer seq_id = 0;		// a global sequence id starting at 1 (0 = unassigned)
+	@JsonProperty				private String name = null;		// optional name
 	/**
 	 * starting at 1 indicates the order this Measurable added to some container
 	 */
-	@Property("ordinal")	protected int ordinal = 0;
+	@JsonProperty("ordinal")	protected int ordinal = 0;
 	/**
 	 * Reference to container if any - a Chord for example
 	 */

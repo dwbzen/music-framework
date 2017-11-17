@@ -3,26 +3,21 @@ package music.element;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import util.IJson;
+import mathlib.util.IJson;
 
-@Embedded
 public class Key implements IJson {
 
 	private static final long serialVersionUID = 8877503587449790917L;
-	private static Morphia morphia = new Morphia();
 
-	@Property("name")	private String name;
-	@Embedded("mode")	private Mode mode = Mode.MAJOR;		// or Mode.MINOR
-	@Embedded			private Pitch[] signature = null;	// a possibly empty list of octave-neutral accidentals
-	@Embedded			private Pitch designation = null;	// defines the root - could be null
-	@Transient			private int fifths = Integer.MIN_VALUE;
-	@Transient			private Scale scale = null;			// the scale associated with the key
+	@JsonProperty("name")	private String name;
+	@JsonProperty("mode")	private Mode mode = Mode.MAJOR;		// or Mode.MINOR
+	@JsonProperty			private Pitch[] signature = null;	// a possibly empty list of octave-neutral accidentals
+	@JsonProperty			private Pitch designation = null;	// defines the root - could be null
+	@JsonIgnore				private int fifths = Integer.MIN_VALUE;
+	@JsonIgnore				private Scale scale = null;			// the scale associated with the key
 	
 	public Key() { 	}
 	
@@ -51,8 +46,6 @@ public class Key implements IJson {
 		this.mode = mode;
 	}
 	
-	@Embedded
-	@Entity(value="Mode", noClassnameStored=true)
 	public enum Mode {
 		MAJOR(1), MINOR(2);
 		Mode(int val) { this.value = val;}
@@ -462,7 +455,7 @@ public class Key implements IJson {
 	}
 	
 	public String toJSON() {
-		return morphia.toDBObject(this).toString();
+		return toJson();
 	}
 	
 	public static Key getKey(Pitch root, Mode mode) {

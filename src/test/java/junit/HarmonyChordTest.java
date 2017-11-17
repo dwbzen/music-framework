@@ -1,6 +1,5 @@
 package junit;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +25,13 @@ public class HarmonyChordTest {
 	static Map<String,ChordFormula> chordFormulas = null;
 	static Map<ChordProgression, Integer> collectorStatsMap = 
 			new TreeMap<ChordProgression, Integer>(new ChordProgressionComparator());
-
+	static ChordManager chordManager = new ChordManager();
+	
 	@Test
 	public void testCreateHaronyChords1() {
-		loadChordFormulas();
 		Pitch p = new Pitch("C");
 		rootPitches.add(p);
-		Map<String, HarmonyChord> harmonyChords = ChordManager.createHarmonyChords(rootPitches, chordFormulas, Key.C_MAJOR);
+		Map<String, HarmonyChord> harmonyChords = chordManager.createHarmonyChords(rootPitches, Key.C_MAJOR);
 		String root = rootPitches.get(0).getStep().name();
 
 		HarmonyChord hc7a = harmonyChords.get(root + "7");
@@ -108,12 +107,8 @@ public class HarmonyChordTest {
 	}
 	
 	public void loadChordFormulas() {
-		try {
-			chordFormulas = ChordManager.loadChordFormulas("/data/music/chord_formulas.json");
-		} catch (IOException ex) {
-			log.error("Could not load chord formulas " + ex.toString());
-			return;
-		}
+
+		chordFormulas = chordManager.getChordFormulas();
 		System.out.println(chordFormulas.size() + " chords loaded");
 	}
 }

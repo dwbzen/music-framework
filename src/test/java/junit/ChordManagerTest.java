@@ -22,15 +22,11 @@ public class ChordManagerTest {
 	static Morphia morphia = new Morphia();
 	static List<Pitch> rootPitches = new ArrayList<Pitch>();
 	static Map<String,ChordFormula> chordFormulas = null;
+	static ChordManager chordManager = new ChordManager();
 
 	@Test
 	public void testLoadChordFormulas() {
-		try {
-			chordFormulas = ChordManager.loadChordFormulas("/data/music/chord_formulas.json");
-		} catch (IOException ex) {
-			log.error("Could not load chord formulas " + ex.toString());
-			return;
-		}
+		chordFormulas = chordManager.getChordFormulas();
 		System.out.println(chordFormulas.size() + " chords loaded");
 	}
 	
@@ -40,7 +36,7 @@ public class ChordManagerTest {
 		testLoadChordFormulas();
 		Pitch p = new Pitch("C4");
 		rootPitches.add(p);
-		Map<String, HarmonyChord> harmonyChords = ChordManager.createHarmonyChords(rootPitches, chordFormulas, Key.C_MAJOR);
+		Map<String, HarmonyChord> harmonyChords = chordManager.createHarmonyChords(rootPitches, Key.C_MAJOR);
 		String root = rootPitches.get(0).getStep().name();
 		if(harmonyChords != null && harmonyChords.size()>0) {
 
