@@ -19,6 +19,7 @@ import mathlib.util.IJson;
 import music.element.Key;
 import music.element.Pitch;
 import util.INameable;
+import util.music.ChordManager;
 
 /**
  * A HarmonyChord is a chord that has an associated ChordFormula rather than

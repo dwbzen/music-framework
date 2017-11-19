@@ -46,7 +46,7 @@ public interface IFormula extends INameable, Serializable {
 	}
 	
 	public static List<Pitch> createPitches(List<Integer>formula, Pitch root, Key key) {
-		return createPitches(formula, root, key, Alteration.NONE);
+		return createPitches(formula, root, key, null);
 	}
 	
 	/**

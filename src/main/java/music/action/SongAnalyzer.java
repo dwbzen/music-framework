@@ -11,7 +11,7 @@ import music.element.song.HarmonyList;
 import music.element.song.Section;
 import music.element.song.Song;
 import music.element.song.SongMeasure;
-import music.element.song.SongManager;
+import util.music.SongManager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

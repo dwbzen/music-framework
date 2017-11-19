@@ -2,10 +2,8 @@ package music.element;
 
 import java.io.Serializable;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Represents a discrete unit of time as in notation for instruments
@@ -18,16 +16,14 @@ import org.mongodb.morphia.annotations.Transient;
  * @author don_bacon
  * @See RhythmScale
  */
-@Embedded
-@Entity(value="RhythmElement")
 public class RhythmElement extends Measurable implements Serializable, Comparable<RhythmElement> {
 
 	private static final long serialVersionUID = -6103237755837158646L;
 	
-	@Property("rest")		private boolean rest = false;
-	@Transient	protected RhythmElement tiedTo = null;		// reference to the note this is tied to - occurs after this note
-	@Transient	protected RhythmElement tiedFrom = null;	//  reference to the note the note this is tied from - occurs before this note
-	@Transient	protected IMeasurableContainer<RhythmElement>	container = null;	// reference to container (like a Chord) or null
+	@JsonProperty("rest")		private boolean rest = false;
+	@JsonIgnore	protected RhythmElement tiedTo = null;		// reference to the note this is tied to - occurs after this note
+	@JsonIgnore	protected RhythmElement tiedFrom = null;	//  reference to the note the note this is tied from - occurs before this note
+	@JsonIgnore	protected IMeasurableContainer<RhythmElement>	container = null;	// reference to container (like a Chord) or null
 
 	public RhythmElement(Duration dur) {
 		setDuration(dur);
@@ -48,7 +44,7 @@ public class RhythmElement extends Measurable implements Serializable, Comparabl
 		return rest;
 	}
 
-	private void setRest(final boolean rest) {
+	public void setRest(final boolean rest) {
 		this.rest = rest;
 	}
 	

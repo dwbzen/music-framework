@@ -32,8 +32,8 @@ import music.element.Scales;
  * @author don_bacon
  *
  */
-public class ScaleExporter implements Consumer<String> {
-	static final org.apache.log4j.Logger log = Logger.getLogger(ScaleExporter.class);
+public class ScaleManager implements Consumer<String> {
+	static final org.apache.log4j.Logger log = Logger.getLogger(ScaleManager.class);
 
 	private StringBuffer stringBuffer = null;
 	ObjectMapper mapper = new ObjectMapper();
@@ -43,7 +43,7 @@ public class ScaleExporter implements Consumer<String> {
 	private String resourceFile = null;
 	private String jsonFormat = null;
 	
-	public ScaleExporter(String resource, String format) {
+	public ScaleManager(String resource, String format) {
 		mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 		resourceFile = resource;
@@ -58,6 +58,7 @@ public class ScaleExporter implements Consumer<String> {
 		String jsonFormat = "JSON";	// the default, for Mathematica use "RawJSON"
 		int size = -1;
 		PrintStream ps = System.out;
+		boolean export = false;
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
     			if(args[i].equalsIgnoreCase("-root")) {
@@ -73,12 +74,17 @@ public class ScaleExporter implements Consumer<String> {
     			else if(args[i].equalsIgnoreCase("-format")) {
     				jsonFormat = args[++i];
     			}
+    			else if(args[i].equalsIgnoreCase("-export")) {
+    				export = true;
+    			}
     		}
     	}
-		ScaleExporter exporter = new ScaleExporter(resourceFile, jsonFormat);
-		if(pitch != null) { 	exporter.addRoot(pitch); }
-		String exportString = size>0 ? exporter.exportScaleFormulas(size) :exporter.exportScaleFormulas();
-		ps.println(exportString);
+		ScaleManager scaleManager = new ScaleManager(resourceFile, jsonFormat);
+		if(pitch != null) { scaleManager.addRoot(pitch); }
+		if(export && scaleManager.getScaleFormulas().size() > 0) {
+			String exportString = size>0 ? scaleManager.exportScaleFormulas(size) :scaleManager.exportScaleFormulas();
+			ps.println(exportString);
+		}
 	}
 	
 	public void addRoot(Pitch p) {
@@ -88,9 +94,14 @@ public class ScaleExporter implements Consumer<String> {
 	public void loadScaleFormulas() {
 		
 		InputStream is = this.getClass().getResourceAsStream("/data/music/" + resourceFile);
-    	Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines();
-    	stream.forEach(s -> accept(s));
-    	stream.close();
+		if(is != null) {
+			Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines();
+			stream.forEach(s -> accept(s));
+			stream.close();
+		}
+		else {
+			log.error("Unable to open " + resourceFile);
+		}
 	}
 	
 	/**
@@ -222,6 +233,18 @@ public class ScaleExporter implements Consumer<String> {
 			default: st = ScaleType.CHROMATIC;
 		}
 		return st;
+	}
+
+	public Map<String, ScaleFormula> getScaleFormulas() {
+		return scaleFormulas;
+	}
+
+	public void setScaleFormulas(Map<String, ScaleFormula> scaleFormulas) {
+		this.scaleFormulas = scaleFormulas;
+	}
+
+	public List<Pitch> getRootPitches() {
+		return rootPitches;
 	}
 
 	@Override

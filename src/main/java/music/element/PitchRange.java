@@ -1,8 +1,6 @@
 package music.element;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Represents a range of Pitches from low to high.
@@ -10,13 +8,11 @@ import org.mongodb.morphia.annotations.Property;
  * @author don_bacon
  *
  */
-@Embedded
-@Entity("PitchRange")
 public class PitchRange {
 
-	@Embedded	private Pitch low;
-	@Embedded	private Pitch high;
-	@Property("stepRange")	private int stepRange = 0;	// #chromatic steps in the range (for a piano it's 88)
+	@JsonProperty	private Pitch low;
+	@JsonProperty	private Pitch high;
+	@JsonProperty	private int stepRange = 0;	// #chromatic steps in the range (for a piano it's 88)
 	
 	public PitchRange(Pitch from, Pitch to) {
 		this.low = from;

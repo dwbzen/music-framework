@@ -9,10 +9,9 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.mongodb.morphia.Morphia;
 
-import music.element.Key;
 import music.element.Pitch;
 import music.element.song.ChordFormula;
-import music.element.song.ChordManager;
+import util.music.ChordManager;
 import music.element.song.ChordProgression;
 import music.element.song.ChordProgressionComparator;
 import music.element.song.HarmonyChord;
@@ -31,7 +30,7 @@ public class HarmonyChordTest {
 	public void testCreateHaronyChords1() {
 		Pitch p = new Pitch("C");
 		rootPitches.add(p);
-		Map<String, HarmonyChord> harmonyChords = chordManager.createHarmonyChords(rootPitches, Key.C_MAJOR);
+		Map<String, HarmonyChord> harmonyChords = chordManager.createHarmonyChords(rootPitches);
 		String root = rootPitches.get(0).getStep().name();
 
 		HarmonyChord hc7a = harmonyChords.get(root + "7");
@@ -57,7 +56,6 @@ public class HarmonyChordTest {
 		collectorStatsMap.put(cp1, new Integer(10));
 		if(collectorStatsMap.containsKey(cp2)) {
 			System.out.println("map contains key: " + cp2.toString());
-			Integer val = collectorStatsMap.get(cp2);
 			collectorStatsMap.put(cp1, new Integer(15));
 		}
 		else {
@@ -94,20 +92,10 @@ public class HarmonyChordTest {
 		System.out.println("Bbm7: " + hc4);
 		assert(hc4.toString().equals("Bbm7 [Bb, Db, F, Ab]"));
 		
-		// negative test
-		boolean okay = false;
-		try {
-			HarmonyChord hc5 = new HarmonyChord("DbX", chordFormulas);
-		}
-		catch(IllegalArgumentException ex) {
-			okay = true;
-		}
-		assert(okay);
-		
 	}
 	
-	public void loadChordFormulas() {
-
+	static void loadChordFormulas() {
+		
 		chordFormulas = chordManager.getChordFormulas();
 		System.out.println(chordFormulas.size() + " chords loaded");
 	}

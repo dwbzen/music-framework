@@ -12,6 +12,7 @@ import music.element.Pitch;
 import music.element.Scales;
 import util.IJson;
 import util.INameable;
+import util.music.ChordManager;
 
 /**
  * A simplified Harmony Chord. Has the bare minimum of information  - the chord name and a beat

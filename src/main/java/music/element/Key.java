@@ -2,6 +2,7 @@ package music.element;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,8 +28,8 @@ public class Key implements IJson {
 	 * @throws IllegalArgumentException if no such key
 	 */
 	public Key(String name) {
-		if(KEY_NAME_MAP.containsKey(name)) {
-			Key mk = KEY_NAME_MAP.get(name);
+		if(keyNameMap.containsKey(name)) {
+			Key mk = keyNameMap.get(name);
 			this.name = name;
 			this.mode = mk.getMode();
 			this.signature = mk.getSignature();
@@ -55,31 +56,32 @@ public class Key implements IJson {
 	
 	public static final String MAJOR_MODE = "major";
 	public static final String MINOR_MODE = "minor";
-	public final static Pitch[] C_Signature = new Pitch[1];
-	public final static Pitch[] F_Signature = new Pitch[1];
-	public final static Pitch[] BFlat_Signature = new Pitch[2];
-	public final static Pitch[] EFlat_Signature = new Pitch[3];
-	public final static Pitch[] AFlat_Signature = new Pitch[4];
-	public final static Pitch[] DFlat_Signature = new Pitch[5];
-	public final static Pitch[] GFlat_Signature = new Pitch[6];
-	public final static Pitch[] CFlat_Signature = new Pitch[7];
+	public final static Pitch[] C_Signature = { Pitch.C };
+	public final static Pitch[] F_Signature = 	  { Pitch.BFlat };
+	public final static Pitch[] BFlat_Signature = { Pitch.BFlat, Pitch.EFlat };
+	public final static Pitch[] EFlat_Signature = { Pitch.BFlat, Pitch.EFlat, Pitch.AFlat };
+	public final static Pitch[] AFlat_Signature = { Pitch.BFlat, Pitch.EFlat, Pitch.AFlat, Pitch.DFlat };
+	public final static Pitch[] DFlat_Signature = { Pitch.BFlat, Pitch.EFlat, Pitch.AFlat, Pitch.DFlat, Pitch.GFlat };
+	public final static Pitch[] GFlat_Signature = { Pitch.BFlat, Pitch.EFlat, Pitch.AFlat, Pitch.DFlat, Pitch.GFlat, Pitch.CFlat };
+	public final static Pitch[] CFlat_Signature = { Pitch.BFlat, Pitch.EFlat, Pitch.AFlat, Pitch.DFlat, Pitch.GFlat, Pitch.CFlat, Pitch.FFlat };
 
-	public final static Pitch[] G_Signature = new Pitch[1];
-	public final static Pitch[] D_Signature = new Pitch[2];
-	public final static Pitch[] A_Signature = new Pitch[3];
-	public final static Pitch[] E_Signature = new Pitch[4];
-	public final static Pitch[] B_Signature = new Pitch[5];
-	public final static Pitch[] FSharp_Signature = new Pitch[6];
-	public final static Pitch[] CSharp_Signature = new Pitch[7];
+	public final static Pitch[] G_Signature = { Pitch.FSharp };
+	public final static Pitch[] D_Signature = { Pitch.FSharp, Pitch.CSharp };
+	public final static Pitch[] A_Signature = { Pitch.FSharp, Pitch.CSharp, Pitch.GSharp };
+	public final static Pitch[] E_Signature = { Pitch.FSharp, Pitch.CSharp, Pitch.GSharp, Pitch.DSharp };
+	public final static Pitch[] B_Signature = { Pitch.FSharp, Pitch.CSharp, Pitch.GSharp, Pitch.DSharp, Pitch.ASharp };
+	public final static Pitch[] FSharp_Signature = { Pitch.FSharp, Pitch.CSharp, Pitch.GSharp, Pitch.DSharp, Pitch.ASharp, Pitch.ESharp };
+	public final static Pitch[] CSharp_Signature = { Pitch.FSharp, Pitch.CSharp, Pitch.GSharp, Pitch.DSharp, Pitch.ASharp, Pitch.ESharp, Pitch.BSharp };
 	
 	/**
 	 * Initialize the key signatures
 	 */
-	public static Map<String, Pitch[]> KEY_SIGNATURE_MAP = new HashMap<String, Pitch[]>();
-	public static Map<String, Key> KEY_NAME_MAP = new HashMap<String, Key>();
+	public static Map<String, Pitch[]> keySignatureMap = new HashMap<String, Pitch[]>();
+	public static Map<String, Key> keyNameMap = new HashMap<String, Key>();
+	public static Map<String, Key> rootKeyMap = new TreeMap<String, Key>();
+	
 	public static final String C_MAJOR_NAME =		"C-Major";
 	public static final String A_MINOR_NAME =		"A-Minor";
-	
 	public static final String F_MAJOR_NAME =		"F-Major";
 	public static final String D_MINOR_NAME =		"D-Minor";
 	public static final String BFlat_MAJOR_NAME =	"Bb-Major";
@@ -110,100 +112,42 @@ public class Key implements IJson {
 	public static final String CSharp_MAJOR_NAME = 	"C#-Major";
 	public static final String ASharp_MINOR_NAME =	"A#-Minor";
 
-	static {
-		C_Signature[0] = Pitch.C;
-		F_Signature[0] = Pitch.BFlat;
-		BFlat_Signature[0] = Pitch.BFlat;
-		BFlat_Signature[1] = Pitch.EFlat;
-		EFlat_Signature[0] = Pitch.BFlat;
-		EFlat_Signature[1] = Pitch.EFlat;
-		EFlat_Signature[2] = Pitch.AFlat;
-		AFlat_Signature[0] = Pitch.BFlat;
-		AFlat_Signature[1] = Pitch.EFlat;
-		AFlat_Signature[2] = Pitch.AFlat;
-		AFlat_Signature[3] = Pitch.DFlat;
-		DFlat_Signature[0] = Pitch.BFlat;
-		DFlat_Signature[1] = Pitch.EFlat;
-		DFlat_Signature[2] = Pitch.AFlat;
-		DFlat_Signature[3] = Pitch.DFlat;
-		DFlat_Signature[4] = Pitch.GFlat;
-		GFlat_Signature[0] =  Pitch.BFlat;
-		GFlat_Signature[1] =  Pitch.EFlat;
-		GFlat_Signature[2] =  Pitch.AFlat;
-		GFlat_Signature[3] =  Pitch.DFlat;
-		GFlat_Signature[4] =  Pitch.GFlat;
-		GFlat_Signature[5] =  Pitch.CFlat;
-		CFlat_Signature[0] =  Pitch.BFlat;
-		CFlat_Signature[1] =  Pitch.EFlat;
-		CFlat_Signature[2] =  Pitch.AFlat;
-		CFlat_Signature[3] =  Pitch.DFlat;
-		CFlat_Signature[4] =  Pitch.GFlat;
-		CFlat_Signature[5] =  Pitch.CFlat;
-		CFlat_Signature[6] =  Pitch.FFlat;
-		
-		G_Signature[0] = Pitch.FSharp;
-		D_Signature[0] = Pitch.FSharp;
-		D_Signature[1] = Pitch.CSharp;
-		A_Signature[0] = Pitch.FSharp;
-		A_Signature[1] = Pitch.CSharp;
-		A_Signature[2] = Pitch.GSharp;
-		E_Signature[0] = Pitch.FSharp;
-		E_Signature[1] = Pitch.CSharp;
-		E_Signature[2] = Pitch.GSharp;
-		E_Signature[3] = Pitch.DSharp;
-		B_Signature[0] = Pitch.FSharp;
-		B_Signature[1] = Pitch.CSharp;
-		B_Signature[2] = Pitch.GSharp;
-		B_Signature[3] = Pitch.DSharp;
-		B_Signature[4] = Pitch.ASharp;
-		FSharp_Signature[0] = Pitch.FSharp;
-		FSharp_Signature[1] = Pitch.CSharp;
-		FSharp_Signature[2] = Pitch.GSharp;
-		FSharp_Signature[3] = Pitch.DSharp;
-		FSharp_Signature[4] = Pitch.ASharp;
-		FSharp_Signature[5] = Pitch.ESharp;
-		CSharp_Signature[0] = Pitch.FSharp;
-		CSharp_Signature[1] = Pitch.CSharp;
-		CSharp_Signature[2] = Pitch.GSharp;
-		CSharp_Signature[3] = Pitch.DSharp;
-		CSharp_Signature[4] = Pitch.ASharp;
-		CSharp_Signature[5] = Pitch.ESharp;
-		CSharp_Signature[6] = Pitch.BSharp;
-	}
 	/**
 	 * Map Key signatures by name
 	 */
 	static {
-		KEY_SIGNATURE_MAP.put(C_MAJOR_NAME, C_Signature);
-		KEY_SIGNATURE_MAP.put(A_MINOR_NAME, C_Signature);
+		keySignatureMap.put(C_MAJOR_NAME, C_Signature);
+		keySignatureMap.put(D_MAJOR_NAME, D_Signature);
+		keySignatureMap.put(E_MAJOR_NAME, E_Signature);
+		keySignatureMap.put(F_MAJOR_NAME, F_Signature);
+		keySignatureMap.put(G_MAJOR_NAME, G_Signature);
+		keySignatureMap.put(A_MAJOR_NAME, A_Signature);
+		keySignatureMap.put(B_MAJOR_NAME, B_Signature);
 		
-		KEY_SIGNATURE_MAP.put(F_MAJOR_NAME, F_Signature);
-		KEY_SIGNATURE_MAP.put(D_MINOR_NAME, F_Signature);
-		KEY_SIGNATURE_MAP.put(BFlat_MAJOR_NAME, BFlat_Signature);
-		KEY_SIGNATURE_MAP.put(G_MINOR_NAME, BFlat_Signature);
-		KEY_SIGNATURE_MAP.put(EFlat_MAJOR_NAME, EFlat_Signature);
-		KEY_SIGNATURE_MAP.put(C_MINOR_NAME, EFlat_Signature);
-		KEY_SIGNATURE_MAP.put(AFlat_MAJOR_NAME, AFlat_Signature);
-		KEY_SIGNATURE_MAP.put(F_MINOR_NAME, AFlat_Signature);
-		KEY_SIGNATURE_MAP.put(DFlat_MAJOR_NAME, DFlat_Signature);
-		KEY_SIGNATURE_MAP.put(BFlat_MINOR_NAME, DFlat_Signature);
-		KEY_SIGNATURE_MAP.put(GFlat_MAJOR_NAME, GFlat_Signature);
-		KEY_SIGNATURE_MAP.put(EFlat_MINOR_NAME, GFlat_Signature);
+		keySignatureMap.put(CSharp_MAJOR_NAME, CSharp_Signature);
+		keySignatureMap.put(FSharp_MAJOR_NAME, FSharp_Signature);
 		
-		KEY_SIGNATURE_MAP.put(G_MAJOR_NAME, G_Signature);
-		KEY_SIGNATURE_MAP.put(E_MINOR_NAME, G_Signature);
-		KEY_SIGNATURE_MAP.put(D_MAJOR_NAME, D_Signature);
-		KEY_SIGNATURE_MAP.put(B_MINOR_NAME, D_Signature);
-		KEY_SIGNATURE_MAP.put(A_MAJOR_NAME, A_Signature);
-		KEY_SIGNATURE_MAP.put(FSharp_MINOR_NAME, A_Signature);
-		KEY_SIGNATURE_MAP.put(E_MAJOR_NAME, E_Signature);
-		KEY_SIGNATURE_MAP.put(CSharp_MINOR_NAME, E_Signature);
-		KEY_SIGNATURE_MAP.put(B_MAJOR_NAME, B_Signature);
-		KEY_SIGNATURE_MAP.put(GSharp_MINOR_NAME, B_Signature);
-		KEY_SIGNATURE_MAP.put(FSharp_MAJOR_NAME, FSharp_Signature);
-		KEY_SIGNATURE_MAP.put(DSharp_MINOR_NAME, FSharp_Signature);
-		KEY_SIGNATURE_MAP.put(CSharp_MAJOR_NAME, CSharp_Signature);
-		KEY_SIGNATURE_MAP.put(ASharp_MINOR_NAME, CSharp_Signature);
+		keySignatureMap.put(BFlat_MAJOR_NAME, BFlat_Signature);
+		keySignatureMap.put(DFlat_MAJOR_NAME, DFlat_Signature);
+		keySignatureMap.put(EFlat_MAJOR_NAME, EFlat_Signature);
+		keySignatureMap.put(GFlat_MAJOR_NAME, GFlat_Signature);
+		keySignatureMap.put(AFlat_MAJOR_NAME, AFlat_Signature);
+		
+		keySignatureMap.put(A_MINOR_NAME, C_Signature);
+		keySignatureMap.put(D_MINOR_NAME, F_Signature);
+		keySignatureMap.put(G_MINOR_NAME, BFlat_Signature);
+		keySignatureMap.put(C_MINOR_NAME, EFlat_Signature);	
+		keySignatureMap.put(F_MINOR_NAME, AFlat_Signature);
+		keySignatureMap.put(BFlat_MINOR_NAME, DFlat_Signature);
+		keySignatureMap.put(EFlat_MINOR_NAME, GFlat_Signature);
+		
+		keySignatureMap.put(E_MINOR_NAME, G_Signature);
+		keySignatureMap.put(B_MINOR_NAME, D_Signature);	
+		keySignatureMap.put(FSharp_MINOR_NAME, A_Signature);
+		keySignatureMap.put(CSharp_MINOR_NAME, E_Signature);	
+		keySignatureMap.put(GSharp_MINOR_NAME, B_Signature);	
+		keySignatureMap.put(DSharp_MINOR_NAME, FSharp_Signature);	
+		keySignatureMap.put(ASharp_MINOR_NAME, CSharp_Signature);
 	}
 	/**
 	 * Define all MAJOR and MINOR keys
@@ -254,43 +198,72 @@ public class Key implements IJson {
 	public static final Key ASharp_MINOR = new Key(ASharp_MINOR_NAME, CSharp_Signature, Pitch.ASharp, Mode.MINOR);
 
 	/**
+	 * Map Keys by Root expressed as octave neutral - used to determine accidental preference (b or #) in chords
+	 */
+	static {
+		rootKeyMap.put(Pitch.C.toString(-1), Key.C_MAJOR);
+		rootKeyMap.put(Pitch.D.toString(-1), Key.D_MAJOR);
+		rootKeyMap.put(Pitch.E.toString(-1), Key.E_MAJOR);
+		rootKeyMap.put(Pitch.F.toString(-1), Key.F_MAJOR);
+		rootKeyMap.put(Pitch.G.toString(-1), Key.G_MAJOR);
+		rootKeyMap.put(Pitch.A.toString(-1), Key.A_MAJOR);
+		rootKeyMap.put(Pitch.B.toString(-1), Key.B_MAJOR);
+		
+		rootKeyMap.put(Pitch.CSharp.toString(-1), Key.CSharp_MAJOR);
+		rootKeyMap.put(Pitch.DSharp.toString(-1), Key.D_MAJOR);			// there is no D# key
+		rootKeyMap.put(Pitch.ESharp.toString(-1), Key.E_MAJOR);			// there is no E# key
+		rootKeyMap.put(Pitch.FSharp.toString(-1), Key.FSharp_MAJOR);
+		rootKeyMap.put(Pitch.GSharp.toString(-1), Key.GSharp_MINOR);		// there is no G# major key
+		rootKeyMap.put(Pitch.ASharp.toString(-1), Key.ASharp_MINOR);		// there is no A# Major key
+		rootKeyMap.put(Pitch.BSharp.toString(-1), Key.B_MAJOR);			// there is no B# Major key
+
+		rootKeyMap.put(Pitch.CFlat.toString(-1), Key.CFlat_MAJOR);
+		rootKeyMap.put(Pitch.BFlat.toString(-1), Key.BFlat_MAJOR);
+		rootKeyMap.put(Pitch.AFlat.toString(-1), Key.AFlat_MAJOR);
+		rootKeyMap.put(Pitch.GFlat.toString(-1), Key.GFlat_MAJOR);
+		rootKeyMap.put(Pitch.FFlat.toString(-1), Key.F_MAJOR);		// there is no Fb major key
+		rootKeyMap.put(Pitch.EFlat.toString(-1), Key.EFlat_MAJOR);
+		rootKeyMap.put(Pitch.DFlat.toString(-1), Key.DFlat_MAJOR);
+	}
+	
+	/**
 	 * All the major and minor keys mapped by canonical name
 	 */
 	static {
-		KEY_NAME_MAP.put(C_MAJOR_NAME, C_MAJOR);
-		KEY_NAME_MAP.put(C_MINOR_NAME, C_MINOR);
-		KEY_NAME_MAP.put(CSharp_MAJOR_NAME, CSharp_MAJOR);
-		KEY_NAME_MAP.put(CSharp_MINOR_NAME, CSharp_MINOR);
-		KEY_NAME_MAP.put(DFlat_MAJOR_NAME, DFlat_MAJOR);
+		keyNameMap.put(C_MAJOR_NAME, C_MAJOR);
+		keyNameMap.put(C_MINOR_NAME, C_MINOR);
+		keyNameMap.put(CSharp_MAJOR_NAME, CSharp_MAJOR);
+		keyNameMap.put(CSharp_MINOR_NAME, CSharp_MINOR);
+		keyNameMap.put(DFlat_MAJOR_NAME, DFlat_MAJOR);
 		// there is no DFlat_MINOR key. It would have 8 flats
-		KEY_NAME_MAP.put(D_MAJOR_NAME, D_MAJOR);
-		KEY_NAME_MAP.put(D_MINOR_NAME, D_MINOR);
+		keyNameMap.put(D_MAJOR_NAME, D_MAJOR);
+		keyNameMap.put(D_MINOR_NAME, D_MINOR);
 		// there is no DSharp_MAJOR key
-		KEY_NAME_MAP.put(DSharp_MINOR_NAME, DSharp_MINOR);
-		KEY_NAME_MAP.put(EFlat_MAJOR_NAME, EFlat_MAJOR);
-		KEY_NAME_MAP.put(EFlat_MINOR_NAME, EFlat_MINOR);
-		KEY_NAME_MAP.put(E_MAJOR_NAME, E_MAJOR);
-		KEY_NAME_MAP.put(E_MINOR_NAME, E_MINOR);
-		KEY_NAME_MAP.put(F_MAJOR_NAME, F_MAJOR);
-		KEY_NAME_MAP.put(F_MINOR_NAME, F_MINOR);
-		KEY_NAME_MAP.put(FSharp_MAJOR_NAME, FSharp_MAJOR);
-		KEY_NAME_MAP.put(FSharp_MINOR_NAME, FSharp_MINOR);
-		KEY_NAME_MAP.put(GFlat_MAJOR_NAME, GFlat_MAJOR);
+		keyNameMap.put(DSharp_MINOR_NAME, DSharp_MINOR);
+		keyNameMap.put(EFlat_MAJOR_NAME, EFlat_MAJOR);
+		keyNameMap.put(EFlat_MINOR_NAME, EFlat_MINOR);
+		keyNameMap.put(E_MAJOR_NAME, E_MAJOR);
+		keyNameMap.put(E_MINOR_NAME, E_MINOR);
+		keyNameMap.put(F_MAJOR_NAME, F_MAJOR);
+		keyNameMap.put(F_MINOR_NAME, F_MINOR);
+		keyNameMap.put(FSharp_MAJOR_NAME, FSharp_MAJOR);
+		keyNameMap.put(FSharp_MINOR_NAME, FSharp_MINOR);
+		keyNameMap.put(GFlat_MAJOR_NAME, GFlat_MAJOR);
 		// there is no GFlat_MINOR key
-		KEY_NAME_MAP.put(G_MAJOR_NAME, G_MAJOR);
-		KEY_NAME_MAP.put(G_MINOR_NAME, G_MINOR);
+		keyNameMap.put(G_MAJOR_NAME, G_MAJOR);
+		keyNameMap.put(G_MINOR_NAME, G_MINOR);
 		// there is no GSharp_MAJOR key
-		KEY_NAME_MAP.put(GSharp_MINOR_NAME, GSharp_MINOR);
-		KEY_NAME_MAP.put(AFlat_MAJOR_NAME, AFlat_MAJOR);
-		KEY_NAME_MAP.put(AFlat_MINOR_NAME, AFlat_MINOR);
-		KEY_NAME_MAP.put(A_MAJOR_NAME, A_MAJOR);
-		KEY_NAME_MAP.put(A_MINOR_NAME, A_MINOR);
+		keyNameMap.put(GSharp_MINOR_NAME, GSharp_MINOR);
+		keyNameMap.put(AFlat_MAJOR_NAME, AFlat_MAJOR);
+		keyNameMap.put(AFlat_MINOR_NAME, AFlat_MINOR);
+		keyNameMap.put(A_MAJOR_NAME, A_MAJOR);
+		keyNameMap.put(A_MINOR_NAME, A_MINOR);
 		// there is no ASharp_MAJOR key
-		KEY_NAME_MAP.put(ASharp_MINOR_NAME, ASharp_MINOR);
-		KEY_NAME_MAP.put(BFlat_MAJOR_NAME, BFlat_MAJOR);
-		KEY_NAME_MAP.put(BFlat_MINOR_NAME, BFlat_MINOR);
-		KEY_NAME_MAP.put(B_MAJOR_NAME,B_MAJOR);
-		KEY_NAME_MAP.put(B_MINOR_NAME, B_MINOR);
+		keyNameMap.put(ASharp_MINOR_NAME, ASharp_MINOR);
+		keyNameMap.put(BFlat_MAJOR_NAME, BFlat_MAJOR);
+		keyNameMap.put(BFlat_MINOR_NAME, BFlat_MINOR);
+		keyNameMap.put(B_MAJOR_NAME,B_MAJOR);
+		keyNameMap.put(B_MINOR_NAME, B_MINOR);
 	}
 	/**
 	 * Octave-neutral Map of all the defined Major and Minor keys
@@ -395,7 +368,7 @@ public class Key implements IJson {
 	 * Sets the signature from the name
 	 */
 	public void setSignature() {
-		this.signature = KEY_SIGNATURE_MAP.containsKey(name) ? KEY_SIGNATURE_MAP.get(name) : C_Signature;
+		this.signature = keySignatureMap.containsKey(name) ? keySignatureMap.get(name) : C_Signature;
 	}
 
 	public void setDesignation(Pitch designation) {
@@ -443,8 +416,8 @@ public class Key implements IJson {
 	 * from the name.
 	 */
 	public void setDesignationAndSignature() {
-		if(name != null && KEY_NAME_MAP.containsKey(name)) {
-			Key temp = KEY_NAME_MAP.get(name);
+		if(name != null && keyNameMap.containsKey(name)) {
+			Key temp = keyNameMap.get(name);
 			setDesignation(temp.getDesignation());
 			setSignature();
 		}

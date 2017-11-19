@@ -1,6 +1,5 @@
 package junit;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,10 +8,9 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.mongodb.morphia.Morphia;
 
-import music.element.Key;
 import music.element.Pitch;
 import music.element.song.ChordFormula;
-import music.element.song.ChordManager;
+import util.music.ChordManager;
 import music.element.song.HarmonyChord;
 
 public class ChordManagerTest {
@@ -36,7 +34,7 @@ public class ChordManagerTest {
 		testLoadChordFormulas();
 		Pitch p = new Pitch("C4");
 		rootPitches.add(p);
-		Map<String, HarmonyChord> harmonyChords = chordManager.createHarmonyChords(rootPitches, Key.C_MAJOR);
+		Map<String, HarmonyChord> harmonyChords = chordManager.createHarmonyChords(rootPitches);
 		String root = rootPitches.get(0).getStep().name();
 		if(harmonyChords != null && harmonyChords.size()>0) {
 

@@ -1,4 +1,4 @@
-package music.element.song;
+package util.music;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,10 +18,12 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.util.JSON;
 
 import music.element.Key;
+import music.element.song.*;
 import util.Configuration;
 import util.IMapped;
 import util.JSONUtil;
 import util.mongo.Find;
+import util.music.ChordManager;
 
 /**
  * Statefull song manager. Loads Songs from a JSON text file or a MongoDB collection.

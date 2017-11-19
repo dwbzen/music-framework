@@ -16,7 +16,7 @@ import org.mongodb.morphia.Morphia;
 
 import util.Configuration;
 import util.mongo.Find;
-import util.music.ScaleExporter;
+import util.music.ScaleManager;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -93,8 +93,8 @@ public class ScaleSearch {
 		ScaleFormula formula = scaleFormulaSearch(formulaName);
 		Scale scale = null;
 		if(formula != null) {
-			String mode = ScaleExporter.getMode(formula);
-			ScaleType st = ScaleExporter.getScaleType(formula);
+			String mode = ScaleManager.getMode(formula);
+			ScaleType st = ScaleManager.getScaleType(formula);
 			String name = formula.getName();
 			Pitch rootPitch = new Pitch(root);
 			scale = new Scale(name, mode, st, rootPitch, formula);
@@ -106,8 +106,8 @@ public class ScaleSearch {
 		String scaleString = null;
 		ScaleFormula formula = scaleFormulaSearch(formulaName);
 		if(formula != null) {
-			String mode = ScaleExporter.getMode(formula);
-			ScaleType st = ScaleExporter.getScaleType(formula);
+			String mode = ScaleManager.getMode(formula);
+			ScaleType st = ScaleManager.getScaleType(formula);
 			String name = formula.getName();
 			Pitch rootPitch = new Pitch(root);
 			Scale scale = new Scale(name, mode, st, rootPitch, formula);

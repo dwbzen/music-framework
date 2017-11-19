@@ -1,14 +1,9 @@
 package junit;
 
-import java.util.Map;
-
-import music.element.Key;
-import music.element.song.ChordFormula;
-import music.element.song.ChordInfo;
-import music.element.song.ChordManager;
-import music.element.song.HarmonyChord;
-
 import org.junit.Test;
+
+import music.element.song.ChordInfo;
+import util.music.ChordManager;
 
 public class ChordUtilTest {
 

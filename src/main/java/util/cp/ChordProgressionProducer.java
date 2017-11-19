@@ -11,12 +11,12 @@ import mathlib.cp.IProducer;
 import mathlib.cp.MarkovChain;
 import mathlib.cp.OccurrenceProbability;
 import music.element.song.ChordFormula;
-import music.element.song.ChordManager;
+import util.music.ChordManager;
 import music.element.song.ChordProgression;
 import music.element.song.ChordProgressionScrapbook;
 import music.element.song.HarmonyChord;
 import music.element.song.Song;
-import music.element.song.SongManager;
+import util.music.SongManager;
 import music.element.song.Songbook;
 
 /**

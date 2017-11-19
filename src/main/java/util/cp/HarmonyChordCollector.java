@@ -9,13 +9,9 @@ import org.apache.logging.log4j.Logger;
 import mathlib.cp.CollectorStats;
 import mathlib.cp.ICollector;
 import mathlib.cp.MarkovChain;
-import music.element.song.ChordProgression;
-import music.element.song.ChordProgressionComparator;
-import music.element.song.HarmonyChord;
-import music.element.song.Song;
-import music.element.song.SongManager;
-import music.element.song.Songbook;
+import music.element.song.*;
 import util.IMapped;
+import util.music.SongManager;
 
 /**
  * Collects chord progressions of a given length from Song instances.
