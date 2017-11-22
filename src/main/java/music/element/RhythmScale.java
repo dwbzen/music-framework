@@ -9,12 +9,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import mathlib.MathUtil;
 import music.action.ExpressionSelector;
@@ -65,7 +62,6 @@ import music.transform.ITransformer.Preference;
  * @see music.element.RhythmicUnitType
  * 
  */
-@Entity(value="RhythmScale", noClassnameStored=true)
 public class RhythmScale  implements IRhythmScale {
 	protected static final org.apache.log4j.Logger log = Logger.getLogger(RhythmScale.class);
 	private static final long serialVersionUID = -1208212903638963243L;
@@ -78,18 +74,17 @@ public class RhythmScale  implements IRhythmScale {
 			"64th", "32nd", "16th", "eighth", "quarter", "half", "whole"
 		};
 	
-	@Id ObjectId id;
-	@Property("name")	private String name = null;
+	@JsonProperty("name")	private String name = null;
 	/**
 	 *  #divisions in a whole note, must be a power of 2
 	 *  TODO - refactor to support compound rhyhthms like 12/8 or 6/4.
 	 */
-	@Property("root")			protected int root;
-	@Embedded("units")			private SortedSet<Integer> baseUnits = new TreeSet<Integer>();	// permitted units for expression
-	@Embedded("expressions")	private Map<Integer, IRhythmTextureMap> expressions = new TreeMap<Integer, IRhythmTextureMap>();
-	@Transient	private Map<Integer, List<RhythmExpression>> expression = new TreeMap<Integer, List<RhythmExpression>>();
-	@Transient	private int range;
-	@Transient  protected ExpressionSelector expressionSelector = null;
+	@JsonProperty("root")			protected int root;
+	@JsonProperty("units")			private SortedSet<Integer> baseUnits = new TreeSet<Integer>();	// permitted units for expression
+	@JsonProperty("expressions")	private Map<Integer, IRhythmTextureMap> expressions = new TreeMap<Integer, IRhythmTextureMap>();
+	@JsonIgnore	private Map<Integer, List<RhythmExpression>> expression = new TreeMap<Integer, List<RhythmExpression>>();
+	@JsonIgnore	private int range;
+	@JsonIgnore  protected ExpressionSelector expressionSelector = null;
 
 	
 	/**
@@ -98,7 +93,7 @@ public class RhythmScale  implements IRhythmScale {
 	 * 15 units can be realized as 14 + 1 (double-dotted half + 16th) or 12 + 3 (dotted half + dotted eighth)
 	 * 
 	 */
-	@Transient protected Map<Integer, List<Duration>> factorMap = new HashMap<Integer, List<Duration>>();
+	@JsonIgnore protected Map<Integer, List<Duration>> factorMap = new HashMap<Integer, List<Duration>>();
 
 	public RhythmScale() {
 	}
@@ -115,14 +110,6 @@ public class RhythmScale  implements IRhythmScale {
 	@Override
 	public String getName() {
 		return name;
-	}
-
-	public ObjectId getId() {
-		return id;
-	}
-
-	public void setId(ObjectId id) {
-		this.id = id;
 	}
 
 	@Override

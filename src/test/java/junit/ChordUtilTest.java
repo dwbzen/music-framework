@@ -3,7 +3,6 @@ package junit;
 import org.junit.Test;
 
 import music.element.song.ChordInfo;
-import util.music.ChordManager;
 
 public class ChordUtilTest {
 
@@ -15,7 +14,7 @@ public class ChordUtilTest {
 	public void testParseChord() {
 		for(int i=0; i<testCases.length;i++) {
 			String chordName = testCases[i];
-			ChordInfo result = ChordManager.parseChordName(chordName);
+			ChordInfo result = ChordInfo.parseChordName(chordName);
 			System.out.println(chordName + ": " + 
 					"name: " + result.getChordName() + 	", root: " + result.getRootNote() +
 					", bass: " + result.getBassNote() + ", symbol: " + result.getChordSymbol());

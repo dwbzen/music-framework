@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
@@ -32,7 +31,7 @@ import music.element.Scales;
  * @author don_bacon
  *
  */
-public class ScaleManager implements Consumer<String> {
+public class ScaleManager  {
 	static final org.apache.log4j.Logger log = Logger.getLogger(ScaleManager.class);
 
 	private StringBuffer stringBuffer = null;
@@ -247,7 +246,6 @@ public class ScaleManager implements Consumer<String> {
 		return rootPitches;
 	}
 
-	@Override
 	/**
 	 * Deserializes a JSON ScaleFormula and adds to scaleFormulas Map
 	 */

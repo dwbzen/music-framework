@@ -4,44 +4,37 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bson.types.ObjectId;
-
 import music.instrument.Instrument;
 import music.instrument.MidiInstrument;
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Reference;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The music data portion of a ScorePart
  * @author don_bacon
  *
  */
-@Entity("ScorePart")
 public class ScorePartEntity implements Serializable {
 
 	private static final long serialVersionUID = -8305108753987313360L;
-	@Id		private ObjectId	id = new ObjectId();
-	@Property("partName")	private String partName;
-	@Property("partNumber")	private int partNumber;
-	@Property("partId")		private String partId;
-	@Property("scoreKey")   private Key scoreKey = null;	// set from configuration by ScorePart
+	@JsonProperty("partName")	private String partName;
+	@JsonProperty("partNumber")	private int partNumber;
+	@JsonProperty("partId")		private String partId;
+	@JsonProperty("scoreKey")   private Key scoreKey = null;	// set from configuration by ScorePart
 
 	
 	/**
 	 * A linked List of Measures
 	 */
-	@Reference		private List<Measure> measures = new ArrayList<Measure>();
-	@Transient		private Instrument instrument;
+	@JsonProperty	private List<Measure> measures = new ArrayList<Measure>();
+	@JsonIgnore		private Instrument instrument;
 
 	/**
 	 * Corresponding midi instrument for this Part - could be null
 	 */
-	@Transient		private MidiInstrument midiInstrument;
-	@Transient		private Score score;	// parent Score
+	@JsonIgnore		private MidiInstrument midiInstrument;
+	@JsonIgnore		private Score score;	// parent Score
 
 	public ScorePartEntity(Score score, String partName, Instrument instrument) {
 		this.partName = partName;

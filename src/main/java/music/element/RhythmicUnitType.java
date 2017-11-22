@@ -1,10 +1,6 @@
 package music.element;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
 
-@Embedded
-@Entity(value="RhythmicUnitType", noClassnameStored=true)
 /**
  * METRIC - one note per duration
  * EXTRAMETRIC - tuplets

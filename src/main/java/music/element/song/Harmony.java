@@ -12,7 +12,6 @@ import music.element.Pitch;
 import music.element.Scales;
 import util.IJson;
 import util.INameable;
-import util.music.ChordManager;
 
 /**
  * A simplified Harmony Chord. Has the bare minimum of information  - the chord name and a beat
@@ -112,7 +111,7 @@ public class Harmony implements IJson, INameable {
 			bassNote = Pitch.A;
 		}
 		else {
-			ChordInfo chordInfo = ChordManager.parseChordName(name);
+			ChordInfo chordInfo = ChordInfo.parseChordName(name);
 			bassNote = new Pitch(chordInfo.getBassNote());
 			isSlash = !chordInfo.getRootNote().equals(chordInfo.getBassNote());
 		}

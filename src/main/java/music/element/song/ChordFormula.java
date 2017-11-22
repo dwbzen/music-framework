@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -61,9 +62,13 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	private  ObjectMapper mapper = new ObjectMapper();
 
 	/**
-	 * Number of notes in the chord. Typically size + 1
+	 * Number of notes in the chord.
 	 */
 	@JsonProperty("chordSize")	private int chordSize;
+	/**
+	 * size (#elements) of formula
+	 */
+	@JsonIgnore		private int size;
 	/**
 	 * chordSpellingNumber - double word binary, 32 bits, accommodates 2 octave + 8 step span
 	 */
@@ -177,7 +182,6 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	public  List<Pitch> createPitches(Pitch root, Key akey) {
 		return IFormula.createPitches(formula, root, akey);
 	}
-
 	
 	public String toJSON() {
 		return toJson();
@@ -189,6 +193,10 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 
 	public void setChordSize(int chordSize) {
 		this.chordSize = chordSize;
+	}
+	
+	public int getSize() {
+		return formula.size();
 	}
 
 	public int getSpellingNumber() {
@@ -244,6 +252,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 			formula.add(i);
 		}
 		setFormulaNumber(computeFormulaNumber(frmla));
+		size = frmla.length;
 	}
 	
 	public String getName() {
@@ -268,6 +277,10 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 
 	public List<Pitch> getTemplate() {
 		return template;
+	}
+	
+	public void addTemplate() {
+		template.addAll(createPitches(Pitch.C, Key.C_MAJOR));
 	}
 
 	public String toString() {

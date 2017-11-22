@@ -1,18 +1,13 @@
 package music.element.song;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Reference;
-import org.mongodb.morphia.annotations.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import mathlib.cp.ICollectable;
 import mathlib.util.IJson;
@@ -36,7 +31,7 @@ import util.music.ChordManager;
  * @author don_bacon
  *
  */
-@Entity(value="HarmonyChord", noClassnameStored=true)
+
 public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>, ICollectable<Pitch> {
 
 	private static final long serialVersionUID = -5601371412350435601L;
@@ -52,14 +47,14 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 	public static final Pitch NULL_VALUE = Pitch.NULL_VALUE;
 	public static final HarmonyChord NULL_VALUE_HARMONY_CHORD = new HarmonyChord("§");
 	
-	@Id ObjectId id;
-	@Reference	private ChordFormula chordFormula = null;	// info about the chord - cannot be null
-	@Embedded	private Pitch root = null;
-	@Transient  private Pitch bassNote = null;		// a slash chord has something other than the root in the bass
-	@Embedded	private List<Pitch> chordPitches = new ArrayList<Pitch>();
-	@Property	private String name = null;				// root + symbol, "C9+11" for example
-	@Transient	private List<String> alternateNames = new ArrayList<String>();
-	@Property	private List<String> spelling = null;	// for readability, just the pitches as in C Eb G Db
+	@JsonIgnore		private ChordFormula chordFormula = null;	// info about the chord - cannot be null
+	@JsonIgnore  	private Pitch bassNote = null;		// a slash chord has something other than the root in the bass
+	@JsonIgnore		private List<String> alternateNames = new ArrayList<String>();
+	
+	@JsonProperty	private Pitch root = null;
+	@JsonProperty	private List<Pitch> chordPitches = new ArrayList<Pitch>();
+	@JsonProperty	private String name = null;				// root + symbol, "C9+11" for example
+	@JsonProperty	private List<String> spelling = null;	// for readability, just the pitches as in C Eb G Db
 	
 	/**
 	 * Create a silent HarmonyChord (no chord is sounded).
@@ -111,7 +106,7 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 	 * @throws IllegalArgumentException if chord name is not valid
 	 */
 	public HarmonyChord(String chord, Map<String, ChordFormula> chordFormulas) throws IllegalArgumentException {
-		ChordInfo chordInfo = ChordManager.parseChordName(chord);
+		ChordInfo chordInfo = ChordInfo.parseChordName(chord);
 		String rootNote = chordInfo.getRootNote();
 		String bass = chordInfo.getBassNote();
 		String symbol = chordInfo.getChordSymbol();
@@ -151,7 +146,6 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 		chordFormula.setFormulaNumber(fnum);
 		chordFormula.setSpellingNumber(spellingNumber);
 		setNames();
-		setId(new ObjectId(new Date(), 1));
 	}
 	
 	/**
@@ -203,14 +197,6 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 
 	public String toString(boolean includeSpelling) {
 		return includeSpelling ? name + " " + spelling : name;
-	}
-
-	public ObjectId getId() {
-		return id;
-	}
-
-	public void setId(ObjectId id) {
-		this.id = id;
 	}
 
 	public List<String> getSpelling() {

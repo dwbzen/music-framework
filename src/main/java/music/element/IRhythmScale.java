@@ -7,7 +7,7 @@ import java.util.SortedSet;
 import music.action.ExpressionSelector;
 import music.element.rhythm.IRhythmTextureMap;
 import music.transform.ITransformer.Preference;
-import util.IJson;
+import mathlib.util.IJson;
 import util.INameable;
 
 public interface IRhythmScale extends IJson, INameable {

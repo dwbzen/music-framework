@@ -1,10 +1,5 @@
 package music.element;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-
-@Embedded
-@Entity(value="PitchClass", noClassnameStored=true)
 public enum PitchClass {
 	UNPITCHED(0), 
 	PITCHED(1), 

@@ -7,40 +7,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import music.ScorePart;
 import util.Configurable;
 import util.Configuration;
 
-import org.bson.types.ObjectId;
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Reference;
-import org.mongodb.morphia.annotations.Transient;
-
-@Entity("Score")
 public class Score implements Configurable, Serializable {
 
 	/**
 	 * Part name + ScorePart
 	 */
-	@Reference	private Map<String, ScorePartEntity> parts = new HashMap<String, ScorePartEntity>();
+	@JsonProperty	private Map<String, ScorePartEntity> parts = new HashMap<String, ScorePartEntity>();
 	private static final long serialVersionUID = 7957510486314451238L;
-	@Transient private Properties configProperties = null;
-	@Transient private Configuration configuration = null;
+	@JsonIgnore private Properties configProperties = null;
+	@JsonIgnore private Configuration configuration = null;
 	
-	@Id		private ObjectId	id = new ObjectId();
-	@Property("workNumber")	private String workNumber;		// as in "BVW1023" or K. 524
-	@Property("title")		private String title;
-	@Property("copyright")	private String copyright;
-	@Property("name")		private String name;			// for persistence
+	@JsonProperty("workNumber")	private String workNumber;		// as in "BVW1023" or K. 524
+	@JsonProperty("title")		private String title;
+	@JsonProperty("copyright")	private String copyright;
+	@JsonProperty("name")		private String name;			// for persistence
 	
 	/**
 	 * type, name. For example, "composer", "Don Bacon"
 	 */
-	@Transient	private Map<String, String> creators = new HashMap<String, String>();
-	@Property("instruments")  private List<String> instrumentNames = new ArrayList<String>();
+	@JsonIgnore		private Map<String, String> creators = new HashMap<String, String>();
+	@JsonProperty("instruments")  private List<String> instrumentNames = new ArrayList<String>();
 
 	public Score(String title) {
 		this.title = title;

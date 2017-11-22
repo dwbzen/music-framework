@@ -6,27 +6,23 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import util.IJson;
+import mathlib.util.IJson;
 import util.Ratio;
 
-@Embedded
-@Entity(value="RhythmExpression")
 public class RhythmExpression implements IJson, IRhythmExpression {
 
 	private static final long serialVersionUID = -1537702606983613050L;
 	
-	@Property("units")			private int units;
-	@Embedded("ratio")			private Ratio ratio = Ratio.ONE_TO_ONE;
-	@Embedded("texture") 		private TextureType textureType = TextureType.MONOPHONIC;	// MONMOPHONIC or CHORDAL
-	@Embedded("rhythmicUnit")	private RhythmicUnitType rhythmicUnitType = RhythmicUnitType.METRIC;	// METRIC or EXTRAMETRIC
-	@Embedded("depth") 			private Set<Integer> chordalDepth = new TreeSet<Integer>();	// for CHORDAL expression, #notes permitted in a chord
-	@Embedded("factors")		private List<Duration> factors = new ArrayList<Duration>();
-	@Transient	private IRhythmScale rhythmScale = null;
+	@JsonProperty("units")			private int units;
+	@JsonProperty("ratio")			private Ratio ratio = Ratio.ONE_TO_ONE;
+	@JsonProperty("texture") 		private TextureType textureType = TextureType.MONOPHONIC;	// MONMOPHONIC or CHORDAL
+	@JsonProperty("rhythmicUnit")	private RhythmicUnitType rhythmicUnitType = RhythmicUnitType.METRIC;	// METRIC or EXTRAMETRIC
+	@JsonProperty("depth") 			private Set<Integer> chordalDepth = new TreeSet<Integer>();	// for CHORDAL expression, #notes permitted in a chord
+	@JsonProperty("factors")		private List<Duration> factors = new ArrayList<Duration>();
+	@JsonIgnore		private IRhythmScale rhythmScale = null;
 	
 	/*
 	 * some common ratios
@@ -174,6 +170,6 @@ public class RhythmExpression implements IJson, IRhythmExpression {
 	}
 
 	public String toString() {
-		return toJSON();
+		return toJson();
 	}
 }
