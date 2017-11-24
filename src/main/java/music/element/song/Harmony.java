@@ -1,16 +1,15 @@
 package music.element.song;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
-
 import music.action.SongAnalyzer;
 import music.action.SongAnalyzer.KeyType;
 import music.element.Key;
 import music.element.Pitch;
 import music.element.Scales;
-import util.IJson;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import mathlib.util.IJson;
 import util.INameable;
 
 /**
@@ -21,14 +20,12 @@ import util.INameable;
  * @author don_bacon
  *
  */
-@Embedded
 public class Harmony implements IJson, INameable {
 
 	private static final long serialVersionUID = 3702027300515217295L;
-	private static Morphia morphia = new Morphia();
 	public static String NO_HARMONY_KEY = "NONE";	// name is "0"
 	
-	@Property	int beat;
+	@JsonProperty	int beat;
 	/**
 	 * The name of the chord as it would appear in ChordFormula symbol. For example, "Bb" is Bb Major chord.
 	 * A triangle (unicode 0394 Δ ) is sometimes used for major instead of M.
@@ -39,14 +36,14 @@ public class Harmony implements IJson, INameable {
 	 * Slash chords like "A7/G" are split up. The name is the chord including the slash (A7/G in this case)
 	 * but the bassNote is saved as a Transient Pitch.
 	 */
-	@Property("chord")	String name;
-	@Transient	HarmonyChord harmonyChord = null;
-	@Transient	HarmonyChord transposedHarmonyChord = null;		// optional - used by SongAnalyzer, SongCollector
-	@Transient	Key	originalKey = null;				// optional - will be non-null if transposedKey is set
-	@Transient	Key transposedKey = null;			// optional - used by SongAnalyzer, SongCollector
-	@Transient	SongMeasure songMeasure = null;		// parent SongMeasure
-	@Transient	Pitch bassNote;						// for slash chords, but set to the root otherwise.
-	@Transient	boolean isSlash = false;			// true if a slash chord
+	@JsonProperty("chord")	String name;
+	@JsonIgnore	HarmonyChord harmonyChord = null;
+	@JsonIgnore	HarmonyChord transposedHarmonyChord = null;		// optional - used by SongAnalyzer, SongCollector
+	@JsonIgnore	Key	originalKey = null;				// optional - will be non-null if transposedKey is set
+	@JsonIgnore	Key transposedKey = null;			// optional - used by SongAnalyzer, SongCollector
+	@JsonIgnore	SongMeasure songMeasure = null;		// parent SongMeasure
+	@JsonIgnore	Pitch bassNote;						// for slash chords, but set to the root otherwise.
+	@JsonIgnore	boolean isSlash = false;			// true if a slash chord
 
 	public Harmony() {
 	}
@@ -82,7 +79,7 @@ public class Harmony implements IJson, INameable {
 	
 	@Override
 	public String toJSON() {
-		return morphia.toDBObject(this).toString();
+		return toJson();
 	}
 
 	public int getBeat() {

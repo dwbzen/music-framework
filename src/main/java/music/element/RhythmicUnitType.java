@@ -4,7 +4,8 @@ package music.element;
 /**
  * METRIC - one note per duration
  * EXTRAMETRIC - tuplets
- * @see https://en.wikipedia.org/wiki/Rhythm
+ * <p>For background information see <a href="https://en.wikipedia.org/wiki/Rhythm">Rhythm</a> on Wikipedia
+ * 
  * @author don_bacon
  *
  */

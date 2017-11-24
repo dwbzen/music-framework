@@ -11,7 +11,11 @@ import music.instrument.Instrument;
 /**
  * Scales a Point to a pitch for a particular instrument or range
  * 
- * @author dbacon
+ * @author don_bacon
+ * 
+ * <p>For background information see 
+ * <a href="https://en.wikipedia.org/wiki/Transposing_instrument">Transposing Instrument</a> and
+ * <a href="https://en.wikipedia.org/wiki/List_of_musical_instruments_by_transposition">Musical Instruments by Transposition</a> on Wikipedia
  *
  */
 public class PitchScaler extends Scaler {
@@ -117,8 +121,6 @@ public class PitchScaler extends Scaler {
 	 * Setting the Key also determines and sets transposeSteps.
 	 * 
 	 * @param key
-	 * @see https://en.wikipedia.org/wiki/Transposing_instrument
-	 * @see https://en.wikipedia.org/wiki/List_of_musical_instruments_by_transposition
 	 */
 	public void setKey(Key key) {
 		this.key = key;

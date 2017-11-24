@@ -3,12 +3,11 @@ package music.element.song;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import music.element.Key;
-import util.IJson;
+import mathlib.util.IJson;
 
 /**
  * The melody part of a SongMeasure. For example, given 192 divisions in 4/4 time:
@@ -20,17 +19,15 @@ import util.IJson;
  * @author don_bacon
  *
  */
-@Embedded
 public class Melody implements IJson {
 
 	private static final long serialVersionUID = 8282039435484302599L;
-	private static Morphia morphia = new Morphia();
 	public static String NO_MELODY_KEY = "NONE";	// Pitch is "0"
 
-	@Embedded("notes")  private List<SongNote> songNotes = new ArrayList<SongNote>();
-	@Transient			 private Key	originalKey = null;			// optional - will be non-null if transposedKey is set
-	@Transient			 private Key transposedKey = null;			// optional - used by SongAnalyzer
-	@Transient			 private SongMeasure songMeasure = null;	// parent SongMeasure
+	@JsonProperty("notes")  private List<SongNote> songNotes = new ArrayList<SongNote>();
+	@JsonIgnore			 	private Key	originalKey = null;			// optional - will be non-null if transposedKey is set
+	@JsonIgnore			 	private Key transposedKey = null;			// optional - used by SongAnalyzer
+	@JsonIgnore			 	private SongMeasure songMeasure = null;	// parent SongMeasure
 
 	public Melody() {
 	}
@@ -65,7 +62,7 @@ public class Melody implements IJson {
 
 	@Override
 	public String toJSON() {
-		return  morphia.toDBObject(this).toString();
+		return  toJson();
 	}
 
 	public static void main(String... args) {

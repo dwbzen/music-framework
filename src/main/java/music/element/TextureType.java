@@ -1,7 +1,7 @@
 package music.element;
 
 /**
- * @see https://en.wikipedia.org/wiki/Texture_(music)
+ * For background information see the Wikipedia article on <a href="https://en.wikipedia.org/wiki/Texture_(music)">Texture</a>
  * @author don_bacon
  *
  */

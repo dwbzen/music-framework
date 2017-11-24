@@ -30,7 +30,7 @@ import mathlib.util.IJson;
  * 
  * NOTE that there are no setters. This is to prevent unintentional changing Pitch references.
  * Use copy constructors instead to create new pitches from existing.
- * @see https://en.wikipedia.org/wiki/Scientific_pitch_notation
+ * <p>See <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a> on Wikipedia.
  */
 public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 

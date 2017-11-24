@@ -33,9 +33,10 @@ import music.element.PitchRange;
  * 
  * Added RhythmScale association. Every instrument must have one!
  * This is set up in the configuration.
+ * <p>
+ * See <a href="https://en.wikipedia.org/wiki/General_MIDI">General MIDI</a> on Wikipedia for Midi programs
+ * and <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a>
  * 
- * See https://en.wikipedia.org/wiki/General_MIDI  for Midi programs
- * See https://en.wikipedia.org/wiki/Scientific_pitch_notation
  * @author dbacon
  *
  */
