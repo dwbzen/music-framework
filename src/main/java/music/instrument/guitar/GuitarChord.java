@@ -28,6 +28,7 @@ import music.element.song.HarmonyChord;
 	E||----3-----------------|
  *
  * "x" indicates omitted string, 0 indicates open string.
+ * Note that in this notation, the "p" positions list read left to right as bottom string to top string.
  * Fingering typically isn't shown on a tab and is an optional attribute.
  * 
  * A List<ChordFormation> holds the chord formations

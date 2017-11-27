@@ -1,7 +1,5 @@
 package music.instrument;
 
-import java.util.List;
-
 import music.element.Alteration;
 import music.element.Cleff;
 import music.element.Pitch;
@@ -23,23 +21,10 @@ public class Bassoon extends Instrument {
 		this.abreviation = "Bsn";
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(71);
+		cleffs.add(Cleff.F);
 		setPartName(NAME);
+		setName(NAME);
 		setMidiProgram(71);
 	}
-	
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
 
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.F);
-		}
-		return cleffs;
-	}
 }

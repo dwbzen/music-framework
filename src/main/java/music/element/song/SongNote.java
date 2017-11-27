@@ -1,16 +1,14 @@
 package music.element.song;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
-
 import music.element.Duration;
 import music.element.Key;
 import music.element.Pitch;
 import music.element.TimeSignature;
-import util.IJson;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import mathlib.util.IJson;
 
 /**
  * A pitch + Duration. Can also be a rest (no pitch).
@@ -26,21 +24,18 @@ import util.IJson;
  * @author don_bacon
  *
  */
-@Embedded
-@Entity(value="Note", noClassnameStored=true)
 public class SongNote implements IJson, Comparable<SongNote> {
 
 	private static final long serialVersionUID = 1282905330533960496L;
-	private static Morphia morphia = new Morphia();
 
-	@Property("pitch")		private String pitch = null;
-	@Embedded("notations")	private Notation notation;
-	@Transient				private boolean rest = true;	// set automatically
-	@Transient				protected Duration duration;	// calculated from Notation + TimeSignature
-	@Transient				private Pitch notePitch = null;		// will be null for a rest
-	@Transient				private Key	originalKey = null;				// optional - will be non-null if transposedKey is set
-	@Transient				private Key transposedKey = null;			// optional - used by SongAnalyzer
-	@Transient				private TimeSignature timeSignature = null;
+	@JsonProperty("pitch")		private String pitch = null;
+	@JsonProperty("notations")	private Notation notation;
+	@JsonIgnore				private boolean rest = true;		// set automatically
+	@JsonIgnore				protected Duration duration;		// calculated from Notation + TimeSignature
+	@JsonIgnore				private Pitch notePitch = null;		// will be null for a rest
+	@JsonIgnore				private Key	originalKey = null;				// optional - will be non-null if transposedKey is set
+	@JsonIgnore				private Key transposedKey = null;			// optional - used by SongAnalyzer
+	@JsonIgnore				private TimeSignature timeSignature = null;
 	
 	public SongNote() {
 	}
@@ -130,7 +125,7 @@ public class SongNote implements IJson, Comparable<SongNote> {
 
 	@Override
 	public String toJSON() {
-		return morphia.toDBObject(this).toString();
+		return toJson();
 	}
 
 }

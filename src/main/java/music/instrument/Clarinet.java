@@ -1,7 +1,5 @@
 package music.instrument;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Key;
 import music.element.Pitch;
@@ -35,6 +33,8 @@ public class Clarinet extends Instrument {
 		setPartName("Bb " + NAME);
 		setMidiProgram(72);
 		setInstrumentName(NAME);			// default value, configurable
+		setName(NAME);
+		cleffs.add(Cleff.G);
 		setInstrumentSound("wind.reed.clarinet");	// default value, configurable
 	}
 
@@ -54,21 +54,6 @@ public class Clarinet extends Instrument {
 	public int getTranspositionSteps() {
 		// written a whole step above desired pitch
 		return 2;
-	}
-	
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.G);
-		}
-		return cleffs;
 	}
 
 }

@@ -1,0 +1,39 @@
+{ "name" : "Standard Rhythm Scale" , 
+	"root" : 16 , "units" : [ 1 , 2 , 3 , 4 , 6 , 8 , 10 , 12 , 14 , 16] , 
+	"expression" : { 
+		"1" : [ 
+			{ "className" : "music.element.RhythmExpression" , "units" : 1 , "expression" : { "beats" : 1 , "timeOf" : 1} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 2]}
+		] , 
+		"2" : [ 
+			{ "className" : "music.element.RhythmExpression" , "units" : 2 , "expression" : { "beats" : 1 , "timeOf" : 1} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 2 , 3]}
+		] , 
+		"4" : [ 
+			{ "className" : "music.element.RhythmExpression" , "units" : 2 , "expression" : { "beats" : 3 , "timeOf" : 2} , "type" : "MONOPHONIC"} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 1 , "expression" : { "beats" : 5 , "timeOf" : 4} , "type" : "MONOPHONIC"} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 4 , "expression" : { "beats" : 1 , "timeOf" : 1} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 2 , 3 , 4]} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 2 , "expression" : { "beats" : 3 , "timeOf" : 2} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 2 , 3 , 4]} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 1 , "expression" : { "beats" : 5 , "timeOf" : 4} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 2 , 3 , 4]}
+		] , 
+		"6" : [ 
+			{ "className" : "music.element.RhythmExpression" , "units" : 6 , "expression" : { "beats" : 1 , "timeOf" : 1} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 2 , 3 , 4]}
+		] , 
+		"8" : [ 
+			{ "className" : "music.element.RhythmExpression" , "units" : 4 , "expression" : { "beats" : 3 , "timeOf" : 2} , "type" : "MONOPHONIC"} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 2 , "expression" : { "beats" : 5 , "timeOf" : 4} , "type" : "MONOPHONIC"} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 8 , "expression" : { "beats" : 1 , "timeOf" : 1} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 2 , 3 , 4 , 5]} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 4 , "expression" : { "beats" : 3 , "timeOf" : 2} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 2 , 3 , 4 , 5]} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 2 , "expression" : { "beats" : 5 , "timeOf" : 4} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 2 , 3 , 4 , 5]}
+		] , 
+		"12" : [ 
+			{ "className" : "music.element.RhythmExpression" , "units" : 12 , "expression" : { "beats" : 1 , "timeOf" : 1} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 3 , 4 , 5]}
+		] , 
+		"16" : [ 
+			{ "className" : "music.element.RhythmExpression" , "units" : 8 , "expression" : { "beats" : 3 , "timeOf" : 2} , "type" : "MONOPHONIC"} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 4 , "expression" : { "beats" : 5 , "timeOf" : 4} , "type" : "MONOPHONIC"} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 16 , "expression" : { "beats" : 1 , "timeOf" : 1} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 3 , 4 , 5]} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 8 , "expression" : { "beats" : 3 , "timeOf" : 2} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 3 , 4 , 5]} , 
+			{ "className" : "music.element.RhythmExpression" , "units" : 4 , "expression" : { "beats" : 5 , "timeOf" : 4} , "type" : "POLYPHONIC" , "polyphonicDepth" : [ 3 , 4 , 5]}
+		]
+
+	}
+}

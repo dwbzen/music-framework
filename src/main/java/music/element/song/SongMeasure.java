@@ -3,14 +3,11 @@ package music.element.song;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import music.element.TimeSignature;
-import util.IJson;
+import mathlib.util.IJson;
 
 /**
  * A simplified Measure as it might appear in a guitar Fake Book.
@@ -31,20 +28,17 @@ import util.IJson;
  * @author don_bacon
  *
  */
-@Embedded
-@Entity(value="measure", noClassnameStored=true)
 public class SongMeasure  implements IJson {
 
 	private static final long serialVersionUID = -2130722449811491021L;
-	private static Morphia morphia = new Morphia();
 	
-	@Embedded("key")			private KeyLite	key = null;						// optional - include if number == 1 or it changed
-	@Embedded("timeSignature")	private TimeSignature timeSignature = null;		// optional - include if number == 1 or it changed
-	@Property("number")			private int number = 1;
-	@Property("goto")			private String goTo = null;		// optional direction to go to a particular section after this SongMeasure
-	@Embedded("harmony")		private List<Harmony> harmony = new ArrayList<Harmony>();
-	@Embedded("melody")			private Melody melody = null;
-	@Transient					private Section section = null;		// the parent Section of this SongMeasure
+	@JsonProperty("key")			private KeyLite	key = null;						// optional - include if number == 1 or it changed
+	@JsonProperty("timeSignature")	private TimeSignature timeSignature = null;		// optional - include if number == 1 or it changed
+	@JsonProperty("number")			private int number = 1;
+	@JsonProperty("goto")			private String goTo = null;		// optional direction to go to a particular section after this SongMeasure
+	@JsonProperty("harmony")		private List<Harmony> harmony = new ArrayList<Harmony>();
+	@JsonProperty("melody")			private Melody melody = null;
+	@JsonIgnore						private Section section = null;		// the parent Section of this SongMeasure
 	/**
 	 * In a Section that repeats n times, there are typically n different endings or trailing measures
 	 * In sheet music that would be indicated by an ending Number >= 1 and <= n with a line over the measures in that ending.
@@ -55,12 +49,12 @@ public class SongMeasure  implements IJson {
 	 * specify ending:1. First time through it goes back to the beginning of "bridge"
 	 * Second time it does't play measures with ending:1 but goes to "coda" when it hits the first instance.
 	 */
-	@Property					private int ending = 0;
+	@JsonProperty		private int ending = 0;
 	/**
 	 * If you need to jump to a specific Section. This takes priority over ending
 	 * and would cause an immediate jump to measure 1 of the named section.
 	 */
-	@Property					private String nextSection = null;
+	@JsonProperty		private String nextSection = null;
 	
 	public SongMeasure() {
 	}

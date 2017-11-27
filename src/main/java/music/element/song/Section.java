@@ -3,13 +3,10 @@ package music.element.song;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import util.IJson;
+import mathlib.util.IJson;
 import util.INameable;
 
 /**
@@ -19,30 +16,27 @@ import util.INameable;
  * @author don_bacon
  *
  */
-@Embedded
-@Entity(value="section", noClassnameStored=true)
 public class Section  implements IJson, INameable {
 
 	private static final long serialVersionUID = -6094004826410293623L;
-	private static Morphia morphia = new Morphia();
 	
-	@Property				private String name = "default";
-	@Embedded("measures")	private List<SongMeasure> songMeasures = new ArrayList<SongMeasure>();
+	@JsonProperty				private String name = "default";
+	@JsonProperty("measures")	private List<SongMeasure> songMeasures = new ArrayList<SongMeasure>();
 	/**
 	 * optional #times this section repeated, default to 1. A repeat of 0 means "repeat until fade"
 	 */
-	@Property				private int repeat = 1;
+	@JsonProperty			private int repeat = 1;
 	/**
 	 * optional numbering - arbitrary integer, no ordering implied - just a number
 	 */
-	@Property				private int number = 1;
-	@Transient				private int numberOfChords = 0;		// a sum of #Harmony in all the measures in this section.
-	@Transient				private Song song = null;			// parent Song of this Section (if there is one)
+	@JsonProperty			private int number = 1;
+	@JsonIgnore				private int numberOfChords = 0;		// a sum of #Harmony in all the measures in this section.
+	@JsonIgnore				private Song song = null;			// parent Song of this Section (if there is one)
 	/**
 	 * For each repeat, the name of the section to go to after this section complete.
 	 * Optional, but there should be a nextSection specified for each repeat
 	 */
-	@Property("next")		private List<String> nextSections = new ArrayList<String>();
+	@JsonProperty("next")	private List<String> nextSections = new ArrayList<String>();
 
 	/**
 	 * Default constructor.

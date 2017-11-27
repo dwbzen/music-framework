@@ -22,7 +22,7 @@ public class KeyLite extends music.element.Key {
 	}
 	
 	@Override
-	public String toJSON() {
+	public String toJson() {
 		StringBuffer sb = new StringBuffer("\"key\"");
 		sb.append(" : { ");
 		sb.append("\"name\" : \"" + getName() + "\", ");

@@ -5,19 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import music.element.IRhythmExpression;
 import music.element.TextureType;
-import util.IJson;
+import mathlib.util.IJson;
 
-@Embedded
-@Entity(value="RhythmTextureMap")
 public class BaseRhythmTextureMap  implements IJson, IRhythmTextureMap {
 
 	private static final long serialVersionUID = 9179677215188237234L;
-	@Embedded("textureMap")	protected Map<TextureType, List<IRhythmExpression>> textureMap = new HashMap<TextureType, List<IRhythmExpression>>();
+	@JsonProperty	protected Map<TextureType, List<IRhythmExpression>> textureMap = new HashMap<TextureType, List<IRhythmExpression>>();
 	
 	public BaseRhythmTextureMap() {
 		textureMap.put(TextureType.MONOPHONIC,	new ArrayList<IRhythmExpression>());

@@ -1,7 +1,5 @@
 package music.instrument.guitar;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Pitch;
 import music.element.Step;
@@ -17,6 +15,7 @@ import music.instrument.Instrument;
 public class AcousticGuitar extends Instrument {
 
 	private static final long serialVersionUID = 471314417767037863L;
+	
 	public final static Pitch LOW_RANGE = new Pitch(Step.E, 3);
 	public final static Pitch HIGH_RANGE = new Pitch(Step.E, 6);
 	public final static String NAME = "Guitar";
@@ -31,18 +30,21 @@ public class AcousticGuitar extends Instrument {
 		super(low, high);
 		cleffs.add(Cleff.G);
 		setName(NAME);
-	}
-	
-	public List<Cleff> getCleffs() {
-		return cleffs;
+		setPartName(NAME);
 	}
 
 	public GuitarTuning getGuitarTuning() {
 		return guitarTuning;
 	}
 
+	/**
+	 * The PitchRange is set based on the PitchRange of the tuning.
+	 * 
+	 * @param guitarTuning
+	 */
 	public void setGuitarTuning(GuitarTuning guitarTuning) {
 		this.guitarTuning = guitarTuning;
+		setPitchRange(guitarTuning.getPitchRange());
 	}
 
 }

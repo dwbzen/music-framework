@@ -327,6 +327,10 @@ public abstract class Instrument implements Configurable, IInstrument {
 		this.key = key;
 	}
 
+	public List<Cleff> getCleffs() {
+		return cleffs;
+	}
+
 	public PitchScaler getPitchScaler() {
 		return pitchScaler;
 	}

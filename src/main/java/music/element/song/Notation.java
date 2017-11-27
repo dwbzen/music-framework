@@ -3,34 +3,28 @@ package music.element.song;
 import music.element.Measurable.TieType;
 import music.element.Measurable.TupletType;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import util.IJson;
+import mathlib.util.IJson;
 
 /**
- * Provide note type (half, quarter etc. ) and tuplet information.
- * Also includes tie information.
+ * Provide note type (half, quarter etc. ),  tuplet and tie information.
+ * 
  * @author don_bacon
  *
  */
-@Embedded
-@Entity(value="Notation")
 public class Notation implements IJson {
 
 	private static final long serialVersionUID = -3719234783577601054L;
-	private static Morphia morphia = new Morphia();
 	
 	/**
 	 * derived from Duration and time signature: whole, half, quarter, eighth, 16th, 32nd, 64th
 	 */
-	@Property("type")		private String noteType = null;
-	@Property("tieType")	private TieType tieType = null;			// NONE(0), START(1), STOP(2), BOTH(3);
-	@Property("tupletType")	private TupletType tupletType = null;		// NONE(0), START(1), CONTINUE(2), STOP(3)
-	@Property("dots")		private int dots = 0;
-	@Property("tuplet")		private String tuplet = null;		// as in "3/2" etc.
+	@JsonProperty("type")		private String noteType = null;
+	@JsonProperty("tieType")	private TieType tieType = null;			// NONE(0), START(1), STOP(2), BOTH(3);
+	@JsonProperty("tupletType")	private TupletType tupletType = null;	// NONE(0), START(1), CONTINUE(2), STOP(3)
+	@JsonProperty("dots")		private int dots = 0;
+	@JsonProperty("tuplet")		private String tuplet = null;		// as in "3/2" etc.
 
 	
 	public Notation() {
