@@ -155,7 +155,7 @@ public class Song implements IJson, IMapped<String>, Supplier<ChordProgression> 
 
 	@Override
 	public String toJSON() {
-		return morphia.toDBObject(this).toString();
+		return toJson();
 	}
 
 	/**

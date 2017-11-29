@@ -1,7 +1,5 @@
 package music.instrument.percussion;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Pitch;
 import music.element.PitchClass;
@@ -35,18 +33,12 @@ public class Cowbell  extends Instrument {
 	public Cowbell(Pitch low, Pitch high) {
 		super(low, high);
 		setPartName(NAME);
+		setName(NAME);
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(56);
+		cleffs.add(Cleff.PERCUSSION_2LINE);
 		setMidiProgram(56);
 		setPitchClass(PitchClass.DISCRETE_2LINE);
 	}
 	
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.PERCUSSION_2LINE);
-		}
-		return cleffs;
-	}
-
 }

@@ -36,7 +36,7 @@ public class Notation implements IJson {
 	
 	@Override
 	public String toJSON() {
-		return morphia.toDBObject(this).toString();
+		return toJson();
 	}
 
 	public String getTuplet() {

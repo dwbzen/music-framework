@@ -8,14 +8,8 @@ public class TenorVoice extends Voice {
 
 	public TenorVoice() {
 		super();
+		setName(NAME);
 		getCleffs().add(Cleff.G8ma);
 	}
 	
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
 }

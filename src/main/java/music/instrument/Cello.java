@@ -1,7 +1,5 @@
 package music.instrument;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Pitch;
 import music.element.Step;
@@ -22,24 +20,10 @@ public class Cello  extends Instrument {
 		this.abreviation = "Vc.";
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(43);
+		cleffs.add(Cleff.F);
 		setPartName(NAME);
+		setName(NAME);
 		setMidiProgram(43);
-	}
-
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
-
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.F);
-		}
-		return cleffs;
 	}
 
 }

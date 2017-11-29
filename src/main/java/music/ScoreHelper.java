@@ -13,7 +13,6 @@ import mathlib.Partition;
 import music.element.Duration;
 import music.element.Measure;
 import music.element.Note;
-import music.element.Pitch;
 import music.element.Tempo;
 import music.element.Duration.BeatUnit;
 import music.element.Measurable.TieType;
@@ -99,7 +98,7 @@ public final class ScoreHelper {
 	 * Factors units to powers of 2 for a given time signature & measure divisions
 	 * 
 	 * @param divsPerMeasure #divisions per measure
-	 * @parem beats #beats per measure
+	 * @param beats #beats per measure
 	 * @param beatNote note value that has the beat
 	 * @param noteUnits units for this note to factor
 	 * @return List<Integer> of factors. Elements are powers of 2 (-6 <= n <= 6)

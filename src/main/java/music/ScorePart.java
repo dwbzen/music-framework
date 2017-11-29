@@ -47,7 +47,7 @@ import util.messaging.SessionImpl;
 
 /**
  * 
- * @author donbacon
+ * @author don_bacon
  *
  */
 public class ScorePart implements Serializable, Runnable {

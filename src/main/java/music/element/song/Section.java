@@ -50,7 +50,7 @@ public class Section  implements IJson, INameable {
 	
 	@Override
 	public String toJSON() {
-		return morphia.toDBObject(this).toString();
+		return toJson();
 	}
 
 	@Override

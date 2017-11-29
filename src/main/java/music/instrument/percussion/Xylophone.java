@@ -1,10 +1,7 @@
 package music.instrument.percussion;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Interval;
-import music.element.Key;
 import music.element.Pitch;
 import music.element.Step;
 import music.instrument.Instrument;
@@ -35,8 +32,10 @@ public class Xylophone extends Instrument {
 	public Xylophone(Pitch low, Pitch high) {
 		super(low, high);
 		setPartName(NAME);
+		setName(NAME);
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(14);
+		cleffs.add(Cleff.G);
 		setMidiProgram(14);
 		transposes=true;
 		setTransposeInterval(new Interval(12));
@@ -48,22 +47,6 @@ public class Xylophone extends Instrument {
 			name = NAME;
 		}
 		return name;
-	}
-	
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.G);
-		}
-		return cleffs;
-	}
-	
-	@Override
-	/**
-	 * Transpose interval is an octave, so there is no change in Key
-	 */
-	public Key getKey(Key scoreKey) {
-		return scoreKey;
 	}
 
 }

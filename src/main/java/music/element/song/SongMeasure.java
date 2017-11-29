@@ -165,11 +165,7 @@ public class SongMeasure  implements IJson {
 
 	@Override
 	public String toJSON() {
-		return morphia.toDBObject(this).toString();
-	}
-	
-	public static void main(String... args) {
-
+		return toJson();
 	}
 
 }

@@ -1,7 +1,5 @@
 package music.instrument;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Pitch;
 import music.element.Step;
@@ -22,27 +20,14 @@ public class Shamisen  extends Instrument  {
 		this.abreviation = "Shamisen";
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(107);
+		cleffs.add(Cleff.G);
+		setName(NAME);
 		setPartName(NAME);
 		setMidiProgram(107);
 		setInstrumentName(NAME);			// default value, configurable
 		setInstrumentSound("pluck.shamisen");	// default value, configurable
 	}
 	
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
-	
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.G);
-		}
-		return cleffs;
-	}
 
 }
 

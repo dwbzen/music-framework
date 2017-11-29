@@ -9,13 +9,7 @@ public class AltoVoice extends Voice{
 	public AltoVoice() {
 		super();
 		getCleffs().add(Cleff.G);
+		setName(NAME);
 	}
 	
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
 }

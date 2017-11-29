@@ -1,13 +1,9 @@
 package util;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Property;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import mathlib.util.IJson;
 
-@Embedded
-@Entity(value="Ratio", noClassnameStored=true)
 public class Ratio  implements IJson {
 
 	private static final long serialVersionUID = -768395102730445320L;
@@ -19,8 +15,8 @@ public class Ratio  implements IJson {
 	public static final Ratio THREE_TO_TWO = new Ratio(3,2);
 	public static final Ratio FIVE_TO_FOUR = new Ratio(5,4);
 	
-	@Property("beats")	private Integer x = 0;
-	@Property("timeOf")	private Integer y = 0;
+	@JsonProperty("beats")	private Integer x = 0;
+	@JsonProperty("timeOf")	private Integer y = 0;
 	
 	public Ratio(int x, int y) {
 		this.x = x;

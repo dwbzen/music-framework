@@ -173,7 +173,7 @@ public class Scale implements IJson, INameable  {
 
 
 	public String toJSON() {
-		return morphia.toDBObject(this).toString();
+		return toJson();
 	}
 	
 	/**

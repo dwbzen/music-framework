@@ -1,7 +1,5 @@
 package music.instrument.percussion;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Pitch;
 import music.element.PitchClass;
@@ -25,24 +23,10 @@ public class SnareDrum extends Instrument {
 		setPartName(NAME);
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(40);
+		cleffs.add(Cleff.PERCUSSION);
+		setName(NAME);
 		setMidiProgram(40);
 		setPitchClass(PitchClass.DISCRETE_1LINE);
-	}
-
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
-	
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.PERCUSSION);
-		}
-		return cleffs;
 	}
 
 }

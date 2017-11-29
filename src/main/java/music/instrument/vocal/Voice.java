@@ -1,8 +1,5 @@
 package music.instrument.vocal;
 
-import java.util.List;
-
-import music.element.Cleff;
 import music.element.Pitch;
 import music.element.Step;
 import music.instrument.Instrument;
@@ -36,8 +33,4 @@ public abstract class Voice extends Instrument {
 		setMidiProgram(53);
 	}
 
-	@Override
-	public List<Cleff> getCleffs() {
-		return cleffs;
-	}
 }

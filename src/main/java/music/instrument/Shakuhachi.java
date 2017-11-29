@@ -1,7 +1,5 @@
 package music.instrument;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Pitch;
 import music.element.Step;
@@ -22,26 +20,12 @@ public class Shakuhachi  extends Instrument  {
 		this.abreviation = "Shakuhachi";
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(76);
+		cleffs.add(Cleff.G);
+		setName(NAME);
 		setPartName(NAME);
 		setMidiProgram(76);
 		setInstrumentName(NAME);					// default value, configurable
 		setInstrumentSound("wind.flutes.shakuhachi");	// default value, configurable
-	}
-	
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
-	
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.G);
-		}
-		return cleffs;
 	}
 
 }

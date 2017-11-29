@@ -1,7 +1,5 @@
 package music.instrument.percussion;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Pitch;
 import music.element.Step;
@@ -24,23 +22,9 @@ public class Timpani extends Instrument {
 		setPartName(NAME);
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(48);
+		cleffs.add(Cleff.F);
+		setName(NAME);
 		setMidiProgram(48);
-	}
-
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
-
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.F);
-		}
-		return cleffs;
 	}
 
 }

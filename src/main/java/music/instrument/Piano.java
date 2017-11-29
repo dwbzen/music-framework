@@ -1,14 +1,11 @@
 package music.instrument;
 
-import java.util.List;
-
-import music.element.Cleff;
 import music.element.Pitch;
 import music.element.Step;
 
 /**
  * Range is A0 to C8
- * @author dbacon
+ * @author don_bacon
  *
  */
 public abstract class Piano extends Instrument {
@@ -25,21 +22,10 @@ public abstract class Piano extends Instrument {
 	public Piano(Pitch low, Pitch high) {
 		super(low, high);
 		setPartName(NAME);
+		setName(NAME);
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(1);
 		setMidiProgram(1);
 	}
-	
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
 
-	@Override
-	public List<Cleff> getCleffs() {
-		return cleffs;
-	}
 }

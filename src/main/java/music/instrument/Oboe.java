@@ -1,7 +1,5 @@
 package music.instrument;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Pitch;
 
@@ -25,23 +23,10 @@ public class Oboe  extends Instrument {
 		setPartName(NAME);
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(69);
+		cleffs.add(Cleff.G);
+		setName(NAME);
 		setMidiProgram(69);
 		transposes = false;
 	}
 
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
-
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.G);
-		}
-		return cleffs;
-	}
 }

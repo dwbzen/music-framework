@@ -1,7 +1,5 @@
 package music.instrument;
 
-import java.util.List;
-
 import music.element.Cleff;
 import music.element.Pitch;
 import music.element.Step;
@@ -21,26 +19,12 @@ public class Koto  extends Instrument {
 		this.abreviation = "Koto";
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(108);
+		cleffs.add(Cleff.G);
+		setName(NAME);
 		setPartName(NAME);
 		setMidiProgram(108);
 		setInstrumentName(NAME);			// default value, configurable
 		setInstrumentSound("pluck.koto");	// default value, configurable
-	}
-
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
-	
-	@Override
-	public List<Cleff> getCleffs() {
-		if(cleffs.size() == 0) {
-			cleffs.add(Cleff.G);
-		}
-		return cleffs;
 	}
 
 }

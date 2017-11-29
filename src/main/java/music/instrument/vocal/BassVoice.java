@@ -9,13 +9,7 @@ public class BassVoice extends Voice {
 	public BassVoice() {
 		super();
 		getCleffs().add(Cleff.F);
+		setName(NAME);
 	}
-	
-	@Override
-	public String getName() {
-		if(name == null) {
-			name = NAME;
-		}
-		return name;
-	}
+
 }
