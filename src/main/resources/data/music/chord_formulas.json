@@ -80,11 +80,13 @@
 { "name" : "Mixed third" , "symbols" : ["m add3"], "groups" : [ "added tone"] , "formula" : [3, 1, 3], "intervals": ["m3", "m2", "m3"], "size" : 3, "chordSize" : 4 }
 { "name" : "Minor sixth" , "symbols" : ["m6"], "groups" : [ "added tone"] , "formula" : [ 3, 3, 4 ] , "intervals": ["m3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
 //
-{ "name" : "Sus2" , "symbols" : ["sus2"], "groups" : [ "suspended"] , "formula" : [ 2, 7] , "intervals": ["M2", "P5"], "size" : 2, "chordSize" : 3 }
+{ "name" : "Sus2" , "symbols" : ["sus2"], "groups" : [ "suspended"] , "formula" : [ 2, 5] , "intervals": ["M2", "P5"], "size" : 2, "chordSize" : 3 }
 { "name" : "Sus4" , "symbols" : ["sus4"], "groups" : [ "suspended"] , "formula" : [ 5, 2] , "intervals": ["P4", "M2"], "size" : 2, "chordSize" : 3 }
 { "name" : "7Sus2" , "symbols" : ["7sus2"], "groups" : [ "suspended"] , "formula" : [ 7, 3, 4] , "intervals": ["P5", "m3", "M3"], "size" : 3, "chordSize" : 4 }
 { "name" : "7Sus4" , "symbols" : ["7sus4"], "groups" : [ "suspended"] , "formula" : [ 5, 2, 3] , "intervals": ["P4", "M2", "m3"], "size" : 3, "chordSize" : 4 }
 { "name" : "Sus6" , "symbols" : ["sus6"], "groups" : [ "suspended"] , "formula" : [ 7, 2] , "intervals": ["P5", "M2"], "size" : 2, "chordSize" : 3 }
+{ "name" : "Sus7" , "symbols" : ["sus7"], "groups" : [ "suspended"] , "formula" : [ 7, 4] , "intervals": ["P5", "M3"], "size" : 2, "chordSize" : 3 }
+{ "name" : "Sus-7" , "symbols" : ["sus-7"], "groups" : [ "suspended"] , "formula" : [ 7, 3] , "intervals": ["P5", "m3"], "size" : 2, "chordSize" : 3 }
 { "name" : "Jazz sus" , "symbols" : ["Jazz sus"], "groups" : [ "suspended"] , "formula" : [ 5, 2, 3, 4] , "intervals": ["P4", "M2", "m3", "M3"], "size" : 4, "chordSize" : 5 }
 { "name" : "5" , "symbols" : ["5"], "groups" : [ "suspended"] , "formula" : [ 7] , "intervals": ["P5"], "size" : 1, "chordSize" : 2 }
 { "name" : "9Sus4" , "symbols" : ["9sus4"], "groups" : [ "suspended"] , "formula" : [ 5, 2, 3, 4] , "intervals": ["P4", "M2", "m3", "M3"], "size" : 4, "chordSize" : 5, "template":["C", "F", "G", "Bb", "D"] }

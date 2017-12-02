@@ -246,6 +246,7 @@ public class ChordManager {
 			String symbols = null;
 			String groups = null;
 			String formulaArrayString = null;
+			String intervalsArrayString = null;
 			stringBuffer.append("{\"" + chordFormula.getName() + "\":{");
 			
 			try {
@@ -262,6 +263,10 @@ public class ChordManager {
 				formulaArrayString = mapper.writeValueAsString(chordFormula.getFormula());
 				stringBuffer.append("\"formula\":");
 				stringBuffer.append(formulaArrayString + ",");
+				
+				intervalsArrayString = mapper.writeValueAsString(chordFormula.getIntervals());
+				stringBuffer.append("\"intervals\":");
+				stringBuffer.append(intervalsArrayString + ",");
 				
 				stringBuffer.append("\"size\":");
 				stringBuffer.append(chordFormula.getSize() + ",");
