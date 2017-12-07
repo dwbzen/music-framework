@@ -9,11 +9,9 @@ import java.util.stream.Stream;
 import util.Configuration;
 
 /**
- * Streams text data, line by line with no trailing delimiters, from a File
- * Statically creates and registers Scale and ScaleFormulas
- * Each instrument will have a FileDataSource.
+ * Streams text data, line by line with no trailing delimiters, from a Json File
  * 
- * @author donbacon
+ * @author don_bacon
  *
  */
 public class FileDataSource extends DataSource {

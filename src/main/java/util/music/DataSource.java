@@ -1,9 +1,5 @@
 package util.music;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.IntSupplier;
@@ -12,20 +8,21 @@ import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mongodb.morphia.Morphia;
 
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
-
-import music.element.ScaleFormula;
-import music.instrument.Instrument;
 import util.Configuration;
 
 /**
  * DataSource base class. There is a DataSource concrete instance for each
  * instrument in the score configuration.
+ * Configuration parameter selectionMode determines how records are selected.
+ * If sequential, data records loaded sequentially, none are skipped. So instruments using
+ * the same data set will have identical scoring.
+ * If random, from 2 to 20 records are skipped on each selection. So the entire data
+ * set must be large enough to accommodate worse case scenario. 
+ * random selectionMode should be used when multiple instruments use the same
+ * fractal data set.
  * 
- * @author donbacon
+ * @author don_bacon
  *
  */
 public abstract class DataSource implements IDataSource {
@@ -43,6 +40,7 @@ public abstract class DataSource implements IDataSource {
 	protected Stream<String> stream;
 	protected Random randomPredicate = null;
 	protected String instrumentName;
+	protected int skipFactor = 20;
 
 	static final String SEQUENTIAL = "sequential";
 	static final String RANDOM = "random";
@@ -114,30 +112,6 @@ public abstract class DataSource implements IDataSource {
 		return instrumentName;
 	}
 
-	/**
-	 * @param resource - the name of the JSON scale formula file, for example "common_scaleFormula.json"
-	 * @param scaleName - the name of a scale, for example "Hirajoshi Japan"
-	 * @param instrument an Instrument instance.
-	 * @return ScaleFormula or null if scale name doesn't exist in that file
-	 */
-	public static ScaleFormula getScaleFormula(String resource, String scaleName, Instrument instrument) {
-		ScaleFormula scaleFormula = null;
-		InputStream is = instrument.getClass().getResourceAsStream("/data/music/" + resource);
-    	Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines();
-
-		Optional<String> optional = stream.filter(s -> s.contains(scaleName)).findFirst();
-		if(optional.isPresent()) {
-			String formulaString = optional.get();
-			DBObject dbo = (DBObject) JSON.parse(formulaString);
-			Morphia morphia = new Morphia();
-			morphia.map(ScaleFormula.class);
-			scaleFormula = morphia.fromDBObject(null, ScaleFormula.class, dbo);
-		}
-		else {
-    		System.err.println("No such scale: " + scaleName);
-    	}
-		return scaleFormula;
-	}
 	
 	/**
      * Used to filter data points in a Stream for random selection.
@@ -160,7 +134,7 @@ public abstract class DataSource implements IDataSource {
 		@Override
 		public int getAsInt() {
 			// How many records to skip for RANDOM selection
-			return random.nextInt(2, 10);
+			return random.nextInt(2, skipFactor);
 		}
     	
     }
