@@ -7,17 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mongodb.morphia.Morphia;
+
 import music.element.song.HarmonyList;
 import music.element.song.Section;
 import music.element.song.Song;
 import music.element.song.SongMeasure;
 import util.music.SongManager;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mongodb.morphia.Morphia;
-
-import util.IMapped;
 
 /**
  * Analyzes the chord progressions and/or melodies of a collection of Songs
@@ -74,14 +72,14 @@ public class SongAnalyzer {
 	/**
 	 * Each IMapped<String> is a Song instance
 	 */
-	private Map<String, IMapped<String>> songMap = null;
+	private Map<String, Song> songMap = null;
 	/*
 	 * The current Song and song name being under analysis
 	 */
 	private Song currentSong = null;
 	private String currentSongName = null;
 
-	public SongAnalyzer(Map<String, IMapped<String>> songMap) {
+	public SongAnalyzer(Map<String, Song> songMap) {
 		this.songMap = songMap;
 		for(KeyType atype : analysisTypes) {
 			Map<Integer, TreeMap<String, Integer>> memeCollectionMapCounts = new HashMap<Integer, TreeMap<String, Integer>>();
@@ -102,15 +100,12 @@ public class SongAnalyzer {
 	 * Syntax:  SongAnalyzer -songs [file:filename | collection:collectionName] [-query queryString]
 	 * example: SongAnalyzer -songs collection:songs -query "artist:The Beatles"
 	 * 
-	 * TODO: add filename support
 	 * @param args
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
 		String songInputFile = null;			// complete path to .JSON Song file 
-		String chordFormulaInputFile = null;	// complete path to .JSON ChordFormulas file TODO
 		String songCollectionName = null;
-		String chordFormulaCollectionName = "chord_formulas";
 		boolean quiet = false;
 		String query = null;
 		for(int i=0; i<args.length; i++) {
@@ -123,15 +118,6 @@ public class SongAnalyzer {
 					songCollectionName = songargs[1];
 				}
 			}
-			else if(args[i].startsWith("-chords")) {
-				String[] chordargs = args[++i].split(":");
-				if(chordargs[0].equalsIgnoreCase("file")) {
-					chordFormulaInputFile = chordargs[1];
-				}
-				else if(chordargs[0].equalsIgnoreCase("collection")) {
-					chordFormulaCollectionName = chordargs[1];
-				}
-			}
 			else if(args[i].equalsIgnoreCase("-query")) {
 				query = args[++i];
 			}
@@ -141,8 +127,8 @@ public class SongAnalyzer {
 			}
 		}
 		SongManager songMgr = new SongManager(songCollectionName, songInputFile);
-		songMgr.loadSongs(songCollectionName, chordFormulaCollectionName, query);
-		Map<String, IMapped<String>> songMap = songMgr.getSongs();
+		songMgr.loadSongs(songCollectionName, query);
+		Map<String, Song> songMap = songMgr.getSongs();
 		
 		SongAnalyzer songAnalyzer = new SongAnalyzer(songMap);
 		songAnalyzer.analyze();
@@ -184,7 +170,7 @@ public class SongAnalyzer {
 
 	public void analyze() {
 		log.info("Start analysis");
-		for(IMapped<String> sm : songMap.values()) {
+		for(Song sm : songMap.values()) {
 			Song song = (Song)sm;
 			analyze(song);
 		}
@@ -268,7 +254,7 @@ public class SongAnalyzer {
 		}
 	}
 
-	public Map<String, IMapped<String>> getSongMap() {
+	public Map<String, Song> getSongMap() {
 		return songMap;
 	}
 	

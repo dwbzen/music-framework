@@ -39,6 +39,8 @@ public class JSONUtil {
 	 * 
 	 * Note this uses the Morphia fromDBObject API and provides a null value for Datastore.
 	 * This may not work in future releases of Morphia. I recommend using Mongo instead of JSON text files.
+	 * 
+	 * @deprecated 
 	 */
 	public static Map<String,IMapped<String>> 
 					loadJSONCollection(String collectionName, 
@@ -87,6 +89,8 @@ public class JSONUtil {
 	 * 		  The name is used as the primary key in the Map returned.
 	 * 		  Additional keys if any in the form of a Set<String> come from keySet()
 	 * @return Map<String,IMapped<String>>
+	 * 
+	 * @deprecated
 	 */
 	public static Map<String,IMapped<String>> 
 					loadJSONCollection(String collectionName, 

@@ -18,8 +18,7 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
+import com.mongodb.client.model.Projections;
 
 /**
  * Wrapper for db.collection.find()
@@ -62,11 +61,9 @@ public class Find {
 	static final Logger log = LogManager.getLogger(Find.class);
 	public static final String DBNAME = "music";
 	public static final String COLLECTION = "ifs1";
-	public static Morphia morphia = new Morphia();
 	
 	private MongoClient mongoClient;
 	private MongoDatabase db;
-	private Datastore datastore = null;
 	private String collectionName;
 	private int limit = 0;
 	private String query = null;
@@ -85,7 +82,7 @@ public class Find {
 		connect(dbname, cname, hostName, port);
 	}
 	
-	public Datastore connect(String databaseName, String cname, String uriString) {
+	public void connect(String databaseName, String cname, String uriString) {
 		try {
 			MongoClientURI clientURI = new MongoClientURI(uriString);
 			mongoClient = new MongoClient(clientURI);
@@ -93,29 +90,25 @@ public class Find {
 			collectionName = cname;
 			collection = db.getCollection(collectionName);
 			log.info("collection size: " + collection.count());
-			datastore = morphia.createDatastore(mongoClient, databaseName);
-			datastore.ensureIndexes();
 		} catch (Exception e) {
 			System.err.println("Execption: " + e.toString());
 			e.printStackTrace();
 		}
-		return datastore;
+		return;
 	}
 	
-	public Datastore connect(String databaseName, String cname, String hostName, int port) {
+	public void connect(String databaseName, String cname, String hostName, int port) {
 		try {
 			mongoClient = new MongoClient(hostName, port );
 			db = mongoClient.getDatabase(databaseName);
 			collectionName = cname;
 			collection = db.getCollection(collectionName);
 			log.info("collection size: " + collection.count());
-			datastore = morphia.createDatastore(mongoClient, databaseName);
-			datastore.ensureIndexes();
 		} catch (Exception e) {
 			System.err.println("Mongo Connection Exception: " + e.toString());
 			e.printStackTrace();
 		}
-		return datastore;
+		return;
 	}
 
 	public static void main(String[] args) {
@@ -218,10 +211,10 @@ public class Find {
 		 * Alternatively could use third-party tool such as Morphia
 		 */
 		if(this.limit > 0) {
-			cursor = collection.find(dbObject).limit(limit).iterator();
+			cursor = collection.find(dbObject).projection( Projections.excludeId()).limit(limit).iterator();
 		}
 		else {
-			cursor = collection.find(dbObject).iterator();
+			cursor = collection.find(dbObject).projection( Projections.excludeId()).iterator();
 		}
 		return cursor;
 	}
@@ -294,10 +287,6 @@ public class Find {
 
 	public MongoDatabase getDb() {
 		return db;
-	}
-
-	public Datastore getDatastore() {
-		return datastore;
 	}
 
 	public MongoCollection<Document> getCollection() {

@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import mathlib.RaggedArray;
 import mathlib.util.IJson;
-import util.IMapped;
+import util.INameable;
 
 /**
  * A Song encapsulates a song as it would appear in a Guitar Fake Book
@@ -24,10 +26,10 @@ import util.IMapped;
  * @author don_bacon
  *
  */
-public class Song implements IJson, IMapped<String>, Supplier<ChordProgression>  {
+public class Song implements IJson, INameable, Supplier<ChordProgression>  {
 
 	private static final long serialVersionUID = 8221829976304858453L;
-
+	@JsonInclude(Include.NON_EMPTY)
 	@JsonProperty("name")		private String name = null;		// the name is the song title
 	@JsonProperty("artist")		private String artist = null;	// As in "The Beatles"
 	@JsonProperty("composers")	private List<String> composers = new ArrayList<String>();

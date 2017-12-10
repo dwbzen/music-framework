@@ -1,29 +1,32 @@
 package util.music;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bson.Document;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.util.JSON;
 
 import music.element.Key;
-import music.element.song.*;
+import music.element.song.ChordFormula;
+import music.element.song.Harmony;
+import music.element.song.HarmonyChord;
+import music.element.song.Section;
+import music.element.song.Song;
+import music.element.song.SongMeasure;
+import music.element.song.Songbook;
 import util.Configuration;
-import util.IMapped;
-import util.JSONUtil;
 import util.mongo.Find;
-import util.music.ChordManager;
 
 /**
  * Statefull song manager. Loads Songs from a JSON text file or a MongoDB collection.
@@ -35,13 +38,14 @@ import util.music.ChordManager;
 public class SongManager {
 	static final Logger log = LogManager.getLogger(SongManager.class);
 	public static final String CONFIG_FILENAME = "/config.properties";
-	public static final String DEFAULT_CHORD_FORMULAS_COLLECTION = "chord_formulas";
 	public static final String defaultHost = "localhost";
 	public static final int defaultPort = 27017;
 	
+	static final String[] songKeys = {"name", "album", "artist" };
+	
 	private Map<String,ChordFormula> chordFormulas = null;
 	private Key key = null;
-	private Map<String,IMapped<String>> songs = new HashMap<String, IMapped<String>>();
+	private Map<String, Song> songMap = new HashMap<String, Song>();	// Map of songs by name
 	private Songbook songbook = null;
 	private Configuration configuration =  null;
 	private Properties configProperties = null;
@@ -50,72 +54,71 @@ public class SongManager {
 	private String dbname = null;
 	private String host = defaultHost;
 	private int port = defaultPort;
-	private String collectionName = null;
-	private String chordFormulasCollection = null;
+	private String songCollectionName = null;
 	private String inputFileName = null;
-	private Datastore datastore = null;
+	ObjectMapper mapper = new ObjectMapper();
+
 
 	/**
-	 * Loads Songs from a JSON text file or a MongoDB collection.
+	 * Loads Songs from a MongoDB collection.
 	 * From the command line:
 	 * -collection <collection name for songs> typically "songs"
-	 * -file <JSON file> if loading from file instead of MongoDB
-	 * -load : if present will actually load songs
 	 * @param args
 	 * @throws IOException 
 	 */
 	public static void main(String... args) throws IOException {
 		String inputFile = null;		// complete path
-		boolean loadSong = false;
-		String collection = null;
-		Map<String, IMapped<String>> songMap = null;
+		String songcollection = null;
 		Songbook songbook = null;
-
+		String query = null;
 		for(int i=0; i<args.length; i++) {
-			if(args[i].equalsIgnoreCase("-file")) {
+			if(args[i].startsWith("-collect")) {
+				songcollection = args[++i];
+			}
+			else if(args[i].startsWith("-file")) {
 				inputFile = args[++i];
 			}
-			else if(args[i].equalsIgnoreCase("-load")) {
-				loadSong =  true;
-			}
-			else if(args[i].startsWith("-collect")) {
-				collection = args[++i];
+			else if(args[i].equalsIgnoreCase("-query")) {
+				query = args[++i];
 			}
 		}
-		SongManager songMgr = new SongManager(collection, inputFile);
-		if(loadSong) {
-			if(inputFile != null) {
-				 songMap = JSONUtil.loadJSONCollection(collection, inputFile, Song.class);
-					if(songMap != null && songMap.size() > 0) {
-						log.warn("#songs: " + songMap.size());
-					}
-			}
-			else {
-				songMgr.loadSongs();
-				songbook = songMgr.getSongbook();
-				// This works too
-				// Map<String,IMapped<String>> namableMap = JSONUtil.loadJSONCollection(collection, Song.class);
-				if(songbook != null && songbook.size() > 0) {
-					log.warn("#songs: " + songbook.size());
-				}
-			}	
+		SongManager songMgr = new SongManager(songcollection, inputFile);
+		if(inputFile != null) {
+			songMgr.loadSongs(inputFile);
+		}
+		else {
+			songMgr.loadSongs(songcollection, query);
+		}
+		songbook = songMgr.getSongbook();
+		if(songbook != null && songbook.size() > 0) {
+			log.warn("#songs loaded: " + songbook.size());
 		}
 	}
 	
 	public SongManager(String collection, String filename) {
 		chordManager = new ChordManager();	// also loads chord_formulas
-		
-		Find.morphia.mapPackage("music.element.song");
+		chordFormulas = chordManager.getChordFormulas();
 		configuration =  Configuration.getInstance(CONFIG_FILENAME);
 		configProperties = configuration.getProperties();
-		dbname = configProperties.getProperty("mongodb.db.name");
-		this.collectionName = collection;
-		this.inputFileName = filename;
+		dbname = configProperties.getProperty("dataSource.mongodb.db.name");
+		inputFileName = filename;
 	}
 	
-	protected void loadSongs( ) {
-		chordFormulasCollection = DEFAULT_CHORD_FORMULAS_COLLECTION;
-		loadSongs(this.collectionName, chordFormulasCollection, null);
+	public void loadSongs( ) {
+		loadSongs(songCollectionName, null);
+	}
+	
+	public void loadSongs(String filename) {
+		Song song = loadSongFile(filename);
+		if(song != null) {
+			addObjectToMap(song);
+			/*
+			 * for analysis purposes add HarmonyChords and a transposition to C-Major
+			 * The Scales also added to the Key
+			 */
+			Key transposedKey = Key.C_MAJOR;
+			addHarmonyChordsToSong(transposedKey, song);
+		}
 	}
 	
 	/**
@@ -124,11 +127,9 @@ public class SongManager {
 	 * @param chordFormulaCollectionName the ChordFormula collection name. Defaults to "chord_formulas"
 	 * @return Map<String,IMapped<String>> keyed by song name, available as getSongs().
 	 */
-	public void loadSongs(String songCollectionName, String chordFormulaCollectionName, String queryString) {
+	public void loadSongs(String songCollectionName, String queryString) {
 
 		Find find = new Find(dbname, songCollectionName, host, port);
-		Morphia morphia = Find.morphia;
-		datastore = find.getDatastore();
 		if(queryString != null) {
 			find.setQuery(queryString);
 		}
@@ -137,18 +138,15 @@ public class SongManager {
 		log.info(" #songs loaded: " + count);
 		if(count == 0) {
 			log.warn("Nothing found in " + songCollectionName + " collection");
-			//return;
 		}
-		chordFormulas = chordManager.getChordFormulas();
 
 		while(cursor.hasNext()) {
 			Document doc = cursor.next();
 			DBObject dbObject = new BasicDBObject(doc);
 			String jsonString = dbObject.toString();
 			log.debug("dbObject: " + jsonString);
-			BasicDBObject obj = (BasicDBObject)JSON.parse(jsonString);
-			Song song = morphia.fromDBObject(datastore, Song.class, obj);
-			addObjectToMap(song, songs);
+			Song song = accept(jsonString);
+			addObjectToMap(song);
 			/*
 			 * for analysis purposes add HarmonyChords and a transposition to C-Major
 			 * The Scales also added to the Key
@@ -210,17 +208,8 @@ public class SongManager {
 		}
 	}
 
-	public static void addObjectToMap(IMapped<String> cf, Map<String,IMapped<String>> map) {
-		map.put(cf.getName(), cf);
-		IMapped<String> iMapped = (IMapped<String>)cf;
-		Set<String> keyList = iMapped.keySet();
-		if(keyList != null && keyList.size() > 0) {
-			for(String key : keyList) {
-				if(!map.containsKey(key)) {
-					map.put(key, cf);
-				}
-			}
-		}
+	private void addObjectToMap(Song song) {
+		songMap.put(song.getName(), song);
 	}
 
 	public Map<String,ChordFormula> getChordFormulas() {
@@ -231,16 +220,16 @@ public class SongManager {
 		return key;
 	}
 
-	public Map<String, IMapped<String>> getSongs() {
-		return songs;
+	public Map<String, Song> getSongs() {
+		return songMap;
 	}
 
-	public String getCollectionName() {
-		return collectionName;
+	public String getSongCollectionName() {
+		return songCollectionName;
 	}
 
-	public void setCollectionName(String collectionName) {
-		this.collectionName = collectionName;
+	public void setSongCollectionName(String collectionName) {
+		songCollectionName = collectionName;
 	}
 
 	public String getInputFileName() {
@@ -260,10 +249,47 @@ public class SongManager {
 	public Songbook getSongbook() {
 		if(songbook == null) {
 			songbook = new Songbook();
-			for(IMapped<String> sm : songs.values()) {
+			for(Song sm : songMap.values()) {
 				songbook.add((Song)sm);
 			}
 		}
 		return songbook;
+	}
+	
+	/**
+	 * Deserializes a JSON Song
+	 */
+	public Song accept(String songJsonString) {
+		Song song = null;
+		log.debug(songJsonString);
+		try {
+			song = mapper.readValue(songJsonString, Song.class);
+		} catch (Exception e) {
+			log.error("Cannot deserialize " + songJsonString + "\nbecause " + e.toString());
+		}
+		return song;
+	}
+	
+	private Song loadSongFile(String filename) {
+		BufferedReader inputFileReader;
+		StringBuffer sb = new StringBuffer();
+		Song song = null;
+		try {
+			inputFileReader = new BufferedReader(new FileReader(filename));
+			String line;
+			while((line = inputFileReader.readLine()) != null) {
+				String jsonline = line.trim();
+				if(jsonline.startsWith("//") || jsonline.startsWith("/*")) {
+					continue;
+				}
+				sb.append(jsonline);
+			}
+			song = accept(sb.toString());
+		} catch (FileNotFoundException e) {
+			System.err.println("File not found: " + filename);
+		} catch (IOException e) {
+			System.err.println("IO Exception: " + filename);
+		}
+		return song;
 	}
 }

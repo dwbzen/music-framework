@@ -353,7 +353,7 @@ public class ExplodeTransformer  extends Transformer {
 					if(count > 0) {
 						Document doc = cursor.next();
 						DBObject dbObject = new BasicDBObject(doc);	
-						NoteExploder noteExploder = morphia.fromDBObject(find.getDatastore(), NoteExploder.class, dbObject);
+						NoteExploder noteExploder = morphia.fromDBObject(null, NoteExploder.class, dbObject);
 						noteExploder.setFrequency(freq);
 						addNoteExploderToSelectionList(freq, noteExploder);
 					}

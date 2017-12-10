@@ -11,7 +11,6 @@ import music.element.Step;
 
 import org.apache.log4j.Logger;
 import org.bson.Document;
-import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import util.Configuration;
@@ -83,7 +82,7 @@ public class ScaleSearch {
 		if(count > 0) {
 			Document doc = cursor.next();
 			DBObject dbObject = new BasicDBObject(doc);
-			scaleFormula = morphia.fromDBObject(findScaleFormula.getDatastore(), ScaleFormula.class, dbObject);
+			scaleFormula = morphia.fromDBObject(null, ScaleFormula.class, dbObject);
 		}
 		findScaleFormula.close();
 		return scaleFormula;
@@ -139,7 +138,6 @@ public class ScaleSearch {
 		String queryString = "name:" + scaleName + ",root:" + root;
 		findScale.setQuery(queryString);
 		MongoCursor<Document> cursor = findScale.search();
-		Datastore datastore = findScale.getDatastore();
 		long count = findScale.getCount();
 		log.debug(queryString + " count: " + count);
 		if(count > 0) {
@@ -147,7 +145,7 @@ public class ScaleSearch {
 			DBObject dbObject = new BasicDBObject(doc);			
 			log.debug("scale: " + dbObject.toString());
 			
-			scale = morphia.fromDBObject(datastore, Scale.class, dbObject);
+			scale = morphia.fromDBObject(null, Scale.class, dbObject);
 		}
 		findScale.close();
 		return scale;

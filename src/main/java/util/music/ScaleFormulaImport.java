@@ -20,8 +20,8 @@ import org.apache.log4j.Logger;
  * creating ScaleFormula instances from each line, writing the JSON
  * string to stdout. Suitable for import into MongoDB, for example:
  * 
- * mongoimport --type json --collection scale_formulas --db test --file common_scales.json
- * mongoimport --type json --collection scale_formulas --db test --file theoretical_scales.json
+ * mongoimport --type json --collection scale_formulas --db music --file common_scales.json
+ * mongoimport --type json --collection scale_formulas --db music --file theoretical_scales.json
  * > db.scale_formulas.ensureIndex( {name:1})
  * 
  * NOTE - errors are fixed in the .csv, then re-save as tab-delimited

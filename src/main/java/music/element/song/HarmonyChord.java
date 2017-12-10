@@ -47,14 +47,14 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 	public static final Pitch NULL_VALUE = Pitch.NULL_VALUE;
 	public static final HarmonyChord NULL_VALUE_HARMONY_CHORD = new HarmonyChord("§");
 	
+	@JsonProperty	private String name = null;				// root + symbol, "C9+11" for example
+	@JsonProperty	private List<String> spelling = null;	// for readability, just the pitches as in C Eb G Db
 	@JsonIgnore		private ChordFormula chordFormula = null;	// info about the chord - cannot be null
 	@JsonIgnore  	private Pitch bassNote = null;		// a slash chord has something other than the root in the bass
 	@JsonIgnore		private List<String> alternateNames = new ArrayList<String>();
 	
 	@JsonProperty	private Pitch root = null;
 	@JsonProperty	private List<Pitch> chordPitches = new ArrayList<Pitch>();
-	@JsonProperty	private String name = null;				// root + symbol, "C9+11" for example
-	@JsonProperty	private List<String> spelling = null;	// for readability, just the pitches as in C Eb G Db
 	
 	/**
 	 * Create a silent HarmonyChord (no chord is sounded).

@@ -26,7 +26,7 @@ import music.element.Scales;
  * Creates a JSON representation for scale formulas in all roots.
  * Results can be imported into MongoDB, for example:
  * 
- * mongoimport --type json --collection scales --db test --file scales-C.json
+ * mongoimport --type json --collection scales --db music --file scales-C.json
  * 
  * @author don_bacon
  *
