@@ -56,13 +56,17 @@ public class SongManager {
 	private int port = defaultPort;
 	private String songCollectionName = null;
 	private String inputFileName = null;
+	private String queryString = null;
 	ObjectMapper mapper = new ObjectMapper();
 
 
 	/**
-	 * Loads Songs from a MongoDB collection.
+	 * Loads Songs from a MongoDB collection or a single file.
 	 * From the command line:
 	 * -collection <collection name for songs> typically "songs"
+	 * -file <name.json> a single song file in JSON format
+	 * -query <string> 	optional query string for collection
+	 * 
 	 * @param args
 	 * @throws IOException 
 	 */
@@ -82,33 +86,43 @@ public class SongManager {
 				query = args[++i];
 			}
 		}
-		SongManager songMgr = new SongManager(songcollection, inputFile);
-		if(inputFile != null) {
-			songMgr.loadSongs(inputFile);
-		}
-		else {
-			songMgr.loadSongs(songcollection, query);
-		}
+		SongManager songMgr = new SongManager(songcollection, inputFile, query);
+		songMgr.loadSongs();
 		songbook = songMgr.getSongbook();
 		if(songbook != null && songbook.size() > 0) {
 			log.warn("#songs loaded: " + songbook.size());
 		}
 	}
 	
-	public SongManager(String collection, String filename) {
+	/**
+	 * Constructor. Specify a collection or a filename but not both (one must be null).
+	 * If both ARE specified, it loadsSongs from the specified file.
+	 * A query string is optional and used if a collection is specified.
+	 * @param collection
+	 * @param filename
+	 * @param queryString
+	 */
+	public SongManager(String collection, String filename, String query) {
 		chordManager = new ChordManager();	// also loads chord_formulas
 		chordFormulas = chordManager.getChordFormulas();
 		configuration =  Configuration.getInstance(CONFIG_FILENAME);
 		configProperties = configuration.getProperties();
-		dbname = configProperties.getProperty("dataSource.mongodb.db.name");
+		dbname = configProperties.getProperty("dataSource.mongodb.db.name", "music");
 		inputFileName = filename;
+		songCollectionName = collection;
+		queryString = query;
 	}
 	
 	public void loadSongs( ) {
-		loadSongs(songCollectionName, null);
+		if(inputFileName != null) {
+			loadSongs(inputFileName);
+		}
+		else {
+			loadSongs(songCollectionName, queryString);
+		}
 	}
 	
-	public void loadSongs(String filename) {
+	void loadSongs(String filename) {
 		Song song = loadSongFile(filename);
 		if(song != null) {
 			addObjectToMap(song);
@@ -127,7 +141,7 @@ public class SongManager {
 	 * @param chordFormulaCollectionName the ChordFormula collection name. Defaults to "chord_formulas"
 	 * @return Map<String,IMapped<String>> keyed by song name, available as getSongs().
 	 */
-	public void loadSongs(String songCollectionName, String queryString) {
+	void loadSongs(String songCollectionName, String queryString) {
 
 		Find find = new Find(dbname, songCollectionName, host, port);
 		if(queryString != null) {
@@ -238,6 +252,10 @@ public class SongManager {
 
 	public void setInputFileName(String inputFileName) {
 		this.inputFileName = inputFileName;
+	}
+
+	public String getQueryString() {
+		return queryString;
 	}
 
 	/**

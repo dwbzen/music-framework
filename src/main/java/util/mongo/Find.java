@@ -30,7 +30,7 @@ import com.mongodb.client.model.Projections;
  *  				    delimit regular expressions with / /
  *
  * Example command line arguments:
- * -collection ifs1 -query "name:ifs1,type:point" -limit 100
+ * -db music -collection songs -query "name:Lovely Rita"
  *  
  * @author dbacon
  *
@@ -60,7 +60,6 @@ public class Find {
 	
 	static final Logger log = LogManager.getLogger(Find.class);
 	public static final String DBNAME = "music";
-	public static final String COLLECTION = "ifs1";
 	
 	private MongoClient mongoClient;
 	private MongoDatabase db;
@@ -113,7 +112,7 @@ public class Find {
 
 	public static void main(String[] args) {
 		String db = DBNAME;
-		String cname = COLLECTION;
+		String cname = null;
 		int lim = 0;
 		String query = null;
 		String type = "NA";	// not assigned - point or stats are valid
@@ -134,6 +133,10 @@ public class Find {
 			else if(args[i].equalsIgnoreCase("-query")) {
 				query = args[++i];
 			}
+		}
+		if(cname == null) {
+			System.err.println("You must specify a collection name!");
+			return;
 		}
 		Find find = new Find(db, cname);
 		find.setLimit(lim);
@@ -195,7 +198,7 @@ public class Find {
 
 	public BasicDBObject buildDBQueryObject() {
 		BasicDBObject dbObject = buildDBObject(getQuery());
-		log.info("query dbObject: " + dbObject);
+		log.debug("query dbObject: " + dbObject);
 		return dbObject;
 	}
 	
@@ -243,7 +246,7 @@ public class Find {
 				// should do some format checking here to avoid possible index out of range
 				String fval =  fvals[1].trim();
 				if(fval.startsWith("/") && fval.endsWith("/")) {
-					// well looky what we got here - one of them regular-type expression
+					// regular expression
 					// strip off the leading and trailing "/" and compile
 					Pattern pattern = Pattern.compile(fval.substring(1, fval.length()-1), Pattern.CASE_INSENSITIVE);
 					dbObject.append(fvals[0], pattern);

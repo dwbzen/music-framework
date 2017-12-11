@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import mathlib.Matrix;
-import music.action.ScaleManager;
 import music.element.Chord;
 import music.element.Duration;
 import music.element.IMeasurableContainer;
@@ -30,6 +29,7 @@ import music.element.Scales;
 import music.element.Score;
 import music.element.ScorePartEntity;
 import music.instrument.Instrument;
+import util.music.ScaleManager;
 
 /**
  * A KeyTransformer alters all pitches by "rounding" up or down to the

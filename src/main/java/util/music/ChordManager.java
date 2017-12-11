@@ -180,7 +180,7 @@ public class ChordManager {
 	 * @return String 
 	 */
 	public static String harmonyChordsToString(Map<String, HarmonyChord> harmonyChords) {
-		StringBuffer sb = new StringBuffer("Num\tChord Name\tFormula Name\tSymbols\tFormula\tPitches\tChord Number\tChord Number (hex)\tSpellingNumber\n");
+		StringBuffer sb = new StringBuffer("Num\tChord Name\tFormula Name\tFormula\tSymbols\tPitches\tChord Number\tGroups\tChord Number (hex)\tSpellingNumber\n");
 		int n = 1;
 		String symbols = "";
 		String formulaText = "";
@@ -197,10 +197,10 @@ public class ChordManager {
 				log.error("Cannot deserialize symbols because " + e.toString());
 			}
 			
-			String displayText = n + "\t" + harmonyChordName + "\t\"" + formula.getName()
-					+ "\"\t\"" +  formulaText
-					+ "\"\t\"" +  symbols
-					+ "\"\t" + harmonyChord.getChordPitches() 
+			String displayText = n + "\t" + harmonyChordName + "\t" + formula.getName()
+					+ "\t" +  formulaText
+					+ "\t" +  symbols
+					+ "\t" + harmonyChord.getChordPitches() 
 					+ "\t" + computeFormulaNumber(formula.getFormula())
 					+ "\t" + groups
 					+ "\t0x" + Integer.toHexString(computeFormulaNumber(formula.getFormula()))

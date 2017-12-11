@@ -1,9 +1,9 @@
 package junit;
 
 import junit.framework.TestCase;
-import music.action.ScaleManager;
 import music.element.Pitch;
 import music.element.Scale;
+import util.music.ScaleManager;
 
 public class ScaleManagerTest   extends TestCase {
 	

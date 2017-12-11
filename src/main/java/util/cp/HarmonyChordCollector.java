@@ -197,8 +197,8 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 				summary = true;
 			}
 		}
-		SongManager songMgr = new SongManager(songCollectionName, songInputFile);
-		songMgr.loadSongs(songCollectionName, query);
+		SongManager songMgr = new SongManager(songCollectionName, songInputFile, query);
+		songMgr.loadSongs();
 		Songbook songbook = songMgr.getSongbook();
 		HarmonyChordCollector collector = HarmonyChordCollector.getChordProgressionCollector(songbook, keylen);
 		collector.setUseOriginalKey(useOriginalKey);

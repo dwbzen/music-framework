@@ -337,8 +337,8 @@ public class ChordProgressionProducer
 		if(debug) {
 			HarmonyChord.setIncludeSpellingInToString(false);	// set to true if you want to see the spelling of each chord
 		}
-		SongManager songMgr = new SongManager(songCollectionName, songInputFile);
-		songMgr.loadSongs(songCollectionName, query);
+		SongManager songMgr = new SongManager(songCollectionName, songInputFile, query);
+		songMgr.loadSongs();
 		Songbook songbook = songMgr.getSongbook();
 
 		Map<String, ChordFormula> chordFormulas = songMgr.getChordFormulas();

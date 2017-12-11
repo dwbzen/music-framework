@@ -9,7 +9,6 @@ import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mongodb.morphia.Morphia;
 
 import music.element.song.HarmonyList;
 import music.element.song.Section;
@@ -35,7 +34,7 @@ import util.music.SongManager;
  */
 public class SongAnalyzer {
 	protected static final Logger log = LogManager.getLogger(SongAnalyzer.class);
-	static Morphia morphia = new Morphia();
+
 	public static final String CONFIG_FILENAME = "/config.properties";
 	public static final String defaultHost = "localhost";
 	public static final int defaultPort = 27017;
@@ -74,10 +73,9 @@ public class SongAnalyzer {
 	 */
 	private Map<String, Song> songMap = null;
 	/*
-	 * The current Song and song name being under analysis
+	 * The current Song under analysis
 	 */
 	private Song currentSong = null;
-	private String currentSongName = null;
 
 	public SongAnalyzer(Map<String, Song> songMap) {
 		this.songMap = songMap;
@@ -97,8 +95,8 @@ public class SongAnalyzer {
 	}
 	
 	/**
-	 * Syntax:  SongAnalyzer -songs [file:filename | collection:collectionName] [-query queryString]
-	 * example: SongAnalyzer -songs collection:songs -query "artist:The Beatles"
+	 * Syntax:  SongAnalyzer [-file filename | -collection collectionName  [-query queryString] ]
+	 * example: SongAnalyzer -collection songs -query "artist:The Beatles"
 	 * 
 	 * @param args
 	 * @throws IOException
@@ -109,14 +107,11 @@ public class SongAnalyzer {
 		boolean quiet = false;
 		String query = null;
 		for(int i=0; i<args.length; i++) {
-			if(args[i].startsWith("-song")) {
-				String[] songargs = args[++i].split(":");
-				if(songargs[0].equalsIgnoreCase("file")) {
-					songInputFile = songargs[1];
-				}
-				else if(songargs[0].equalsIgnoreCase("collection")) {
-					songCollectionName = songargs[1];
-				}
+			if(args[i].startsWith("-collection")) {
+				songCollectionName = args[++i];
+			}
+			else if(args[i].startsWith("-file")) {
+				songInputFile = args[++i];
 			}
 			else if(args[i].equalsIgnoreCase("-query")) {
 				query = args[++i];
@@ -126,8 +121,8 @@ public class SongAnalyzer {
 				quiet = true;
 			}
 		}
-		SongManager songMgr = new SongManager(songCollectionName, songInputFile);
-		songMgr.loadSongs(songCollectionName, query);
+		SongManager songMgr = new SongManager(songCollectionName, songInputFile, query);
+		songMgr.loadSongs();
 		Map<String, Song> songMap = songMgr.getSongs();
 		
 		SongAnalyzer songAnalyzer = new SongAnalyzer(songMap);
@@ -179,8 +174,7 @@ public class SongAnalyzer {
 
 	public void analyze(Song song) {
 		currentSong = song;
-		currentSongName = song.getName();
-		log.info("analyzing song '" + currentSongName + "'");
+		log.info("analyzing song '" + currentSong.getName() + "'");
 		for(Section section : song.getSections()) {
 			analyze(section);
 		}
