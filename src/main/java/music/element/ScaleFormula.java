@@ -28,16 +28,16 @@ import util.IMapped;
  * @author don_bacon
  *
  */
-public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
+public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 	
 	private static final long serialVersionUID = 8075575845123712068L;
 	static final Logger log = LogManager.getLogger(ScaleFormula.class);
 	static ObjectMapper mapper = new ObjectMapper();
 	
-	protected String name;
+	private final String name;
 	@JsonInclude(Include.NON_EMPTY)
-	protected List<String> alternateNames = new ArrayList<String>();
-	protected List<String> groups = new ArrayList<String>();
+	private List<String> alternateNames = new ArrayList<String>();
+	private List<String> groups = new ArrayList<String>();
 	private List<Integer> formula = new ArrayList<Integer>();
 	private int size;
 
@@ -75,7 +75,7 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 		setFormula(frmla);
 	}
 	
-	public void setFormula(int[] frmla) {
+	private void setFormula(int[] frmla) {
 		for(int i : frmla) {
 			formula.add(i);
 		}
@@ -85,14 +85,6 @@ public class ScaleFormula implements IScaleFormula, IJson, IMapped<String> {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void addGroup(String group) {
-		groups.add(group);
-	}
-	
 	public List<String> getGroups() {
 		return groups;
 	}

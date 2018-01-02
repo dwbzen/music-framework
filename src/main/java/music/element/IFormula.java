@@ -15,7 +15,6 @@ import util.INameable;
 public interface IFormula extends INameable, Serializable {
 	
 	public List<Integer> getFormula();
-	public void setFormula(int[] frmla);
 	public List<String> getAlternateNames();
 	
 	public static List<Integer> formulaToPitchSet(int[] forml) {

@@ -1,48 +1,49 @@
 package music.element;
 
 import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import mathlib.util.IJson;
 
-import util.IJson;
-
-public class TimeSignature implements Serializable, IJson {
+/**
+ * Immutable class encapsulates time signature as in 4/4 or 3/8.
+ * @author don_bacon
+ *
+ */
+public final class TimeSignature implements Serializable, IJson {
 
 	private static final long serialVersionUID = 3422423947214684471L;
-	public static final int DEFAULT_DIVISIONS_PER_MEASURE = 16;	// 4 divisions per beat (quarter note) in 4/4 time
+	public static final int DEFAULT_DIVISIONS_PER_MEASURE = 192;	// 48 divisions per beat (quarter note) in 4/4 time
 
 	/**
-	 * Time signature beats per measure
+	 * Time signature beats per measure, typically 4
 	 */
-	@JsonProperty("beatsPerMeasure")		private int beats = 4;	// beats per measure. divisions per beat = divisions/beats, 24/3 = 8 for example
+	@JsonProperty("beatsPerMeasure")	private final int beats;	// beats per measure. divisions per beat = divisions/beats, 24/3 = 8 for example
 	/**
 	 * Time signature beat note (1=whole, 2=half, 4 = quaver, 8 = semiquaver etc.)
 	 * SO time signature is beats/beatNote: 3/4, 6/8, whatever
 	 */
-	@JsonProperty("beatType")	private int beatNote = 4;		// defaults to quarterNote
+	@JsonProperty("beatType")	private final int beatNote;
 	/**
 	 * Number of basic units in the measure. Must be >0
 	 */
-	@JsonProperty("divisions")	private int divisions = DEFAULT_DIVISIONS_PER_MEASURE;
+	@JsonProperty("divisions")	private final int divisions;
 
 	/**
-	 * Defaults to 4/4 time
+	 * Creates a 4/4 TimeSignature with 16 divisions/measure (all defaults)
 	 */
 	public TimeSignature() {
+		beats = 4;
+		beatNote = 4;
+		divisions = DEFAULT_DIVISIONS_PER_MEASURE;
 	}
-	
 	public TimeSignature(int beatsPerMeasure, int notethatHasOneBeat, int numOfDivisions) {
-		this.beats = beatsPerMeasure;
-		this.beatNote = notethatHasOneBeat;
-		this.divisions = numOfDivisions;
+		beats = beatsPerMeasure;
+		beatNote = notethatHasOneBeat;
+		divisions = numOfDivisions;
 	}
 	
 	public int getDivisions() {
 		return divisions;
-	}
-
-	public void setDivisions(int divisions) {
-		this.divisions = divisions;
 	}
 	
 	public int getDivisionPerBeat() {
@@ -52,23 +53,10 @@ public class TimeSignature implements Serializable, IJson {
 		return beats;
 	}
 
-	public void setBeats(int beats) {
-		this.beats = beats;
-	}
-
 	public int getBeatNote() {
 		return beatNote;
 	}
 
-	public void setBeatNote(int beatNote) {
-		this.beatNote = beatNote;
-	}
-	
-	public void setTimeSignature(int[] ts) {
-		beats = ts[0];
-		beatNote = ts[1];
-	}
-	
 	public int[] getTimeSignature() {
 		int[] ts = new int[2];
 		ts[0] = beats;

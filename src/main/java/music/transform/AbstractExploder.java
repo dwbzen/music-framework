@@ -8,29 +8,26 @@ import music.element.PitchRange;
 
 import org.apache.log4j.Logger;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import util.IJson;
+import mathlib.util.IJson;
 
 public abstract class AbstractExploder implements IJson, IExploder {
 
 	private static final long serialVersionUID = -3056868476406574952L;
 	protected static final org.apache.log4j.Logger log = Logger.getLogger(ExplodeTransformer.class);
-	private static Morphia morphia = new Morphia();
 		
-	@Transient				private ThreadLocalRandom random = ThreadLocalRandom.current();
-	@Property("name")		protected String name;
-	@Property("type")		protected ExploderType exploderType = null;	// ARPEGIO or CHORD
-	@Embedded("formula")	protected List<IntegerPair> formula = null;
-	@Embedded("ratio")		protected IntegerPair ratio = null;
-	@Property("frequency")	protected int frequency;
+	@JsonIgnore				private ThreadLocalRandom random = ThreadLocalRandom.current();
+	@JsonProperty("name")		protected String name;
+	@JsonProperty("type")		protected ExploderType exploderType = null;	// ARPEGIO or CHORD
+	@JsonProperty("formula")	protected List<IntegerPair> formula = null;
+	@JsonProperty("ratio")		protected IntegerPair ratio = null;
+	@JsonProperty("frequency")	protected int frequency;
 	/*
 	 * Defines the pitch limits.
 	 */
-	@Transient				protected PitchRange pitchRange = null;
+	@JsonIgnore				protected PitchRange pitchRange = null;
 	
 	protected  AbstractExploder(ExploderType et, List<IntegerPair> formula, IntegerPair ratio, int freq) {
 		this.exploderType = et;
@@ -56,10 +53,6 @@ public abstract class AbstractExploder implements IJson, IExploder {
 		return size;
 	}
 	
-	@Override
-	public String toJSON() {
-		return morphia.toDBObject(this).toString();
-	}
 	
 	public List<IntegerPair> getFormula() {
 		return formula;
@@ -79,24 +72,18 @@ public abstract class AbstractExploder implements IJson, IExploder {
 	public void setPitchRange(PitchRange pitchRange) {
 		this.pitchRange = pitchRange;
 	}
-	public static Morphia getMorphia() {
-		return morphia;
-	}
-
+	
 	public ThreadLocalRandom getRandom() {
 		return random;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public ExploderType getExploderType() {
 		return exploderType;

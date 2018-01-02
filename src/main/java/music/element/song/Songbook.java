@@ -33,7 +33,6 @@ public class Songbook extends ArrayList<Song> implements INameable {
 		return added;
 	}
 	
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}

@@ -10,7 +10,6 @@ public interface INameable  {
 	
 	static final String NAME = "name";
 	
-	void setName(String name);
 	String getName();
 
 }
