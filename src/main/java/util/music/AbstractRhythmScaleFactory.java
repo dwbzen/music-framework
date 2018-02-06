@@ -6,7 +6,6 @@ import java.util.SortedSet;
 
 import music.action.ExpressionSelector;
 import music.element.RhythmScale;
-import music.element.TextureType;
 import music.element.rhythm.IRhythmTextureMap;
 import util.Ratio;
 
@@ -22,6 +21,7 @@ public abstract class AbstractRhythmScaleFactory  implements IRhythmScaleFactory
 	protected SortedSet<Integer> baseUnits = null;
 	protected double metricProbability = 0.8;
 	protected Map<Ratio, Double> extrametricProbabilityMap = new HashMap<Ratio, Double>();
+	protected boolean chordal = false;
 	
 	protected AbstractRhythmScaleFactory() {
 		
@@ -111,6 +111,16 @@ public abstract class AbstractRhythmScaleFactory  implements IRhythmScaleFactory
 
 	public SortedSet<Integer> getBaseUnits() {
 		return baseUnits;
+	}
+
+
+	public boolean isChordal() {
+		return chordal;
+	}
+
+
+	public void setChordal(boolean chordal) {
+		this.chordal = chordal;
 	}
 	
 }

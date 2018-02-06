@@ -21,8 +21,8 @@ import util.Ratio;
  */
 public class Standard16RhythmScaleFactory extends Monophonic16StandardRhythmScaleFactory {
 
-	protected double monophonicProbability = .75;
-	protected double chordalProbablility = .25;
+	protected double monophonicProbability = 1.0;
+	protected double chordalProbablility = 0.0;
 	
 	public Standard16RhythmScaleFactory() {
 		super();
@@ -40,6 +40,8 @@ public class Standard16RhythmScaleFactory extends Monophonic16StandardRhythmScal
 
 	@Override
 	void addChordalExpressions(RhythmScale rhythmScale) {
+		setChordal(true);
+		rhythmScale.setChordal(true);
 		Map<Integer, IRhythmTextureMap> expressions = rhythmScale.getExpressions();
 		/*
 		 * chordal expression includes chordal depth which gives the possible #notes in a chord
@@ -83,9 +85,9 @@ public class Standard16RhythmScaleFactory extends Monophonic16StandardRhythmScal
 	@Override
 	/**
 	 * Creates an ExpressionSelector for standard rhythm scale.
-	 * Set CHORDAL texture probablilities to the chordalProbability value
-	 * Set MONOPONIC texture probablilities to the monophonicProbability value
-	 * Either can be changed.
+	 * Set CHORDAL texture probablilities to the chordalProbability default value
+	 * Set MONOPONIC texture probablilities to the monophonicProbability default value
+	 * Either can be changed by instrument configuration.
 	 * 
 	 * @param RhythmScale rhythmScale
 	 */

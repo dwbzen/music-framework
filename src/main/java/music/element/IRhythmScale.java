@@ -34,4 +34,19 @@ public interface IRhythmScale extends IJson, INameable {
 	 Map<Integer, List<Duration>> getFactorMap();
 	 List<Duration> getFactors(Integer units);
 	 String getNoteType(Note note);
+	 
+	 /**
+	  * 
+	  * @return true if the RhythmScale supports Chordal texture, false otherwise
+	  */
+	 boolean isChordal();
+	 void setChordal(boolean chordal);
+	 
+	 default void setChordalTextureProbability(double chordalProbability) {
+		 ExpressionSelector selector = getExpressionSelector();
+		 for(Integer units : getBaseUnits()) {
+			 selector.setTextureTypeProbability(units, TextureType.CHORDAL, chordalProbability);
+			 selector.setTextureTypeProbability(units, TextureType.MONOPHONIC, 1-chordalProbability);
+		 }
+	 }
 }

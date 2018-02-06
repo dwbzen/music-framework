@@ -571,6 +571,13 @@ public class ProductionFlow implements Runnable {
     			factory = RhythmScaleFactory.getRhythmScaleFactory(rsName);
     			IRhythmScale rs = factory.createRhythmScale(rsName);
     			instrument.setRhythmScale(rs);
+    			if(rs.isChordal()) {
+    				String ckey = "music.instrument." + instrumentName + ".chordalProbablility";
+    				if(configProperties.containsKey(ckey)) {
+    					double chordalProbability = Double.parseDouble(configProperties.getProperty(ckey, "0.0"));
+    					rs.setChordalTextureProbability(chordalProbability);
+    				}
+    			}
     		}
     		else {
     			instrument.setRhythmScale(allRhythmScale);

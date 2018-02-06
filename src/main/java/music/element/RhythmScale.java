@@ -52,6 +52,9 @@ import music.transform.ITransformer.Preference;
  * {4,  {{2, [3,2]}, {2, 3, 4, 5}}, ... } says that 4 units can be represented
  * as a 3:2 triplet having 2,3,4, or 5 notes.
  * 
+ * chordal property defaults to false but can be overridden for individual
+ * instruments as configured (chordalProbability > 0)
+ * 
  * Principle use of Rhythm scales is converting raw durations values in a data set
  * to a discrete value during music generation. A similar concept
  * is used when converting raw Pitch to a particular Scale pitch.
@@ -82,9 +85,10 @@ public class RhythmScale  implements IRhythmScale {
 	@JsonProperty("root")			protected int root;
 	@JsonProperty("units")			private SortedSet<Integer> baseUnits = new TreeSet<Integer>();	// permitted units for expression
 	@JsonProperty("expressions")	private Map<Integer, IRhythmTextureMap> expressions = new TreeMap<Integer, IRhythmTextureMap>();
+	@JsonProperty("chordal")		private boolean chordal = false;
 	@JsonIgnore	private Map<Integer, List<RhythmExpression>> expression = new TreeMap<Integer, List<RhythmExpression>>();
 	@JsonIgnore	private int range;
-	@JsonIgnore  protected ExpressionSelector expressionSelector = null;
+	@JsonIgnore protected ExpressionSelector expressionSelector = null;
 
 	
 	/**
@@ -249,6 +253,16 @@ public class RhythmScale  implements IRhythmScale {
 		// 16: 2,3,4,5,6	32: 1,2,3,4,5,6		64: 0,1,2,3,4,5,6
 		
 		return NoteTypes[ind];
+	}
+
+	@Override
+	public boolean isChordal() {
+		return chordal;
+	}
+
+	@Override
+	public void setChordal(boolean chordal) {
+		this.chordal = chordal;
 	}
 	
 }
