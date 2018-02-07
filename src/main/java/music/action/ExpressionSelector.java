@@ -26,6 +26,8 @@ public class ExpressionSelector {
 	 */
 	private Map<Integer, Map<IRhythmExpression, Double>> rhythmicUnitTypeProbabilityMap = new HashMap<Integer, Map<IRhythmExpression, Double>>();
 	
+	private double tieAcrossBarlineProbability = 0.0;	// configurable as music.instrument.<instrument>.tieAcrossBarline
+	
 	public ExpressionSelector(IRhythmScale rs) {
 		rhythmScale = rs;
 		rs.setExpressionSelector(this);
@@ -141,6 +143,14 @@ public class ExpressionSelector {
 
 	public Map<Integer, Map<IRhythmExpression, Double>> getRhythmicUnitTypeProbabilityMap() {
 		return rhythmicUnitTypeProbabilityMap;
+	}
+
+	public double getTieAcrossBarlineProbability() {
+		return tieAcrossBarlineProbability;
+	}
+
+	public void setTieAcrossBarlineProbability(double tieAcrossBarlineProbability) {
+		this.tieAcrossBarlineProbability = tieAcrossBarlineProbability;
 	}
 	
 	

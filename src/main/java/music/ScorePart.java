@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -54,7 +55,8 @@ public class ScorePart implements Serializable, Runnable {
 
 	private static final long serialVersionUID = -8550433867242770122L;
 	protected static final Logger log = LogManager.getLogger(ProductionFlow.class);
-
+	
+	private ThreadLocalRandom random = ThreadLocalRandom.current();
 	private ScorePartEntity	scorePartEntity = null;
 	private Measure currentMeasure;
 	private PointSet<Number> scorePartData = null;
@@ -173,6 +175,8 @@ public class ScorePart implements Serializable, Runnable {
     	noteIterator = notes.iterator();
     	int measureCounter = 1;
     	ExpressionSelector selector = rhythmScale.getExpressionSelector();
+    	double tieProbability = selector.getTieAcrossBarlineProbability();
+ 
     	List<Measurable> tupletGroup = null;		// assigned when creating tuplet group
     	Note lastNote = null;
     	
@@ -181,7 +185,7 @@ public class ScorePart implements Serializable, Runnable {
 	    		int units = note.getDuration().getDurationUnits();
 	    		TextureType tt = selector.selectTextureType(units);
 	    		if(tt == null) {
-	    			System.out.println(units);
+	    			log.error(units);
 	    		}
 	    		/*
 	    		 * Select the Expression for this note

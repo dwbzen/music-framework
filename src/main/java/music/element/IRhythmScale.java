@@ -49,4 +49,12 @@ public interface IRhythmScale extends IJson, INameable {
 			 selector.setTextureTypeProbability(units, TextureType.MONOPHONIC, 1-chordalProbability);
 		 }
 	 }
+	 
+	 default void setTieAcrossBarlineProbability(double tieAcrossBarlineProbability ) {
+		 getExpressionSelector().setTieAcrossBarlineProbability(tieAcrossBarlineProbability);
+	 }
+	 
+	 default double getTieAcrossBarlineProbability() {
+		 return getExpressionSelector().getTieAcrossBarlineProbability();
+	 }
 }

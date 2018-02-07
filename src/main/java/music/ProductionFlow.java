@@ -544,7 +544,7 @@ public class ProductionFlow implements Runnable {
 	}
 
 	/**
-     * Creates and assigns the appropriate RhythmScales for each instrument.
+     * Creates and assigns the appropriate RhythmScales and ExpressionSelector for each instrument.
      */
 	void createRhythmScales() {
 		IRhythmScale allRhythmScale = null;
@@ -565,6 +565,12 @@ public class ProductionFlow implements Runnable {
 		 */
     	for(String instrumentName:instrumentNames) {
     		Instrument instrument = instruments.get(instrumentName);
+    		String tiekey = "music.instrument." + instrumentName + ".tieAcrossBarline";
+    		double tieProbablilty =  configProperties.containsKey(tiekey) ? Double.parseDouble(configProperties.getProperty(tiekey)) : 0.0;
+    		
+    		String ckey = "music.instrument." + instrumentName + ".chordalProbablility";
+    		double chordalProbability = (configProperties.containsKey(ckey)) ? Double.parseDouble(configProperties.getProperty(ckey)) : 0.0;
+    		
     		String key = "score.rhythmScale.instrument." + instrumentName;
     		if(configProperties.containsKey(key)) {
     			String rsName = configProperties.getProperty(key);
@@ -572,14 +578,15 @@ public class ProductionFlow implements Runnable {
     			IRhythmScale rs = factory.createRhythmScale(rsName);
     			instrument.setRhythmScale(rs);
     			if(rs.isChordal()) {
-    				String ckey = "music.instrument." + instrumentName + ".chordalProbablility";
-    				if(configProperties.containsKey(ckey)) {
-    					double chordalProbability = Double.parseDouble(configProperties.getProperty(ckey, "0.0"));
-    					rs.setChordalTextureProbability(chordalProbability);
-    				}
+    				rs.setChordalTextureProbability(chordalProbability);
     			}
+    			rs.setTieAcrossBarlineProbability(tieProbablilty);
     		}
     		else {
+    			allRhythmScale.setTieAcrossBarlineProbability(tieProbablilty);
+    			if(allRhythmScale.isChordal()) {
+    				allRhythmScale.setChordalTextureProbability(chordalProbability);
+    			}
     			instrument.setRhythmScale(allRhythmScale);
     		}
     	}
