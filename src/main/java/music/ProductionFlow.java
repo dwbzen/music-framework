@@ -39,6 +39,7 @@ import music.musicxml.MusicXMLHelper;
 import music.transform.ITransformer;
 import music.transform.Layer;
 import util.Configuration;
+import util.ConfigurationException;
 import util.messaging.MessageProducerImpl;
 import util.messaging.SessionImpl;
 import util.mongo.MongoDBDataSource;
@@ -439,45 +440,15 @@ public class ProductionFlow implements Runnable {
 	 * 
 	 * @throws Exception if it can't instantiate any of the transformers or Instruments
 	 */
-    @SuppressWarnings("unchecked")
-	void configure() throws Exception {
+    void configure() throws ConfigurationException {
+    	ProductionFlowConfigurator configurator = new ProductionFlowConfigurator(this);
+    	configurator.configure(configuration);
+    	
 		configProperties = configuration.getProperties();
 		
 		// properties passed on the command line
 		configProperties.setProperty("measures", "" + measures);
 		
-    	/*
-    	 * score properties and Instruments
-    	 * The Key of each Instrument is set to the score.key as an initial value
-    	 */
-    	title = configProperties.getProperty("score.title", "Title");
-    	workNumber = configProperties.getProperty("score.opus", "Opus 1");
-    	scoreName = configProperties.getProperty("score.name", "Score1");
-    	String[] instNames = configProperties.getProperty("score.instruments").split(",");
-    	instrumentNames.addAll(Arrays.asList(instNames));
-    	for(String name:instrumentNames) {
-    		String classname = configProperties.getProperty("score.instruments." + name + ".class");
-    		Class<Instrument> instrumentClass = (Class<Instrument>) Class.forName(classname);
-    		Instrument instrument = (music.instrument.Instrument)instrumentClass.newInstance();
-    		instrument.setPitchRange(IInstrument.getConfiguredPitchRange(configProperties, classname));
-    		instrument.setName(name);
-    		instrument.setInstrumentName(configProperties.getProperty("score.instruments." + name + "instrument-name", name));
-    		instrument.configure(configuration);
-    		instrument.setKey(new Key(configProperties.getProperty("score.key", "C-Major")));
-    		instruments.put(name, instrument);
-    	}
-    	/*
-    	 * global divisions per measure for Measure and Transformers
-    	 */
-    	int divisionsPerMeasure = Integer.parseInt(configProperties.getProperty("score.measure.divisions", "16"));
-    	Measure.setDivisionsPerMeasure(divisionsPerMeasure);
-    	
-    	/*
-    	 * Data source defaults to file
-    	 * transport defaults to activeMQ
-    	 */
-    	dataSourceName = configProperties.getProperty("dataSource", "file");
-    	dataSourceTransport = configProperties.getProperty("dataSource.transport", "activeMQ");
     	
     	/*
     	 * Transformers
@@ -489,9 +460,6 @@ public class ProductionFlow implements Runnable {
     	 */
     	createRhythmScales();
    		
-   		fieldNames.put("stats",configProperties.getProperty("dataSource.fields.stats").split(","));
-   		fieldNames.put("point",configProperties.getProperty("dataSource.fields.point").split(","));
-
     	/******************************************
     	 * configure Transport
     	 ******************************************/
@@ -499,48 +467,48 @@ public class ProductionFlow implements Runnable {
         
     }
 
-    private void configureTransport()  throws JMSException {
-   		if(dataSourceTransport.equalsIgnoreCase("activemq")) {
-	    	user=configProperties.getProperty("activeMQ.user");
-	    	password = configProperties.getProperty("activeMQ.password");
-	    	url = configProperties.getProperty("activeMQ.url" );
-	
-	        /*
-	         *  Set up the ActiveMQ JMS Components
-	         */
-	    	try {
-		        connectionFactory = new ActiveMQConnectionFactory(user, password, url);
-		        connection = connectionFactory.createConnection();
-		        connection.start();
+    private void configureTransport()  throws ConfigurationException {
+    	try {
+	   		if(dataSourceTransport.equalsIgnoreCase("activemq")) {
+		    	user=configProperties.getProperty("activeMQ.user");
+		    	password = configProperties.getProperty("activeMQ.password");
+		    	url = configProperties.getProperty("activeMQ.url" );
 		
 		        /*
-		         * Create the MQ session
-		         * and a queue for each instrument: piano.queue etc.
-		         * Assign a MessageProducer for each queue
+		         *  Set up the ActiveMQ JMS Components
 		         */
-		        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			        connectionFactory = new ActiveMQConnectionFactory(user, password, url);
+			        connection = connectionFactory.createConnection();
+			        connection.start();
+			
+			        /*
+			         * Create the MQ session
+			         * and a queue for each instrument: piano.queue etc.
+			         * Assign a MessageProducer for each queue
+			         */
+			        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			        for(String name:instrumentNames) {
+			        	Destination dest = session.createQueue(name + ".queue");
+			        	destinations.put(name, dest);
+			        	MessageProducer mp = session.createProducer(dest);
+			        	MessageProducerImpl mpImpl = new MessageProducerImpl(mp, dest);
+			        	producers.put(name, mpImpl);
+			        }
+	   		}
+	   		else {
+	   			session = new SessionImpl();
 		        for(String name:instrumentNames) {
 		        	Destination dest = session.createQueue(name + ".queue");
 		        	destinations.put(name, dest);
 		        	MessageProducer mp = session.createProducer(dest);
-		        	MessageProducerImpl mpImpl = new MessageProducerImpl(mp, dest);
-		        	producers.put(name, mpImpl);
+		        	producers.put(name, mp);
 		        }
-	    	}
-		    catch(JMSException e) {
-		    	 log.error("JMSException: " + e.toString());
-		    	 throw e;
-		    }
-   		}
-   		else {
-   			session = new SessionImpl();
-	        for(String name:instrumentNames) {
-	        	Destination dest = session.createQueue(name + ".queue");
-	        	destinations.put(name, dest);
-	        	MessageProducer mp = session.createProducer(dest);
-	        	producers.put(name, mp);
-	        }
-   		}
+	   		}
+    	}
+	    catch(JMSException e) {
+	    	 log.error("JMSException: " + e.toString());
+	    	 throw new ConfigurationException(e.toString());
+	    }
 	}
 
 	/**
@@ -593,55 +561,59 @@ public class ProductionFlow implements Runnable {
 	}
 
 	@SuppressWarnings("unchecked")
-	void createTransformers() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	void createTransformers() throws ConfigurationException {
 		Class<ITransformer> tclass = null;
 		ITransformer transformer = null;
 		String[] tforms = null;
-    	/*
-    	 * Get & configure transformers for individual instruments
-    	 * Each instrument gets its own ScaleTransformer if needed so it knows the Range
-    	 */
-    	for(String instrumentName:instrumentNames) {
-    		String key = "score.transformers." + instrumentName;
-    		if(configProperties.containsKey(key)) {
-    			tforms = configProperties.getProperty(key).split(",");
-        		for(String tclassname : tforms) {
-        			tclass = (Class<ITransformer>)Class.forName(tclassname);
-        			transformer = tclass.newInstance();
-        			Instrument instrument = instruments.get(instrumentName);
-        			transformer.configure(configProperties, instrument);
-        			transformer.setInstrument(instrument);
-        			transformer.setTransformerClassName(tclassname);
-        			transformerMap.put(instrument, transformer);
-        		}
-    		}
-    	}
-    	
-		/*
-		 * Get & configure default transformers - these apply to instruments
-		 * not configured with their own transformer
-		 * Each instrument gets its own Transformer so it knows the Range
-		 */
-		if(configProperties.containsKey("score.transformers.default")) {
-    		tforms = configProperties.getProperty("score.transformers.default").split(",");	// can specify more than one
-    		for(Instrument instrument : instruments.values()) {
-	    		for(String tclassname : tforms) {
-	    			/*
-	    			 * If there's already a transformer of the same class for this instrument
-	    			 * then don't configure the default
-	    			 */
-	    			if(transformerMap.containsKey(instrument)) {
-	    				String tcname = transformerMap.get(instrument).getTransformerClassName();
-	    				continue;
-	    			}
-	    			tclass = (Class<ITransformer>)Class.forName(tclassname);
-	    			transformer = tclass.newInstance();
-	    			transformer.configure(configProperties, instrument);
-	    			transformers.add(transformer);
+		try {
+	    	/*
+	    	 * Get & configure transformers for individual instruments
+	    	 * Each instrument gets its own ScaleTransformer if needed so it knows the Range
+	    	 */
+	    	for(String instrumentName:instrumentNames) {
+	    		String key = "score.transformers." + instrumentName;
+	    		if(configProperties.containsKey(key)) {
+	    			tforms = configProperties.getProperty(key).split(",");
+	        		for(String tclassname : tforms) {
+	        			tclass = (Class<ITransformer>)Class.forName(tclassname);
+	        			transformer = tclass.newInstance();
+	        			Instrument instrument = instruments.get(instrumentName);
+	        			transformer.configure(configProperties, instrument);
+	        			transformer.setInstrument(instrument);
+	        			transformer.setTransformerClassName(tclassname);
+	        			transformerMap.put(instrument, transformer);
+	        		}
 	    		}
-    		}
-    	}
-
+	    	}
+	    	
+			/*
+			 * Get & configure default transformers - these apply to instruments
+			 * not configured with their own transformer
+			 * Each instrument gets its own Transformer so it knows the Range
+			 */
+			if(configProperties.containsKey("score.transformers.default")) {
+	    		tforms = configProperties.getProperty("score.transformers.default").split(",");	// can specify more than one
+	    		for(Instrument instrument : instruments.values()) {
+		    		for(String tclassname : tforms) {
+		    			/*
+		    			 * If there's already a transformer of the same class for this instrument
+		    			 * then don't configure the default
+		    			 */
+		    			if(transformerMap.containsKey(instrument)) {
+		    				String tcname = transformerMap.get(instrument).getTransformerClassName();
+		    				continue;
+		    			}
+		    			tclass = (Class<ITransformer>)Class.forName(tclassname);
+		    			transformer = tclass.newInstance();
+		    			transformer.configure(configProperties, instrument);
+		    			transformers.add(transformer);
+		    		}
+	    		}
+	    	}
+		}
+		catch(Exception ex) {
+			throw new ConfigurationException(ex.toString());
+		}
 	}
 
 	public String getDbname() {
@@ -711,7 +683,6 @@ public class ProductionFlow implements Runnable {
 	public void setInstruments(Map<String, Instrument> instruments) {
 		this.instruments = instruments;
 	}
-
 
 	public boolean isSaveScore() {
 		return saveScore;
@@ -824,6 +795,10 @@ public class ProductionFlow implements Runnable {
 
 	public void setDataSourceTransport(String dataSourceTransport) {
 		this.dataSourceTransport = dataSourceTransport;
+	}
+
+	public Map<String, String[]> getFieldNames() {
+		return fieldNames;
 	}
     
 }
