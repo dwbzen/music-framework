@@ -158,18 +158,15 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 
 	public static void main(String[] args) {
 		
-		Monophonic16StandardRhythmScaleFactory factory = Monophonic16StandardRhythmScaleFactory.getInstance();
-		RhythmScale rs = factory.createRhythmScale("Rhythm Scale - no chords");
-		System.out.println(rs.toJSON());
+		// Monophonic16StandardRhythmScaleFactory factory = Monophonic16StandardRhythmScaleFactory.getInstance();
+		// RhythmScale rs1 = factory.createRhythmScale("Rhythm Scale - no chords");
+		// System.out.println(rs1.toJSON());
 		
 		IRhythmScaleFactory rsFactory = RhythmScaleFactory.getRhythmScaleFactory("Monophonic16StandardRhythmScale");
-		rs = rsFactory.createRhythmScale("Rhythm Scale - no chords");
-		System.out.println(rs.toJSON());
+		RhythmScale rs = rsFactory.createRhythmScale("Rhythm Scale - no chords");
 		
-		List<Duration> factors13 = rs.getFactors(13);
-		for(Duration d : factors13) {
-			System.out.println(d.toJSON());
-		}
+		System.out.println(rs.toJson());
+
 	}
 	
 }

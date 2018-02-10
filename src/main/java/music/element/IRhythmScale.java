@@ -50,11 +50,4 @@ public interface IRhythmScale extends IJson, INameable {
 		 }
 	 }
 	 
-	 default void setTieAcrossBarlineProbability(double tieAcrossBarlineProbability ) {
-		 getExpressionSelector().setTieAcrossBarlineProbability(tieAcrossBarlineProbability);
-	 }
-	 
-	 default double getTieAcrossBarlineProbability() {
-		 return getExpressionSelector().getTieAcrossBarlineProbability();
-	 }
 }

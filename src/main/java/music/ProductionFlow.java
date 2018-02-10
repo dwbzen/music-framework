@@ -443,12 +443,10 @@ public class ProductionFlow implements Runnable {
     void configure() throws ConfigurationException {
     	ProductionFlowConfigurator configurator = new ProductionFlowConfigurator(this);
     	configurator.configure(configuration);
-    	
 		configProperties = configuration.getProperties();
 		
 		// properties passed on the command line
 		configProperties.setProperty("measures", "" + measures);
-		
     	
     	/*
     	 * Transformers
@@ -460,9 +458,9 @@ public class ProductionFlow implements Runnable {
     	 */
     	createRhythmScales();
    		
-    	/******************************************
-    	 * configure Transport
-    	 ******************************************/
+    	/*
+    	 * Transport
+    	 */
    		configureTransport();
         
     }
@@ -548,10 +546,10 @@ public class ProductionFlow implements Runnable {
     			if(rs.isChordal()) {
     				rs.setChordalTextureProbability(chordalProbability);
     			}
-    			rs.setTieAcrossBarlineProbability(tieProbablilty);
+    			rs.getExpressionSelector().setTieAcrossBarlineProbability(tieProbablilty);
     		}
     		else {
-    			allRhythmScale.setTieAcrossBarlineProbability(tieProbablilty);
+    			allRhythmScale.getExpressionSelector().setTieAcrossBarlineProbability(tieProbablilty);
     			if(allRhythmScale.isChordal()) {
     				allRhythmScale.setChordalTextureProbability(chordalProbability);
     			}
@@ -612,6 +610,7 @@ public class ProductionFlow implements Runnable {
 	    	}
 		}
 		catch(Exception ex) {
+			ex.printStackTrace();
 			throw new ConfigurationException(ex.toString());
 		}
 	}

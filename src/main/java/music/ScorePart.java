@@ -272,7 +272,8 @@ public class ScorePart implements Serializable, Runnable {
 	    			Note lastNoteAdded = addFactorsNotes(unitsThisMeasure, note, measure, false);
 	    			measure = createNewMeasure();
 	    			measureCounter++;
-	    			addFactorsNotes(unitsNextMeasure, lastNoteAdded, measure, true);
+	    			boolean tieToNote = random.nextDouble() <= tieProbability;
+	    			addFactorsNotes(unitsNextMeasure, lastNoteAdded, measure, tieToNote);
 	    			log.debug("   note, lastNoteAdded: " + note + " " + lastNoteAdded);
 	    			unitsCount = unitsNextMeasure;
 	    		}
