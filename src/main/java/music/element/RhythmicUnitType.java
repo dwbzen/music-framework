@@ -2,8 +2,9 @@ package music.element;
 
 
 /**
- * METRIC - one note per duration
- * EXTRAMETRIC - tuplets
+ * <ul>
+ * <li>METRIC - one note per duration</li>
+ * <li>EXTRAMETRIC - tuplets - 3, 5, or 7 notes per duration</li>
  * <p>For background information see <a href="https://en.wikipedia.org/wiki/Rhythm">Rhythm</a> on Wikipedia
  * 
  * @author don_bacon

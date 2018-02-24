@@ -50,18 +50,31 @@ import util.music.RandomDataSource;
 import util.music.RhythmScaleFactory;
 
 /**
- * This creates and executes a logical workflow that to produce a MusicXML file.
+ * This creates and executes a workflow to produce a MusicXML file.</p>
  * 
- * Example usage: ProductionFlow -measures 20 -score -xml  -file "score0814.xml" -analyze -random
- *  -measures   : number of measures to create
- *  -analyze	: display score analysis upon completion
- *  -rand		: random data selection
- *  -xml		: create musicXML scores
- *  -file		: output MusicXML file
+ * Example usage: </p>
+ * <code>ProductionFlow -measures 20 -score -xml "score0814.xml" -analyze -random</code></p>
+ * <code>-measures 30 -rand  -xml "C:\\Music\\Scores\\musicXML\\score20180209.xml" -analyze</code></p>
+ * <dl>
+ * <dt>-measures</dt> <dd>: number of measures to create</dd>
+ * <dt>-analyze</dt> <dd>: display score analysis upon completion</dd>
+ * <dt>-rand</dt> <dd>: random data selection</dd>
+ * <dt>-xml filename</dt> <dd>: writes musicXML score to filename</dd>
+ * <dt>-save</dt> <dd>: save JSON score for import into MongoDB</dd>
+ * <dt>-noscore</dt>  <dd>: do not produce score files</dd>
+ * <dt>-file</dt> <dd>: output MusicXML file</dd>
+ * </dl>
+ * <p>
+ * Normally data points are selected from the data set sequentially.
+ * Set -rand to select points at random (skips 2 to 20 points each iteration).
+ * </p>
+ * Analysis usage: </p>
+ * <code>
+ * ProductionFlow -measures 20 -analyze -analyzeFile "C:\\data\\music\\testScore.csv" -rand
+ * </code></p>
  * 
- * Analysis usage: ProductionFlow -measures 20 -analyze -analyzeFile "C:\\data\\music\\testScore.csv" -rand
  * This will create a Score instance and analyze pitches and durations.
- * If -analyzeFile not specified, results sent to stdout.
+ * If -analyzeFile not specified, results sent to stdout.</p>
  * @see music.action.ScoreAnalysis
  * 
  * @author donbacon
@@ -162,12 +175,10 @@ public class ProductionFlow implements Runnable {
     			}
     			else  if(args[i].equalsIgnoreCase("-xml")) {
     				createXML = true;
+    				xmlFileName = args[++i];
     			}
     			else  if(args[i].startsWith("-rand")) {
     				randomSelection = true;
-    			}
-    			else if(args[i].equalsIgnoreCase("-file")) {
-    				xmlFileName = args[++i];
     			}
     			else  if(args[i].equalsIgnoreCase("-save")) {
     				saveScore = true;

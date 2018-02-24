@@ -18,11 +18,14 @@ import org.apache.log4j.Logger;
  * Imports a tab-delimited text file with the fields:
  * Name Of Scale, Alternative Scale Names, Groups, Formula
  * creating ScaleFormula instances from each line, writing the JSON
- * string to stdout. Suitable for import into MongoDB, for example:
- * 
- * mongoimport --type json --collection scale_formulas --db music --file common_scales.json
- * mongoimport --type json --collection scale_formulas --db music --file theoretical_scales.json
- * > db.scale_formulas.ensureIndex( {name:1})
+ * string to stdout. Suitable for import into MongoDB, for example:</p>
+ * <code>
+ * mongoimport --type json --collection scale_formulas --db music --file common_scaleFormulas.json
+ * </p>
+ * mongoimport --type json --collection scale_formulas --db music --file theoretical_scaleFormulas.json
+ * </code>
+ * </p>
+ * > db.scale_formulas.ensureIndex( {name:1})</p>
  * 
  * NOTE - errors are fixed in the .csv, then re-save as tab-delimited
  * Also you will need to remove Invalid UTF8 characters manually: 0x92 (’), 0x95 (•)

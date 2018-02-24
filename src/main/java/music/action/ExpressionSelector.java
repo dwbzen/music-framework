@@ -63,7 +63,7 @@ public class ExpressionSelector {
 		return tt;
 	}
 	
-	public IRhythmExpression selectRhythmExpression(int units) {
+	public IRhythmExpression selectRhythmExpression(int units, TextureType textureType) {
 		IRhythmExpression re = null;
 		double rand = 0;
 		Map<IRhythmExpression, Double> rep = rhythmicUnitTypeProbabilityMap.get(units);
@@ -78,12 +78,14 @@ public class ExpressionSelector {
 			rand = random.nextDouble();
 			double cumProb = 0;
 			for(IRhythmExpression r : rep.keySet()) {
-				double prob = rep.get(r).doubleValue();
-				if(rand >= cumProb && rand < cumProb + prob) {
-					re = r;
-					break;
+				if(r.getTextureType().equals(textureType)) {
+					double prob = rep.get(r).doubleValue();
+					if(rand >= cumProb && rand < cumProb + prob) {
+						re = r;
+						break;
+					}
+					cumProb += prob;
 				}
-				cumProb += prob;
 			}
 		}
 		if(re == null) {
@@ -151,6 +153,12 @@ public class ExpressionSelector {
 
 	public void setTieAcrossBarlineProbability(double tieAcrossBarlineProbability) {
 		this.tieAcrossBarlineProbability = tieAcrossBarlineProbability;
+	}
+
+	public int getNumberOfNotesInChord(IRhythmExpression rhythmExpression) {
+		Object[] depthArray = rhythmExpression.getChordalDepth().toArray();
+		int index = random.nextInt(depthArray.length);
+		return (Integer)depthArray[index];
 	}
 	
 	

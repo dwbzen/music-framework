@@ -176,6 +176,7 @@ public class ScorePart implements Serializable, Runnable {
     	int measureCounter = 1;
     	ExpressionSelector selector = rhythmScale.getExpressionSelector();
     	double tieProbability = selector.getTieAcrossBarlineProbability();
+    	int notesInThisChord = 1;	// if CHORDAL texture
  
     	List<Measurable> tupletGroup = null;		// assigned when creating tuplet group
     	Note lastNote = null;
@@ -194,19 +195,19 @@ public class ScorePart implements Serializable, Runnable {
 	    		 * If CHORDAL, read additional notes to add to the chord
 	    		 */
 	    		boolean chordal = tt.equals(TextureType.CHORDAL);
-	    		log.debug("-->measure: " + measureCounter + " units: " + units + " units count: " + unitsCount + " textureType: " + tt);
-	    		IRhythmExpression rhythmExpression = selector.selectRhythmExpression(units);
-	    		log.debug("   " + rhythmExpression);
-	    		if(rhythmExpression == null) {
-	    			log.warn("no rhythmExpression for " + units);
-	    		}
-	    		else {
-	    			log.debug("   rhythmExpression units: " + units + " " + rhythmExpression.getRhythmicUnitType());
-	    		}
+	    		IRhythmExpression rhythmExpression = selector.selectRhythmExpression(units, tt);
 	    		RhythmicUnitType rut = rhythmExpression.getRhythmicUnitType();
+	    		log.debug("   rhythmExpression units: " + units + " " + rut);
+	    		if(chordal) {
+	    			notesInThisChord = selector.getNumberOfNotesInChord(rhythmExpression);
+	    			log.info("measure: " + measureCounter + " units: " + units + " units count: " + unitsCount + " textureType: " + tt);
+	    			log.info("   " + rhythmExpression.toString());
+	    			log.info("   chord notes " + notesInThisChord);
+	    		}
+
 	    		/*
-	    		 *  do not allow tuplets across the bar line.
-	    		 *  If adding this EXTRAMETIC tuplet would cause that to happen, revert to METRIC
+	    		 *  do not allow EXTRAMETIC (tuplets) to tie across the bar line.
+	    		 *  If adding this tuplet would cause that to happen, revert to METRIC
 	    		 */
 	    		if(rut.equals(RhythmicUnitType.METRIC)  || unitsCount + units > unitsPerMeasure) {
 	    			// nothing more to do - can use the Note as is
@@ -238,7 +239,7 @@ public class ScorePart implements Serializable, Runnable {
 	    			groupNote.setTupletType(TupletType.STOP);
 	    		}
 	    		
-	    		if(unitsCount + units <= unitsPerMeasure) {
+	    		if(unitsCount + units <= unitsPerMeasure) {	// units fit in the measure
 	    			if(tupletGroup != null && tupletGroup.size() > 0 ) {
 	    				measure.addMeasurables(tupletGroup);
 	    				tupletGroup = null;
@@ -255,11 +256,10 @@ public class ScorePart implements Serializable, Runnable {
 	    				measure = createNewMeasure();
 	    			}
 	    		}
-	    		else {
+	    		else {		// units exceed what's available in the Measure 
 	    			/*
-	    			 * units exceed what's available in the Measure 
-	    			 * need to create a new measure and note tied to the previous
-	 				 * Tuplets are not allowed to span measures
+	    			 * Create a new measure and note tied to the previous
+	 				 * Tuplets are not allowed to span across measures
 	    			 * for example, unitsCount = 14, units = 8
 	    			 * unitsNextMeasure is (unitsCount + units) - unitsPerMeasure = (14 + 8) - 16 = 6
 	    			 * unitsThisMeasure is units - unitsNextMeasure = 8 - 6 = 2
@@ -272,6 +272,7 @@ public class ScorePart implements Serializable, Runnable {
 	    			Note lastNoteAdded = addFactorsNotes(unitsThisMeasure, note, measure, false);
 	    			measure = createNewMeasure();
 	    			measureCounter++;
+	    			// tie across the bar line determined by tieProbability for this instrument
 	    			boolean tieToNote = random.nextDouble() <= tieProbability;
 	    			addFactorsNotes(unitsNextMeasure, lastNoteAdded, measure, tieToNote);
 	    			log.debug("   note, lastNoteAdded: " + note + " " + lastNoteAdded);
