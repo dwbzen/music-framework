@@ -272,4 +272,15 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		}
 	}
 
+	@Override
+	/**
+	 * Sets the tuplet type for the Chord and for each note in the chord.
+	 */
+	public void setTupletType(TupletType tupletType) {
+		this.tupletType = tupletType;
+		for(Note note : notes) {
+			note.setTupletType(tupletType);
+		}
+	}
+
 }

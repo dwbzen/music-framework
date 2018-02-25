@@ -25,6 +25,7 @@ import mathlib.PointSet;
 import music.action.DurationScaler;
 import music.action.ExpressionSelector;
 import music.action.PitchScaler;
+import music.element.Chord;
 import music.element.Duration;
 import music.element.IRhythmExpression;
 import music.element.IRhythmScale;
@@ -172,15 +173,18 @@ public class ScorePart implements Serializable, Runnable {
     	int unitsPerMeasure = measure.getDivisions();
     	int unitsCount = 0;	// number of divisions (units) added so far
     	Note note = null;
+    	Chord chord = null;
     	noteIterator = notes.iterator();
     	int measureCounter = 1;
     	ExpressionSelector selector = rhythmScale.getExpressionSelector();
     	double tieProbability = selector.getTieAcrossBarlineProbability();
     	int notesInThisChord = 1;	// if CHORDAL texture
  
-    	List<Measurable> tupletGroup = null;		// assigned when creating tuplet group
+    	// assigned when creating tuplet group
+    	// Each Measurable can be a single Note or a Chord
+    	List<Measurable> tupletGroup = null;
     	Note lastNote = null;
-    	
+		Note chordNote = null;
     	do {
 	    	if((note = getNextNote()) != null) {
 	    		int units = note.getDuration().getDurationUnits();
@@ -194,17 +198,20 @@ public class ScorePart implements Serializable, Runnable {
 	    		 * If EXTRAMETRIC, read additional notes to fulfill tuplet
 	    		 * If CHORDAL, read additional notes to add to the chord
 	    		 */
-	    		boolean chordal = tt.equals(TextureType.CHORDAL);
+	    		boolean chordal = false;
 	    		IRhythmExpression rhythmExpression = selector.selectRhythmExpression(units, tt);
 	    		RhythmicUnitType rut = rhythmExpression.getRhythmicUnitType();
+
 	    		log.debug("   rhythmExpression units: " + units + " " + rut);
-	    		if(chordal) {
+	    		if(tt.equals(TextureType.CHORDAL)) {
 	    			notesInThisChord = selector.getNumberOfNotesInChord(rhythmExpression);
+	    			chordal = notesInThisChord > 1;
 	    			log.info("measure: " + measureCounter + " units: " + units + " units count: " + unitsCount + " textureType: " + tt);
 	    			log.info("   " + rhythmExpression.toString());
 	    			log.info("   chord notes " + notesInThisChord);
 	    		}
 
+    			String noteType = rhythmScale.getNoteType(note);
 	    		/*
 	    		 *  do not allow EXTRAMETIC (tuplets) to tie across the bar line.
 	    		 *  If adding this tuplet would cause that to happen, revert to METRIC
@@ -213,6 +220,10 @@ public class ScorePart implements Serializable, Runnable {
 	    			// nothing more to do - can use the Note as is
 	    			log.debug("   add " + RhythmicUnitType.METRIC + " note: " + note.toString() );
 	    			tupletGroup = null;
+	    			if(chordal) {
+	    				// create a chord having notesInThisChord notes
+	    				chord = createChord(note, notesInThisChord, noteType);
+	    			}
 	    		}
 	    		else if(rut.equals(RhythmicUnitType.EXTRAMETRIC)) {
 
@@ -225,18 +236,36 @@ public class ScorePart implements Serializable, Runnable {
 	    			note.getDuration().setDurationUnits(groupUnits);
 	    			String tupletNoteType = rhythmScale.getNoteType(note);
 	    			note.setNoteType(tupletNoteType);
-	    			note.setTupletType(TupletType.START);
-	    			tupletGroup.add(new Note(note));	// clone it
 	    			lastNote = note;
-	    			// get notesInThisGroup-1 more notes
+	    			note.setTupletType(TupletType.START);
 	    			Note groupNote = null;
-	    			for(int i=1; i<notesInThisGroup; i++) {
-	    				groupNote = new Note(getNextNote());		// clone it
-	    				groupNote.setDuration(note.getDuration());	// keep the pitch, copy the Duration
-	    				groupNote.setNoteType(tupletNoteType);
-	    				tupletGroup.add(groupNote);
+	    			Chord groupChord = null;
+	    			Measurable mNoteOrChord = null;
+	    			
+	    			if(chordal) {
+	    				groupChord = createChord(note, notesInThisChord, noteType);
+    					groupChord.setTupletType(TupletType.START);
+	    				tupletGroup.add(groupChord);
 	    			}
-	    			groupNote.setTupletType(TupletType.STOP);
+	    			else {
+	    				tupletGroup.add(new Note(note));
+	    			}
+	    			// get notesInThisGroup-1 more notes or more Chords if CHORDAL
+	    			for(int i=1; i<notesInThisGroup; i++) {
+    					groupNote = new Note(getNextNote());
+	    				if(chordal) {
+	    					groupChord = createChord(groupNote, notesInThisChord, noteType);
+	    					tupletGroup.add(groupChord);
+	    					mNoteOrChord = groupChord;
+	    				}
+	    				else {
+	    					groupNote.setDuration(note.getDuration());	// keep the pitch, copy the Duration
+	    					groupNote.setNoteType(tupletNoteType);
+	    					tupletGroup.add(groupNote);
+	    					mNoteOrChord = groupNote;
+	    				}
+	    			}
+	    			mNoteOrChord.setTupletType(TupletType.STOP);
 	    		}
 	    		
 	    		if(unitsCount + units <= unitsPerMeasure) {	// units fit in the measure
@@ -245,9 +274,15 @@ public class ScorePart implements Serializable, Runnable {
 	    				tupletGroup = null;
 	    			}
 	    			else {
-	    				note.setNoteType(rhythmScale.getNoteType(note));
-	    				measure.addMeasureable(new Note(note));
-	    				lastNote = note;
+	    				if(chordal) {
+	    					measure.addMeasureable(chord);
+	    					lastNote = chordNote;
+	    				}
+	    				else {
+	    					note.setNoteType(rhythmScale.getNoteType(note));
+	    					measure.addMeasureable(new Note(note));
+	    					lastNote = note;
+	    				}
 	    			}
 	    			unitsCount += units;
 	    			if(unitsCount == unitsPerMeasure) {
@@ -274,6 +309,9 @@ public class ScorePart implements Serializable, Runnable {
 	    			measureCounter++;
 	    			// tie across the bar line determined by tieProbability for this instrument
 	    			boolean tieToNote = random.nextDouble() <= tieProbability;
+	    			/*
+	    			 * TODO account for the last Measurable added is a Chord instead of an individual Note
+	    			 */
 	    			addFactorsNotes(unitsNextMeasure, lastNoteAdded, measure, tieToNote);
 	    			log.debug("   note, lastNoteAdded: " + note + " " + lastNoteAdded);
 	    			unitsCount = unitsNextMeasure;
@@ -345,6 +383,23 @@ public class ScorePart implements Serializable, Runnable {
     
     public String toString() {
     	return scorePartEntity.toString();
+    }
+    
+    private Chord createChord(Note firstNote, int notesInThisChord, String chordNoteType) {
+		// create a chord having notesInThisChord notes
+    	Chord chord = new Chord();
+		chord.addNote(firstNote);
+		Duration duration = firstNote.getDuration();
+		Note chordNote = null;
+		for(int i=1; i<notesInThisChord; i++) {
+			chordNote = new Note(getNextNote());
+			chordNote.setDuration(duration);
+			chordNote.setNoteType(chordNoteType);
+			chord.addNote(chordNote);
+		}
+		chord.setDuration(duration);
+		chord.setNoteType(chordNoteType);
+		return chord;
     }
     
 	private void collectScorePartData() {
