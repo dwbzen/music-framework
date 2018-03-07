@@ -205,7 +205,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	}
 	
 	public boolean equals(Chord o) {
-		boolean eq = (compareTo(o)== 0) && getRoot().equals(o);
+		boolean eq = (compareTo(o)== 0) && getRoot().equals(o.getRoot());
 		return eq;
 	}
 	

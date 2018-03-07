@@ -5,6 +5,7 @@ A Java framework encapsulating musical structure, notation and theory for purpos
 https://github.com/dwbzen/music-framework
 
 echo "# music-framework" >> README.md
+
 git init
 git add README.md
 git commit -m "first commit"
