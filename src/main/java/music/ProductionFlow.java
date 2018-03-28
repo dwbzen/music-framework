@@ -29,11 +29,9 @@ import com.mongodb.MongoClient;
 import music.ScorePart.State;
 import music.action.ScoreAnalyzer;
 import music.element.IRhythmScale;
-import music.element.Key;
 import music.element.Measure;
 import music.element.Score;
 import music.element.ScorePartEntity;
-import music.instrument.IInstrument;
 import music.instrument.Instrument;
 import music.musicxml.MusicXMLHelper;
 import music.transform.ITransformer;
@@ -585,7 +583,7 @@ public class ProductionFlow implements Runnable {
 	    			tforms = configProperties.getProperty(key).split(",");
 	        		for(String tclassname : tforms) {
 	        			tclass = (Class<ITransformer>)Class.forName(tclassname);
-	        			transformer = tclass.newInstance();
+	        			transformer = tclass.getDeclaredConstructor().newInstance();
 	        			Instrument instrument = instruments.get(instrumentName);
 	        			transformer.configure(configProperties, instrument);
 	        			transformer.setInstrument(instrument);
@@ -613,7 +611,7 @@ public class ProductionFlow implements Runnable {
 		    				continue;
 		    			}
 		    			tclass = (Class<ITransformer>)Class.forName(tclassname);
-		    			transformer = tclass.newInstance();
+		    			transformer = tclass.getDeclaredConstructor().newInstance();
 		    			transformer.configure(configProperties, instrument);
 		    			transformers.add(transformer);
 		    		}

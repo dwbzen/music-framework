@@ -92,9 +92,9 @@ public class ScaleExportManager  {
 		
 		InputStream is = this.getClass().getResourceAsStream("/data/music/" + resourceFile);
 		if(is != null) {
-			Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines();
-			stream.forEach(s -> accept(s));
-			stream.close();
+			try(Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines()) {
+				stream.forEach(s -> accept(s));
+			}
 		}
 		else {
 			log.error("Unable to open " + resourceFile);
@@ -103,12 +103,10 @@ public class ScaleExportManager  {
 	
 	/**
 	 * Exports all scale formulas in Mathematica RawJSON format.
-	 * For example: [ {"Major":{"groups":["major"],"formula":[2,2,1,2,2,2,1],"size":7}},
-					  {"Pentatonic minor":{"groups":["pentatonic"],"formula":[3,2,3,2,2],"size":5}} ]
-	 * In Mathematica: { 
-	 * 				"Major" -> {"size" -> 7, "groups" -> {"major"}, "formula" -> {2, 2, 1, 2, 2, 2, 1}}, 
-	 				"Pentatonic minor" -> {"size" -> 5, "groups" -> {"pentatonic"}, "formula" -> {3, 2, 3, 2, 2} }
-	 				   }
+	 * For example: [ {"name":"Lydian Pentachord","groups":["lydian"],"formula":[2,2,2,1,5],"size":5},
+					  {"name":"Major Pentachord","groups":["major"],"formula":[2,2,1,2,5],"size":5}  ]
+	 * In Mathematica: [ {"Lydian Pentachord":{"groups":[ "lydian" ],"formula":[ 2, 2, 2, 1, 5 ],"size":5} },
+						 {"Major Pentachord":{"groups":[ "major" ],"formula":[ 2, 2, 1, 2, 5 ],"size":5} }  ]
 	 * The association key is the scale name.
 	 * Sends output to stdout.
 	 */
@@ -181,11 +179,11 @@ public class ScaleExportManager  {
 		for(ScaleFormula formula : scaleFormulas.values() ) {
 			String mode = getMode(formula);
 			ScaleType st = getScaleType(formula);
-			log.debug("formula: " + formula.toJSON());
+			log.debug("formula: " + formula.toJson());
 			for(Pitch pitch : rootPitches) {
 				String name = formula.getName();	// + "-" + pitch.toString();
 				Scale scale = new Scale(name, mode, st, pitch, formula);
-				System.out.println(scale.toJSON());
+				System.out.println(scale.toJson());
 			}
 		}
 	}

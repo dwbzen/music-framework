@@ -2,6 +2,7 @@ package music.element;
 import music.element.Scale;
 import music.element.Key.Mode;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,11 +11,12 @@ public final class Scales {
 	/**
 	 * All the defined scales in this Map
 	 */
-	private static Map<String, Scale> scaleMap = new HashMap<String, Scale>();
+	private static Map<String, Scale> scaleMap = Collections.synchronizedMap(new HashMap<String, Scale>());
 
 	public static final String MAJOR = "major";
 	public static final String MINOR = "minor";
 	public static final String MODE = "mode";		// a modal scale or mode of some scale: Dorian, etc.
+	
 	public static final String WHOLE_TONE = "whole tone";
 	public static final String CHROMATIC_12TONE = "chromatic 12-tone";
 	public static final String PENTATONIC = "pentatonic";

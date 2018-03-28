@@ -17,32 +17,63 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  *  A Scale is a specific realization of a ScaleFormula that has a root (starting note)
  *  and optionally may be associated with a Key.
+ *  Scale is immutable.
  *  
  * @author don_bacon
  *
  */
-public class Scale implements IJson, INameable  {
+public final class Scale implements IJson, INameable, Cloneable  {
 
 	private static final long serialVersionUID = -6449893042332225583L;
 
-	@JsonProperty("name")		private String name = null;
-	@JsonProperty("mode")		private String mode = null;			// valid values: MAJOR, MINOR, MODE, can be null if N/A
-	@JsonProperty("type")		private ScaleType scaleType = null;
-	@JsonProperty("root")		private Pitch root = null;
-	@JsonProperty("rootPitch")	private String rootPitch = null; 	// C, C#, Bb etc.
-	@JsonProperty("key")		private Key key = null;				// if there is an associated Key, could be null
+	@JsonProperty("name")		private final String name;
+	@JsonProperty("mode")		private final String mode;			// valid values: MAJOR, MINOR, MODE, can be null if N/A
+	@JsonProperty("type")		private final ScaleType scaleType;
+	@JsonProperty("root")		private final Pitch root;
+	@JsonProperty("rootPitch")	private String rootPitch; 	// C, C#, Bb etc.
+	@JsonProperty("key")		private Key key;				// if there is an associated Key, could be null
 	@JsonProperty("pitches")	private List<Pitch> pitches = new ArrayList<Pitch>();
 	@JsonProperty("notes")		private String notes = null;		// the toString(this) for readability
 	@JsonIgnore					private ScaleFormula scaleFormula = null;
 	@JsonProperty("formulaName")	private String formulaName;
 	@JsonProperty("description")	private String description;		// optional descriptive text
 	
-	public Scale() {
+	
+	/**
+	 * Construct a Scale from a scale formula. Also adds to SCALE_MAP by name
+	 * so all those static definitions are automatically added.
+	 * 
+	 * @param name any non-null name for this scale
+	 * @param mode Scales.MAJOR, Scales.MINOR, Scales.MODE
+	 * @param type associated ScaleType
+	 * @param root the root Pitch
+	 * @param formula ScaleFormula of intervals
+	 * @param key associated Key, if null Key is defaulted to Key.C_MAJOR
+	 */
+	public Scale(String name, String mode, ScaleType type, Pitch root, ScaleFormula formula, Key key) {
+		this(name, mode, type, root, key);
+		pitches = IScaleFormula.createPitches(formula.getFormula(), root, key);
+		scaleFormula = formula;
+		formulaName = formula.getName();
+		notes = toString();
+		Scales.addScaleToScaleMap(name, this);
+	}
+	
+	/**
+	 * Construct a Scale from a scale formula. Key is defaulted to Key.C_MAJOR
+	 *
+	 * @param name any non-null name for this scale
+	 * @param mode Scales.MAJOR, Scales.MINOR, Scales.MODE
+	 * @param type associated ScaleType
+	 * @param root the root Pitch
+	 * @param formula ScaleFormula of intervals
+	 */
+	public Scale(String name, String mode, ScaleType type, Pitch root, ScaleFormula formula) {
+		this(name, mode, type, root, formula, Key.C_MAJOR);
 	}
 	
 	/**
 	 * Constructs a scale from an array of Pitch. Key is defaulted to Key.C_MAJOR
-	 * It that's not what you want - use a constructor and set to (Key)null.
 	 * 
 	 * @param name any non-null name for this scale
 	 * @param mode MAJOR, MINOR, MODE can be null if N/A or DISCRETE if unpitched
@@ -50,7 +81,7 @@ public class Scale implements IJson, INameable  {
 	 * @param root the root Pitch
 	 * @param pitchs an array of Pitch
 	 */
-	public Scale(String name, String mode, ScaleType type, Pitch root, Pitch...pitchs ) {
+	private Scale(String name, String mode, ScaleType type, Pitch root, Pitch...pitchs ) {
 		this(name, mode, type, root, Key.C_MAJOR);
 		for(int i=0; i<pitchs.length; i++) {
 			pitches.add(pitchs[i]);
@@ -61,7 +92,6 @@ public class Scale implements IJson, INameable  {
 	
 	/**
 	 * Constructs a scale from an array of Pitch.
-	 * This constructor needed to instance a Scale from Mongo JSON record.
 	 * 
 	 * @param name any non-null name for this scale
 	 * @param mode MAJOR, MINOR, MODE can be null if N/A
@@ -70,65 +100,11 @@ public class Scale implements IJson, INameable  {
 	 * @param pitchs an array of Pitch
 	 * @param scaleFormulaName the String formulaName
 	 */
-	public Scale(String name, String mode, ScaleType type, Pitch root, Key key, Pitch[] pitchs,  String notes, String scaleFormulaName ) {
+	private Scale(String name, String mode, ScaleType type, Pitch root, Key key, Pitch[] pitchs,  String notes, String scaleFormulaName ) {
 		this(name, mode, type, root, pitchs);
 		this.key = key;
 		this.notes = notes;
 		this.formulaName = scaleFormulaName;
-	}
-	
-	public Scale(String name, String mode, ScaleType type, String rootPitch, Key key, Pitch[] pitchs,  String notes, String scaleFormulaName ) {
-		this.name = name;
-		this.mode = mode;
-		this.scaleType = type;
-		this.rootPitch = rootPitch;
-		this.root = new Pitch(rootPitch);
-		this.key = key;
-		this.notes = notes;
-		for(int i=0; i<pitchs.length; i++) {
-			pitches.add(pitchs[i]);
-		}
-		this.formulaName = scaleFormulaName;
-	}
-	
-	/**
-	 * Constructs a scale from an array of Pitch.
-	 * This constructor needed to instance a Scale from Mongo JSON record.
-	 */
-	public Scale(String name, ScaleType type, Pitch root, Key key, Pitch[] pitchs,  String notes, String scaleFormulaName) {
-		this(name, null, type, root, key, pitchs, notes, scaleFormulaName);
-	}
-
-	/**
-	 * Construct a Scale from a scale formula. Key is defaulted to Key.C_MAJOR
-	 * It that's not what you want - use a constructor and set to (Key)null.
-	 * @param name any non-null name for this scale
-	 * @param mode MAJOR, MINOR, MODE
-	 * @param type associated ScaleType
-	 * @param root the root Pitch
-	 * @param formula ScaleFormula of intervals
-	 */
-	public Scale(String name, String mode, ScaleType type, Pitch root, ScaleFormula formula) {
-		this(name, mode, type, root, formula, Key.C_MAJOR);
-	}
-	
-	/**
-	 * Construct a Scale from a scale formula. Also adds to SCALE_MAP by name
-	 * so all those static definitions are automatically added.
-	 * @param name any non-null name for this scale
-	 * @param mode MAJOR, MINOR, MODE
-	 * @param type associated ScaleType
-	 * @param root the root Pitch
-	 * @param formula ScaleFormula of intervals
-	 * @param key associated Key
-	 */
-	public Scale(String name, String mode, ScaleType type, Pitch root, ScaleFormula formula, Key key) {
-		this(name, mode, type, root, key);
-		pitches = IScaleFormula.createPitches(formula.getFormula(), root, key);
-		scaleFormula = formula;
-		formulaName = formula.getName();
-		notes = toString();
-		Scales.addScaleToScaleMap(name, this);
 	}
 
 	/**
@@ -141,26 +117,27 @@ public class Scale implements IJson, INameable  {
 	 * @param key associated Key
 	 * @param pref Alteration preference in creating scale: UP_ONE or DOWN_ONE
 	 */
-	public Scale(String name, String mode, ScaleType type, Pitch root, ScaleFormula formula, Key key, Alteration pref) {
+	private Scale(String name, String mode, ScaleType type, Pitch root, ScaleFormula formula, Key key, Alteration pref) {
 		this(name, mode, type, root, key);
 		pitches = IFormula.createPitches(formula.getFormula(), root, key, pref);
 		scaleFormula = formula;
 		formulaName = formula.getName();
 	}
 
-	protected Scale(String name, String mode, ScaleType type, Pitch root, Key key) {
+	private Scale(String name, String mode, ScaleType type, Pitch root, Key key) {
 		this.name = name;
 		this.mode = mode;
 		scaleType = type;
 		this.root = root;
-		this.key = key;
+		this.key = (key == null) ? Key.C_MAJOR : key;
+;
 		rootPitch = root.toString();
 	}
 
 	/**
 	 * Makes a deep copy of a Scale
 	 * @param scale the Scale to copy
-	 * @return Scale
+	 * @return a new Scale that is a deep copy of the input Scale
 	 */
 	public static Scale copyScale(Scale scale) {
 		Pitch[] pitches = new Pitch[scale.pitches.size()];
@@ -170,10 +147,10 @@ public class Scale implements IJson, INameable  {
 		copy.description = scale.description != null ? scale.description : "copy";
 		return copy;
 	}
-
-
-	public String toJSON() {
-		return toJson();
+	
+	@Override
+	public Scale clone() {
+		return copyScale(this);
 	}
 	
 	/**
@@ -203,7 +180,7 @@ public class Scale implements IJson, INameable  {
 		return truncatedScale;
 	}
 	
-	protected void removeLastPitch() {
+	private void removeLastPitch() {
 		int index = pitches.size() - 1;
 		pitches.remove(index);
 	}
@@ -230,42 +207,30 @@ public class Scale implements IJson, INameable  {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getMode() {
 		return mode;
 	}
 
-	public void setMode(String mode) {
-		this.mode = mode;
-	}
-
+	/**
+	 * 
+	 * @return immutable ScaleType
+	 */
 	public ScaleType getScaleType() {
 		return scaleType;
 	}
 
-	public void setScaleType(ScaleType scaleType) {
-		this.scaleType = scaleType;
-	}
-
 	public Pitch getRoot() {
-		return root;
-	}
-
-	public void setRoot(Pitch root) {
-		this.root = root;
+		return new Pitch(root);
 	}
 
 	public Key getKey() {
 		return key;
 	}
 
-	public void setKey(Key key) {
-		this.key = key;
-	}
-
+	/**
+	 * Gets a copy of scale pitches
+	 * @return new List<Pitch> of Scale pitches
+	 */
 	public List<Pitch> getPitches() {
 		return pitches;
 	}
@@ -293,10 +258,6 @@ public class Scale implements IJson, INameable  {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public String getNotes() {
 		if(notes == null) {
 			notes = toString();
@@ -308,8 +269,4 @@ public class Scale implements IJson, INameable  {
 		return pitches.size();
 	}
 
-	
-	public static void main(String... args) {
-
-	}
 }

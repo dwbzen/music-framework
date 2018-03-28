@@ -62,26 +62,14 @@ public interface IFormula extends INameable, Serializable {
 
 		List<Pitch> plist = new ArrayList<Pitch>();
 		plist.add(root);
-		Pitch current = root;
 		Pitch next = null;
+		int stepIncrement = 0;
 		int preference = (altpref != null) ? altpref.value() : 
 			(key != null && key.getSignature() != null && key.getSignature().length > 0) ? key.getSignature()[0].getAlteration() : 0;
 		for(int i: formula) {
-			next = new Pitch(current);
-			if( i > 0) {
-				next.increment(i);
-				int alt = next.getAlteration();
-				if(alt != 0 && alt != preference) {
-					/*
-					 * amounts to getting the enharmonic equivalent
-					 * so D# same as Eb (preference -1)
-					 * Db same as C# (preference 1)
-					 */
-					next.setEnharmonicEquivalent();
-				}
-			}
+			stepIncrement += i;
+			next = root.increment(stepIncrement, preference);
 			plist.add(next);
-			current = next;
 		}
 		return plist;
 	}

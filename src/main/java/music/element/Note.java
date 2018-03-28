@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author don_bacon
  *
  */
-public class Note extends Measurable implements Serializable, Comparable<Note> {
+public class Note extends Measurable implements Serializable, Comparable<Note>, Cloneable {
 
 	private static final long serialVersionUID = 1774493820041575241L;
 	
@@ -65,6 +65,15 @@ public class Note extends Measurable implements Serializable, Comparable<Note> {
 			aNote.setTiedTo(this);
 			setTiedFrom(aNote);
 		}
+	}
+	
+	/**
+	 * Makes a clone of this including references to tied notes.
+	 * 
+	 */
+	@Override
+	public Note clone() {
+		return new Note(this, true);
 	}
 	
 	public Pitch getPitch() {

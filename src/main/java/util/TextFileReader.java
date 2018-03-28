@@ -14,7 +14,7 @@ import java.util.List;
  *
  */
 public class TextFileReader {
-	public final static Character SPACE = new Character(' ');
+	public final static Character SPACE = ' ';
 	private List<String> lines = new ArrayList<String>();
 	private Character delimiter = null;
 	private String endOfLine = null;

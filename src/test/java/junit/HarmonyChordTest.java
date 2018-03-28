@@ -53,17 +53,17 @@ public class HarmonyChordTest {
 		System.out.println("ChordProgression3: " + cp3.toString());
 		
 		// test TreeMap
-		collectorStatsMap.put(cp1, new Integer(10));
+		collectorStatsMap.put(cp1, 10);
 		if(collectorStatsMap.containsKey(cp2)) {
 			System.out.println("map contains key: " + cp2.toString());
-			collectorStatsMap.put(cp1, new Integer(15));
+			collectorStatsMap.put(cp1, 15);
 		}
 		else {
 			System.out.println("map does NOT contain key: " + cp2.toString());
 		}
 		if(!collectorStatsMap.containsKey(cp3)) {
 			System.out.println("map does NOT contain key: " + cp3.toString());
-			collectorStatsMap.put(cp3,  new Integer(30));
+			collectorStatsMap.put(cp3,  30);
 		}
 		System.out.println("Keys/Values");
 		for(ChordProgression cp : collectorStatsMap.keySet()) {

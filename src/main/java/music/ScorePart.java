@@ -87,6 +87,7 @@ public class ScorePart implements Serializable, Runnable {
 		state = State.INIT;
 		scorePartEntity = new ScorePartEntity(score, pname, instr);
 		scorePartEntity.setPartId("P-" + pname);
+		scorePartData = new PointSet<Number>();
 		configuration = score.getConfiguration();
 		partName = pname;
 		instrument = instr;
@@ -421,7 +422,7 @@ public class ScorePart implements Serializable, Runnable {
        	}
        	else if(type.equals("point")) {
        		Point2D<Number> point = (Point2D<Number>)jsonObj;
-       		log.trace(" point for " + getPartName() + ": " + point.toJSON());
+       		log.trace(" point for " + getPartName() + ": " + point.toJson());
        		if(scorePartData != null) {
        			scorePartData.add(point);
        		}
@@ -483,17 +484,13 @@ public class ScorePart implements Serializable, Runnable {
 	public String getPartName() {
 		return partName;
 	}
-	public void setPartName(String partName) {
-		this.partName = partName;
-	}
+
 	public Instrument getInstrument() {
 		return instrument;
 	}
+	
 	public String getInstrumentName() {
 		return instrument.getName();
-	}
-	public void setInstrument(Instrument instrument) {
-		this.instrument = instrument;
 	}
 	
 	public void addMeasure(Label label, Measure measure) {
@@ -515,10 +512,6 @@ public class ScorePart implements Serializable, Runnable {
 
 	public List<Note> getNotes() {
 		return notes;
-	}
-
-	public void setScorePartData(PointSet<Number> scorePartData) {
-		this.scorePartData = scorePartData;
 	}
 
 	public ScorePartEntity getScorePartEntity() {

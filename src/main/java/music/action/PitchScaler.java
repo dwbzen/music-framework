@@ -68,8 +68,7 @@ public class PitchScaler extends Scaler {
 		int stepRange =sr == 0 ? 0 : sr - 1;
 		double m = stepRange/drange.doubleValue();
 		double d = m * ( num.doubleValue() - minVal.doubleValue());
-		p = round(d);
-		p.decrement(transposeSteps);
+		p = round(d);	// rounds and transposes if needed for transposing instrument
 		log.debug(" num: " + num + " d: " + d + "  pitch: " + p);
 		if(p.compareTo(pr.getLow()) < 0) {
 			log.warn("PitchScaler out of bounds " + num);
@@ -94,7 +93,7 @@ public class PitchScaler extends Scaler {
 		if(rangeNote == 5) {
 			log.debug("stop");
 		}
-		return new Pitch(getInstrument().getNotes().get(rangeNote));
+		return new Pitch(getInstrument().getNotes().get(rangeNote), transposeSteps);
 	}
 	
 

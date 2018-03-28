@@ -2,7 +2,7 @@ package music.element;
 
 import java.io.Serializable;
 
-public class Interval implements Serializable {
+public final class Interval implements Serializable {
 	private static final long serialVersionUID = 4723660592073647534L;
 
 	public static enum Direction {
@@ -13,7 +13,7 @@ public class Interval implements Serializable {
 	}
 	
 	private int interval;
-	private int octave = 0;
+	private int octave;
 	private Direction direction;
 	
 	public Interval(int steps) {

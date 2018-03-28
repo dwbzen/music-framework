@@ -132,7 +132,7 @@ public class RandomDataSource  extends DataSource {
 		builder.add(startCommand);
 		builder.add(pointSet.toJSON());
 		for(Point2D<Double> point : pointSet.getPoints()) {
-			builder.add(point.toJSON());
+			builder.add(point.toJson());
 		}
 		builder.add(shutdownCommand);
 		stream = builder.build();

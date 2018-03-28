@@ -46,7 +46,7 @@ public class ProductionFlowConfigurator implements Configurator {
     		try {
 	    		String classname = configProperties.getProperty("score.instruments." + name + ".class");
 	    		Class<Instrument> instrumentClass = (Class<Instrument>) Class.forName(classname);
-	    		Instrument instrument = (music.instrument.Instrument)instrumentClass.newInstance();
+	    		Instrument instrument = (music.instrument.Instrument)instrumentClass.getDeclaredConstructor().newInstance();
 	    		instrument.setPitchRange(IInstrument.getConfiguredPitchRange(configProperties, classname));
 	    		instrument.setName(name);
 	    		instrument.setInstrumentName(configProperties.getProperty("score.instruments." + name + "instrument-name", name));

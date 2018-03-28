@@ -53,8 +53,8 @@ public class ChordManagerTest {
 			System.out.println("7+11 notes the same as 9+11 :" + 
 					harmonyChords.get(root + "7+11").notesSame(harmonyChords.get(root + "9+11")) );	// should be 5
 			
-			System.out.println("Harmony chord " + hc1.getName() + hc1.toJSON());
-			System.out.println("Harmony chord " + hc2.getName() + hc3.toJSON());
+			System.out.println("Harmony chord " + hc1.getName() + hc1.toJson());
+			System.out.println("Harmony chord " + hc2.getName() + hc3.toJson());
 		}
 
 	}

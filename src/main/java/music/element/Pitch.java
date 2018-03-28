@@ -28,11 +28,12 @@ import mathlib.util.IJson;
  * So Cb4 is one semitone down from C4 which is B3.
  * Similarly, B#4 is the same pitch as C5.
  * 
- * NOTE that there are no setters. This is to prevent unintentional changing Pitch references.
- * Use copy constructors instead to create new pitches from existing.
- * <p>See <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a> on Wikipedia.
+ * Pitch is immutable
+ * Use copy constructors or clone() to create new pitches from existing.
+ * 
+ * <p>See <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a> on Wikipedia.</p>
  */
-public class Pitch implements Serializable, IJson, Comparable<Pitch> {
+public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Cloneable {
 
 	static final org.apache.log4j.Logger log = Logger.getLogger(Pitch.class);
 	private static final long serialVersionUID = 4360957591772707668L;
@@ -119,18 +120,11 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 	
 	public static int pitchRange = 88;	// Piano range: A0 to C7
 	
-	/**
-	 * Default constructor
-	 */
-	public Pitch() {
-	}
-
 	public Pitch(Step s, int oct, Alteration alt) {
 		step = s;
 		octave = oct;
 		alteration = alt.value();
 		setRangeStep();
-		log.trace(toString() + " rangeStep: " + rangeStep);
 	}
 	
 	public Pitch(Step s, int oct, int alt) {
@@ -138,7 +132,6 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 		octave = oct;
 		alteration = alt;
 		setRangeStep();
-		log.trace(toString() + " rangeStep: " + rangeStep);
 	}
 
 	public  Pitch(Step s, int oct) {
@@ -176,10 +169,11 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 	 * @param other Pitch to copy (alteration, step)
 	 * @param octave octave for new Pitch
 	 */
-	public Pitch(Pitch other, int octave) {
+	public Pitch(Pitch other, int transposeSteps) {
 		step =  other.getStep();
-		this.octave = octave;
+		octave = other.getOctave();
 		alteration = other.getAlteration();
+		adjustPitch(transposeSteps, Alteration.NONE);
 		setRangeStep();
 	}
 	
@@ -192,6 +186,14 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 		this(Pitch.fromString(s));
 		setRangeStep();
 		log.trace(toString() + " rangeStep: " + rangeStep);
+	}
+	
+	/**
+	 * Makes a clone of this
+	 */
+	@Override
+	public Pitch clone() {
+		return new Pitch(this);
 	}
 	
 	/**
@@ -243,27 +245,29 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 
 	/**
 	 * Increments this by n chromatic steps and insures the alteration preference is honored.
-	 * @param n #steps to increment 
+	 * @param n #steps to increment, must be >= 0
 	 * @param altPref 0 = no preference, -1 = flats, 1 = sharps
+	 * @return a new Pitch altered
 	 */
-	public void increment(int n, int altPref) {
-		increment(n);
-		if(altPref != this.alteration) {
-			setEnharmonicEquivalent();
+	public Pitch increment(int n, int altPref) {
+		Pitch p = clone();
+		p.increment(n);
+		if(altPref != p.alteration) {
+			p.setEnharmonicEquivalent();
 		}
+		return p;
 	}
 	
 	/**
 	 * Adds n steps to this. Also adjusts the range step.
-	 * 
-	 * @param n
+	 * @throws IllegalArgumentException if increment amount < 0
+	 * @param n number of steps to increment, must be >= 0
 	 */
-	public void increment(int n) {
-		if(n<0 ) {
-			decrement(-n);
-			return;
+	private void increment(int n)  {
+		if(n < 0) {
+			throw new IllegalArgumentException("Pitch.increment amount must be >= 0");
 		}
-		else if (n>0) {
+		if (n>0) {
 			int nstep = getStep().value() + getAlteration() + n - 1;
 			if(nstep >= 12) {
 				if(octave >= 0) {	// otherwise the pitch is octave-neutral
@@ -282,28 +286,30 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 	 * Lowers this by n steps,  adjusts the range step
 	 * and sets the enharmonic equivalent of the adjusted pitch.
 	 * 
-	 * @param n number of steps to decrement
-	 * @param altPref new alteration preference (sharps or flats)
+	 * @param n number of steps to decrement, must be >= 0
+	 * @param altPref new alteration preference: 0 = no preference, 1 = sharps, -1 = flats)
+	 * @return a new Pitch altered
 	 */
-	public void decrement(int n, int altPref) {
-		decrement(n);
-		if(altPref != this.alteration) {
-			setEnharmonicEquivalent();
+	public Pitch decrement(int n, int altPref) {
+		Pitch p = clone();
+		p.decrement(n);
+		if(altPref != p.alteration) {
+			p.setEnharmonicEquivalent();
 		}
-
+		return p;
 	}
 	
 	/**
 	 * Lowers this by n steps and also adjusts the range step.
 	 * 
-	 * @param n
+	 * @param n  number of steps to decrement, must be >= 0
+	 * @throws IllegalArgumentException if decrement amount < 0
 	 */
-	public void decrement(int n) {
-		if(n<0) {
-			increment(-n);
-			return;
+	private void decrement(int n) {
+		if(n < 0) {
+			throw new IllegalArgumentException("Pitch.decrement amount must be >= 0");
 		}
-		else if (n>0) {
+		if (n>0) {
 			int nstep = getStep().value() + getAlteration() - n - 1;
 			if(nstep >= 12) {
 				if(octave >= 0) {	// otherwise the pitch is octave-neutral
@@ -324,6 +330,31 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 		}
 	}
 
+	/**
+	 * Adjusts the Pitch by the number of steps indicated
+	 * @param numberOfSteps
+	 * @param alteration alteration preference - sharps (UP_ONE) or flats (DOWN_ONE) or NONE. If null, no preference indicated.
+	 * @return a new Pitch adjusted
+	 */
+	public Pitch adjustPitch(int numberOfSteps, Alteration alteration) {
+		int altPreference = (alteration != null) ? alteration.value() : 0;
+		Pitch p = clone();
+		p.adjustPitch(numberOfSteps);
+		if(altPreference != p.alteration) {
+			p.setEnharmonicEquivalent();
+		}
+		return p;
+	}
+	
+	private void adjustPitch(int numberOfSteps) {
+		if(numberOfSteps >= 0 ) {
+			increment(numberOfSteps);
+		}
+		else {
+			decrement(-numberOfSteps);
+		}
+	}
+	
 	/**
 	 * Implements Pitch + 1, adds 1 step and returns the new pitch
 	 * @return new Pitch one step up from the original which is not changed.
@@ -348,33 +379,23 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 		return step;
 	}
 	
-	public Integer getStepValue() {
+	public int getStepValue() {
 		return getStep().getValue();
-	}
-	
-	public void setStep(Step s) {
-		this.step = s;
 	}
 
 	public int getOctave() {
 		return octave;
 	}
-	public void setOctave(int octave) {
-		this.octave = octave;
-	}
 
 	public int getAlteration() {
 		return alteration;
-	}
-	public void setAlteration(int alt) {
-		this.alteration = alt;
 	}
 	
 	public int getRangeStep() {
 		return rangeStep;
 	}
 	
-	protected void setRangeStep() {
+	private void setRangeStep() {
 		if(!getStep().equals(Step.SILENT)) {
 			int sind = getStep().getValue() + alteration;
 			int ind = sind;
@@ -471,19 +492,24 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 	}
 
 	/**
-	 * transpose the pitch up n ocatves
+	 * Transpose this up n ocatves and return as a new Pitch
 	 * @param n
+	 * @return transposed Pitch
 	 */
-	public void transposeUp(int n) {
-		octave += n;
+	public Pitch transposeUp(int n) {
+		Pitch p = new Pitch(this);
+		p.octave += n;
+		return p;
 	}
 	/**
-	 * transpose the pitch down n octaves.
-	 * 
+	 * Transpose this down n ocatves and return as a new Pitch
 	 * @param n
+	 * @return transposed Pitch
 	 */
-	public void transposeDown(int n) {
-		octave = (octave-n >= 0) ? octave-n : 0;
+	public Pitch transposeDown(int n) {
+		Pitch p = new Pitch(this);
+		p.octave = (octave-n >= 0) ? octave-n : 0;
+		return p;
 	}
 	
 	/**
@@ -515,8 +541,19 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 		return sb.toString();
 	}
 
-	public void setEnharmonicEquivalent() {
-		if(this.alteration > 0) {
+	/**
+	 * Creates a new Pitch that is the enharmonic equivalent of this
+	 * @param alt if>0, make a sharp a flat or natural; if <0 make a flat a sharp
+	 * @return new Pitch with alteration adjusted as needed
+	 */
+	public Pitch setEnharmonicEquivalent(int alt) {
+		Pitch p = clone();
+		p.setEnharmonicEquivalent();
+		return p;
+	}
+	
+	private void setEnharmonicEquivalent() {
+		if(alteration > 0) {
 			// make a sharp a flat (or natural)
 			alteration *= -1;
 			switch(step) {
@@ -645,15 +682,15 @@ public class Pitch implements Serializable, IJson, Comparable<Pitch> {
 	public static void main(String... args) {
 		
 		Pitch E4 = new Pitch("E4");
-		System.out.println(E4 + " " + E4.toJSON());
+		System.out.println(E4 + " " + E4.toJson());
 
 		Pitch F5 = new Pitch("F5");
-		System.out.println(F5 + " " + F5.toJSON());
+		System.out.println(F5 + " " + F5.toJson());
 		
 		Pitch C0 = new Pitch("C0");
-		System.out.println(C0 + " " + C0.toJSON());
+		System.out.println(C0 + " " + C0.toJson());
 		Pitch C9 = new Pitch("C9");
-		System.out.println(C9 + " " + C9.toJSON());
+		System.out.println(C9 + " " + C9.toJson());
 
 	}
 

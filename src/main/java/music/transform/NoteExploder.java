@@ -17,10 +17,7 @@ import music.element.Pitch;
 
 import org.apache.log4j.Logger;
 
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * This explodes a single pitch (Note) horizontally into many pitches (ARPEGIO)
@@ -45,18 +42,15 @@ import org.mongodb.morphia.annotations.Transient;
  * @author don_bacon
  *
  */
-@Entity(value="NoteExploder", noClassnameStored=false)
 public class NoteExploder extends AbstractExploder {
 
 	private static final long serialVersionUID = -5725725372694711902L;
 	protected static final org.apache.log4j.Logger log = Logger.getLogger(ExplodeTransformer.class);
-	private static Morphia morphia = new Morphia();
 	/*
 	 *  if true, breaks ties when forming chords - this value is configured in the ExplodeTransformer
 	 */
-	@Transient	private boolean breakChordTies = false;
+	@JsonIgnore	private boolean breakChordTies = false;
 
-	@Id	private String id;
 	
 	public NoteExploder(ExploderType exptype, List<IntegerPair> formula) {
 		super(exptype, formula, IExploder.ONE_TO_ONE, 0);
@@ -113,7 +107,7 @@ public class NoteExploder extends AbstractExploder {
 			for(int i=0; i<formula.size(); i++) {
 				IntegerPair pair = formula.get(i);
 				int interval = pair.same() ? pair.getX() : getRandom().nextInt(pair.getX(), pair.getY().intValue()+1);
-				Pitch newPitch = new Pitch(rootPitch);
+				Pitch newPitch = new Pitch(rootPitch, interval);
 				Note newNote = new Note(newPitch, newDuration);
 				if(tuplet) {
 					if(i==0) {
@@ -127,10 +121,6 @@ public class NoteExploder extends AbstractExploder {
 					}
 				}
 				newNote.setNoteType(noteType);
-				/*
-				 * increment but don't exceed PitchRange
-				 */
-				newNote.getPitch().increment(interval);
 				checkRange(newNote);
 				if(i==0 && note.getTiedFrom() != null) {	// first note in formula
 					if(newNote.getPitch().equals(note.getTiedFrom().getPitch())) {
@@ -180,13 +170,9 @@ public class NoteExploder extends AbstractExploder {
 				IntegerPair pair = formula.get(i);
 				int interval = pair.same() ? pair.getX() : getRandom().nextInt(pair.getX(), pair.getY().intValue()+1);
 				if(interval != 0) {
-					Pitch newPitch = new Pitch(rootPitch);
+					Pitch newPitch = new Pitch(rootPitch, interval);
 					newNote = new Note(newPitch, duration);
 					newNote.setNoteType(noteType);
-					/*
-					 * increment but don't exceed PitchRange
-					 */
-					newNote.getPitch().increment(interval);
 					checkRange(newNote);
 					if(!chord.containsPitch(newNote.getPitch())) {
 						chord.addNote(newNote);
@@ -265,19 +251,6 @@ public class NoteExploder extends AbstractExploder {
 
 	public void setBreakChordTies(boolean breakChordTies) {
 		this.breakChordTies = breakChordTies;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	@Override
-	public String toJSON() {
-		return morphia.toDBObject(this).toString();
 	}
 	
 }

@@ -143,7 +143,7 @@ public class MusicXMLHelper {
 			// this also adds Identification information to the XML
 			// signature composed of ProxyMusic version and date of marshalling.
 			// and sets indent level to 2 spaces
-			Marshalling.marshal(_scorePartwise, os, true, new Integer(2));
+			Marshalling.marshal(_scorePartwise, os, true, 2);
 		} catch ( MarshallingException e) {
 			System.err.println("Marshalling exception: " + e.toString());
 		}

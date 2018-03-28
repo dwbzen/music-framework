@@ -231,7 +231,7 @@ public class SongAnalyzer {
 			if(memeCollectionMap.containsKey(key)) {
 				count = memeCollectionMap.get(key).intValue() + 1;
 			}
-			memeCollectionMap.put(key, new Integer(count));
+			memeCollectionMap.put(key, count);
 			// add to memeCollectionMap (by song)
 			List<Song> songList = memeCollectionSongMap.get(key);
 			if(songList != null) {

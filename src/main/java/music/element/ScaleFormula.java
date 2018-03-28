@@ -20,10 +20,11 @@ import mathlib.util.IJson;
 import util.IMapped;
 
 /**
- * A ScaleFormula is exactly that - a sequence of steps (a chromatic step)
- *  that can be used to create a Scale.
- * A Scale is a specific realization of a ScaleFormula that has a root (starting note)
- * and other features.
+ * A ScaleFormula is a sequence of steps (a chromatic step) that can be used to create a Scale from a starting root pitch. 
+ * A Scale is a specific realization of a ScaleFormula that has a root (starting note) and other features.</p>
+ * For example, the formula for a major scale is [2,2,1,2,2,2,1]</p>
+ * Starting with a root of C, and applying the formula produces the scale:</p>
+ * C, D (C + 2 steps), E (D + 2 steps), F (E + 1 step), G, A, B, C</p>
  * 
  * @author don_bacon
  *

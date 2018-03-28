@@ -41,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author don_bacon
  *
  */
-public class Tempo implements Serializable, Comparable<Tempo> {
+public final class Tempo implements Serializable, Comparable<Tempo> {
 
 	private static final long serialVersionUID = -2764691813647880595L;
 
@@ -102,13 +102,23 @@ public class Tempo implements Serializable, Comparable<Tempo> {
 		return tempo;
 	}
 	
-	public Tempo() {
-	}
-	
+	/**
+	 * Creates a new Tempo with BeatUnit of QUARTER
+	 * @param bpm beats per measure
+	 */
 	public Tempo(int bpm) {
-		beatsPerMinute = bpm;	// thank God for auto-boxing
+		beatsPerMinute = bpm;
 	}
 	
+	/**
+	 * Creates a new Tempo with specified BeatUnit
+	 * @param bpm beats per measure
+	 */
+	public Tempo(int bpm, BeatUnit beatUnit) {
+		beatsPerMinute = bpm;
+		this.beatUnit = beatUnit;
+	}
+
 	/**
 	 * Translates how many beats in this tempo for a given duration in seconds
 	 * @param seconds
@@ -122,16 +132,8 @@ public class Tempo implements Serializable, Comparable<Tempo> {
 		return beatsPerMinute;
 	}
 
-	public void setBeatsPerMinute(int beatsPerMinute) {
-		this.beatsPerMinute = beatsPerMinute;
-	}
-
 	public BeatUnit getBeatUnit() {
 		return beatUnit;
-	}
-
-	public void setBeatUnit(BeatUnit beatUnit) {
-		this.beatUnit = beatUnit;
 	}
 
 	@Override

@@ -15,9 +15,9 @@ public class MongoUtil {
 	public final static Map<UNITS, String> unitLabels =  new HashMap<UNITS, String>();
 	
 	static {
-		conversionMap.put(UNITS.KM, new Double(6371));
-		conversionMap.put(UNITS.MILES, new Double(3959));
-		conversionMap.put(UNITS.RADIANS, new Double(1.0));
+		conversionMap.put(UNITS.KM, 6371.0);
+		conversionMap.put(UNITS.MILES, 3959.0);
+		conversionMap.put(UNITS.RADIANS, 1.0);
 		unitsMap.put("km", UNITS.KM);
 		unitLabels.put(UNITS.KM, "km:");
 		unitsMap.put("miles", UNITS.MILES);

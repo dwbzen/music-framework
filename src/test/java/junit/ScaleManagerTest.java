@@ -17,7 +17,7 @@ public class ScaleManagerTest   extends TestCase {
 		for(String scaleName : commonScales) {
 			Scale scale = scaleManager.getScale(scaleName, rootPitch);
 			assertNotNull(scale);
-			System.out.println(scale.toJSON());
+			System.out.println(scale.toJson());
 		}
 	}
 	
@@ -26,7 +26,7 @@ public class ScaleManagerTest   extends TestCase {
 		for(String scaleName : theoreticalScales) {
 			Scale scale = scaleManager.getScale(scaleName, rootPitch);
 			assertNotNull(scale);
-			System.out.println(scale.toJSON());
+			System.out.println(scale.toJson());
 		}
 	}
 	
@@ -34,7 +34,12 @@ public class ScaleManagerTest   extends TestCase {
 		for(String scaleName : mappedScales) {
 			Scale scale = scaleManager.getScale(scaleName);
 			assertNotNull(scale);
-			System.out.println(scale.toJSON());
+			System.out.println(scale.toJson());
 		}
+	}
+	
+	public void testGetUnknownScale() {
+		Scale scale = scaleManager.getScale("Unknown Scale");
+		assertNull(scale);
 	}
 }

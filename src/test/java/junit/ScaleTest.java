@@ -47,7 +47,7 @@ public class ScaleTest extends TestCase {
 	@Test
 	public void testScaleMapping() {
 		Scale gmajor = Scales.G_MAJOR;
-		System.out.println(gmajor.toJSON());
+		System.out.println(gmajor.toJson());
 		DBObject dbObject = morphia.toDBObject(gmajor);
 		Scale scale = morphia.fromDBObject(null, Scale.class, dbObject);
 		System.out.println(scale.toString());

@@ -87,7 +87,7 @@ public class ScaleFormulaImport {
 					}
 				}
 				formulaMap.put(scaleName, scaleFormula);
-				System.out.println(scaleFormula.toJSON());
+				System.out.println(scaleFormula.toJson());
 			}
 			inputFileReader.close();
 		} catch(FileNotFoundException e) {

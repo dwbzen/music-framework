@@ -42,8 +42,8 @@ public abstract class Scaler implements IScaler {
 	}
 	
 	public void setRange(Number maxX, Number minX) {
-		maxVal = new Double(maxX.doubleValue());
-		minVal = new Double(minX.doubleValue());
+		maxVal = maxX.doubleValue();
+		minVal = minX.doubleValue();
 	}
 	
 	public Instrument getInstrument() {

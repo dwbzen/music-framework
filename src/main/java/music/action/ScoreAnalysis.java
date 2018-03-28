@@ -139,12 +139,11 @@ public class ScoreAnalysis {
 	 */
 	public void addNote(Note note) {
 		Pitch p = note.getPitch();
-		if(p.getAlteration() > 0) {
-			p.setEnharmonicEquivalent();
-		}
-		//System.out.print("add note: " + p + "    ");
-		String noteKey = p.toString();			// step + octave as in "C#4"
-		String pitchKey = p.toString(-1);		// just the step as in "C" or "Eb"
+		int alt = p.getAlteration();
+		Pitch pitch = (alt > 0) ? p.setEnharmonicEquivalent(alt) : p;
+
+		String noteKey = pitch.toString();			// step + octave as in "C#4"
+		String pitchKey = pitch.toString(-1);		// just the step as in "C" or "Eb"
 		//System.out.println(pitchKey + "    " + noteKey);
 		int pitchCount = 1;
 		int noteCount = 1;
@@ -158,7 +157,7 @@ public class ScoreAnalysis {
 			noteCount = 1+ noteCounts.get(noteKey).intValue();
 		}
 		noteCounts.put(noteKey, Integer.valueOf(noteCount));
-		String durKey = note.getDuration().toJSON();
+		String durKey = note.getDuration().toJson();
 		if(durationCounts.containsKey(durKey)) {
 			durCount = 1 + durationCounts.get(durKey);
 		}

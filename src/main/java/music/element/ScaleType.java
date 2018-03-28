@@ -18,16 +18,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Discrete (for unpitched percussion where Pitch is a line position and not a true Pitch)
  * There are 4 Discrete scale types corresponding to the #lines needed to score the instrument: 1, 2, 3, 4, or 5
  * 
+ * ScaleType is immutable.
  * @author DBacon
  *
  */
-public class ScaleType {
+public final class ScaleType {
 	
-	@JsonProperty("name")	private String name;	// hexatonic, pentatonic, chromatic etc.
-	@JsonProperty("length")	private int length = 0;		// #notes in the scale (normally 7)
-	
-	public ScaleType() {
-	}
+	@JsonProperty("name")	private final String name;		// hexatonic, pentatonic, chromatic etc.
+	@JsonProperty("length")	private final int length;		// #notes in the scale (normally 7)
 	
 	public ScaleType(String name) {
 		this.name = name;
@@ -114,12 +112,4 @@ public class ScaleType {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
-	}
-	
 }

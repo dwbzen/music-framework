@@ -82,7 +82,7 @@ public class ScaleManager {
 				mode = scaleFormula.getMode();
 				st = scaleFormula.getScaleType();
 				scale = new Scale(scaleName, mode, st, root, scaleFormula);
-				log.debug("Found Scale: " + scale.toJSON());
+				log.debug("Found Scale: " + scale.toJson());
 			}
 			else {
 				System.out.println("No such scale found: " + scaleName);
@@ -106,21 +106,24 @@ public class ScaleManager {
 	public ScaleFormula findScaleFormula(String scaleName, String resource) {
 		ScaleFormula scaleFormula = null;
 		InputStream is = this.getClass().getResourceAsStream("/data/music/" + resource);
-    	Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines();
+		/*
+		 * try-with-resource will auto close the stream
+		 */
+		try(Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines()) {
 
-		Optional<String> optional = stream.filter(s -> s.contains(scaleName)).findFirst();
-		if(optional.isPresent()) {
-			String formulaString = optional.get();
-			try {
-				scaleFormula = mapper.readValue(formulaString, ScaleFormula.class);
-			} catch (IOException e) {
-				log.error("Cannot deserialize " + formulaString + " because " + e.toString());
+			Optional<String> optional = stream.filter(s -> s.contains(scaleName)).findFirst();
+			if(optional.isPresent()) {
+				String formulaString = optional.get();
+				try {
+					scaleFormula = mapper.readValue(formulaString, ScaleFormula.class);
+				} catch (IOException e) {
+					log.error("Cannot deserialize " + formulaString + " because " + e.toString());
+				}
 			}
-			stream.close();
+			else {
+	    		log.error("No such scale: " + scaleName);
+	    	}
 		}
-		else {
-    		log.error("No such scale: " + scaleName);
-    	}
 		return scaleFormula;
 	}
 	

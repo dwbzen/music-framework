@@ -48,7 +48,7 @@ public class Measure implements IJson, Consumer<Measurable> {
 	 */
 	@JsonProperty("beatNote")	private int beatNote = 4;		// defaults to quarterNote
 	@JsonProperty				private Dynamics dynamics = new Dynamics();		// defaults to mf
-	@JsonProperty				private Tempo tempo = new Tempo();	// defaults to 90 (Moderato)
+	@JsonProperty				private Tempo tempo = new Tempo(90);	// defaults to 90 (Moderato)
 	/**
 	 * true if the tempo changes on this measure (from the previous)
 	 */
