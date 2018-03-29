@@ -155,7 +155,7 @@
 { "name" : "Genus Chromaticum (6b's)" , "groups" : [ "genus"] , "formula" : [ 1 , 2 , 1 , 1 , 2 , 1 , 1 , 2 , 1] , "size" : 9}
 { "name" : "Genus Primum Inverse" , "groups" : [ "genus"] , "formula" : [ 5 , 2 , 3 , 2] , "size" : 4}
 { "name" : "Genus Secundum" , "alternateNames" : [ "Chord CMaj6sus4"] , "groups" : [ "genus"] , "formula" : [ 4 , 1 , 2 , 2 , 2 , 1] , "size" : 6}
-{ "name" : "Gipsy Hexatonic, Raga Kalakanti" , "groups" : [ "gipsy"] , "formula" : [ 1 , 4 , 1 , 2 , 1 , 1 , 2] , "size" : 7}
+{ "name" : "Gipsy Hexatonic, Raga Kalakanti" , "groups" : [ "gypsy"] , "formula" : [ 1 , 4 , 1 , 2 , 1 , 1 , 2] , "size" : 7}
 { "name" : "Gypsy Hexatonic" , "groups" : [ "gypsy"] , "formula" : [ 1 , 3 , 1 , 2 , 1 , 1 , 3] , "size" : 7}
 { "name" : "Half Diminished plus b8" , "groups" : [ "half"] , "formula" : [ 3 , 3 , 4 , 1 , 1] , "size" : 5}
 { "name" : "Half-Dimiished Bebop" , "groups" : [ "half"] , "formula" : [ 1 , 2 , 2 , 1 , 1 , 1 , 3 , 1] , "size" : 8}
@@ -546,7 +546,7 @@
 { "name" : "Raga Valaji (India) - Thriteenth e.g.C13" , "alternateNames" : [ "Chord C13"] , "groups" : [ "raga"] , "formula" : [ 4 , 3 , 2 , 1 , 2] , "size" : 5}
 { "name" : "Raga Vasanta, Chayavati (India)" , "groups" : [ "raga"] , "formula" : [ 1 , 3 , 1 , 4 , 2 , 1] , "size" : 6}
 { "name" : "Raga Vasantabhairavi" , "groups" : [ "raga"] , "formula" : [ 1 , 3 , 1 , 3 , 2 , 2] , "size" : 6}
-{ "name" : "Raga Vijayanagari" , "groups" : [ "raga"] , "formula" : [ 2 , 1 , 3 , 1 , 2 , 3] , "size" : 6}
+{ "name" : "Raga Vijayanagari" , "alternateNames" : [ "Satie Gnossiennes 3"]  , "groups" : [ "raga"] , "formula" : [ 2 , 1 , 3 , 1 , 2 , 3] , "size" : 6}
 { "name" : "Raga Vijayasri (India)" , "groups" : [ "raga"] , "formula" : [ 1 , 1 , 4 , 1 , 4 , 1] , "size" : 6}
 { "name" : "Raga Vijayavasanta (India)" , "groups" : [ "raga"] , "formula" : [ 4 , 2 , 1 , 3 , 1 , 1] , "size" : 6}
 { "name" : "Raga Viyogavarali (as 7/26/8 in 12edo)" , "groups" : [ "raga"] , "formula" : [ 1 , 2 , 2 , 3 , 3 , 1] , "size" : 6}

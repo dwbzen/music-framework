@@ -38,32 +38,42 @@ public class ScaleExportManager  {
 	private List<Pitch> rootPitches = new ArrayList<Pitch>();
 	private Map<String, ScaleFormula> scaleFormulas = new TreeMap<String, ScaleFormula>();
 	private String resourceFile = null;
+	private String group = null;
 	private String jsonFormat = null;
+	private int size = 0;
 	
-	public ScaleExportManager(String resource, String format) {
+	public ScaleExportManager(String resource, String format, String group, int size) {
 		mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 		resourceFile = resource;
 		jsonFormat = format;
+		this.size = size;
+		this.group = group;
 		loadScaleFormulas();
 	}
 	
 	public static void main(String... args)  {
-		String root = "C";
+		String root = null;
 		Pitch pitch = null;
 		String resourceFile = null;
 		String jsonFormat = "JSON";	// the default, for Mathematica use "RawJSON"
-		int size = -1;
+		String group = null;
+		int size = 0;
 		PrintStream ps = System.out;
 		boolean export = false;
+		boolean scales = false;
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
     			if(args[i].equalsIgnoreCase("-root")) {
     				root = args[++i];
     				pitch = new Pitch(root);
+    				scales = true;
     			}
     			else if(args[i].equalsIgnoreCase("-size")) {
     				size = Integer.parseInt(args[++i]);
+    			}
+    			else if(args[i].equalsIgnoreCase("-group")) {
+    				group = args[++i];
     			}
     			else if(args[i].equalsIgnoreCase("-resource")) {
     				resourceFile = args[++i];
@@ -73,17 +83,23 @@ public class ScaleExportManager  {
     			}
     			else if(args[i].equalsIgnoreCase("-export")) {
     				export = true;
-    			}
+    			}		
     		}
     	}
-		ScaleExportManager scaleManager = new ScaleExportManager(resourceFile, jsonFormat);
-		if(pitch != null) { scaleManager.addRoot(pitch); }
-		if(export && scaleManager.getScaleFormulas().size() > 0) {
-			String exportString = size>0 ? scaleManager.exportScaleFormulas(size) :scaleManager.exportScaleFormulas();
+		ScaleExportManager scaleExportManager = new ScaleExportManager(resourceFile, jsonFormat, group, size);
+
+		if(export) {
+			String exportString = scaleExportManager.exportScaleFormulas();
 			ps.println(exportString);
 		}
+		if(scales) {
+			scaleExportManager.addRoot(pitch);
+			String scalesString = scaleExportManager.exportScales();
+			ps.println(scalesString);
+		}
+		
 	}
-	
+
 	public void addRoot(Pitch p) {
 		rootPitches.add(p);
 	}
@@ -112,23 +128,11 @@ public class ScaleExportManager  {
 	 */
 	public String exportScaleFormulas() {
 		stringBuffer = new StringBuffer("[\n");
-		scaleFormulas.keySet().forEach(s ->  exportScaleFormula(scaleFormulas.get(s)));
-		stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
-		stringBuffer.append("]");
-		return(stringBuffer.toString());
-	}
-	
-	/**
-	 * Exports scale formulas of a given length (size)
-	 * @param size
-	 */
-	public String exportScaleFormulas(int size) {
-		stringBuffer = new StringBuffer("[\n");
-		for(ScaleFormula sf : scaleFormulas.values()) {
-			if(sf.getSize() == size) {
-				exportScaleFormula(sf);
-			}
-		}
+		scaleFormulas.keySet()
+			.stream()
+			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
+			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
+			.forEach(s ->  exportScaleFormula(scaleFormulas.get(s)));
 		stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
 		stringBuffer.append("]");
 		return(stringBuffer.toString());
@@ -170,22 +174,30 @@ public class ScaleExportManager  {
 			stringBuffer.append("},\n");
 		}
 	}
+	public String exportScales() {
+		stringBuffer = new StringBuffer("[\n");
+		scaleFormulas.keySet()
+			.stream()
+			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
+			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
+			.forEach(s ->  exportScales(scaleFormulas.get(s)));
+		stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
+		stringBuffer.append("]");
+		return(stringBuffer.toString());
+	}
 	
-	public void exportScales(String root) {
-		rootPitches.add(new Pitch(root));
-		/*
-		 * Create a scale with the root(s) specified and export
-		 */
-		for(ScaleFormula formula : scaleFormulas.values() ) {
-			String mode = getMode(formula);
-			ScaleType st = getScaleType(formula);
-			log.debug("formula: " + formula.toJson());
-			for(Pitch pitch : rootPitches) {
-				String name = formula.getName();	// + "-" + pitch.toString();
-				Scale scale = new Scale(name, mode, st, pitch, formula);
-				System.out.println(scale.toJson());
-			}
+	
+	private String exportScales(ScaleFormula formula) {
+		String mode = getMode(formula);
+		ScaleType st = getScaleType(formula);
+		for(Pitch pitch : rootPitches) {
+			String name = formula.getName();
+			Scale scale = new Scale(name, mode, st, pitch, formula);
+			stringBuffer.append("{\"name\":\"" + name + "\",\"notes\":[ ");
+			stringBuffer.append(scale.toString());
+			stringBuffer.append(" ] },\n");
 		}
+		return stringBuffer.toString();
 	}
 	
 	public static String getMode(ScaleFormula formula) {
