@@ -512,18 +512,22 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 		return p;
 	}
 	
+	public String toString() {
+		return toString(false);
+	}
 	/**
 	 * The Pitch in scientific format. 
 	 * Uses #s  for accidental when alteration >= 1
 	 * and flats (b) when alteration <= -1
 	 * @return String representation of this Pitch
 	 */
-	public String toString() {
+	public String toString(boolean quote) {
 		int ordinal = step.getOrdinal();
-		StringBuffer sb = new StringBuffer( PITCH_NOTES[ordinal]);
+		StringBuilder sb = (quote) ? new StringBuilder("\"" + PITCH_NOTES[ordinal]) : new StringBuilder( PITCH_NOTES[ordinal]);
 		int alt = getAlteration();
 		sb.append ((alteration == 0) ? "" : (alteration < 0) ? FLAT[-alt] : SHARP[alt]);
 		if(octave >= 0) { sb.append(String.valueOf(octave)); }
+		if(quote) { sb.append("\""); }
 		return sb.toString();
 	}
 	

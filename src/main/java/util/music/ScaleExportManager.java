@@ -24,7 +24,9 @@ import music.element.Scales;
 
 /**
  * Creates a JSON representation for scale formulas in all roots.
- * Results can be imported into MongoDB or Mathematica depending on specified format
+ * Results can be imported into MongoDB or Mathematica depending on specified format:</p>
+ * JSON for importing into MongoDB (the default), 
+ * RawJSON for importing into Mathematica
  * 
  * @author don_bacon
  *
@@ -32,7 +34,7 @@ import music.element.Scales;
 public class ScaleExportManager  {
 	static final org.apache.log4j.Logger log = Logger.getLogger(ScaleExportManager.class);
 
-	private StringBuffer stringBuffer = null;
+	private StringBuilder stringBuilder = null;
 	ObjectMapper mapper = new ObjectMapper();
 	
 	private List<Pitch> rootPitches = new ArrayList<Pitch>();
@@ -127,15 +129,15 @@ public class ScaleExportManager  {
 	 * Sends output to stdout.
 	 */
 	public String exportScaleFormulas() {
-		stringBuffer = new StringBuffer("[\n");
+		stringBuilder = new StringBuilder("[\n");
 		scaleFormulas.keySet()
 			.stream()
 			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
 			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
 			.forEach(s ->  exportScaleFormula(scaleFormulas.get(s)));
-		stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
-		stringBuffer.append("]");
-		return(stringBuffer.toString());
+		stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
+		stringBuilder.append("]");
+		return(stringBuilder.toString());
 	}
 	
 	private void exportScaleFormula(ScaleFormula sf) {
@@ -143,47 +145,47 @@ public class ScaleExportManager  {
 		String groups = null;
 		String formulaArrayString = null;
 		if(jsonFormat.equalsIgnoreCase("JSON")) {
-			stringBuffer.append(sf.toJson() + ",\n");
+			stringBuilder.append(sf.toJson() + ",\n");
 		}
 		else if(jsonFormat.equalsIgnoreCase("RawJSON")) {
 			// sample: {"Minor Melodic":{ "alternateNames" : [ "Jazz Minor"], "groups":["minor"], "formula":[2,1,2,2,2,2,1],"size":7} }
-			stringBuffer.append("{\"" + sf.getName() + "\":{");
+			stringBuilder.append("{\"" + sf.getName() + "\":{");
 			
 			try {
 				if(!sf.getAlternateNames().isEmpty()) {
 					names = mapper.writeValueAsString(sf.getAlternateNames());
-					stringBuffer.append("\"alternateNames\":");
-					stringBuffer.append(names + ",");
+					stringBuilder.append("\"alternateNames\":");
+					stringBuilder.append(names + ",");
 				}
 				if(!sf.getGroups().isEmpty()) {
 					groups = mapper.writeValueAsString(sf.getGroups());
-					stringBuffer.append("\"groups\":");
-					stringBuffer.append(groups + ",");
+					stringBuilder.append("\"groups\":");
+					stringBuilder.append(groups + ",");
 				}
 				formulaArrayString = mapper.writeValueAsString(sf.getFormula());
-				stringBuffer.append("\"formula\":");
-				stringBuffer.append(formulaArrayString + ",");
+				stringBuilder.append("\"formula\":");
+				stringBuilder.append(formulaArrayString + ",");
 				
-				stringBuffer.append("\"size\":");
-				stringBuffer.append(sf.getSize() + "} ");
+				stringBuilder.append("\"size\":");
+				stringBuilder.append(sf.getSize() + "} ");
 				
 			} catch (JsonProcessingException e) {
 				log.error("JsonProcessingException");
 			}
 
-			stringBuffer.append("},\n");
+			stringBuilder.append("},\n");
 		}
 	}
 	public String exportScales() {
-		stringBuffer = new StringBuffer("[\n");
+		stringBuilder = new StringBuilder("[\n");
 		scaleFormulas.keySet()
 			.stream()
 			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
 			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
 			.forEach(s ->  exportScales(scaleFormulas.get(s)));
-		stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
-		stringBuffer.append("]");
-		return(stringBuffer.toString());
+		stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
+		stringBuilder.append("]");
+		return(stringBuilder.toString());
 	}
 	
 	
@@ -193,11 +195,16 @@ public class ScaleExportManager  {
 		for(Pitch pitch : rootPitches) {
 			String name = formula.getName();
 			Scale scale = new Scale(name, mode, st, pitch, formula);
-			stringBuffer.append("{\"name\":\"" + name + "\",\"notes\":[ ");
-			stringBuffer.append(scale.toString());
-			stringBuffer.append(" ] },\n");
+			if(jsonFormat.equalsIgnoreCase("RawJSON")) {
+				stringBuilder.append("\"" + name + "\":\"notes\":[ ");
+			}
+			else {
+				stringBuilder.append("{\"name\":\"" + name + "\",\"notes\":[ ");
+			}
+			stringBuilder.append(scale.toString(true));
+			stringBuilder.append(" ] },\n");
 		}
-		return stringBuffer.toString();
+		return stringBuilder.toString();
 	}
 	
 	public static String getMode(ScaleFormula formula) {

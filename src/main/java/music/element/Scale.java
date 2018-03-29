@@ -153,16 +153,20 @@ public final class Scale implements IJson, INameable, Cloneable  {
 		return copyScale(this);
 	}
 	
+	public String toString() {
+		return toString(false);
+	}
+	
 	/**
 	 * Comma-delimited pitches in this scale
 	 */
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
+	public String toString(boolean quote) {
+		StringBuilder sb = new StringBuilder();
 		Iterator<Pitch> pit = pitches.iterator();
-		sb.append(pit.next().toString());
+		sb.append(pit.next().toString(quote));
 		while(pit.hasNext()) {
 			sb.append(", ");
-			sb.append(pit.next().toString());
+			sb.append(pit.next().toString(quote));
 		}
 		return sb.toString();
 	}
