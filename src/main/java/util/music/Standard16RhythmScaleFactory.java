@@ -149,6 +149,6 @@ public class Standard16RhythmScaleFactory extends Monophonic16StandardRhythmScal
 		
 		IRhythmScaleFactory rsFactory = RhythmScaleFactory.getRhythmScaleFactory("Standard16RhythmScale");
 		RhythmScale rs = rsFactory.createRhythmScale("Standard Rhythm Scale");
-		System.out.println(rs.toJson());
+		System.out.println(rs.toJson(true));
 	}
 }

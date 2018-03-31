@@ -185,7 +185,7 @@ public class ScorePart implements Serializable, Runnable {
     	// Each Measurable can be a single Note or a Chord
     	List<Measurable> tupletGroup = null;
     	Note lastNote = null;
-		Note chordNote = null;
+		Chord lastChord = null;
     	do {
 	    	if((note = getNextNote()) != null) {
 	    		int units = note.getDuration().getDurationUnits();
@@ -222,7 +222,7 @@ public class ScorePart implements Serializable, Runnable {
 	    			log.debug("   add " + RhythmicUnitType.METRIC + " note: " + note.toString() );
 	    			tupletGroup = null;
 	    			if(chordal) {
-	    				// create a chord having notesInThisChord notes
+	    				// create a chord having the number notesInThisChord # of notes
 	    				chord = createChord(note, notesInThisChord, noteType);
 	    			}
 	    		}
@@ -277,7 +277,7 @@ public class ScorePart implements Serializable, Runnable {
 	    			else {
 	    				if(chordal) {
 	    					measure.addMeasureable(chord);
-	    					lastNote = chordNote;
+	    					lastChord = chord;
 	    				}
 	    				else {
 	    					note.setNoteType(rhythmScale.getNoteType(note));
@@ -302,19 +302,29 @@ public class ScorePart implements Serializable, Runnable {
 	    			 */
 	    			int unitsNextMeasure = (unitsCount + units) - unitsPerMeasure;
 	    			int unitsThisMeasure = units - unitsNextMeasure;
-	    			log.debug("   Tie notes measure " + measure.getNumber() + 	",  unitsCount, units: " + unitsCount + ", " + units + " unitsNextMeasure: " + unitsNextMeasure + " unitsThisMeasure: " + unitsThisMeasure );
-	    			note.setTupletType(TupletType.NONE);
-	    			tupletGroup = null;
-	    			Note lastNoteAdded = addFactorsNotes(unitsThisMeasure, note, measure, false);
-	    			measure = createNewMeasure();
-	    			measureCounter++;
+	    			Note lastNoteAdded = null;
+	    			Chord lastChordAdded = null;
+	    			log.debug("   Tie notes measure " + measure.getNumber() + 	",  unitsCount, units: " + unitsCount + ", " 
+	    					+ units + " unitsNextMeasure: " + unitsNextMeasure 
+	    					+ " unitsThisMeasure: " + unitsThisMeasure );
+	    			
 	    			// tie across the bar line determined by tieProbability for this instrument
 	    			boolean tieToNote = random.nextDouble() <= tieProbability;
-	    			/*
-	    			 * TODO account for the last Measurable added is a Chord instead of an individual Note
-	    			 */
-	    			addFactorsNotes(unitsNextMeasure, lastNoteAdded, measure, tieToNote);
-	    			log.debug("   note, lastNoteAdded: " + note + " " + lastNoteAdded);
+	    			
+	    			if(chordal) {
+	    				chord.setTupletType(TupletType.NONE);
+	    				lastChordAdded = addFactorsChords(unitsThisMeasure, chord, measure);
+	    				log.debug("   chord, lastChordAdded: " + chord + " " + lastChordAdded);
+	    			}
+	    			else {
+		    			note.setTupletType(TupletType.NONE);
+		    			lastNoteAdded = addFactorsNotes(unitsThisMeasure, note, measure, false);
+		    			addFactorsNotes(unitsNextMeasure, lastNoteAdded, measure, tieToNote);
+		    			log.debug("   note, lastNoteAdded: " + note + " " + lastNoteAdded);
+	    			}
+	    			tupletGroup = null;
+	    			measure = createNewMeasure();
+	    			measureCounter++;
 	    			unitsCount = unitsNextMeasure;
 	    		}
 	    	}	// end if(Notes)
@@ -328,7 +338,37 @@ public class ScorePart implements Serializable, Runnable {
     	}
     }
     
-    /**
+    public Measurable addFactors(int units, Measurable aMeasurable, Measure measure, boolean tieToNote) {
+    	Measurable noteOrChord = null;
+    	if(aMeasurable instanceof Note) {
+    		noteOrChord = addFactorsNotes(units, (Note) aMeasurable, measure, tieToNote);
+    	}
+    	else if(aMeasurable instanceof Chord) {
+    		noteOrChord = addFactorsChords(units, (Chord) aMeasurable, measure);
+    	}
+    	return noteOrChord;
+    }
+    
+	/**
+     * Adds Chord(s) to a Measure based on units provided, using the Notes of a given Chord
+     * If the Pitch or any of the Notes happens to be null, the Chord provided is a rest - and so are all the
+     * factor notes.
+     * @param units units to factor - may be 1 to n Durations depending on the RhythmScale
+     * @param note the Chord providing the Notes to use
+     * @param measure the Measure to add Chords to
+     * @return the last Chord added to the Measure
+     */
+    private Chord addFactorsChords(int units, Chord aChord, Measure measure) {
+    	List<Duration> factors =  rhythmScale.getFactors(units);
+    	Chord chord = null;
+		for(Duration duration : factors) {
+			chord = Chord.createChord(aChord, duration);
+			measure.addMeasureable(chord);
+		}
+		return chord;
+	}
+
+	/**
      * Adds Note(s) to a Measure based on units provided, using the Pitch of a given Note
      * If the Pitch happens to be null, the Note provided is a rest - and so are all the
      * factor notes.
@@ -338,7 +378,7 @@ public class ScorePart implements Serializable, Runnable {
      * @param tieToNote if true, tie the first factor note to the Note provided
      * @return the last Note added to the Measure
      */
-    public Note addFactorsNotes(int units, Note aNote, Measure measure, boolean tieToNote) {
+    private Note addFactorsNotes(int units, Note aNote, Measure measure, boolean tieToNote) {
 		List<Duration> factors =  rhythmScale.getFactors(units);
 		Pitch pitch = aNote.getPitch();
 		Note note = null;

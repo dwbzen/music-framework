@@ -37,6 +37,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	@JsonIgnore		private Iterator<Note> iterator = null;
 	
 	public Chord() {
+		
 	}
 	
 	public Chord(List<Note> chordNotes) {
@@ -57,6 +58,13 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		for(Pitch p:pitches) {
 			addNote(new Note(p,0));
 		}
+	}
+	
+	public static Chord createChord(Chord aChord, Duration duration) {
+		Chord chord = new Chord();
+		aChord.notes.forEach(note -> chord.addNote(new Note(note)));
+		chord.setNoteType(aChord.getNoteType());
+		return chord;
 	}
 
 	public SortedSet<Note> getNotes() {
