@@ -8,12 +8,12 @@ apply plugin: 'maven'
 apply plugin: 'eclipse'
 
 group = 'music_framework'
-version = '1.0'
+version = '2.0'
 
 description = """Music Framework"""
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.9
+targetCompatibility = 1.9
 jar {
     manifest {
         attributes 'Implementation-Title': 'music-framework',
