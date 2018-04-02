@@ -13,13 +13,6 @@ public class ScalerTest extends TestCase  {
 	private Double maxY = .9990596;
 	private Instrument instrument = null;
 	private String[] pitchRange={"E4", "A6"};
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String... args) {
-	}
-	
 
 	public void testPitchScaler() {
 		setup();

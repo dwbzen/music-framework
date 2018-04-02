@@ -461,11 +461,11 @@ public class Key implements IJson {
 	}
 
 	public boolean isFlatKey() {
-		return signature[0].getAlteration() <= 0;	// C is considered a Flat key
+		return signature != null ? signature[0].getAlteration() <= 0 : true;	// C is considered a flat key
 	}
 	
 	public boolean isSharpKey() {
-		return signature[0].getAlteration() > 0;
+		return signature != null ? signature[0].getAlteration() > 0 : false;
 	}
 
 	public Scale getScale() {

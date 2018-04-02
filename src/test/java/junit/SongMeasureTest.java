@@ -1,13 +1,8 @@
 package junit;
 
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
-import org.mongodb.morphia.Morphia;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.util.JSON;
-
+import junit.framework.TestCase;
 import music.element.Key;
 import music.element.TimeSignature;
 import music.element.song.KeyLite;
@@ -16,24 +11,15 @@ import music.element.song.Notation;
 import music.element.song.SongMeasure;
 import music.element.song.SongNote;
 
-public class SongMeasureTest {
+public class SongMeasureTest extends TestCase {
 
 	@Test
 	public void testSongMeasure() {
-		Morphia morphia = new Morphia();
-		morphia.mapPackage("music.element");
-		morphia.mapPackage("music.element.song");
 
 		SongMeasure measure = createTestSongMeasure();
-		String jsonString = measure.toJSON();
+		String jsonString = measure.toJson();
 		System.out.println("measure: " + jsonString);
-		
-		BasicDBObject obj = (BasicDBObject)JSON.parse(jsonString);
-		SongMeasure m = morphia.fromDBObject(null, SongMeasure.class, obj);
-		String fromDBObject = m.toJSON();
-		System.out.println("from DB object: " + fromDBObject);
-		assertTrue(fromDBObject.equals(jsonString));
-		
+		assertEquals(measure.getMelody().getSongNotes().size(), 3);
 	}
 	
 	private static SongMeasure createTestSongMeasure() {

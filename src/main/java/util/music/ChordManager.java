@@ -118,7 +118,7 @@ public class ChordManager {
 					Key key = Key.rootKeyMap.get(root.toString(-1));
 					HarmonyChord harmonyChord = new HarmonyChord(formula, root, key);
 					if(harmonyChord != null) {
-						harmonyChords.put(harmonyChord.getName(), harmonyChord);
+						formula.getSymbols().forEach(symbol -> harmonyChords.put(root.getStep().name() + symbol, harmonyChord));
 					}
 				}
 			}

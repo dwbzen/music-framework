@@ -4,6 +4,7 @@
 }
 
 apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 
@@ -40,6 +41,7 @@ uploadArchives {
     }
 }
 
+// JDK 9: javax.xml.bind module deprecated for removal
 dependencies {
 	compile files('libs/proxymusic-3.0.jar')
 	runtime files('libs/proxymusic-3.0.jar')
@@ -51,10 +53,11 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version:'2.7'
     compile group: 'org.apache.activemq', name: 'activemq-all', version:'5.14.3'
 	compile group: 'math-lib', name: 'mathlib-gradle', version: '1.0'
-	compile group:  'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.0'
-    compile group:  'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.0'
-    compile group:  'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.0'
-    compile group:  'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.0'
+	compile group:  'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.5'
+    compile group:  'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.5'
+    compile group:  'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.5'
+    compile group:  'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.5'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile group:  'javax.json', name: 'javax.json-api', version: '1.1'
+    compile group:	'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
 }
