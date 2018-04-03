@@ -48,11 +48,6 @@ public class Section  implements IJson, INameable {
 		this.name = name;
 	}
 	
-	@Override
-	public String toJSON() {
-		return toJson();
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}

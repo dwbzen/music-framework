@@ -60,11 +60,6 @@ public class Melody implements IJson {
 		return songNotes;
 	}
 
-	@Override
-	public String toJSON() {
-		return  toJson();
-	}
-
 	public static void main(String... args) {
 		
 	}

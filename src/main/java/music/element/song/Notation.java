@@ -33,11 +33,6 @@ public class Notation implements IJson {
 	public Notation(String noteType) {
 		this.noteType = noteType;
 	}
-	
-	@Override
-	public String toJSON() {
-		return toJson();
-	}
 
 	public String getTuplet() {
 		return tuplet;

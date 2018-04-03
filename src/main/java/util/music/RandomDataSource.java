@@ -105,8 +105,8 @@ public class RandomDataSource  extends DataSource {
 		pointSet = new PointSet<Double>();
 		CommandMessage cmStart = new CommandMessage(dataSetName, "START");
 		CommandMessage cmShutdown = new CommandMessage(dataSetName, "SHUTDOWN");
-		startCommand = cmStart.toJSON();
-		shutdownCommand = cmShutdown.toJSON();
+		startCommand = cmStart.toJson();
+		shutdownCommand = cmShutdown.toJson();
 		pointSet.setLinearFunction("random");
 		pointSet.setName(dataSetName);
 		generatePointSet();
@@ -130,7 +130,7 @@ public class RandomDataSource  extends DataSource {
 		createDataSet();
 		Stream.Builder<String> builder =  Stream.builder();
 		builder.add(startCommand);
-		builder.add(pointSet.toJSON());
+		builder.add(pointSet.toJson());
 		for(Point2D<Double> point : pointSet.getPoints()) {
 			builder.add(point.toJson());
 		}

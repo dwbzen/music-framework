@@ -163,9 +163,4 @@ public class SongMeasure  implements IJson {
 		this.goTo = goTo;
 	}
 
-	@Override
-	public String toJSON() {
-		return toJson();
-	}
-
 }

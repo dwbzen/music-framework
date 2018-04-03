@@ -28,7 +28,7 @@ public class MelodyTest {
 		melody.getSongNotes().add(songNote);
 		melody.getSongNotes().add(songNote2);
 		melody.getSongNotes().add(songNote3);
-		String jsonString = melody.toJSON();
+		String jsonString = melody.toJson();
 		System.out.println(jsonString);
 		
 	}

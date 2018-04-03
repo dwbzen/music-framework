@@ -77,11 +77,6 @@ public class Harmony implements IJson, INameable {
 		return key;
 	}
 	
-	@Override
-	public String toJSON() {
-		return toJson();
-	}
-
 	public int getBeat() {
 		return beat;
 	}

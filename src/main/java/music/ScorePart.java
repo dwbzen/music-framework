@@ -472,11 +472,11 @@ public class ScorePart implements Serializable, Runnable {
        	}
        	else if(type.equals("stats")) {
        		scorePartData = (PointSet<Number>)jsonObj;
-       		log.trace("pointSet for " + getPartName() + ": " + scorePartData.toJSON());
+       		log.trace("pointSet for " + getPartName() + ": " + scorePartData.toJson());
        	}
        	else if(type.equalsIgnoreCase(JSONObject.UNKNOWN)) {
        		BaseJSONObject base = (BaseJSONObject)jsonObj;
-        	log.error("Unknown message type " + base.toJSON());
+        	log.error("Unknown message type " + base.toJson());
       		 // nothing to see here
        	}
     }

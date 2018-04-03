@@ -155,11 +155,6 @@ public class Song implements IJson, INameable, Supplier<ChordProgression>  {
 		this.sectionTerminator = sectionTerminator;
 	}
 
-	@Override
-	public String toJSON() {
-		return toJson();
-	}
-
 	/**
 	 * Implements the Supplier get() function.
 	 * Gets one section at a time. Returns NULL when no more sections;

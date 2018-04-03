@@ -123,9 +123,4 @@ public class SongNote implements IJson, Comparable<SongNote> {
 		this.timeSignature = timeSignature;
 	}
 
-	@Override
-	public String toJSON() {
-		return toJson();
-	}
-
 }
