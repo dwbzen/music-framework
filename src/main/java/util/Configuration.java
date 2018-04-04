@@ -4,6 +4,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Singleton Configuration
  * Usage example: 
@@ -14,22 +17,24 @@ import java.util.Properties;
  *
  */
 public class Configuration {
-
-	private String configurationFilename = null;
+	
+	protected static final Logger log = LogManager.getLogger(Configuration.class);
+	private static Configuration configuration = null;
 	private Properties properties = null;
+	private static String configurationFilename = null;
 	
-	protected Configuration() {}
-	
-	protected Configuration(String configFilename) {
+	private Configuration() {}
+	private Configuration(String configFilename) {
 		properties = new Properties();
-		setConfigurationFilename(configFilename);
 	}
 	
 	public static Configuration getInstance(String configFile) {
-		Configuration configuration = null;
-		synchronized(Configuration.class){
-			configuration = new Configuration(configFile);
-			configuration.loadProperties();
+		if(configuration == null) {
+			synchronized(Configuration.class){
+				configuration = new Configuration(configFile);
+				configurationFilename = configFile;
+				configuration.loadProperties();
+			}
 		}
 		return configuration;
 	}
@@ -39,13 +44,11 @@ public class Configuration {
         if(url == null) {
             throw new IllegalArgumentException("Could not load resource: \"" + configurationFilename + "\"");
         }
-        try {
-        	InputStream stream = url.openStream();
+        try(InputStream stream = url.openStream()) {
         	properties.load(stream);
-            stream.close();
         }
         catch(Exception e) {
-        	System.err.println("Could not load " + configurationFilename + " " + e.toString());
+        	log.error("Could not load " + configurationFilename + " " + e.toString());
         }
 	}
 	
@@ -55,17 +58,6 @@ public class Configuration {
 	
 	public Properties getProperties() {
 		return this.properties;
-	}
-	
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
-
-	public String getConfigurationFilename() {
-		return configurationFilename;
-	}
-	public void setConfigurationFilename(String configurationFilename) {
-		this.configurationFilename = configurationFilename;
 	}
 	
 }
