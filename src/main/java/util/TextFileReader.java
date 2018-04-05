@@ -1,9 +1,11 @@
 package util;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,19 +16,18 @@ import java.util.List;
  *
  */
 public class TextFileReader {
-	public final static Character SPACE = ' ';
 	private List<String> lines = new ArrayList<String>();
 	private Character delimiter = null;
 	private String endOfLine = null;
 	private String fileName = null;
 	
-	private static Character delim = SPACE;
-	private static String eolString = "";
+	static Character delim = ' ';
+	static String eolString = "";
 	
 	protected TextFileReader(String inputFile, Character cdelim, String eol) {
 		setDelimiter(cdelim);
 		setEndOfLine(eol);
-		setFileName(inputFile);
+		fileName = inputFile;
 	}
 	
 	public static TextFileReader getInstance(String inputFile, Character cdelim, String eol) {
@@ -45,26 +46,15 @@ public class TextFileReader {
 	 * Appends the set delim Character and eolString (if not null) after trimming the line.
 	 * @param inputFile the file to read. If null, reads from STDIN.
 	 * @return String text of the entire file, lines separated by configured delimiter (normally SPACE)
+	 * @throws FileNotFoundException 
 	 * 
-	 * @throws IOException
 	 */
-	public String getFileText() throws IOException {
-		StringBuffer sb = new StringBuffer();
-		BufferedReader inputFileReader = (fileName != null) ?
-					new BufferedReader(new FileReader(fileName)) :
-					new BufferedReader(new InputStreamReader(System.in));
-		String line;
-		while((line = inputFileReader.readLine()) != null) {
-			if(line.length()>0) { 
-				sb.append(line.trim());
-				lines.add(line);
-				sb.append(delimiter);
-				if(endOfLine != null) {
-					sb.append(endOfLine);
-				}
-			}
+	public String getFileText() throws FileNotFoundException, IOException {
+		readFileLines();
+		StringBuilder sb = new StringBuilder();
+		for(String line : lines) {
+			sb.append(line);
 		}
-		inputFileReader.close();
 		return sb.toString();
 	}
 	
@@ -76,14 +66,20 @@ public class TextFileReader {
 	 * @throws IOException
 	 */
 	public List<String> getFileLines() throws IOException {
-		if(lines.size() == 0) {
-			BufferedReader inputFileReader = (fileName != null) ?
-					new BufferedReader(new FileReader(fileName)) :
-					new BufferedReader(new InputStreamReader(System.in));
+		if(lines.isEmpty()) {
+			readFileLines();
+		}
+		return lines;
+	}
+	
+	private void readFileLines() throws FileNotFoundException, IOException {
+		StringBuilder sb = null;
+		Reader in = (fileName != null) ? new FileReader(fileName) : new InputStreamReader(System.in);
+		try(BufferedReader inputFileReader = new BufferedReader(in)) {
 			String line;
 			while((line = inputFileReader.readLine()) != null) {
-				if(line.length()>0) {
-					StringBuffer sb = new StringBuffer(line.trim());
+				if(line.length()>0) { 
+					sb = new StringBuilder(line.trim());
 					sb.append(delimiter);
 					if(endOfLine != null) {
 						sb.append(endOfLine);
@@ -91,9 +87,7 @@ public class TextFileReader {
 					lines.add(sb.toString()); 
 				}
 			}
-			inputFileReader.close();
 		}
-		return lines;
 	}
 	
 	public static void main(String... args) throws IOException {
@@ -103,7 +97,7 @@ public class TextFileReader {
 		System.out.println(text);
 		System.out.println("length: " + text.length());
 		
-		TextFileReader reader2 = TextFileReader.getInstance(filename, "\n");
+		TextFileReader reader2 = TextFileReader.getInstance(filename, "___\n");
 		text = reader2.getFileText();
 		System.out.println(text);
 		System.out.println("length: " + text.length());
@@ -119,10 +113,6 @@ public class TextFileReader {
 
 	public List<String> getLines() {
 		return lines;
-	}
-
-	public void setLines(List<String> lines) {
-		this.lines = lines;
 	}
 
 	public Character getDelimiter() {
@@ -145,10 +135,6 @@ public class TextFileReader {
 		return fileName;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-	
 	public int size() {
 		return lines.size();
 	}
