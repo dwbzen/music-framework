@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Singleton Configuration
  * Usage example: 
  * Configuration config = Configuration.getInstance("/config.properties");
  * Properties properties = config.getProperties();
@@ -19,9 +18,8 @@ import org.apache.logging.log4j.Logger;
 public class Configuration {
 	
 	protected static final Logger log = LogManager.getLogger(Configuration.class);
-	private static Configuration configuration = null;
 	private Properties properties = null;
-	private static String configurationFilename = null;
+	private String configurationFilename = null;
 	
 	private Configuration() {}
 	private Configuration(String configFilename) {
@@ -29,12 +27,11 @@ public class Configuration {
 	}
 	
 	public static Configuration getInstance(String configFile) {
-		if(configuration == null) {
-			synchronized(Configuration.class){
+		Configuration configuration = null;
+		synchronized(Configuration.class){
 				configuration = new Configuration(configFile);
-				configurationFilename = configFile;
+				configuration.configurationFilename = configFile;
 				configuration.loadProperties();
-			}
 		}
 		return configuration;
 	}

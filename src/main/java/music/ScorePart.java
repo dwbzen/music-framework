@@ -314,17 +314,20 @@ public class ScorePart implements Serializable, Runnable {
 	    			if(chordal) {
 	    				chord.setTupletType(TupletType.NONE);
 	    				lastChordAdded = addFactorsChords(unitsThisMeasure, chord, measure);
+		    			measure = createNewMeasure();
+		    			measureCounter++;
+		    			addFactorsChords(unitsNextMeasure, lastChordAdded, measure);
 	    				log.debug("   chord, lastChordAdded: " + chord + " " + lastChordAdded);
 	    			}
 	    			else {
 		    			note.setTupletType(TupletType.NONE);
 		    			lastNoteAdded = addFactorsNotes(unitsThisMeasure, note, measure, false);
+		    			measure = createNewMeasure();
+		    			measureCounter++;
 		    			addFactorsNotes(unitsNextMeasure, lastNoteAdded, measure, tieToNote);
 		    			log.debug("   note, lastNoteAdded: " + note + " " + lastNoteAdded);
 	    			}
 	    			tupletGroup = null;
-	    			measure = createNewMeasure();
-	    			measureCounter++;
 	    			unitsCount = unitsNextMeasure;
 	    		}
 	    	}	// end if(Notes)

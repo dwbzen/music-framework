@@ -57,6 +57,8 @@ public class ProductionFlowConfigurator implements Configurator {
     		catch(Exception e) {
     			String errorMessage = "Could not create Instrument " + name;
     			log.error(errorMessage);
+    			log.error(e.toString() );
+    			e.printStackTrace();
     			throw new ConfigurationException(errorMessage);
     		}
     		
