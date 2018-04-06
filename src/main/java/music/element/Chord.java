@@ -16,9 +16,11 @@ import mathlib.util.IJson;
  * All the notes in the same voice will have the same duration.
  * A Note that would appear in the same time slice with a different duration
  * would have a different voice.
- * The notes are maintained in a list in ascending order by pitch.
+ * The notes are maintained in a SortedSet, ordered by Note.
  * Chords can be tied together like notes.
  * By definition, all the notes in each Chord are implicitly tied together.
+ * A Chord must also have a non-null root note. If not specified, it is
+ * assigned in the constructors/factory methods.
  * 
  * @author don_bacon
  *
@@ -40,9 +42,17 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		
 	}
 	
+	/**
+	 * Creates a Chord from a List of Note.
+	 * The first entry is set as the Root note.
+	 * @param chordNotes
+	 */
 	public Chord(List<Note> chordNotes) {
 		for(Note note : chordNotes) {
-			notes.add(note);
+			addNote(note);
+			if(root == null) {
+				root = note;
+			}
 		}
 	}
 	
@@ -64,22 +74,33 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		Chord chord = new Chord();
 		aChord.notes.forEach(note -> chord.addNote(new Note(note)));
 		chord.setNoteType(aChord.getNoteType());
+		chord.setRoot(aChord.getRoot());
 		return chord;
 	}
 	
+	/**
+	 * Creates a Chord from a String[] of pitches.
+	 * Pitches can be octave-neutral as in "Eb" or specify an octave as in "Eb4"
+	 * The first entry is set as the Root note.
+	 * @param chordNotes
+	 * @param duration duration to apply, must be >= 0
+	 * @return Chord
+	 */
 	public static Chord createChord(String[] chordNotes, int duration) {
 		Chord chord = new Chord();
 		Note root = null;
+		Duration dur = new Duration(duration);
 		if(chordNotes != null && chordNotes.length>0) {
 			for(String s : chordNotes) {
 				Pitch p = Pitch.fromString(s);
-				Note note = new Note(p, duration);
+				Note note = new Note(p, dur);
 				chord.addNote(note);
 				if(root == null) {
 					root = note;
 					chord.setRoot(root);
 				}
 			}
+			chord.duration = dur;
 		}
 		return chord;
 	}
@@ -90,7 +111,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	
 	/**
 	 * Adds a Note to this chord (that already isn't there)
-	 * Can't add a rest to a Chord.
+	 * 
 	 * @param n Note to add
 	 * @return true if added, false otherwise (a duplicate)
 	 * @throws IllegalArgumentException if try to add a rest OR duration doesn't match
@@ -100,7 +121,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		if(note == null || note.isRest()) {
 			throw new IllegalArgumentException("Note is null or a rest");
 		}
-		if(duration == null || duration.getDurationUnits() == 0) {
+		if(duration == null) {
 			duration = note.getDuration();
 		}
 		else if(duration.getDurationUnits() != note.getDuration().getDurationUnits()) {
@@ -127,6 +148,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		if(removed) {
 			note.breakAllTies();
 		}
+		size--;
 		return removed;
 	}
 	
@@ -205,7 +227,8 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	 * Chords are equal if they have the same notes and the same root.
 	 * This considers notes that are enharmonic equivalent to be equals in this context (so F# is the same note as Gb).
 	 * This also holds for the root pitch in each chord.
-	 * If same number of notes in each, add up rancge step of each and compare the results.
+	 * If same number of notes in each, add up range step of each and compare the results.
+	 * 
 	 * @param object
 	 * @return
 	 */
@@ -295,7 +318,13 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		return size;
 	}
 
+	/**
+	 * Sets the Duration on all Notes in the Chord and the Chord itself.
+	 * 
+	 * @param dur
+	 */
 	public void setNoteDurations(Duration dur) {
+		duration = dur;
 		for(Note note : notes) {
 			note.setDuration(new Duration(dur));
 		}
