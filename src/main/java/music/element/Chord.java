@@ -66,6 +66,23 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		chord.setNoteType(aChord.getNoteType());
 		return chord;
 	}
+	
+	public static Chord createChord(String[] chordNotes, int duration) {
+		Chord chord = new Chord();
+		Note root = null;
+		if(chordNotes != null && chordNotes.length>0) {
+			for(String s : chordNotes) {
+				Pitch p = Pitch.fromString(s);
+				Note note = new Note(p, duration);
+				chord.addNote(note);
+				if(root == null) {
+					root = note;
+					chord.setRoot(root);
+				}
+			}
+		}
+		return chord;
+	}
 
 	public SortedSet<Note> getNotes() {
 		return notes;
@@ -185,8 +202,11 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	
 	@Override
 	/**
-	 * If same number of notes in each, add up the pitches of each and compare the results
-	 * @param o
+	 * Chords are equal if they have the same notes and the same root.
+	 * This considers notes that are enharmonic equivalent to be equals in this context (so F# is the same note as Gb).
+	 * This also holds for the root pitch in each chord.
+	 * If same number of notes in each, add up rancge step of each and compare the results.
+	 * @param object
 	 * @return
 	 */
 	public int compareTo(Chord o) {
@@ -201,8 +221,8 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 			while(it.hasNext()) {
 				Pitch p = it.next().getPitch();
 				Pitch po = ito.next().getPitch();
-				psum += p.getStep().value() * (1 + p.getOctave());
-				psumo += po.getStep().value() * (1 + po.getOctave());
+				psum += p.getRangeStep();
+				psumo += po.getRangeStep();
 			}
 			cmp = (psum == psumo) ? 0 : (psum < psumo) ? -1 : 1;
 		}
@@ -212,8 +232,9 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		return cmp;
 	}
 	
-	public boolean equals(Chord o) {
-		boolean eq = (compareTo(o)== 0) && getRoot().equals(o.getRoot());
+	@Override
+	public boolean equals(Object object) {
+		boolean eq = object instanceof Chord ? (compareTo((Chord)object)== 0) && getRoot().equals(((Chord)object).getRoot()) : false;
 		return eq;
 	}
 	

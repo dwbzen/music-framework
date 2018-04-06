@@ -272,7 +272,7 @@ public class ScaleExportManager  {
 		} catch (Exception e) {
 			log.error("Cannot deserialize " + formulaString + "\nbecause " + e.toString());
 		}
-		scaleFormulas.put(scaleFormula.getName(), scaleFormula);
+		if(scaleFormula != null) {	scaleFormulas.put(scaleFormula.getName(), scaleFormula); }
 		
 	}
 }

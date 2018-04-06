@@ -65,6 +65,12 @@ public class FileDataSource extends DataSource {
 		} catch (IOException e) {
 			log.error("IOException: " + e.getMessage());
 		}
+		finally {
+			if(stream1 != null) { stream1.close(); }
+			if(stream2 != null) { stream2.close(); }
+			if(stream3 != null) { stream3.close(); }
+
+		}
 		return stream;
 	}
     
