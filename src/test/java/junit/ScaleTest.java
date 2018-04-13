@@ -1,5 +1,6 @@
 package junit;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
@@ -11,7 +12,7 @@ import music.element.Step;
 
 
 public class ScaleTest extends TestCase {
-	
+	static final org.apache.log4j.Logger log = Logger.getLogger(ScaleTest.class);
 	public ScaleTest() {
 	}
 
@@ -19,7 +20,7 @@ public class ScaleTest extends TestCase {
 	@Test
 	public void testPitchMapping() {
 		Pitch pitch = new Pitch(Step.G, 3, Alteration.NONE);
-		System.out.println("pitch: " + pitch.toJson());
+		log.info("pitch: " + pitch.toJson());
 		assertEquals(pitch.getChromaticScaleDegree(), 8);
 		assertEquals(pitch.getAbsoluteChromaticScaleDegree(), 44);
 	}
@@ -27,7 +28,7 @@ public class ScaleTest extends TestCase {
 	@Test
 	public void testScaleMapping() {
 		Scale gmajor = Scales.G_MAJOR;
-		System.out.println(gmajor.toJson());
+		log.info(gmajor.toJson());
 		assertEquals(gmajor.getNotes(), "G, A, B, C, D, E, F#, G");
 	}
 }

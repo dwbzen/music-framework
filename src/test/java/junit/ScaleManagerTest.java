@@ -1,11 +1,14 @@
 package junit;
 
+import org.apache.log4j.Logger;
+
 import junit.framework.TestCase;
 import music.element.Pitch;
 import music.element.Scale;
 import util.music.ScaleManager;
 
 public class ScaleManagerTest   extends TestCase {
+	static final org.apache.log4j.Logger log = Logger.getLogger(ScaleManagerTest.class);
 	
 	String[] commonScales = {"Harmonic minor", "JG Octatonic", "Pyramid Hexatonic", "Hirajoshi Japan"};
 	String[] mappedScales = {"D-HarmonicMinor", "Hirajoshi Japan in D"};
@@ -17,7 +20,7 @@ public class ScaleManagerTest   extends TestCase {
 		for(String scaleName : commonScales) {
 			Scale scale = scaleManager.getScale(scaleName, rootPitch);
 			assertNotNull(scale);
-			System.out.println(scale.toJson());
+			log.debug(scale.toJson());
 		}
 	}
 	
@@ -26,7 +29,7 @@ public class ScaleManagerTest   extends TestCase {
 		for(String scaleName : theoreticalScales) {
 			Scale scale = scaleManager.getScale(scaleName, rootPitch);
 			assertNotNull(scale);
-			System.out.println(scale.toJson());
+			log.debug(scale.toJson());
 		}
 	}
 	
@@ -34,7 +37,7 @@ public class ScaleManagerTest   extends TestCase {
 		for(String scaleName : mappedScales) {
 			Scale scale = scaleManager.getScale(scaleName);
 			assertNotNull(scale);
-			System.out.println(scale.toJson());
+			log.debug(scale.toJson());
 		}
 	}
 	

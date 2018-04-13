@@ -64,7 +64,7 @@ public abstract class Instrument implements Configurable, IInstrument {
 	 * 
 	 * 
 	 */
-	protected double[] durationRangeSeconds = IInstrument.durationRangeSeconds;	// raw, practical limit
+	protected double[] durationRangeSeconds = {0.166, 2.66};	// raw, practical limit
 	
 	/**
 	 * The key for this instrument - C, Bb, Eb etc.

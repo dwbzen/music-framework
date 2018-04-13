@@ -1,5 +1,6 @@
 package junit;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
@@ -12,13 +13,13 @@ import music.element.song.SongMeasure;
 import music.element.song.SongNote;
 
 public class SongMeasureTest extends TestCase {
-
+	static final org.apache.log4j.Logger log = Logger.getLogger(SongMeasureTest.class);
 	@Test
 	public void testSongMeasure() {
 
 		SongMeasure measure = createTestSongMeasure();
 		String jsonString = measure.toJson();
-		System.out.println("measure: " + jsonString);
+		log.info("measure: " + jsonString);
 		assertEquals(measure.getMelody().getSongNotes().size(), 3);
 	}
 	

@@ -3,6 +3,7 @@ package junit;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
@@ -14,7 +15,7 @@ import music.element.Scales;
 import music.element.Step;
 
 public class PitchTest extends TestCase {
-	
+	static final org.apache.log4j.Logger log = Logger.getLogger(PitchTest.class);
 	static Pitch eflat4 = new Pitch("Eb4");
 	static Pitch p3 = new Pitch("Bb4");
 	static Pitch p4 = new Pitch("F#5");
@@ -61,25 +62,25 @@ public class PitchTest extends TestCase {
 		for(Pitch p : cscale.getPitches()) {
 			pitchHash.put(p, p.getRangeStep());
 		}
-		System.out.println(c0 + " index: " + pitchHash.get(c0));
-		System.out.println(c9 + " index: " + pitchHash.get(c9));
+		log.debug(c0 + " index: " + pitchHash.get(c0));
+		log.debug(c9 + " index: " + pitchHash.get(c9));
 		assertEquals(0, pitchHash.get(c0).intValue());
 		assertEquals(108, pitchHash.get(c9).intValue());
 		
 		Pitch cflat2 = new Pitch("Cb2");
 		Pitch b1 = new Pitch("B1");
-		System.out.println(cflat2 + " index: " + pitchHash.get(cflat2));
-		System.out.println(b1 + " index: " + pitchHash.get(b1));
+		log.debug(cflat2 + " index: " + pitchHash.get(cflat2));
+		log.debug(b1 + " index: " + pitchHash.get(b1));
 		assertEquals(23, pitchHash.get(cflat2).intValue());
 		assertEquals(23,  pitchHash.get(b1).intValue());
 		
 		for(Pitch tp : Scales.CHROMATIC_12TONE_SCALE.getPitches()) {
 			assertTrue(pitchHash.containsKey(tp));
-			System.out.println(tp + " index: " + pitchHash.get(tp));
+			log.debug(tp + " index: " + pitchHash.get(tp));
 		}
 
-		System.out.println(eflat4 + " " + eflat4.hashCode());
-		System.out.println(eflat + " " + eflat.hashCode());
+		log.debug(eflat4 + " " + eflat4.hashCode());
+		log.debug(eflat + " " + eflat.hashCode());
 	}
 
 	@Test
@@ -125,17 +126,17 @@ public class PitchTest extends TestCase {
 	private static void showDifference(Key key, int expectedDiff) {
 		Pitch root = key.getRoot();
 		int transposeSteps = root.difference(Pitch.C, key);
-		System.out.println("root: " + root + " key:" + key + " steps:" + transposeSteps);
+		log.debug("root: " + root + " key:" + key + " steps:" + transposeSteps);
 		assertEquals(expectedDiff, transposeSteps);
 	}
 	
 	private static void showDifference(Pitch p1, Pitch p2, int expectedDiff) {
 		int diff = p1.difference(p2);
-		System.out.println(p1.toString() + "  " + p1.getRangeStep() + " " +
+		log.info(p1.toString() + "  " + p1.getRangeStep() + " " +
 				p2.toString() + " " + p2.getRangeStep() + " diff: " + diff);
 		
 		int diff2 = p2.difference(p1);
-		System.out.println(p2.toString() + "  " + p2.getRangeStep() + " " +
+		log.info(p2.toString() + "  " + p2.getRangeStep() + " " +
 				p1.toString() + " " + p1.getRangeStep() + " diff: " + diff2);
 		assertEquals(expectedDiff, diff);
 		assertEquals((-expectedDiff), diff2);

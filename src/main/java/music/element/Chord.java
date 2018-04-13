@@ -257,8 +257,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	
 	@Override
 	public boolean equals(Object object) {
-		boolean eq = object instanceof Chord ? (compareTo((Chord)object)== 0) && getRoot().equals(((Chord)object).getRoot()) : false;
-		return eq;
+		return object instanceof Chord ? (compareTo((Chord)object)== 0) && getRoot().equals(((Chord)object).getRoot()) : false;
 	}
 	
 	/**
@@ -276,7 +275,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	 * @return root Note. Could be null if no notes in the chord yet.
 	 */
 	public Note getRoot() {
-		if(root == null && notes.size()>0) {
+		if(root == null && !notes.isEmpty()) {
 			root = notes.first();
 		}
 		return root;

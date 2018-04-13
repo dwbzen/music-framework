@@ -6,19 +6,17 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.mongodb.morphia.Morphia;
 
 import junit.framework.TestCase;
 import music.element.Pitch;
 import music.element.song.ChordFormula;
-import util.music.ChordManager;
 import music.element.song.HarmonyChord;
+import util.music.ChordManager;
 
 public class ChordManagerTest extends TestCase {
 
 	public static final String CONFIG_FILENAME = "/config.properties";
 	static final org.apache.log4j.Logger log = Logger.getLogger(ChordManagerTest.class);
-	static Morphia morphia = new Morphia();
 	static List<Pitch> rootPitches = new ArrayList<Pitch>();
 	static Map<String,ChordFormula> chordFormulas = null;
 	static ChordManager chordManager = new ChordManager();
@@ -26,7 +24,7 @@ public class ChordManagerTest extends TestCase {
 	@Test
 	public void testLoadChordFormulas() {
 		chordFormulas = chordManager.getChordFormulas();
-		System.out.println(chordFormulas.size() + " chords loaded");
+		log.debug(chordFormulas.size() + " chords loaded");
 	}
 	
 	
@@ -43,9 +41,9 @@ public class ChordManagerTest extends TestCase {
 			HarmonyChord hc2 = harmonyChords.get(root + "7");			// C, E,  G, Bb
 			HarmonyChord hc3 = harmonyChords.get(root + "7-13");
 			int ndiff = hc1.notesDifferent(hc2);	// should be 4
-			System.out.println(hc1.getName() + " notes different than " + hc2.getName() + " " + ndiff);
+			log.debug(hc1.getName() + " notes different than " + hc2.getName() + " " + ndiff);
 			int nsame = hc1.notesSame(hc2);	// should be 2
-			System.out.println(hc1.getName() + " notes the same as " + hc2.getName() + " " + nsame);
+			log.debug(hc1.getName() + " notes the same as " + hc2.getName() + " " + nsame);
 			
 			// C9+11: C, E, G, Bb, D, Gb
 			// C7+11: C, E, G, Bb,    Gb
@@ -55,10 +53,10 @@ public class ChordManagerTest extends TestCase {
 			System.out.println("7-11 notes different than 9-11 :" +  diff);	// should be 1
 			assertEquals(diff, 1);
 			int same = hc7_11.notesSame(hc9_11);
-			System.out.println("7-11 notes the same as 9-11 :" + same );	// should be 5
+			log.debug("7-11 notes the same as 9-11 :" + same );	// should be 5
 			assertEquals(same, 5);
-			System.out.println("Harmony chord " + hc1.getName() + hc1.toJson());
-			System.out.println("Harmony chord " + hc2.getName() + hc3.toJson());
+			log.debug("Harmony chord " + hc1.getName() + hc1.toJson());
+			log.debug("Harmony chord " + hc2.getName() + hc3.toJson());
 		}
 
 	}

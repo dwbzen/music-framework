@@ -1,5 +1,6 @@
 package junit;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
@@ -7,7 +8,7 @@ import music.element.song.Notation;
 import music.element.song.SongNote;
 
 public class SongNoteTest extends TestCase {
-	
+	static final org.apache.log4j.Logger log = Logger.getLogger(SongNoteTest.class);
 	@Test
 	public void testSongNote() {
 		
@@ -16,15 +17,15 @@ public class SongNoteTest extends TestCase {
 		SongNote songNote2 = new SongNote("D5", notation);
 		SongNote songNote3 = new SongNote("G#5", notation);
 		
-		System.out.println(songNote.toJson());
+		log.info(songNote.toJson());
 		notation.setTuplet("3/2");
 		songNote.setNotation(notation);
 		songNote2.setNotation(notation);
 		songNote3.setNotation(notation);
-		System.out.println(songNote.toJson());
-		System.out.println(songNote2.toJson());
+		log.info(songNote.toJson());
+		log.info(songNote2.toJson());
 		String jsonString = songNote3.toJson();
-		System.out.println(jsonString);
+		log.info(jsonString);
 		
 	}
 

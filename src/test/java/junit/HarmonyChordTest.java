@@ -7,19 +7,18 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.mongodb.morphia.Morphia;
 
+import junit.framework.TestCase;
 import music.element.Pitch;
 import music.element.song.ChordFormula;
-import util.music.ChordManager;
 import music.element.song.ChordProgression;
 import music.element.song.ChordProgressionComparator;
 import music.element.song.HarmonyChord;
+import util.music.ChordManager;
 
-public class HarmonyChordTest {
+public class HarmonyChordTest extends TestCase {
 	public static final String CONFIG_FILENAME = "/config.properties";
 	static final org.apache.log4j.Logger log = Logger.getLogger(HarmonyChordTest.class);
-	static Morphia morphia = new Morphia();
 	static List<Pitch> rootPitches = new ArrayList<Pitch>();
 	static Map<String,ChordFormula> chordFormulas = null;
 	static Map<ChordProgression, Integer> collectorStatsMap = 
@@ -48,27 +47,27 @@ public class HarmonyChordTest {
 		cp3.add(hc7a);
 		cp3.add(hm7);
 		
-		System.out.println("ChordProgression1: " + cp1.toString());
-		System.out.println("ChordProgression2: " + cp2.toString());
-		System.out.println("ChordProgression3: " + cp3.toString());
+		log.debug("ChordProgression1: " + cp1.toString());
+		log.debug("ChordProgression2: " + cp2.toString());
+		log.debug("ChordProgression3: " + cp3.toString());
 		
 		// test TreeMap
 		collectorStatsMap.put(cp1, 10);
 		if(collectorStatsMap.containsKey(cp2)) {
-			System.out.println("map contains key: " + cp2.toString());
+			log.debug("map contains key: " + cp2.toString());
 			collectorStatsMap.put(cp1, 15);
 		}
 		else {
-			System.out.println("map does NOT contain key: " + cp2.toString());
+			log.debug("map does NOT contain key: " + cp2.toString());
 		}
 		if(!collectorStatsMap.containsKey(cp3)) {
-			System.out.println("map does NOT contain key: " + cp3.toString());
+			log.debug("map does NOT contain key: " + cp3.toString());
 			collectorStatsMap.put(cp3,  30);
 		}
-		System.out.println("Keys/Values");
+		log.debug("Keys/Values");
 		for(ChordProgression cp : collectorStatsMap.keySet()) {
 			Integer ival = collectorStatsMap.get(cp);
-			System.out.println(cp.toString() + "  " + ival);
+			log.debug(cp.toString() + "  " + ival);
 		}
 	}
 	
@@ -80,16 +79,16 @@ public class HarmonyChordTest {
 		HarmonyChord hc3 = new HarmonyChord("C#", chordFormulas);
 		HarmonyChord hc4 = new HarmonyChord("Bbm7", chordFormulas);
 
-		System.out.println("D7: " + hc1);
+		log.info("D7: " + hc1);
 		assert(hc1.toString().equals("D7 [D, Gb, A, C]"));
 		
-		System.out.println("C: " + hc2);
+		log.info("C: " + hc2);
 		assert(hc2.toString().equals("C [C, E, G]"));
 
-		System.out.println("C#: " + hc3);
+		log.info("C#: " + hc3);
 		assert(hc3.toString().equals("C# [C#, F, Ab]"));
 
-		System.out.println("Bbm7: " + hc4);
+		log.info("Bbm7: " + hc4);
 		assert(hc4.toString().equals("Bbm7 [Bb, Db, F, Ab]"));
 		
 	}
@@ -97,6 +96,7 @@ public class HarmonyChordTest {
 	static void loadChordFormulas() {
 		
 		chordFormulas = chordManager.getChordFormulas();
-		System.out.println(chordFormulas.size() + " chords loaded");
+		log.info(chordFormulas.size() + " chords loaded");
+		assertTrue(chordFormulas != null && chordFormulas.size() > 0);
 	}
 }

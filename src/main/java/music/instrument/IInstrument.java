@@ -70,18 +70,6 @@ public interface IInstrument extends INameable, Serializable {
 	}
 	
 	
-	static double[] durationRangeSeconds = {0.166, 2.66};	// raw, practical limit
-	
-	/**
-	 * @deprecated config values removed
-	 * @param configProperties
-	 * @param classname
-	 * @return
-	 */
-	public static double[] getConfiguredDurationRange(Properties configProperties, String classname) {
-		return durationRangeSeconds;
-	}
-	
 	public static PitchRange getConfiguredPitchRange(Properties configProperties, String classname) {
 		PitchRange pr = null;
 		String range = configProperties.getProperty(classname + ".range");
