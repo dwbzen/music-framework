@@ -29,6 +29,33 @@ public class ScaleManager {
 	private Properties properties;
 	private Pitch defaultRootPitch = new Pitch("C");
 	
+	/**
+	 * Usage: ScaleManager --scale:<scale name> --root:<root note>\n
+	 * Example: java -jar ScaleManager.jar --scale:"Hirajoshi Japan" --root:C4
+	 * 
+	 * @param properties
+	 */
+	public static void main(String...args) {
+		String scaleName = null;
+		String root = null;
+		for(String arg : args) {
+			if(arg.toLowerCase().startsWith("--scale")) {
+				int ind = arg.indexOf(":");
+				scaleName = arg.substring(ind+1);
+			}
+			if(arg.toLowerCase().startsWith("--root")) {
+				int ind = arg.indexOf(":");
+				root = arg.substring(ind+1);
+			}
+		}
+		if(scaleName != null && root != null) {
+			Pitch rootPitch = new Pitch(root);
+			ScaleManager scaleManager = new ScaleManager();
+			Scale scale = scaleManager.getScale(scaleName, rootPitch);
+			System.out.println(scale.toString());
+		}
+	}
+	
 	public ScaleManager(Properties properties) {
 		setDataSourceName(properties.getProperty("dataSource", "file"));
 	}
