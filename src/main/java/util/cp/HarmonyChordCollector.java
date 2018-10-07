@@ -207,10 +207,10 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 		MarkovChain<HarmonyChord, ChordProgression> markovChain = collector.getMarkovChain();
 		HarmonyChord.setIncludeSpellingInToString(false);	// set to true if you want to see the spelling of each chord
 		if(print) {
-			markovChain.display();
+			System.out.print(markovChain.getMarkovChainDisplayText());
 		}
 		if(summary) {
-			markovChain.displaySummaryMap();
+			System.out.print(markovChain.getInvertedSummaryMapText());
 		}
 	}
 
