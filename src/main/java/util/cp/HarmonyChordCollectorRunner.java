@@ -31,7 +31,7 @@ public class HarmonyChordCollectorRunner {
 		String chordFormulaCollectionName = "chord_formulas";
 		String query = null;
 
-		boolean useOriginalKey = true;
+		boolean useOriginalKey = false;
 		int keylen = 2;
 
 		for(int i=0; i<args.length; i++) {

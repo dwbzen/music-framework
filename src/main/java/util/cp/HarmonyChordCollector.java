@@ -120,7 +120,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 				}
 			}
 			// add terminal state
-			subset = chordProgression.subset(lim);
+			subset = chordProgression.subset(lim<0 ? 0 : lim);
 			subset.add(ChordProgression.TERMINAL);
 			log.debug("  terminal subset: '" + subset + "'");
 			addOccurrence(subset, ChordProgression.NULL_VALUE);

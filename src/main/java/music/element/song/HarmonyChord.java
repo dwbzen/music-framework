@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import mathlib.cp.ICollectable;
 import mathlib.util.IJson;
+import music.element.Alteration;
 import music.element.Key;
 import music.element.Pitch;
 import util.INameable;
@@ -157,10 +158,11 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 	public  HarmonyChord(HarmonyChord other, Key key, Key newKey) {
 		Pitch otherRoot = other.getRoot();
 		int n = otherRoot.getChromaticScaleDegree(key);
+		int altPref = newKey.getAlterationPreference(-1);
+		Alteration altPreference = altPref == 0 ? Alteration.NONE : altPref<0 ? Alteration.DOWN_ONE : Alteration.UP_ONE;
 		log.debug(otherRoot.toString() + ": n = " + n);
-		this.root = new Pitch(newKey.getDesignation());
-		this.bassNote = this.root;
-		root.increment(n-1, newKey.getAlterationPreference(-1));	// we prefer flats to sharps
+		root = new Pitch(newKey.getDesignation(), n-1, altPreference);
+		bassNote = root;
 		log.debug("other root: " + otherRoot.toString() + " key: " + key.toString() +
 				" newKey: " + newKey + " newRoot: " + root.toString());
 		chordFormula = other.getChordFormula();

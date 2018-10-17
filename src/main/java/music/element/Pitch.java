@@ -169,14 +169,23 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	 * @param other Pitch to copy (alteration, step)
 	 * @param octave octave for new Pitch
 	 */
-	public Pitch(Pitch other, int transposeSteps) {
+	public Pitch(Pitch other, int transposeSteps, Alteration alterationPreference) {
 		step =  other.getStep();
 		octave = other.getOctave();
 		alteration = other.getAlteration();
-		adjustPitch(transposeSteps, Alteration.NONE);
+		adjustPitch(transposeSteps, alterationPreference);
 		setRangeStep();
 	}
 	
+	/**
+	 * Copy constructor.
+	 * @param other Pitch to copy (alteration, step)
+	 * @param octave octave for new Pitch
+	 */
+	public Pitch(Pitch other, int transposeSteps) {
+		this(other, transposeSteps, Alteration.NONE);
+	}
+
 	/**
 	 * Creates a Pitch from a standard string format as in C9, D#3, Eb2, Gb etc.
 	 * or note + optional accidental + optional octave
@@ -331,19 +340,16 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	}
 
 	/**
-	 * Adjusts the Pitch by the number of steps indicated
+	 * Adjusts this Pitch by the number of steps indicated
 	 * @param numberOfSteps
 	 * @param alteration alteration preference - sharps (UP_ONE) or flats (DOWN_ONE) or NONE. If null, no preference indicated.
-	 * @return a new Pitch adjusted
 	 */
-	public Pitch adjustPitch(int numberOfSteps, Alteration alteration) {
+	public void adjustPitch(int numberOfSteps, Alteration alteration) {
 		int altPreference = (alteration != null) ? alteration.value() : 0;
-		Pitch p = clone();
-		p.adjustPitch(numberOfSteps);
-		if(altPreference != p.alteration) {
-			p.setEnharmonicEquivalent();
+		adjustPitch(numberOfSteps);
+		if(altPreference != alteration.value()) {
+			setEnharmonicEquivalent();
 		}
-		return p;
 	}
 	
 	private void adjustPitch(int numberOfSteps) {
