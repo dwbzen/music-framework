@@ -18,16 +18,17 @@ public class HarmonyChordCollectorRunner {
 	static OutputStyle outputStyle = OutputStyle.TEXT;
 	
 	/**
-	 * Syntax:  SongCollector -songs [file:filename | collection:collectionName] [-query queryString] -keylen n [-print | -noprint] [-summary] 
-	 * example: SongCollector -songs collection:songs -query "artist:The Beatles" -keylen 2 -print -summary
-	 * Uses the MongoDB "chord_formulas" collection for chords; can override in command line.
+	 * Syntax:  SongCollector -songs [file:filename | collection:collectionName] [-query queryString] -keylen n [-print | -noprint] [-summary] <br>
+	 * example: SongCollector -songs collection:songs -query "artist:The Beatles" -keylen 2 -print -summary<br>
+	 * Uses the MongoDB "chord_formulas" collection for chords; can override in command line.<br>
+	 * Default Mongo song collection is "songs"
 	 * 
 	 * @param args
 	 * @throws IOException
 	 * 
 	 */public static void main(String... args) throws IOException {
 		String songInputFile = null;			// complete path to .JSON Song file TODO
-		String songCollectionName = null;
+		String songCollectionName = "songs";
 		String chordFormulaCollectionName = "chord_formulas";
 		String query = null;
 

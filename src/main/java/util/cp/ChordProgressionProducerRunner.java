@@ -25,7 +25,7 @@ public class ChordProgressionProducerRunner {
 	public static void main(String...args) {
 		
 		String songInputFile = null;			// complete path to .JSON Song file TODO
-		String songCollectionName = null;
+		String songCollectionName = "songs";
 		String chordFormulaCollectionName = "chord_formulas";
 		String query = null;
 		int num = 5;

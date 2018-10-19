@@ -113,7 +113,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 			for(int i=0; i<lim; i++) {
 				int index = i + keylen;
 				if(index <= numberOfTokens) {		// don't run off the end of the List
-					subset = chordProgression.subset(i, i+keylen);
+					subset = chordProgression.subset(i, index);
 					nextHarmonyChord =  (index == numberOfTokens) ? ChordProgression.TERMINAL : chordProgression.get(i+keylen);
 					log.debug("  subset: '" + subset + " next HarmonyChord: " + nextHarmonyChord);
 					addOccurrence(subset, nextHarmonyChord);

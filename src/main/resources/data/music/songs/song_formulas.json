@@ -1,8 +1,18 @@
 // ****************************************************************************
-// Command Lines:
-//	mongoimport --type json --collection songs --db test --file songs.json
-//	mongoimport --type json --collection temp --db test --file songs.json
-//
+/* Command Lines:
+    mongoimport --type json --db music --collection songs --file "A Day In the Life.json"
+ 	mongoimport --type json --db music --collection songs --file "Being For The Benefit of Mr. Kite.json"
+    mongoimport --type json --collection songs --db music --file "Fixing a Hole.json"
+    mongoimport --type json --collection songs --db music --file "Getting Better.json"
+    mongoimport --type json --collection songs --db music --file "Good Morning.json"
+    mongoimport --type json --collection songs --db music --file "Lovely Rita.json"
+    mongoimport --type json --collection songs --db music --file "Lucy In the Sky With Diamonds.json"
+    mongoimport --type json --collection songs --db music --file "Sgt Pepper's Lonely Hearts Club Band.json"
+    mongoimport --type json --collection songs --db music --file "She's Leaving Home.json"
+    mongoimport --type json --collection songs --db music --file "When I'm Sixty-Four.json"
+    mongoimport --type json --collection songs --db music --file "With A Little Help From My Friends.json"
+    mongoimport --type json --collection songs --db music --file "Penny Lane.json"
+*/
 // Queries/Updates:
 // db.songs.find( {"album" : "Sargeant Pepper's Lonely Hearts Club Band"}, {"name" : 1, "track" : 1} )
 // db.songs.update( {"name" : "Lovely Rita" }, {$set: {"track":10} })
