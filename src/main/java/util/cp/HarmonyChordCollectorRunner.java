@@ -76,7 +76,7 @@ public class HarmonyChordCollectorRunner {
 				}
 			}
 			else if(args[i].equalsIgnoreCase("-sorted")) {
-				sorted = true;
+				sorted = args[++i].equalsIgnoreCase("true") ? true : false;
 			}
 			else if(args[i].startsWith("-original")) {	// as in originalKey
 				useOriginalKey = true;
