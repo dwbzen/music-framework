@@ -104,11 +104,12 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	
 	@Override
 	public MarkovChain<HarmonyChord, ChordProgression> apply(ChordProgression chordProgression) {
-		int numberOfTokens = chordProgression.size();
 		ChordProgression subset = null;
 		HarmonyChord nextHarmonyChord = null;
-		if(numberOfTokens > 0) {
+		
+		if(chordProgression.size() > keylen - 1) {
 			log.debug("apply: " + chordProgression);
+			int numberOfTokens = chordProgression.size();
 			int lim = numberOfTokens - keylen + 1;
 			for(int i=0; i<lim; i++) {
 				int index = i + keylen;
@@ -120,7 +121,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 				}
 			}
 			// add terminal state
-			subset = chordProgression.subset(lim<0 ? 0 : lim);
+			subset = chordProgression.subset(lim);
 			subset.add(ChordProgression.TERMINAL);
 			log.debug("  terminal subset: '" + subset + "'");
 			addOccurrence(subset, ChordProgression.NULL_VALUE);
