@@ -88,7 +88,7 @@ public class Find {
 			db = mongoClient.getDatabase( databaseName );
 			collectionName = cname;
 			collection = db.getCollection(collectionName);
-			log.info("collection size: " + collection.count());
+			log.debug("collection size: " + collection.count());
 		} catch (Exception e) {
 			System.err.println("Execption: " + e.toString());
 			e.printStackTrace();
@@ -102,7 +102,7 @@ public class Find {
 			db = mongoClient.getDatabase(databaseName);
 			collectionName = cname;
 			collection = db.getCollection(collectionName);
-			log.info("collection size: " + collection.count());
+			log.debug("collection size: " + collection.count());
 		} catch (Exception e) {
 			System.err.println("Mongo Connection Exception: " + e.toString());
 			e.printStackTrace();

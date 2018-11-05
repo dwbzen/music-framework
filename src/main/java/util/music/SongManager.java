@@ -90,7 +90,7 @@ public class SongManager {
 		songMgr.loadSongs();
 		songbook = songMgr.getSongbook();
 		if(songbook != null && songbook.size() > 0) {
-			log.warn("#songs loaded: " + songbook.size());
+			log.debug("#songs loaded: " + songbook.size());
 		}
 	}
 	
@@ -149,7 +149,7 @@ public class SongManager {
 		}
 		MongoCursor<Document> cursor = find.search();
 		long count = find.getCount();
-		log.info(" #songs loaded: " + count);
+		log.debug(" #songs loaded: " + count);
 		if(count == 0) {
 			log.warn("Nothing found in " + songCollectionName + " collection");
 		}
