@@ -117,7 +117,7 @@ public class ChordProgressionProducer
 		 * This would indicate some kind of internal error so throw a RuntimeException
 		 */
 		if(cstats == null) {
-			log.info("getNextHarmonyChord(): cstats null for nextSeed: " + nextSeed);
+			log.debug("getNextHarmonyChord(): cstats null for nextSeed: " + nextSeed);
 			return HarmonyChord.TERMINAL_HARMONY_CHORD;
 		}
 		int occur = cstats.getTotalOccurrance();
