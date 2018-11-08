@@ -59,7 +59,7 @@ public class ChordProgressionProducer
 	 * Produces a Set<ChordProgression> as a ChordProgressionScrapbook
 	 */
 	@Override
-	public ChordProgressionScrapbook produce() {
+	public ChordProgressionScrapbook produce(boolean enableDisplay) {
 		ChordProgressionScrapbook chordProgressionSet = new ChordProgressionScrapbook(sortedResult);
 		nextSeed = seed;
 		for(count=0; count<numberToGenerate; ) {
@@ -68,6 +68,9 @@ public class ChordProgressionProducer
 				log.debug(">>> " + count + ". adding: " + chordProgression);
 				count++;
 				chordProgressionSet.add(chordProgression);
+				if(enableDisplay) {
+					System.out.println(chordProgression);
+				}
 			}
 			if(reuseSeed) {
 				if(++recycleSeedCount <= recycleSeedNumber) {

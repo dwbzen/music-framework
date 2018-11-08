@@ -40,7 +40,8 @@ public class ChordProgressionProducerRunner {
 		boolean debug = false;
 		int minlength = 0;
 		int maxlength = 0;
-
+		boolean enableDisplay = true;
+		
 		for(int i=0; i<args.length; i++) {
 			if(args[i].startsWith("-song")) {
 				String[] songargs = args[++i].split(":");
@@ -136,8 +137,8 @@ public class ChordProgressionProducerRunner {
 		}
 
 		for(int nr=1; nr<=repeats; nr++) {
-			ChordProgressionScrapbook chordProgressionSet = chordProgressionProducer.produce();
-			if(chordProgressionSet != null) {
+			ChordProgressionScrapbook chordProgressionSet = chordProgressionProducer.produce(enableDisplay);
+			if(chordProgressionSet != null && !enableDisplay) {
 				for(ChordProgression cp : chordProgressionSet) {
 					System.out.println(cp);
 				}
