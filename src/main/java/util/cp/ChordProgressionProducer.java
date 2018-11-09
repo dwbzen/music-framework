@@ -43,9 +43,13 @@ public class ChordProgressionProducer
 	private int minimumLength = 3;	// don't save ChordProgressions with fewer chords than this
 	private int maximumLength = 20;	// don't save ChordProgressions with more chords than this
 	private int count = 0;
+	private boolean trace = true;
 
 	public static ChordProgressionProducer getChordProgressionProducer(int keylen, MarkovChain<HarmonyChord, ChordProgression> cstatsMap, ChordProgression seedProgression) {
 		ChordProgressionProducer producer = new ChordProgressionProducer(keylen, cstatsMap);
+		if(seedProgression.isEmpty()) {
+			seedProgression.addAll(producer.pickSeed());
+		}
 		producer.setSeed(seedProgression);
 		producer.setOriginalSeed(new ChordProgression(seedProgression));
 		return producer;
@@ -77,13 +81,13 @@ public class ChordProgressionProducer
 					nextSeed = seed;
 				}
 				else {
-					seed =  markovChain.pickSeed();
+					seed =  pickSeed();
 					nextSeed = seed;
 					recycleSeedCount = 0;
 				}
 			}
 			else {
-				seed = markovChain.pickSeed();	// need a new seed for next iteration
+				seed = pickSeed();	// need a new seed for next iteration
 				nextSeed = seed;
 			}
 		}
@@ -100,15 +104,20 @@ public class ChordProgressionProducer
 	 */
 	@Override
 	public ChordProgression apply(MarkovChain<HarmonyChord, ChordProgression>  cstatsMap) {
+		if(trace) {
+			log.info("initial seed: " + seed);
+		}
 		ChordProgression generatedChordProgression = new ChordProgression(seed);	// deep copy constructor
 		HarmonyChord nextHarmonyChord = null;
 		do {
 			nextHarmonyChord = getNextHarmonyChord();	// also sets nextSeed
-			if(!nextHarmonyChord.equals(ChordProgression.TERMINAL)) {	// end of this ChordProgression
+			if(!nextHarmonyChord.isTerminalOrNull() ) {	// '¶'  '§'  end of this ChordProgression
 				generatedChordProgression.add(nextHarmonyChord);
-				log.debug("added: "  + nextHarmonyChord);
+				if(trace) {
+					log.info("added: "  + nextHarmonyChord + " chordProgression: " + generatedChordProgression);
+				}
 			}
-		} while(!nextHarmonyChord.equals(ChordProgression.TERMINAL) && generatedChordProgression.length() < maximumLength);
+		} while(!nextHarmonyChord.isTerminalOrNull() && generatedChordProgression.length() < maximumLength);
 		return generatedChordProgression;
 	}
 	
@@ -144,10 +153,28 @@ public class ChordProgressionProducer
 			}
 		}
 		// set the nextSeed which is an instance variable
-		nextSeed = new ChordProgression(nextSeed.subset(1), nextChord);
+		if(! nextChord.isNullValue() ) {
+			nextSeed = new ChordProgression(nextSeed.subset(1), nextChord);
+		}
+		else {
+			nextSeed = pickSeed();
+		}
+
 		log.debug(" nextHarmonyChord: " + nextChord);
-		log.debug("nextSeed now: {" + nextSeed + "}");
+		if(trace) {		
+			log.info("nextSeed now: {" + nextSeed + "}"); 
+		}
+		
 		return nextChord;
+	}
+	
+	private ChordProgression pickSeed() {
+		ChordProgression cp =  null; 
+		do {
+			cp = markovChain.pickSeed();
+		} while(cp.length() < keylen || cp.get(cp.length()-1).isTerminalOrNull());
+		
+		return cp;
 	}
 
 

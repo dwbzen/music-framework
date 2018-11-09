@@ -325,6 +325,17 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 	public boolean identical(HarmonyChord other) {
 		return compareTo(other) == 0 && getChordFormula().getSpellingNumber() == other.getChordFormula().getSpellingNumber();
 	}
+	
+	public boolean isTerminal() {
+		return this.equals(TERMINAL_HARMONY_CHORD);
+	}
+	public boolean isNullValue() {
+		return this.equals(NULL_VALUE_HARMONY_CHORD);
+	}
+	
+	public boolean isTerminalOrNull() {
+		return this.equals(TERMINAL_HARMONY_CHORD) || this.equals(NULL_VALUE_HARMONY_CHORD);
+	}
 
 	@Override
 	public Pitch getTerminal() {

@@ -119,7 +119,7 @@ public class ChordProgressionProducerRunner {
 			seedProgression = ChordProgressionProducer.createSeedChordProgression(chordFormulas, seedString);
 		}
 		else {
-			seedProgression = markovChain.pickSeed();
+			seedProgression = new ChordProgression();	// let the Producer pick the seed
 		}
 		log.debug("seed ChordProgression: " + seedProgression.toString());
 		
