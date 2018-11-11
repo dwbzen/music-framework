@@ -46,7 +46,7 @@ public abstract class Measurable {
 	private static Integer nextSeqId = 1;
 
 	public static enum TieType {
-		NONE(0), START(1), STOP(2), BOTH(3);
+		NONE(0), START(1), STOP(2), BOTH(3), start(1), stop(2), both(3);
 		TieType(int val) { this.value = val;}
 		private final int value;
 		public int value() { return value; }

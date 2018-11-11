@@ -32,7 +32,7 @@ public class ChordProgressionProducer
 	private ChordProgression seed;
 	private ChordProgression nextSeed;
 	private ChordProgression originalSeed;
-	private int keylen; 
+	private int order; 
 	private MarkovChain<HarmonyChord, ChordProgression> markovChain = null;
 	private int numberToGenerate;		// number to produce
 	private boolean reuseSeed = false;
@@ -43,7 +43,7 @@ public class ChordProgressionProducer
 	private int minimumLength = 3;	// don't save ChordProgressions with fewer chords than this
 	private int maximumLength = 20;	// don't save ChordProgressions with more chords than this
 	private int count = 0;
-	private boolean trace = true;
+	private boolean trace = false;
 
 	public static ChordProgressionProducer getChordProgressionProducer(int keylen, MarkovChain<HarmonyChord, ChordProgression> cstatsMap, ChordProgression seedProgression) {
 		ChordProgressionProducer producer = new ChordProgressionProducer(keylen, cstatsMap);
@@ -55,7 +55,7 @@ public class ChordProgressionProducer
 		return producer;
 	}
 	protected ChordProgressionProducer(int keylen, MarkovChain<HarmonyChord, ChordProgression> cstatsMap) {
-		this.keylen = keylen;
+		this.order = keylen;
 		this.markovChain = cstatsMap;
 	}
 
@@ -172,7 +172,7 @@ public class ChordProgressionProducer
 		ChordProgression cp =  null; 
 		do {
 			cp = markovChain.pickSeed();
-		} while(cp.length() < keylen || cp.get(cp.length()-1).isTerminalOrNull());
+		} while(cp.length() < order || cp.get(cp.length()-1).isTerminalOrNull());
 		
 		return cp;
 	}
@@ -194,12 +194,12 @@ public class ChordProgressionProducer
 		return cp;
 	}
 
-	public int getKeylen() {
-		return keylen;
+	public int getOrder() {
+		return order;
 	}
 
-	public void setKeylen(int keylen) {
-		this.keylen = keylen;
+	public void setOrder(int keylen) {
+		this.order = keylen;
 	}
 
 	public ChordProgression getSeed() {
@@ -284,4 +284,11 @@ public class ChordProgressionProducer
 	public void setMaximumLength(int maximumLength) {
 		this.maximumLength = maximumLength;
 	}
+	public boolean isTrace() {
+		return trace;
+	}
+	public void setTrace(boolean trace) {
+		this.trace = trace;
+	}
+	
 }

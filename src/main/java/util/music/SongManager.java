@@ -90,7 +90,7 @@ public class SongManager {
 		songMgr.loadSongs();
 		songbook = songMgr.getSongbook();
 		if(songbook != null && songbook.size() > 0) {
-			log.debug("#songs loaded: " + songbook.size());
+			log.info("#songs loaded: " + songbook.size());
 		}
 	}
 	

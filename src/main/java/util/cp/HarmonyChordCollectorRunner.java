@@ -33,7 +33,7 @@ public class HarmonyChordCollectorRunner {
 		String query = null;
 
 		boolean useOriginalKey = false;
-		int keylen = 2;
+		int order = 2;
 
 		for(int i=0; i<args.length; i++) {
 			if(args[i].startsWith("-song")) {
@@ -54,8 +54,8 @@ public class HarmonyChordCollectorRunner {
 			else if(args[i].equalsIgnoreCase("-query")) {
 				query = args[++i];
 			}
-			else if(args[i].equalsIgnoreCase("-keylen")) {
-				keylen = Integer.parseInt(args[++i]);
+			else if(args[i].equalsIgnoreCase("-order")) {
+				order = Integer.parseInt(args[++i]);
 			}
 			else if(args[i].startsWith("-display")) {
 				String[] formats = args[++i].split(",");
@@ -85,7 +85,7 @@ public class HarmonyChordCollectorRunner {
 		SongManager songMgr = new SongManager(songCollectionName, songInputFile, query);
 		songMgr.loadSongs();
 		Songbook songbook = songMgr.getSongbook();
-		HarmonyChordCollector collector = HarmonyChordCollector.getChordProgressionCollector(songbook, keylen);
+		HarmonyChordCollector collector = HarmonyChordCollector.getChordProgressionCollector(songbook, order);
 		collector.setUseOriginalKey(useOriginalKey);
 		collector.collect();
 		

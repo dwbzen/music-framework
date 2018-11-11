@@ -31,7 +31,7 @@ import util.IMapped;
 public class HarmonyChordCollector implements ICollector<ChordProgression, MarkovChain<HarmonyChord, ChordProgression>, Song> {
 	protected static final Logger log = LogManager.getLogger(HarmonyChordCollector.class);
 	public static final String CONFIG_FILENAME = "/config.properties";
-	private int keylen;
+	private int order;
 	private Songbook songbook = null;
 	private Song song = null;
 	private boolean useOriginalKey = false;
@@ -46,7 +46,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	/**
 	 * Factory method.
 	 * @param songbook Songbook
-	 * @param keylen
+	 * @param order
 	 * @return
 	 */
 	public static HarmonyChordCollector getChordProgressionCollector(Songbook songbook, int order) {
@@ -58,7 +58,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	/**
 	 * Factory method.
 	 * @param song
-	 * @param keylen
+	 * @param order
 	 * @return
 	 */
 	public static HarmonyChordCollector getChordProgressionCollector(Song song, int order) {
@@ -68,7 +68,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	}
 
 	protected HarmonyChordCollector(int order) {
-		this.keylen = order;
+		this.order = order;
 		markovChain =
 				new MarkovChain<HarmonyChord, ChordProgression>(new ChordProgressionComparator(), order);
 	}
@@ -107,15 +107,15 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 		ChordProgression subset = null;
 		HarmonyChord nextHarmonyChord = null;
 		
-		if(chordProgression.size() > keylen - 1) {
+		if(chordProgression.size() > order - 1) {
 			log.debug("apply: " + chordProgression);
 			int numberOfTokens = chordProgression.size();
-			int lim = numberOfTokens - keylen + 1;
+			int lim = numberOfTokens - order + 1;
 			for(int i=0; i<lim; i++) {
-				int index = i + keylen;
+				int index = i + order;
 				if(index <= numberOfTokens) {		// don't run off the end of the List
 					subset = chordProgression.subset(i, index);
-					nextHarmonyChord =  (index == numberOfTokens) ? ChordProgression.TERMINAL : chordProgression.get(i+keylen);
+					nextHarmonyChord =  (index == numberOfTokens) ? ChordProgression.TERMINAL : chordProgression.get(i+order);
 					log.debug("  subset: '" + subset + " next HarmonyChord: " + nextHarmonyChord);
 					addOccurrence(subset, nextHarmonyChord);
 				}
@@ -148,12 +148,12 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	}
 	
 
-	public int getKeylen() {
-		return keylen;
+	public int getOrder() {
+		return order;
 	}
 
-	public void setKeylen(int keylen) {
-		this.keylen = keylen;
+	public void setOrder(int keylen) {
+		this.order = keylen;
 	}
 
 	public Map<String, IMapped<String>> getSongMap() {

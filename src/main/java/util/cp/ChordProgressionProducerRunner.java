@@ -29,7 +29,7 @@ public class ChordProgressionProducerRunner {
 		String chordFormulaCollectionName = "chord_formulas";
 		String query = null;
 		int num = 5;
-		int keylen = 2;
+		int order = 2;
 		boolean sort = false;
 		boolean reuse = false;
 		boolean statistical = true;
@@ -61,8 +61,8 @@ public class ChordProgressionProducerRunner {
 			else if(args[i].equalsIgnoreCase("-query")) {
 				query = args[++i];
 			}
-			else if(args[i].equalsIgnoreCase("-keylen")) {
-				keylen = Integer.parseInt(args[++i]);
+			else if(args[i].equalsIgnoreCase("-order")) {
+				order = Integer.parseInt(args[++i]);
 			}
 			else if(args[i].equalsIgnoreCase("-num")) {
 				num = Integer.parseInt(args[++i]);
@@ -104,7 +104,7 @@ public class ChordProgressionProducerRunner {
 		Songbook songbook = songMgr.getSongbook();
 
 		Map<String, ChordFormula> chordFormulas = songMgr.getChordFormulas();
-		HarmonyChordCollector collector = new HarmonyChordCollector(keylen);
+		HarmonyChordCollector collector = new HarmonyChordCollector(order);
 		collector.setUseOriginalKey(useOriginalKey);
 		for(Song song : songbook) {
 			collector.accept(song);
@@ -123,7 +123,7 @@ public class ChordProgressionProducerRunner {
 		}
 		log.debug("seed ChordProgression: " + seedProgression.toString());
 		
-		ChordProgressionProducer chordProgressionProducer = ChordProgressionProducer.getChordProgressionProducer(keylen, markovChain, seedProgression);
+		ChordProgressionProducer chordProgressionProducer = ChordProgressionProducer.getChordProgressionProducer(order, markovChain, seedProgression);
 		chordProgressionProducer.setNumberToGenerate(num);
 		chordProgressionProducer.setSortedResult(sort);
 		chordProgressionProducer.setStatisticalPick(statistical);
