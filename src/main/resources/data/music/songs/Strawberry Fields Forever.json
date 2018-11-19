@@ -1,0 +1,90 @@
+{ "name" : "Strawberry Fields Forever", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
+  "year" : 1967, "album" : "Magical Mystery Tour",
+  "sections" : 
+  [
+      	{ "name" : "intro", "repeat" : 1, "number" : 10, "next" : [ "chorus1" ],
+  			"measures" :
+  			[
+		  		{ "number" : 1,
+				   		"key" : { "name" : "Bb-Major", "mode" : "MAJOR" },
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "F", "beat" : 1 }, { "chord" : "Am", "beat" : 3 } ]
+				},
+				{ "number" : 2, "harmony" : [ { "chord" : "F7", "beat" : 1 }, { "chord" : "Gm", "beat" : 3 },{ "chord" : "D", "beat" : 4 } ] },
+				{ "number" : 3, "harmony" : [ { "chord" : "Gm", "beat" : 1 }, { "chord" : "F", "beat" : 3 } ] },
+				{ "number" : 4,
+			 			"timeSignature" : { "beatsPerMeasure" : 2, "beatType" : 4, "divisions" : 96 },
+				  		"harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Bb", "beat" : 2 }  ]
+				}
+			]
+		},
+      	{ "name" : "chorus1", "number" : 20, "repeat" : 1, "next" : [ "verse" ],
+  			"measures" :
+  			[
+				{ "number" : 1,
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 },
+				  		"harmony" : [ { "chord" : "Bb", "beat" : 1 } ]
+				},
+				{ "number" : 3, "harmony" : [ { "chord" : "Fm7", "beat" : 1 } ] },
+				{ "number" : 5, "harmony" : [ { "chord" : "G7", "beat" : 1 } ] },
+				{ "number" : 7, "harmony" : [ { "chord" : "Eb", "beat" : 1 },{ "chord" : "F", "beat" : 2, "division" : 24 }, { "chord" : "G", "beat" : 3 } ] },
+				{ "number" : 8, 
+					"timeSignature" : { "beatsPerMeasure" : 2, "beatType" : 4, "divisions" : 96 }
+				},
+				{ "number" : 9, 
+					"timeSignature" : { "beatsPerMeasure" : 6, "beatType" : 8, "divisions" : 144 },
+					"harmony" : [ { "chord" : "Ebma7", "beat" : 1 }, { "chord" : "F", "beat" : 6 } ]
+				},
+				{ "number" : 10, 
+					"timeSignature" : { "beatsPerMeasure" : 9, "beatType" : 8, "divisions" : 216 },
+					"harmony" : [ { "chord" : "Bb", "beat" : 1 } ]
+				}
+			]
+		},
+      	{ "name" : "verse", "number" : 30, "repeat" : 3, "next" : [ "coda" ],
+  			"measures" :
+  			[
+				{ "number" : 1, "harmony" : [ { "chord" : "F", "beat" : 1 }, { "chord" : "Am", "beat" : 3 } ] },
+				{ "number" : 2, "harmony" : [ { "chord" : "F7", "beat" : 1 }, { "chord" : "D7", "beat" : 4 } ] },
+				{ "number" : 3, "harmony" : [ { "chord" : "Gm", "beat" : 1 }, { "chord" : "Gm7", "beat" : 3 } ] },
+				{ "number" : 4, "harmony" : [ { "chord" : "Eb", "beat" : 1 } ] },
+				{ "number" : 5, "harmony" : [ { "chord" : "F7", "beat" : 3 } ] },
+				{ "number" : 6, "harmony" : [ { "chord" : "Bb", "beat" : 1 }, { "chord" : "Gm", "beat" : 3 } ] },
+				{ "number" : 7, "harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "F", "beat" : 3 } ] },
+				{ "number" : 8, "harmony" : [ { "chord" : "Eb", "beat" : 1 }, { "chord" : "Bb", "beat" : 3 } ] },
+				{ "number" : 9, "harmony" : [ { "chord" : "Bb", "beat" : 1 } ] },
+				{ "number" : 11, "harmony" : [ { "chord" : "Fm7", "beat" : 1 } ] },
+				{ "number" : 13, "harmony" : [ { "chord" : "Ddim", "beat" : 1 } ] },
+				{ "number" : 15, "harmony" : [ { "chord" : "Eb", "beat" : 1 },{ "chord" : "F", "beat" : 2, "division" : 24 }, { "chord" : "G", "beat" : 3 } ] },
+				{ "number" : 16, 
+					"timeSignature" : { "beatsPerMeasure" : 2, "beatType" : 4, "divisions" : 96 }
+				},
+				{ "number" : 17, 
+					"timeSignature" : { "beatsPerMeasure" : 6, "beatType" : 8, "divisions" : 144 },
+					"harmony" : [ { "chord" : "Ebma7", "beat" : 1 }, { "chord" : "F", "beat" : 6 } ]
+				},
+				{ "number" : 18, 
+					"timeSignature" : { "beatsPerMeasure" : 9, "beatType" : 8, "divisions" : 216 },
+					"harmony" : [ { "chord" : "Bb", "beat" : 1 } ]
+				},
+				{ "number" : 19,
+			 			"timeSignature" : { "beatsPerMeasure" : 4, "beatType" : 4, "divisions" : 192 }
+				}
+			]
+		},
+		{ "name" : "coda", "number" : 40, "repeat" : 4,
+			"measures" :
+			[
+				{ "number" : 1, 
+					"timeSignature" : { "beatsPerMeasure" : 6, "beatType" : 8, "divisions" : 144 },
+					"harmony" : [ { "chord" : "Ebma7", "beat" : 1 }, { "chord" : "F", "beat" : 6 } ]
+				},
+				{ "number" : 2, 
+					"timeSignature" : { "beatsPerMeasure" : 9, "beatType" : 8, "divisions" : 216 },
+					"harmony" : [ { "chord" : "Bb", "beat" : 1 }, { "chord" : "Gm", "beat" : 7 } ]
+				}
+			]
+		
+		}
+	]
+}

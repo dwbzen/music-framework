@@ -26,6 +26,7 @@ public class Harmony implements IJson, INameable {
 	public static String NO_HARMONY_KEY = "NONE";	// name is "0"
 	
 	@JsonProperty	int beat;
+	@JsonProperty	int division = 0;	// The division# after the beat the chord is played
 	/**
 	 * The name of the chord as it would appear in ChordFormula symbol. For example, "Bb" is Bb Major chord.
 	 * A triangle (unicode 0394 Δ ) is sometimes used for major instead of M.
@@ -156,6 +157,22 @@ public class Harmony implements IJson, INameable {
 		this.originalKey = originalKey;
 	}
 	
+	public int getDivision() {
+		return division;
+	}
+
+	public void setDivision(int division) {
+		this.division = division;
+	}
+
+	public boolean isSlash() {
+		return isSlash;
+	}
+
+	public void setSlash(boolean isSlash) {
+		this.isSlash = isSlash;
+	}
+
 	@Override
 	public String toString() {
 		return getName();

@@ -28,7 +28,7 @@ import util.IMapped;
  * @author Don_Bacon
  *
  */
-public class HarmonyChordCollector implements ICollector<ChordProgression, MarkovChain<HarmonyChord, ChordProgression>, Song> {
+public class HarmonyChordCollector implements ICollector<ChordProgression, MarkovChain<HarmonyChord, ChordProgression, Song>, Song> {
 	protected static final Logger log = LogManager.getLogger(HarmonyChordCollector.class);
 	public static final String CONFIG_FILENAME = "/config.properties";
 	private int order;
@@ -41,7 +41,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	 */
 	private Map<String, IMapped<String>> songMap = null;
 	
-	private MarkovChain<HarmonyChord, ChordProgression> markovChain;
+	private MarkovChain<HarmonyChord, ChordProgression, Song> markovChain;
 	
 	/**
 	 * Factory method.
@@ -70,7 +70,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	protected HarmonyChordCollector(int order) {
 		this.order = order;
 		markovChain =
-				new MarkovChain<HarmonyChord, ChordProgression>(new ChordProgressionComparator(), order);
+				new MarkovChain<HarmonyChord, ChordProgression, Song>(new ChordProgressionComparator(), order);
 	}
 	
 	@Override
@@ -88,9 +88,10 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	@Override
 	public void accept(Song song) {
 		log.debug("accept song '" + song.getName() + "'");
+		this.song = song;
 		song.setOriginalKey(useOriginalKey);
 		/*
-		 * Gather references to the HarmonyChords. This ChordProgression is the basis for the analysis.
+		 * Gather references to the HarmonyChords. ChordProgression by Section is the basis for the analysis.
 		 * Make sure everything in the same key. SongManager does this automatically when Song are loaded
 		 * as each Harmony has associated HarmonyChords in both the original and transposed key
 		 * get() also adds a terminating HarmonyChord at the end (if not null). The default is HarmonyChord.TERMINAL_HARMONY_CHORD
@@ -103,7 +104,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	}
 	
 	@Override
-	public MarkovChain<HarmonyChord, ChordProgression> apply(ChordProgression chordProgression) {
+	public MarkovChain<HarmonyChord, ChordProgression, Song> apply(ChordProgression chordProgression) {
 		ChordProgression subset = null;
 		HarmonyChord nextHarmonyChord = null;
 		
@@ -133,15 +134,15 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 	private void addOccurrence(ChordProgression theChordProgression, HarmonyChord theHarmonyChord ) {
 		boolean terminal = theHarmonyChord.equals(ChordProgression.NULL_VALUE);
 		if(markovChain.containsKey(theChordProgression)) {
-			CollectorStats<HarmonyChord, ChordProgression> collectorStats = markovChain.get(theChordProgression);
-			collectorStats.addOccurrence(theHarmonyChord);
+			CollectorStats<HarmonyChord, ChordProgression, Song> collectorStats = markovChain.get(theChordProgression);
+			collectorStats.addOccurrence(theHarmonyChord, song);
 			collectorStats.setTerminal(terminal);
 		}
 		else {
-			CollectorStats<HarmonyChord, ChordProgression> collectorStats = 
-					new CollectorStats<HarmonyChord, ChordProgression>();
+			CollectorStats<HarmonyChord, ChordProgression, Song> collectorStats = 
+					new CollectorStats<HarmonyChord, ChordProgression, Song>();
 			collectorStats.setSubset(theChordProgression);
-			collectorStats.addOccurrence(theHarmonyChord);
+			collectorStats.addOccurrence(theHarmonyChord, song);
 			markovChain.put(theChordProgression, collectorStats);
 			collectorStats.setTerminal(terminal);
 		}
@@ -160,7 +161,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 		return songMap;
 	}
 
-	public MarkovChain<HarmonyChord, ChordProgression> getMarkovChain() {
+	public MarkovChain<HarmonyChord, ChordProgression, Song> getMarkovChain() {
 		return markovChain;
 	}
 

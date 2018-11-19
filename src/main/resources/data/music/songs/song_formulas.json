@@ -12,6 +12,7 @@
     mongoimport --type json --collection songs --db music --file "When I'm Sixty-Four.json"
     mongoimport --type json --collection songs --db music --file "With A Little Help From My Friends.json"
     mongoimport --type json --collection songs --db music --file "Penny Lane.json"
+	mongoimport --type json --collection songs --db music --file "Strawberry Fields Forever.json"
 */
 // Queries/Updates:
 // db.songs.find( {"album" : "Sargeant Pepper's Lonely Hearts Club Band"}, {"name" : 1, "track" : 1} )

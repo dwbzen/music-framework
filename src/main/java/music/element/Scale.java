@@ -9,7 +9,7 @@ import java.util.Map;
 import music.element.Key.Mode;
 import music.element.Scales;
 import mathlib.util.IJson;
-import util.INameable;
+import mathlib.util.INameable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -211,6 +211,10 @@ public final class Scale implements IJson, INameable, Cloneable  {
 		return name;
 	}
 
+	public void setName(String aname) {
+		// cannot be assigned directly
+	}
+	
 	public String getMode() {
 		return mode;
 	}

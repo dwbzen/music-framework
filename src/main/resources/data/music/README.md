@@ -3,6 +3,8 @@
 
 Use the following command to import chords and chord formulas into MongoDB
 
+See [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/) for details.
+
 `mongoimport --type json --collection chord_formulas --db music --file "chord_formulas.json"`
 
 # Scale Files
@@ -23,6 +25,7 @@ Commands listed below should be executed from the `<root>/src/main/resources/dat
 * `mongoimport --type json --collection songs --db music --file "She's Leaving Home.json"`
 * `mongoimport --type json --collection songs --db music --file "When I'm Sixty-Four.json"`
 * `mongoimport --type json --collection songs --db music --file "With A Little Help From My Friends.json"`
+* `mongoimport --type json --collection songs --db music --file "Strawberry Fields Forever.json"`
 
 # Other imports (optional)
 ## Fractals

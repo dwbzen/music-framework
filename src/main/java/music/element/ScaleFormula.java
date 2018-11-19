@@ -196,5 +196,11 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 		return keyset;
 	}
 
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

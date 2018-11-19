@@ -109,7 +109,7 @@ public class ChordProgressionProducerRunner {
 		for(Song song : songbook) {
 			collector.accept(song);
 		}
-		MarkovChain<HarmonyChord, ChordProgression> markovChain = collector.getMarkovChain();
+		MarkovChain<HarmonyChord, ChordProgression, Song> markovChain = collector.getMarkovChain();
 		
 		ChordProgression seedProgression = null;
 		if(seedString != null) {

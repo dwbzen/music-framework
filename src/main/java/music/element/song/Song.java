@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import mathlib.RaggedArray;
 import mathlib.util.IJson;
-import util.INameable;
+import mathlib.util.INameable;
 
 /**
  * A Song encapsulates a song as it would appear in a Guitar Fake Book
@@ -26,7 +26,7 @@ import util.INameable;
  * @author don_bacon
  *
  */
-public class Song implements IJson, INameable, Supplier<ChordProgression>  {
+public class Song implements IJson, INameable, Supplier<ChordProgression> {
 
 	private static final long serialVersionUID = 8221829976304858453L;
 	@JsonInclude(Include.NON_EMPTY)

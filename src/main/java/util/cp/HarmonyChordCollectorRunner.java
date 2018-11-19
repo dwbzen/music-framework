@@ -6,6 +6,7 @@ import mathlib.cp.MarkovChain;
 import mathlib.cp.OutputStyle;
 import music.element.song.ChordProgression;
 import music.element.song.HarmonyChord;
+import music.element.song.Song;
 import music.element.song.Songbook;
 import util.music.SongManager;
 
@@ -89,7 +90,7 @@ public class HarmonyChordCollectorRunner {
 		collector.setUseOriginalKey(useOriginalKey);
 		collector.collect();
 		
-		MarkovChain<HarmonyChord, ChordProgression> markovChain = collector.getMarkovChain();
+		MarkovChain<HarmonyChord, ChordProgression, Song> markovChain = collector.getMarkovChain();
 		HarmonyChord.setIncludeSpellingInToString(false);	// set to true if you want to see the spelling of each chord
 		if(displayMarkovChain) {
 			if(sorted) {

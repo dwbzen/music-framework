@@ -14,6 +14,7 @@ import music.element.song.ChordFormula;
 import music.element.song.ChordProgression;
 import music.element.song.ChordProgressionScrapbook;
 import music.element.song.HarmonyChord;
+import music.element.song.Song;
 import util.music.ChordManager;
 
 /**
@@ -23,7 +24,7 @@ import util.music.ChordManager;
  *
  */
 public class ChordProgressionProducer 
-				implements IProducer<MarkovChain<HarmonyChord, ChordProgression> , ChordProgression> {
+				implements IProducer<MarkovChain<HarmonyChord, ChordProgression, Song> , ChordProgression> {
 
 	protected static final Logger log = LogManager.getLogger(ChordProgressionProducer.class);
 	public static final String CONFIG_FILENAME = "/config.properties";
@@ -33,7 +34,7 @@ public class ChordProgressionProducer
 	private ChordProgression nextSeed;
 	private ChordProgression originalSeed;
 	private int order; 
-	private MarkovChain<HarmonyChord, ChordProgression> markovChain = null;
+	private MarkovChain<HarmonyChord, ChordProgression, Song> markovChain = null;
 	private int numberToGenerate;		// number to produce
 	private boolean reuseSeed = false;
 	private boolean statisticalPick = true;
@@ -45,7 +46,7 @@ public class ChordProgressionProducer
 	private int count = 0;
 	private boolean trace = false;
 
-	public static ChordProgressionProducer getChordProgressionProducer(int keylen, MarkovChain<HarmonyChord, ChordProgression> cstatsMap, ChordProgression seedProgression) {
+	public static ChordProgressionProducer getChordProgressionProducer(int keylen, MarkovChain<HarmonyChord, ChordProgression, Song> cstatsMap, ChordProgression seedProgression) {
 		ChordProgressionProducer producer = new ChordProgressionProducer(keylen, cstatsMap);
 		if(seedProgression.isEmpty()) {
 			seedProgression.addAll(producer.pickSeed());
@@ -54,7 +55,7 @@ public class ChordProgressionProducer
 		producer.setOriginalSeed(new ChordProgression(seedProgression));
 		return producer;
 	}
-	protected ChordProgressionProducer(int keylen, MarkovChain<HarmonyChord, ChordProgression> cstatsMap) {
+	protected ChordProgressionProducer(int keylen, MarkovChain<HarmonyChord, ChordProgression, Song> cstatsMap) {
 		this.order = keylen;
 		this.markovChain = cstatsMap;
 	}
@@ -103,7 +104,7 @@ public class ChordProgressionProducer
 	 * 		 in cstats for that key
 	 */
 	@Override
-	public ChordProgression apply(MarkovChain<HarmonyChord, ChordProgression>  cstatsMap) {
+	public ChordProgression apply(MarkovChain<HarmonyChord, ChordProgression, Song>  cstatsMap) {
 		if(trace) {
 			log.info("initial seed: " + seed);
 		}
@@ -123,7 +124,7 @@ public class ChordProgressionProducer
 	
 	private HarmonyChord getNextHarmonyChord() {
 		HarmonyChord nextChord = null;
-		CollectorStats<HarmonyChord, ChordProgression> cstats  = markovChain.get(nextSeed);
+		CollectorStats<HarmonyChord, ChordProgression, Song> cstats  = markovChain.get(nextSeed);
 		/*
 		 * it's impossible that nextSeed does not occur in collectorStatsMap
 		 * This would indicate some kind of internal error so throw a RuntimeException

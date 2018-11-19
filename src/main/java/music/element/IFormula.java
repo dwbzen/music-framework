@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import util.INameable;
+import mathlib.util.INameable;
+
 
 /**
  * Any music.element that has a formula of intervals.
