@@ -11,10 +11,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import mathlib.cp.ICollectable;
 import mathlib.util.IJson;
+import mathlib.util.INameable;
 import music.element.Alteration;
 import music.element.Key;
 import music.element.Pitch;
-import util.INameable;
 import util.music.ChordManager;
 
 /**
