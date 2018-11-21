@@ -133,6 +133,7 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 
 	private void addOccurrence(ChordProgression theChordProgression, HarmonyChord theHarmonyChord ) {
 		boolean terminal = theHarmonyChord.equals(ChordProgression.NULL_VALUE);
+		System.out.print(theChordProgression);
 		if(markovChain.containsKey(theChordProgression)) {
 			CollectorStats<HarmonyChord, ChordProgression, Song> collectorStats = markovChain.get(theChordProgression);
 			collectorStats.addOccurrence(theHarmonyChord, song);
