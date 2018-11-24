@@ -28,11 +28,27 @@ import music.element.song.ChordInfo;
 import music.element.song.HarmonyChord;
 
 /**
- * Creates a JSON representation for chord formulas in all roots.
+ * Creates a JSON representation for chord formulas in all roots.</p>
  * 
- * Also has static utility methods to create HarmonyChords, compute chord and spelling numbers,
- * parse chords from the String representation (for example, "D7-5/C").
- * chordFormulasMap maps chordFormula by both name and all the symbols.
+ * Also has static utility methods to create HarmonyChords, compute chord and spelling numbers,<br>
+ * parse chords from the String representation (for example, "D7-5/C").<br>
+ * chordFormulasMap maps chordFormula by both name and all the symbols.<br>
+ * 
+ * Load and/or export chord formulas or chords (HarmonyChords instanced from root list)
+ * <code>
+ * Usage: ChordManager -export formulas -format RawJSON
+ * 		  ChordManager -print -roots C4 -resource my_formulas.json
+ * 		  ChordManager -print -resource "chord_formulas.json" -roots C4
+ * </code>
+ * 
+ * Use -print To display a tab-delimited table of harmony chords with corresponding chord formula(s),<br>
+ * chord number (decimal and hex) and spelling number (hex). Suitable for import into Excel.</p>
+ * Use RawJSON format for Mathematica import.<br>
+ * If unspecified, resource file defaults to "chord_formulas.json"<br>
+ * Specify -roots all for all 24 root notes.<br>
+ * All roots: { "Ab", "A", "A#", "Bb", "B", "B#", "Cb", "C", "C#", "Db", "D", "D#", "Eb", "E", "E#", "Fb", "F", "F#", "Gb", "G", "G#" }<br>
+ * If unspecified, roots defaults to { "C" }<br>
+ * 
  * @author don_bacon
  *
  */
@@ -52,6 +68,9 @@ public class ChordManager {
 	private List<String> groupsFilter = new ArrayList<String>();
 	
 	public static final String CONFIG_FILENAME = "/config.properties";
+	static String TAB = "\t";
+	public static boolean showAllSymbols = false;
+	public static boolean showHexFormulaNumbers = true;
 	
 	static {
 		String[] roots = { "Ab", "A", "A#", "Bb", "B", "B#", "Cb", "C", "C#", "Db", "D", "D#", "Eb", "E", "E#", "Fb", "F", "F#", "Gb", "G", "G#" };
@@ -174,40 +193,52 @@ public class ChordManager {
 	
 	/**
 	 * Outputs the HarmonyChords built on root "C" for all chord formulas
-	 * in a tab-separated format for importing into Excel.
+	 * in a tab-separated format for importing into Excel.<br>
+	 * Outputting symbols is suppressed unless the showAllSymbols is true.<br>
+	 * Result can be pasted into an Excel spreadsheet.
 	 * 
 	 * @param harmonyChords Map<String, HarmonyChord>
 	 * @return String 
 	 */
-	public static String harmonyChordsToString(Map<String, HarmonyChord> harmonyChords) {
-		StringBuffer sb = new StringBuffer("Num\tChord Name\tFormula Name\tFormula\tSymbols\tPitches\tChord Number\tGroups\tChord Number (hex)\tSpellingNumber\n");
+	public static String harmonyChordsToString( Map<Pitch, Map<String, HarmonyChord>> rootMap) {
+		StringBuilder sb = new StringBuilder("Num\tChord Name\tFormula Name\tFormula\tSymbol(s)\tPitches\tGroups\tChord Number\tSpellingNumber");
+		if(showHexFormulaNumbers) {
+			sb.append("\tChord Number(hex)\tSpellingNumber(hex)");
+		}
+		sb.append("\n");
 		int n = 1;
 		String symbols = "";
 		String formulaText = "";
 		String groups = null;
-		for(String key : harmonyChords.keySet()) {
-			HarmonyChord harmonyChord = harmonyChords.get(key);
-			String harmonyChordName = harmonyChord.getName();
-			ChordFormula formula = harmonyChord.getChordFormula();
-			try {
-				formulaText = mapper.writeValueAsString(formula.getFormula());
-				symbols = mapper.writeValueAsString(formula.getSymbols());
-				groups = mapper.writeValueAsString(formula.getGroups());
-			} catch (JsonProcessingException e) {
-				log.error("Cannot deserialize symbols because " + e.toString());
+		for(Pitch p : rootMap.keySet()) {
+			Map<String, HarmonyChord> harmonyChords = rootMap.get(p);
+			for(String key : harmonyChords.keySet()) {
+				HarmonyChord harmonyChord = harmonyChords.get(key);
+				String harmonyChordName = harmonyChord.getName();
+				ChordFormula formula = harmonyChord.getChordFormula();
+				String rootString = harmonyChord.getRoot().toString(-1);
+				try {
+					formulaText = mapper.writeValueAsString(formula.getFormula());
+					symbols = mapper.writeValueAsString(formula.getSymbols());
+					groups = mapper.writeValueAsString(formula.getGroups());
+				} catch (JsonProcessingException e) {
+					log.error("Cannot deserialize symbols because " + e.toString());
+				}
+				String symbol = harmonyChordName.substring(harmonyChordName.indexOf(rootString) + rootString.length() );
+				sb.append(n + "\t" + harmonyChordName + "\t" + formula.getName());
+				sb.append(TAB +  formulaText);
+				sb.append(TAB + (showAllSymbols ?  symbols : symbol));
+				sb.append(TAB + harmonyChord.getChordPitches());
+				sb.append(TAB + groups);
+				sb.append(TAB + computeFormulaNumber(formula.getFormula()));
+				sb.append(TAB + formula.getSpellingNumber());
+				if(showHexFormulaNumbers) {
+					 sb.append(TAB + "0x" + Integer.toHexString(computeFormulaNumber(formula.getFormula())));
+					 sb.append(TAB + "0x" + Integer.toHexString(formula.getSpellingNumber()));
+				}
+				sb.append("\n");
+				n++;
 			}
-			
-			String displayText = n + "\t" + harmonyChordName + "\t" + formula.getName()
-					+ "\t" +  formulaText
-					+ "\t" +  symbols
-					+ "\t" + harmonyChord.getChordPitches() 
-					+ "\t" + computeFormulaNumber(formula.getFormula())
-					+ "\t" + groups
-					+ "\t0x" + Integer.toHexString(computeFormulaNumber(formula.getFormula()))
-					+ "\t0x" + Integer.toHexString(formula.getSpellingNumber())
-					+ "\n";
-			sb.append(displayText);
-			n++;
 		}
 		return sb.toString();
 	}
@@ -449,20 +480,12 @@ public class ChordManager {
 		return groupsFilter;
 	}
 
+	public Map<Pitch, Map<String, HarmonyChord>> getHarmonyChordsRootMap() {
+		return harmonyChordsRootMap;
+	}
+
 	/**
-	 * Load and/or export chord formulas or chords (HarmonyChords instanced from root list)
 	 * 
-	 * Usage: ChordManager -export formulas -format RawJSON
-	 * 		  ChordManager -print -roots C4 -resource my_formulas.json
-	 * 		  ChordManager -print -resource "chord_formulas.json" -roots C4
-	 * 
-	 * Use -print To display a tab-delimited table of harmony chords with corresponding chord formulas
-	 * chord number (decimal and hex) and spelling number (hex). Suitable for import into Excel.
-	 * Use RawJSON format for Mathematica import.
-	 * If unspecified, resource file defaults to "chord_formulas.json"
-	 * Specify -roots all for all 24 root notes.
-	 * All roots: { "Ab", "A", "A#", "Bb", "B", "B#", "Cb", "C", "C#", "Db", "D", "D#", "Eb", "E", "E#", "Fb", "F", "F#", "Gb", "G", "G#" }
-	 * If unspecified, roots defaults to { "C" }
 	 * @param args
 	 * @throws IOException
 	 */
@@ -524,7 +547,7 @@ public class ChordManager {
 		}
 		
 		if(printResults) {
-			String harmonyChordString = ChordManager.harmonyChordsToString(chordManager.getHarmonyChords());
+			String harmonyChordString = ChordManager.harmonyChordsToString(chordManager.getHarmonyChordsRootMap());
 			ps.print(harmonyChordString);
 		}
 	}

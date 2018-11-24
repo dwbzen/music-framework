@@ -475,6 +475,9 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	}
 	
 	@Override
+	/**
+	 * The ordering of Pitches is {C=C, D=D, E=E, F=F, G=G, A=A, B=B}
+	 */
 	public int compareTo(Pitch other) {
 		int sd = getRangeStep();
 		int sdOther =  other.getRangeStep();

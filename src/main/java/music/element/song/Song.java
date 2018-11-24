@@ -45,6 +45,11 @@ public class Song implements IJson, INameable, Supplier<ChordProgression> {
 	@JsonIgnore				private boolean originalKey = false;
 	@JsonIgnore				private HarmonyChord sectionTerminator = HarmonyChord.TERMINAL_HARMONY_CHORD;
 
+	public Song() {
+		name = INameable.DEFAULT_NAME;
+		artist = "None";
+	}
+	
 	public String getArtist() {
 		return artist;
 	}

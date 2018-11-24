@@ -9,21 +9,28 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
+import mathlib.cp.CollectorStats;
+import mathlib.cp.MarkovChain;
 import music.element.Pitch;
 import music.element.song.ChordFormula;
 import music.element.song.ChordProgression;
 import music.element.song.ChordProgressionComparator;
 import music.element.song.HarmonyChord;
+import music.element.song.Song;
 import util.music.ChordManager;
+import util.music.SongManager;
 
 public class HarmonyChordTest extends TestCase {
 	public static final String CONFIG_FILENAME = "/config.properties";
 	static final org.apache.log4j.Logger log = Logger.getLogger(HarmonyChordTest.class);
 	static List<Pitch> rootPitches = new ArrayList<Pitch>();
 	static Map<String,ChordFormula> chordFormulas = null;
-	static Map<ChordProgression, Integer> collectorStatsMap = 
-			new TreeMap<ChordProgression, Integer>(new ChordProgressionComparator());
+	
+	//static Map<ChordProgression, Integer> collectorStatsMap = new TreeMap<ChordProgression, Integer>(new ChordProgressionComparator());
+	static MarkovChain<HarmonyChord, ChordProgression, Song> markovChain = new MarkovChain<>(new ChordProgressionComparator(), 2);
 	static ChordManager chordManager = new ChordManager();
+	static SongManager songManager = new SongManager("songs", null, "name:With A Little Help From My Friends");
+	static Song song = null;
 	
 	@Test
 	public void testCreateHaronyChords1() {
@@ -36,6 +43,8 @@ public class HarmonyChordTest extends TestCase {
 		HarmonyChord hc9 = harmonyChords.get(root + "9");
 		HarmonyChord hm7 = harmonyChords.get(root + "m7");
 		HarmonyChord hc7b = harmonyChords.get(root + "7");
+	
+		
 		ChordProgression cp1 = new ChordProgression();
 		ChordProgression cp2 = new ChordProgression();
 		ChordProgression cp3 = new ChordProgression();
@@ -51,29 +60,26 @@ public class HarmonyChordTest extends TestCase {
 		log.debug("ChordProgression2: " + cp2.toString());
 		log.debug("ChordProgression3: " + cp3.toString());
 		
-		// test TreeMap
-		collectorStatsMap.put(cp1, 10);
-		if(collectorStatsMap.containsKey(cp2)) {
-			log.debug("map contains key: " + cp2.toString());
-			collectorStatsMap.put(cp1, 15);
-		}
-		else {
-			log.debug("map does NOT contain key: " + cp2.toString());
-		}
-		if(!collectorStatsMap.containsKey(cp3)) {
-			log.debug("map does NOT contain key: " + cp3.toString());
-			collectorStatsMap.put(cp3,  30);
-		}
-		log.debug("Keys/Values");
-		for(ChordProgression cp : collectorStatsMap.keySet()) {
-			Integer ival = collectorStatsMap.get(cp);
-			log.debug(cp.toString() + "  " + ival);
+		CollectorStats<HarmonyChord, ChordProgression, Song> collectorStats = new CollectorStats<HarmonyChord, ChordProgression, Song>();
+		
+		// test MarkovChain
+		collectorStats.addOccurrence(hc9, song);
+		collectorStats.addOccurrence(hc7a, song);
+		collectorStats.addOccurrence(hc7b, song);
+		
+		markovChain.put(cp1, collectorStats);
+		assertTrue(markovChain.containsKey(cp1));
+		assertFalse(markovChain.containsKey(cp3));
+		
+		log.info("Keys/Values");
+		for(ChordProgression cp : markovChain.keySet()) {
+			CollectorStats<HarmonyChord, ChordProgression, Song> ival = markovChain.get(cp);
+			log.info(cp.toString() + "  " + ival);
 		}
 	}
 	
 	@Test
 	public void testCreateHaronyChords2() {
-		loadChordFormulas();
 		HarmonyChord hc1 = new HarmonyChord("D7", chordFormulas);
 		HarmonyChord hc2 = new HarmonyChord("C", chordFormulas);
 		HarmonyChord hc3 = new HarmonyChord("C#", chordFormulas);
@@ -93,8 +99,10 @@ public class HarmonyChordTest extends TestCase {
 		
 	}
 	
-	static void loadChordFormulas() {
-		
+	static {
+		songManager.loadSongs();
+		song = songManager.getSongbook().get(0);
+		song.setOriginalKey(true);
 		chordFormulas = chordManager.getChordFormulas();
 		log.info(chordFormulas.size() + " chords loaded");
 		assertTrue(chordFormulas != null && chordFormulas.size() > 0);

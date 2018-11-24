@@ -19,7 +19,7 @@ import util.music.ChordManager;
 
 /**
  * A HarmonyChord is a chord that has an associated ChordFormula rather than
- * an arbitrary array of notes.
+ * an arbitrary array of notes.<br>
  * It is a realization of a particular ChordFormula with a root Pitch.
  * Because components are Pitch there is no implied duration and
  * instances can't be used in a Measure or Score (it's not a Measurable).
@@ -305,7 +305,14 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 	 */
 	@Override
 	public int compareTo(HarmonyChord other) {
-		return getChordFormula().getFormulaNumber() - other.getChordFormula().getFormulaNumber();
+		int myFn = getChordFormula().getFormulaNumber();
+		int otherFn = other.getChordFormula().getFormulaNumber();
+		if(myFn == otherFn) {	// same chord, different roots maybe
+			return getRoot().compareTo(other.getRoot());
+		}
+		else {
+			return myFn - otherFn;
+		}
 	}
 	
 	/**
