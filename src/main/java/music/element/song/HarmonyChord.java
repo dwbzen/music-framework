@@ -315,6 +315,11 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 		}
 	}
 	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
 	/**
 	 * HarmonyChords are equal if they have the same formula number and name
 	 * @param other HarmonyChord to test for equality

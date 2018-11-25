@@ -195,4 +195,12 @@ public class HarmonyChordCollector implements ICollector<ChordProgression, Marko
 		this.useOriginalKey = useOriginalKey;
 	}
 
+	public boolean isTrace() {
+		return trace;
+	}
+
+	public void setTrace(boolean trace) {
+		this.trace = trace;
+	}
+
 }

@@ -2,6 +2,7 @@ package util.cp;
 
 import java.io.IOException;
 
+import mathlib.cp.CollectorStats;
 import mathlib.cp.MarkovChain;
 import mathlib.cp.OutputStyle;
 import music.element.song.ChordProgression;
@@ -32,6 +33,7 @@ public class HarmonyChordCollectorRunner {
 		String songCollectionName = "songs";
 		String chordFormulaCollectionName = "chord_formulas";
 		String query = null;
+		boolean trace = false;
 
 		boolean useOriginalKey = false;
 		int order = 2;
@@ -82,11 +84,17 @@ public class HarmonyChordCollectorRunner {
 			else if(args[i].startsWith("-original")) {	// as in originalKey
 				useOriginalKey = true;
 			}
+			else if(args[i].equalsIgnoreCase("-trace")) {
+				trace = args[++i].equalsIgnoreCase("true") ? true : false;
+			}
 		}
 		SongManager songMgr = new SongManager(songCollectionName, songInputFile, query);
 		songMgr.loadSongs();
 		Songbook songbook = songMgr.getSongbook();
 		HarmonyChordCollector collector = HarmonyChordCollector.getChordProgressionCollector(songbook, order);
+
+		CollectorStats.trace = trace;
+		collector.setTrace(trace);
 		collector.setUseOriginalKey(useOriginalKey);
 		collector.collect();
 		

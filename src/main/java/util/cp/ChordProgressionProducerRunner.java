@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import mathlib.cp.CollectorStats;
 import mathlib.cp.MarkovChain;
 import music.element.song.ChordFormula;
 import music.element.song.ChordProgression;
@@ -41,6 +42,7 @@ public class ChordProgressionProducerRunner {
 		int minlength = 0;
 		int maxlength = 0;
 		boolean enableDisplay = true;
+		boolean trace = false;
 		
 		for(int i=0; i<args.length; i++) {
 			if(args[i].startsWith("-song")) {
@@ -94,6 +96,9 @@ public class ChordProgressionProducerRunner {
 			else if(args[i].startsWith("-original")) {	// as in originalKey
 				useOriginalKey = true;
 			}
+			else if(args[i].equalsIgnoreCase("-trace")) {
+				trace = args[++i].equalsIgnoreCase("true") ? true : false;
+			}
 		}
 		
 		if(debug) {
@@ -105,6 +110,8 @@ public class ChordProgressionProducerRunner {
 
 		Map<String, ChordFormula> chordFormulas = songMgr.getChordFormulas();
 		HarmonyChordCollector collector = new HarmonyChordCollector(order);
+		CollectorStats.trace = trace;
+		collector.setTrace(trace);
 		collector.setUseOriginalKey(useOriginalKey);
 		for(Song song : songbook) {
 			collector.accept(song);
