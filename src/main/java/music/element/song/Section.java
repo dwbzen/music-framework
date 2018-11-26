@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import mathlib.util.IJson;
-import util.INameable;
+import mathlib.util.INameable;
 
 /**
  * A Section is a logical division of a Song, such as "verse", "chorus" or "coda".

@@ -1,4 +1,5 @@
 package util;
+import mathlib.util.INameable;
 
 /**
  * Predictably enough, something that has a name that is also an IEntity.
@@ -10,7 +11,7 @@ public interface INameableEntity extends INameable, IEntity {
 	
 	@Override
 	default String rollJSON() {
-		return( "{ " + NAME + ": " + getName() + "}");
+		return( "{ " + "name:" + ": " + getName() + "}");
 		
 	}
 	

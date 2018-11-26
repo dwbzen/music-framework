@@ -8,7 +8,7 @@ import music.action.ExpressionSelector;
 import music.element.rhythm.IRhythmTextureMap;
 import music.transform.ITransformer.Preference;
 import mathlib.util.IJson;
-import util.INameable;
+import mathlib.util.INameable;
 
 public interface IRhythmScale extends IJson, INameable {
 	

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import mathlib.util.IJson;
-import util.INameable;
+import mathlib.util.INameable;
 
 /**
  * A simplified Harmony Chord. Has the bare minimum of information  - the chord name and a beat

@@ -2,6 +2,7 @@ package util;
 
 import java.util.HashSet;
 import java.util.Set;
+import mathlib.util.INameable;
 
 /**
  * A INameable that has a (possibly empty) keySet.

@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
-import util.INameable;
+import mathlib.util.INameable;
 
 /**
  * A collection of Song(s) treated as a unit.
