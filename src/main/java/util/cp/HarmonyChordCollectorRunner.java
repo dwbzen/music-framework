@@ -31,10 +31,9 @@ public class HarmonyChordCollectorRunner {
 	 */public static void main(String... args) throws IOException {
 		String songInputFile = null;			// complete path to .JSON Song file TODO
 		String songCollectionName = "songs";
-		String chordFormulaCollectionName = "chord_formulas";
 		String query = null;
 		boolean trace = false;
-
+		boolean showSupplierCounts = false;
 		boolean useOriginalKey = false;
 		int order = 2;
 
@@ -46,12 +45,6 @@ public class HarmonyChordCollectorRunner {
 				}
 				else if(songargs[0].equalsIgnoreCase("collection")) {
 					songCollectionName = songargs[1];
-				}
-			}
-			else if(args[i].startsWith("-chords")) {
-				String[] chordargs = args[++i].split(":");
-				if(chordargs[0].equalsIgnoreCase("collection")) {
-					chordFormulaCollectionName = chordargs[1];
 				}
 			}
 			else if(args[i].equalsIgnoreCase("-query")) {
@@ -76,6 +69,7 @@ public class HarmonyChordCollectorRunner {
 					else if(f.startsWith("pretty")) { outputStyle = OutputStyle.PRETTY_JSON; }
 					else if(f.equalsIgnoreCase("text")) { outputStyle = OutputStyle.TEXT; }
 					else if(f.equalsIgnoreCase("csv")) { outputStyle = OutputStyle.CSV; }
+					else if(f.equalsIgnoreCase("suppliers")) { showSupplierCounts = true;}
 				}
 			}
 			else if(args[i].equalsIgnoreCase("-sorted")) {
@@ -102,11 +96,11 @@ public class HarmonyChordCollectorRunner {
 		HarmonyChord.setIncludeSpellingInToString(false);	// set to true if you want to see the spelling of each chord
 		if(displayMarkovChain) {
 			if(sorted) {
-				String s = markovChain.getSortedDisplayText(outputStyle);
+				String s = markovChain.getSortedDisplayText(outputStyle, showSupplierCounts);
 				System.out.println(s);
 			}
 			else {
-				System.out.println( outputStyle==OutputStyle.JSON ? markovChain.toJson() :  markovChain.getMarkovChainDisplayText()); 
+				System.out.println( outputStyle==OutputStyle.JSON ? markovChain.toJson() :  markovChain.getMarkovChainDisplayText(showSupplierCounts)); 
 			}
 		}
 		if(displaySummaryMap) { 
