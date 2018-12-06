@@ -1,6 +1,10 @@
 package util.cp;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import mathlib.cp.CollectorStats;
 import mathlib.cp.MarkovChain;
@@ -20,8 +24,16 @@ public class HarmonyChordCollectorRunner {
 	static OutputStyle outputStyle = OutputStyle.TEXT;
 	
 	/**
-	 * Syntax:  SongCollector -songs [file:filename | collection:collectionName] [-query queryString] -keylen n [-print | -noprint] [-summary] <br>
-	 * example: SongCollector -songs collection:songs -query "artist:The Beatles" -keylen 2 -print -summary<br>
+	 * Usage:  HarmonyChordCollectorRunner <br>
+	 * 	-songs [file:filename | collection:collectionName] <br>
+	 *  -query queryString <br>
+	 *  -order n[,n2,...] <br>
+	 *  -display [markov | summary | inverted] <br>
+	 *  -output <list of output formats: json, text, csv, pretty, suppliers> <br>
+	 *  -sorted [true | false ] <br>
+	 *  -original <br>
+	 *  -trace [true | false] <br>
+	 * example: HarmonyChordCollectorRunner -songs collection:songs -query "artist:The Beatles" -order 1,2 -display markov -output text<br>
 	 * Uses the MongoDB "chord_formulas" collection for chords; can override in command line.<br>
 	 * Default Mongo song collection is "songs"
 	 * 
@@ -35,7 +47,8 @@ public class HarmonyChordCollectorRunner {
 		boolean trace = false;
 		boolean showSupplierCounts = false;
 		boolean useOriginalKey = false;
-		int order = 2;
+		String orderstring = null;
+		List<Integer> orderList = new ArrayList<Integer>();
 
 		for(int i=0; i<args.length; i++) {
 			if(args[i].startsWith("-song")) {
@@ -51,7 +64,7 @@ public class HarmonyChordCollectorRunner {
 				query = args[++i];
 			}
 			else if(args[i].equalsIgnoreCase("-order")) {
-				order = Integer.parseInt(args[++i]);
+				orderstring = args[++i];
 			}
 			else if(args[i].startsWith("-display")) {
 				String[] formats = args[++i].split(",");
@@ -82,18 +95,30 @@ public class HarmonyChordCollectorRunner {
 				trace = args[++i].equalsIgnoreCase("true") ? true : false;
 			}
 		}
+		
+		if(orderstring == null) {
+			orderList.add(2);	// default order is 2 if not specified
+		}
+		else {
+			for(String order : orderstring.split(",")) {
+				orderList.add(Integer.parseInt(order));
+			}
+		}
 		SongManager songMgr = new SongManager(songCollectionName, songInputFile, query);
 		songMgr.loadSongs();
 		Songbook songbook = songMgr.getSongbook();
-		HarmonyChordCollector collector = HarmonyChordCollector.getChordProgressionCollector(songbook, order);
-
-		CollectorStats.trace = trace;
-		collector.setTrace(trace);
-		collector.setUseOriginalKey(useOriginalKey);
-		collector.collect();
+		Map<Integer, MarkovChain<HarmonyChord, ChordProgression, Song>> markovChains = new TreeMap<>();
+		for(Integer order : orderList) {
+			HarmonyChordCollector collector = HarmonyChordCollector.getChordProgressionCollector(songbook, order);
+			CollectorStats.trace = trace;
+			collector.setTrace(trace);
+			collector.setUseOriginalKey(useOriginalKey);
+			collector.collect();
+			markovChains.put(order, collector.getMarkovChain());
+		}
 		
-		MarkovChain<HarmonyChord, ChordProgression, Song> markovChain = collector.getMarkovChain();
 		HarmonyChord.setIncludeSpellingInToString(false);	// set to true if you want to see the spelling of each chord
+		MarkovChain<HarmonyChord, ChordProgression, Song> markovChain = combineMarkovChains(markovChains);
 		if(displayMarkovChain) {
 			if(sorted) {
 				String s = markovChain.getSortedDisplayText(outputStyle, showSupplierCounts);
@@ -110,6 +135,19 @@ public class HarmonyChordCollectorRunner {
 			boolean displayJson = outputStyle==OutputStyle.JSON || outputStyle==OutputStyle.PRETTY_JSON;
 			System.out.println(markovChain.getInvertedSummaryMapText(displayJson , outputStyle==OutputStyle.PRETTY_JSON));
 		}
-	}
+	 }
+	 
+	 private static MarkovChain<HarmonyChord, ChordProgression, Song> combineMarkovChains(Map<Integer, MarkovChain<HarmonyChord, ChordProgression, Song>> markovChains) {
+		 MarkovChain<HarmonyChord, ChordProgression, Song> markovChain = null;
+			for(Integer ord : markovChains.keySet()) {
+				if(markovChain == null) {
+					markovChain = markovChains.get(ord);
+				}
+				else {
+					markovChain.add(markovChains.get(ord));
+				}
+			}
+			return markovChain;
+	 }
 	
 }
