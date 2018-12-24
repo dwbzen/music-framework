@@ -75,7 +75,9 @@ import util.music.RhythmScaleFactory;
  * If -analyzeFile not specified, results sent to stdout.</p>
  * @see music.action.ScoreAnalysis
  * 
- * @author donbacon
+ * TODO refactor to remove morphia
+ * 
+ * @author don_bacon
  *
  */
 public class ProductionFlow implements Runnable {
