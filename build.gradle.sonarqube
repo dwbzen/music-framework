@@ -1,22 +1,43 @@
+/*
+ * This build file for use with SonarQube source analysis and reports
+ *
+ */
 
  plugins {
+  id "org.sonarqube" version "2.6"
   id "java"
 }
 
 apply plugin: 'java-library'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
+apply plugin: "jacoco"
 
 sourceCompatibility = 10
 targetCompatibility = 10
 group = 'music_framework'
 version = '2.0'
 description = 'Music Framework'
+project.tasks["sonarqube"].dependsOn "jacocoTestReport"
+
 
 jar {
     manifest {
         attributes 'Implementation-Title': 'music-framework',
                    'Implementation-Version': version
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.1"
+    reportsDir = file("${buildDir}/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
     }
 }
 
