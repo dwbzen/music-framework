@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import mathlib.cp.CollectorStats;
 import mathlib.cp.IProducer;
 import mathlib.cp.MarkovChain;
-import mathlib.cp.OccurrenceProbability;
+import mathlib.OccurrenceProbability;
 import music.element.song.ChordFormula;
 import music.element.song.ChordProgression;
 import music.element.song.ChordProgressionScrapbook;
