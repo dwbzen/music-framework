@@ -20,18 +20,16 @@ import javax.jms.Session;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
+import org.bson.Document;
 
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 import music.ScorePart.State;
 import music.action.ScoreAnalyzer;
 import music.element.IRhythmScale;
-import music.element.Measure;
 import music.element.Score;
-import music.element.ScorePartEntity;
 import music.instrument.Instrument;
 import music.musicxml.MusicXMLHelper;
 import music.transform.ITransformer;
@@ -75,7 +73,6 @@ import util.music.RhythmScaleFactory;
  * If -analyzeFile not specified, results sent to stdout.</p>
  * @see music.action.ScoreAnalysis
  * 
- * TODO refactor to remove morphia
  * 
  * @author don_bacon
  *
@@ -144,7 +141,6 @@ public class ProductionFlow implements Runnable {
     private String dataSourceName = null;
     private String dataSourceTransport = null;
 	private MongoClient mongoClient  = null;
-	private Datastore ds = null;
 	private String host;
 	private int port;
     
@@ -317,32 +313,24 @@ public class ProductionFlow implements Runnable {
 
 	/**
 	 * Save the score to a MongoDB Collection
+	 * TODO complete the implementation
 	 * 
 	 */
 	public void saveCollection() {
-		Morphia morphia = new Morphia();
+		MongoDatabase database = null;
+		MongoCollection<Document> collection = null;
 		try {
 			mongoClient = new MongoClient(host, port);
-			ds = morphia.createDatastore(mongoClient, dbname);
+			database = mongoClient.getDatabase("test");
+			collection = database.getCollection("scores");
 		} catch (Exception e) {
 			log.error("saveCollection Exception: " + e.toString());
 			e.printStackTrace();
 			return;
 		}
-		Map<String, ScorePartEntity> parts = score.getParts();
-		for(String partname: parts.keySet()) {
-			ScorePartEntity sp = parts.get(partname);
-			List<Measure> measures = sp.getMeasures();
-			for(Measure measure : measures) {
-				DBObject dbo = morphia.toDBObject(measure);
-				log.debug("save measure: " + measure.getNumber() + "\n" + dbo.toString());
-				ds.save(measure);
-				log.debug("measure " + measure.getNumber() + " saved");
-			}
-			ds.save(sp);
-		}
 		score.setName(scoreName);
-		ds.save(score);
+		Document scoreDoc = new Document(scoreName, score.toJson());
+		collection.insertOne(scoreDoc);
 		mongoClient.close();
 	}
 

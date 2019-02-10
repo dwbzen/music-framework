@@ -211,7 +211,7 @@ public class Find {
 		 * For example: -query "city:ST PETERSBURG, state:FL"
 		 * the query string must be converted to a DBObject (JSON)
 		 * this is a requirement of the java API.
-		 * Alternatively could use third-party tool such as Morphia
+		 * 
 		 */
 		if(this.limit > 0) {
 			cursor = collection.find(dbObject).projection( Projections.excludeId()).limit(limit).iterator();

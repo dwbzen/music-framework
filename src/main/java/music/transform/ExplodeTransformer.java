@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import mathlib.IntegerPair;
 import music.element.Chord;
 import music.element.Duration;
@@ -17,17 +19,7 @@ import music.element.Score;
 import music.element.ScorePartEntity;
 import music.instrument.Instrument;
 import music.transform.IExploder.ExploderType;
-
-import org.apache.log4j.Logger;
-import org.bson.Document;
-import org.mongodb.morphia.Morphia;
-
 import util.Configuration;
-import util.mongo.Find;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCursor;
 
 /**
  * Applies the configured NoteExploder and/or ChordExploder to each Measurable.
@@ -44,7 +36,6 @@ public class ExplodeTransformer  extends Transformer {
 	public static Map<ExploderType, Map<String, IExploder>> mappedExploders = new HashMap<ExploderType, Map<String, IExploder>>();
 	public final static String formulaNames = "score.transformers.ExplodeTransformer.formulaNames.";
 	
-	private Morphia morphia = new Morphia();
 	private List<IExploder> noteExploders = new ArrayList<IExploder>();		// all the NoteExploders
 	/*
 	 * The ARPEGIO NoteExploders that can be selected and applied
@@ -90,7 +81,7 @@ public class ExplodeTransformer  extends Transformer {
 	}
 	
 	/**
-	 * This sets up the builtin (mapped) exploders.
+	 * This sets up the built-in (mapped) exploders.
 	 * Adding to  Map<ExploderType, Map<String, IExploder>> (the String is the exploder name)
 	 */
 	public ExplodeTransformer() {
@@ -292,10 +283,8 @@ public class ExplodeTransformer  extends Transformer {
 
 	@Override
 	public void configure(Properties props) {
-		morphia.map(NoteExploder.class);
 		/*
 		 * Look first in internal explode formula map for the named formula
-		 * If it's not there, check the database
 		 */
 		configureNoteExploders(props, ExploderType.ARPEGIO);
 		configureNoteExploders(props, ExploderType.CHORD);
@@ -336,27 +325,6 @@ public class ExplodeTransformer  extends Transformer {
 				if(mappedExploders.get(exploderType).containsKey(fname)) {
 					NoteExploder nexp = (NoteExploder)mappedExploders.get(exploderType).get(fname);
 					addNoteExploderToSelectionList(freq, nexp);
-				}
-				/*
-				 * Otherwise look in the MongoDB for an exploder of this type & name
-				 */
-				else {
-					// look in the db
-					String dbname = props.getProperty("dataSource.mongodb.db.name");
-					String collectionName = props.getProperty("dataSource.mongodb.exploderFormulas");
-					Find find = new Find(dbname, collectionName);
-					String queryString = "name:" + fname + ",type" + exploderTypeText;
-					find.setQuery(queryString);
-					MongoCursor<Document> cursor = find.search();
-					long count = find.count();
-					log.debug(queryString + " count: " + count);
-					if(count > 0) {
-						Document doc = cursor.next();
-						DBObject dbObject = new BasicDBObject(doc);	
-						NoteExploder noteExploder = morphia.fromDBObject(null, NoteExploder.class, dbObject);
-						noteExploder.setFrequency(freq);
-						addNoteExploderToSelectionList(freq, noteExploder);
-					}
 				}
 			}
 		}

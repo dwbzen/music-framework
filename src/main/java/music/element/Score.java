@@ -10,12 +10,13 @@ import java.util.Properties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import mathlib.util.IJson;
 import music.ScorePart;
 import util.Configurable;
 import util.Configuration;
 
 
-public class Score implements Configurable, Serializable {
+public class Score implements Configurable, Serializable, IJson {
 
 	/**
 	 * Part name + ScorePart

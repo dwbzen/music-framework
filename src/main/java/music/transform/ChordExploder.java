@@ -3,14 +3,11 @@ package music.transform;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import mathlib.IntegerPair;
 import music.element.Measurable;
 import music.element.Measure;
-
-import org.apache.log4j.Logger;
-
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
 
 /**
  * This explodes a single Measurable (Chord) into a List of Chords using
@@ -26,13 +23,10 @@ import org.mongodb.morphia.annotations.Id;
  * 
  * TODO: finish this
  */
-@Entity(value="ChordExploder", noClassnameStored=false)
 public class ChordExploder extends AbstractExploder {
 	private static final long serialVersionUID = 3462947065561693138L;
 
 	protected static final org.apache.log4j.Logger log = Logger.getLogger(ExplodeTransformer.class);
-
-	@Id	private String id;
 
 	public ChordExploder(List<IntegerPair> formula) {
 		super(ExploderType.CHORD, formula, IExploder.ONE_TO_ONE, 0);
