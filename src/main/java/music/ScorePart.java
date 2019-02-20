@@ -17,9 +17,9 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import mathlib.BaseJSONObject;
+import mathlib.BaseJsonObject;
 import mathlib.CommandMessage;
-import mathlib.JSONObject;
+import mathlib.JsonObject;
 import mathlib.Point2D;
 import mathlib.PointSet;
 import music.action.DurationScaler;
@@ -457,7 +457,7 @@ public class ScorePart implements Serializable, Runnable {
 	}
 
     @SuppressWarnings("unchecked")
-	public void processMessage(JSONObject jsonObj) {
+	public void processMessage(JsonObject jsonObj) {
     	String type = jsonObj.getType();
        	if(type.equals("message")) {
        		CommandMessage cm = (CommandMessage)jsonObj;
@@ -477,8 +477,8 @@ public class ScorePart implements Serializable, Runnable {
        		scorePartData = (PointSet<Number>)jsonObj;
        		log.trace("pointSet for " + getPartName() + ": " + scorePartData.toJson());
        	}
-       	else if(type.equalsIgnoreCase(JSONObject.UNKNOWN)) {
-       		BaseJSONObject base = (BaseJSONObject)jsonObj;
+       	else if(type.equalsIgnoreCase(JsonObject.UNKNOWN)) {
+       		BaseJsonObject base = (BaseJsonObject)jsonObj;
         	log.error("Unknown message type " + base.toJson());
       		 // nothing to see here
        	}

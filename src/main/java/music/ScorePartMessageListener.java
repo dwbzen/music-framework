@@ -9,11 +9,11 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import mathlib.JSONObject;
-
 import org.apache.activemq.command.ActiveMQMapMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import mathlib.JsonObject;
 
 public class ScorePartMessageListener implements Runnable, MessageListener, ExceptionListener {
 	protected static final Logger log = LogManager.getLogger(ScorePartMessageListener.class);
@@ -69,7 +69,7 @@ public class ScorePartMessageListener implements Runnable, MessageListener, Exce
 	}
 	
 	public void processMessageText(String messageText) {
-		JSONObject jsonObj = JSONObject.analyzeMessage(messageText);
+		JsonObject jsonObj = JsonObject.analyzeMessage(messageText);
 		if(jsonObj == null) {
 			log.error("processMessageText JSONObject is null: " + messageText);
 			return;
