@@ -15,7 +15,7 @@
 </Appenders>
 <Loggers>
 
-    <Logger name="math" additivity="false">
+    <Logger name="mathlib" additivity="false">
 		<level value="INFO"/>
 		<appender-ref ref="STDOUT"/>
 	</Logger>
@@ -30,17 +30,17 @@
 		<appender-ref ref="STDOUT"/>
 	</Logger>
 	
-	<Logger name="util.mongo" additivity="false">
+	<Logger name="util.music" additivity="false">
 		<level value="INFO"/>
 		<appender-ref ref="STDOUT"/>
 	</Logger>
 	
-	<Logger name="com" additivity="false">
+	<Logger name="org" additivity="false">
 		<level value="INFO"/>
 		<appender-ref ref="STDOUT"/>
 	</Logger>
 	
-    <Root level="info">
+    <Root level="debug">
       <AppenderRef ref="STDOUT"/>
     </Root>
 </Loggers>
