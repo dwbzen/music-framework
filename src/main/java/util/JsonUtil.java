@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.log4j.Logger;
 
-public class JSONUtil {
-	static final org.apache.log4j.Logger log = Logger.getLogger(JSONUtil.class);
+public class JsonUtil {
+	static final org.apache.log4j.Logger log = Logger.getLogger(JsonUtil.class);
 	public static final String CONFIG_FILENAME = "/config.properties";
 
 	public static void addObjectToMap(IMapped<String> cf, Map<String,IMapped<String>> map) {
