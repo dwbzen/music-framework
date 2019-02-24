@@ -144,6 +144,10 @@ public class ScorePart implements Serializable, Runnable {
 
     		// use RhythmScale factors to get the Durations (units & dots) for scaled units
     		List<Duration> factors =  rhythmScale.getFactors(units);
+    		if(factors == null) {
+    			System.err.println("Null factors for " + units + " units, rawUnits= " + rawUnits);
+    			continue;
+    		}
     		for(Duration df : factors) {
         		Note note = new Note(pitch, df);
         		note.setPoint(point);
@@ -463,7 +467,7 @@ public class ScorePart implements Serializable, Runnable {
     	String type = jsonObj.getType();
        	if(type.equals(CommandMessage.objectType)) {			// "message"
        		CommandMessage cm = (CommandMessage)jsonObj;
-       		log.info(" command message: " + cm.getCommand());
+       		log.debug(" command message: " + cm.getCommand());
        	}
        	else if(type.equals(Point2D.ObjectType)) {				// "Point2D"
        		Point2D<Double> point = (Point2D<Double>)jsonObj;
@@ -478,7 +482,7 @@ public class ScorePart implements Serializable, Runnable {
        	else if(type.equals(PointSetStats.objectType)) {		// "stats"
        		PointSetStats<Double> stats = (PointSetStats<Double>)jsonObj;
        		scorePartData.setStats(stats);
-       		log.trace("pointSet for " + getPartName() + ": " + scorePartData.toJson());
+       		log.debug("pointSet for " + getPartName() + ": " + scorePartData.toJson());
        	}
        	else if(type.equals(IteratedFunctionSystem.objectType)) {	// "IFS"
        		IteratedFunctionSystem ifs = (IteratedFunctionSystem)jsonObj;

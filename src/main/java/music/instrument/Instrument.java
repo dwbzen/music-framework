@@ -239,6 +239,8 @@ public abstract class Instrument implements Configurable, IInstrument {
 	}
 	protected void createDurationScaler() {
 		DurationScaler ds = new DurationScaler(this);
+		// these values are default and will be overwritten with PointSetStats maxY and minY
+		// if creating a score from a fractal file
 		ds.setMinVal(durationRangeSeconds[0]);
 		ds.setMaxVal(durationRangeSeconds[1]);
 		setDurationScaler(ds);
