@@ -22,6 +22,8 @@ import mathlib.CommandMessage;
 import mathlib.JsonObject;
 import mathlib.Point2D;
 import mathlib.PointSet;
+import mathlib.PointSetStats;
+import mathlib.ifs.IteratedFunctionSystem;
 import music.action.DurationScaler;
 import music.action.ExpressionSelector;
 import music.action.PitchScaler;
@@ -60,7 +62,7 @@ public class ScorePart implements Serializable, Runnable {
 	private ThreadLocalRandom random = ThreadLocalRandom.current();
 	private ScorePartEntity	scorePartEntity = null;
 	private Measure currentMeasure;
-	private PointSet<Number> scorePartData = null;
+	private PointSet<Double> scorePartData = null;
 	
 	// raw notes used to populate Measures
 	private List<Note> notes = new ArrayList<Note>();
@@ -87,7 +89,7 @@ public class ScorePart implements Serializable, Runnable {
 		state = State.INIT;
 		scorePartEntity = new ScorePartEntity(score, pname, instr);
 		scorePartEntity.setPartId("P-" + pname);
-		scorePartData = new PointSet<Number>();
+		scorePartData = new PointSet<Double>();
 		configuration = score.getConfiguration();
 		partName = pname;
 		instrument = instr;
@@ -123,7 +125,7 @@ public class ScorePart implements Serializable, Runnable {
 	 * Use configured RhythmScale for this instrument to set duration units
 	 */
 	public void createScorePart() {
-    	List<Point2D<Number>> points = scorePartData.getPoints();
+    	List<Point2D<Double>> points = scorePartData.getPoints();
     	PitchScaler ps = instrument.getPitchScaler();
     	ps.setMinVal(scorePartData.getMinXValue());
     	ps.setMaxVal(scorePartData.getMaxXValue());
@@ -131,7 +133,7 @@ public class ScorePart implements Serializable, Runnable {
     	DurationScaler durationScaler = instrument.getDurationScaler();
     	durationScaler.setMinVal(scorePartData.getMinYValue());
     	durationScaler.setMaxVal(scorePartData.getMaxYValue());
-    	for(Point2D<Number> point: points) {
+    	for(Point2D<Double> point: points) {
     		Pitch pitch = instrument.scale(point.getX().doubleValue());
     		Duration duration = durationScaler.scaleToRhythmScale(point.getY().doubleValue());
     		double rawUnits = duration.getRawDuration();
@@ -185,7 +187,7 @@ public class ScorePart implements Serializable, Runnable {
     	// Each Measurable can be a single Note or a Chord
     	List<Measurable> tupletGroup = null;
     	Note lastNote = null;
-		Chord lastChord = null;
+		Chord lastChord = null;		// TODO finish chord implementation
     	do {
 	    	if((note = getNextNote()) != null) {
 	    		int units = note.getDuration().getDurationUnits();
@@ -459,13 +461,13 @@ public class ScorePart implements Serializable, Runnable {
     @SuppressWarnings("unchecked")
 	public void processMessage(JsonObject jsonObj) {
     	String type = jsonObj.getType();
-       	if(type.equals("message")) {
+       	if(type.equals(CommandMessage.objectType)) {			// "message"
        		CommandMessage cm = (CommandMessage)jsonObj;
        		log.info(" command message: " + cm.getCommand());
        	}
-       	else if(type.equals("point")) {
-       		Point2D<Number> point = (Point2D<Number>)jsonObj;
-       		log.trace(" point for " + getPartName() + ": " + point.toJson());
+       	else if(type.equals(Point2D.ObjectType)) {				// "Point2D"
+       		Point2D<Double> point = (Point2D<Double>)jsonObj;
+       		log.debug(" point for " + getPartName() + ": " + point.toJson());
        		if(scorePartData != null) {
        			scorePartData.add(point);
        		}
@@ -473,11 +475,16 @@ public class ScorePart implements Serializable, Runnable {
        			System.err.println("PointSet is null!!");
        		}
        	}
-       	else if(type.equals("stats")) {
-       		scorePartData = (PointSet<Number>)jsonObj;
+       	else if(type.equals(PointSetStats.objectType)) {		// "stats"
+       		PointSetStats<Double> stats = (PointSetStats<Double>)jsonObj;
+       		scorePartData.setStats(stats);
        		log.trace("pointSet for " + getPartName() + ": " + scorePartData.toJson());
        	}
-       	else if(type.equalsIgnoreCase(JsonObject.UNKNOWN)) {
+       	else if(type.equals(IteratedFunctionSystem.objectType)) {	// "IFS"
+       		IteratedFunctionSystem ifs = (IteratedFunctionSystem)jsonObj;
+       		scorePartData.setIteratedFunctionSystem(ifs);
+       	}
+       	else if(type.equalsIgnoreCase(JsonObject.UNKNOWN)) {	// "unknown"	
        		BaseJsonObject base = (BaseJsonObject)jsonObj;
         	log.error("Unknown message type " + base.toJson());
       		 // nothing to see here
@@ -549,7 +556,7 @@ public class ScorePart implements Serializable, Runnable {
 		return currentMeasure;
 	}
 
-	public PointSet<Number> getScorePartData() {
+	public PointSet<Double> getScorePartData() {
 		return scorePartData;
 	}
 

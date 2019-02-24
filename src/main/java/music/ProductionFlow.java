@@ -312,7 +312,7 @@ public class ProductionFlow implements Runnable {
 	}
 
 	/**
-	 * Save the score to a MongoDB Collection
+	 * Save the Json score to a MongoDB Collection
 	 * TODO complete the implementation
 	 * 
 	 */
@@ -412,6 +412,7 @@ public class ProductionFlow implements Runnable {
 				else if(dataSourceName.equalsIgnoreCase("mongodb") || instrumentSource.equalsIgnoreCase("mongodb")) {
 					ds = new MongoDBDataSource(configuration, instrumentName);
 				}
+				
 				ds.stream().forEach(rec ->{
 					try {
 						producer.send(session.createTextMessage(rec));

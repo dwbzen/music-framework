@@ -96,7 +96,6 @@ public class RandomDataSource  extends DataSource {
 	 * Creates 3 JSON record types as in the examples:
 	 * 
 	 * {"name": <dataSetName>,"type": "message","command": "START" }
-	 * {"LinearFunction": "random", "name": <dataSetName>,"type": "stats", "n": <size>,"minX": -5.957154E-7,"minY": -4.809322E-7,"maxX": 0.9961879,"maxY": 0.9981611,"minPoint":[ 0.002261410, 0.003954140 ],"maxPoint":[ 0.8678628, 0.1321371 ] }
 	 * {"name": <dataSetName>, "type": "point", "Point2D": [ 0.02034002, 0.4716790 ] }
 	 * {"name": <dataSetName>,"type": "message","command": "SHUTDOWN" }
 	 *
@@ -107,8 +106,8 @@ public class RandomDataSource  extends DataSource {
 		CommandMessage cmShutdown = new CommandMessage(dataSetName, "SHUTDOWN");
 		startCommand = cmStart.toJson();
 		shutdownCommand = cmShutdown.toJson();
-		pointSet.setLinearFunction("random");
 		pointSet.setName(dataSetName);
+		pointSet.setDataSource(PointSet.DataSource.RANDOM);
 		generatePointSet();
 	}
 

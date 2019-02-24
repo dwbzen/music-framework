@@ -32,7 +32,7 @@ public class ScorePartMessageListener implements Runnable, MessageListener, Exce
 	public void run() {
 		
 		try {
-			while(more) {
+			while(more) {	// messages in the instrument queue
 				Message message = consumer.receive();
 				log.debug("Received a message " +  message.toString());
 				if(message instanceof TextMessage)  {
@@ -84,7 +84,7 @@ public class ScorePartMessageListener implements Runnable, MessageListener, Exce
 	            more = false;
         	}
         	else if(checkText(messageText, "START")) {
-        		// TODO now what? - reset maybe
+        		// Should not see these, but can be safely ignored if present
         	}
         } 
         else {
