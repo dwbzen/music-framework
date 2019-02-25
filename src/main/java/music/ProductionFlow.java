@@ -385,47 +385,14 @@ public class ProductionFlow implements Runnable {
 	 */
 	public void loadData() {
 		log.debug("loadData()");
+		DataLoader dataLoader = null;
 		try {
 			for(String instrumentName : instrumentNames) {
-				String instrumentSource = configProperties.getProperty("dataSource." + instrumentName);
-				log.info("loadData for " + instrumentName + " source: " + instrumentSource);
 				MessageProducer producer = producers.get(instrumentName);
-				DataSource ds = null;
-				
-				/**********************************************************
-				 * Load data from random source
-				 **********************************************************/
-				if(dataSourceName.equalsIgnoreCase("random") || instrumentSource.equalsIgnoreCase("random")) {
-					ds = new RandomDataSource(configuration, instrumentName);
-				}
-				
-				/********************************************************
-				 * Load source data from a file
-				 ********************************************************/
-				else if(dataSourceName.equalsIgnoreCase("file") || instrumentSource.equalsIgnoreCase("file")) {
-					ds = new FileDataSource(configuration, instrumentName);
-				}
-								
-		    	/***************************************************
-		    	 * Load data from MongoDB
-		    	 ***************************************************/
-				else if(dataSourceName.equalsIgnoreCase("mongodb") || instrumentSource.equalsIgnoreCase("mongodb")) {
-					ds = new MongoDBDataSource(configuration, instrumentName);
-				}
-				
-				ds.stream().forEach(rec ->{
-					try {
-						producer.send(session.createTextMessage(rec));
-					} catch (JMSException e) {
-						// this is bad, this is VERY bad
-						log.error("JMSException " + e.toString() + " rec: " + rec);
-						log.error(" instrument: " + instrumentName);
-						return;
-					}
-				});
-				ds.close();
+				dataLoader = new DataLoader(instrumentName, configuration, producer, dataSourceName, connection, session);
+				Thread thread = new Thread(dataLoader);
+				thread.start();
 			}
-			connection.close();
 		} catch (Exception e) {
 			log.error("loadData exception: " +e.toString());
 		}
