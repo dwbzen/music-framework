@@ -34,7 +34,7 @@ public class ScorePartMessageListener implements Runnable, MessageListener, Exce
 		try {
 			while(more) {	// messages in the instrument queue
 				Message message = consumer.receive();
-				log.debug("Received a message " +  message.toString());
+				log.trace("Received a message " +  message.toString());
 				if(message instanceof TextMessage)  {
 					String messageText = getTextMessage(message);
 					processMessageText(messageText);

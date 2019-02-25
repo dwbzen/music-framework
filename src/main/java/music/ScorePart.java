@@ -467,11 +467,11 @@ public class ScorePart implements Serializable, Runnable {
     	String type = jsonObj.getType();
        	if(type.equals(CommandMessage.objectType)) {			// "message"
        		CommandMessage cm = (CommandMessage)jsonObj;
-       		log.debug(" command message: " + cm.getCommand());
+       		log.trace(" command message: " + cm.getCommand());
        	}
        	else if(type.equals(Point2D.ObjectType)) {				// "Point2D"
        		Point2D<Double> point = (Point2D<Double>)jsonObj;
-       		log.debug(" point for " + getPartName() + ": " + point.toJson());
+       		log.trace(" point for " + getPartName() + ": " + point.toJson());
        		if(scorePartData != null) {
        			scorePartData.add(point);
        		}

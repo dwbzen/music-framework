@@ -232,7 +232,7 @@ public abstract class Instrument implements Configurable, IInstrument {
 	}
 	
 	/**
-	 * Default PitchScaler. @Override if needed.
+	 * Default PitchScaler.
 	 */
 	protected void createPitchScaler() {
 		setPitchScaler(new PitchScaler(this));
