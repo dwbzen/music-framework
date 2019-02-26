@@ -83,7 +83,7 @@ public class ScorePart implements Serializable, Runnable {
 	private State state = State.UNKNOWN;
 	private Tempo tempo = null;		// set from config as in score.tempo=90
 	private Key scoreKey = null;	// set from configuration as in: score.key=F-Major
-	public enum State {UNKNOWN, INIT, WORKING, COMPLETE};
+	public enum State {UNKNOWN, INIT, WORKING, COMPLETE, ERROR};
 	
 	public ScorePart(Score score, String pname, Instrument instr) {
 		state = State.INIT;

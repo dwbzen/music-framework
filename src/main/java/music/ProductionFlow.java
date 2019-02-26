@@ -39,6 +39,7 @@ import util.ConfigurationException;
 import util.messaging.MessageProducerImpl;
 import util.messaging.SessionImpl;
 import util.mongo.MongoDBDataSource;
+import util.music.DataLoadException;
 import util.music.DataSource;
 import util.music.FileDataSource;
 import util.music.IRhythmScaleFactory;
@@ -161,6 +162,7 @@ public class ProductionFlow implements Runnable {
     	boolean randomSelection = false;
     	int port = defaultPort;
     	int measures = 0;
+    	String dataSourceName = null;
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
     			if(args[i].equalsIgnoreCase("-noload")) {
@@ -365,7 +367,7 @@ public class ProductionFlow implements Runnable {
 			for(String instrumentName : instrumentNames) {
 				State state = scoreParts.get(instrumentName).getState();
 				log.trace(instrumentName + " state: " + state);
-				complete &= state.equals(ScorePart.State.COMPLETE);
+				complete &= state.equals(State.COMPLETE);
 			}
 		} while (!complete);
 		return score;
@@ -382,8 +384,10 @@ public class ProductionFlow implements Runnable {
 	 * All DataSources return data is the same JSON format.
 	 * To give some variety to data sets, DataSource can be configured to select points randomly
 	 * This depends on setting of sequentialSelection (if false, use random selection)
+	 * @throws DataLoadException (RuntimeException)
+	 * @throws  
 	 */
-	public void loadData() {
+	public void loadData() throws DataLoadException  {
 		log.debug("loadData()");
 		DataLoader dataLoader = null;
 		try {
@@ -395,7 +399,26 @@ public class ProductionFlow implements Runnable {
 			}
 		} catch (Exception e) {
 			log.error("loadData exception: " +e.toString());
+			throw(new DataLoadException("loadData exception: " +e.toString()));
 		}
+		/*
+		 * wait for threads to complete
+		 */
+		boolean complete;
+		do {
+			complete = true;
+			for(String instrumentName : instrumentNames) {
+				State state = dataLoader.getState();
+				log.trace(instrumentName + " state: " + state);
+				complete &= (state.equals(State.COMPLETE) || state.equals(State.ERROR));
+				if(state.equals(State.ERROR)) {
+					log.error("ERROR loading data for " + instrumentName);
+				}
+				else if(state.equals(State.COMPLETE)) {
+					log.info("data for " + instrumentName + " loaded");
+				}
+			}
+		} while (!complete);
 		return;
 	}
 	
