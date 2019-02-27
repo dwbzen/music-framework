@@ -213,9 +213,9 @@ public class ScorePart implements Serializable, Runnable {
 	    		if(tt.equals(TextureType.CHORDAL)) {
 	    			notesInThisChord = selector.getNumberOfNotesInChord(rhythmExpression);
 	    			chordal = notesInThisChord > 1;
-	    			log.info("measure: " + measureCounter + " units: " + units + " units count: " + unitsCount + " textureType: " + tt);
-	    			log.info("   " + rhythmExpression.toString());
-	    			log.info("   chord notes " + notesInThisChord);
+	    			log.debug("measure: " + measureCounter + " units: " + units + " units count: " + unitsCount + " textureType: " + tt);
+	    			log.debug("   " + rhythmExpression.toString());
+	    			log.debug("   chord notes " + notesInThisChord);
 	    		}
 
     			String noteType = rhythmScale.getNoteType(note);
@@ -225,7 +225,7 @@ public class ScorePart implements Serializable, Runnable {
 	    		 */
 	    		if(rut.equals(RhythmicUnitType.METRIC)  || unitsCount + units > unitsPerMeasure) {
 	    			// nothing more to do - can use the Note as is
-	    			log.debug("   add " + RhythmicUnitType.METRIC + " note: " + note.toString() );
+	    			log.trace("   add " + RhythmicUnitType.METRIC + " note: " + note.toString() );
 	    			tupletGroup = null;
 	    			if(chordal) {
 	    				// create a chord having the number notesInThisChord # of notes
@@ -234,7 +234,7 @@ public class ScorePart implements Serializable, Runnable {
 	    		}
 	    		else if(rut.equals(RhythmicUnitType.EXTRAMETRIC)) {
 
-	    			log.debug("   add " + rut + " note: " + note.toString() );
+	    			log.trace("   add " + rut + " note: " + note.toString() );
 	    			tupletGroup = new ArrayList<Measurable>();
 	    			Ratio ratio =  rhythmExpression.getRatio();
 	    			int notesInThisGroup = ratio.getNumberOfNotes();
@@ -310,7 +310,7 @@ public class ScorePart implements Serializable, Runnable {
 	    			int unitsThisMeasure = units - unitsNextMeasure;
 	    			Note lastNoteAdded = null;
 	    			Chord lastChordAdded = null;
-	    			log.debug("   Tie notes measure " + measure.getNumber() + 	",  unitsCount, units: " + unitsCount + ", " 
+	    			log.trace("   Tie notes measure " + measure.getNumber() + 	",  unitsCount, units: " + unitsCount + ", " 
 	    					+ units + " unitsNextMeasure: " + unitsNextMeasure 
 	    					+ " unitsThisMeasure: " + unitsThisMeasure );
 	    			
@@ -323,7 +323,7 @@ public class ScorePart implements Serializable, Runnable {
 		    			measure = createNewMeasure();
 		    			measureCounter++;
 		    			addFactorsChords(unitsNextMeasure, lastChordAdded, measure);
-	    				log.debug("   chord, lastChordAdded: " + chord + " " + lastChordAdded);
+	    				log.trace("   chord, lastChordAdded: " + chord + " " + lastChordAdded);
 	    			}
 	    			else {
 		    			note.setTupletType(TupletType.NONE);
@@ -331,7 +331,7 @@ public class ScorePart implements Serializable, Runnable {
 		    			measure = createNewMeasure();
 		    			measureCounter++;
 		    			addFactorsNotes(unitsNextMeasure, lastNoteAdded, measure, tieToNote);
-		    			log.debug("   note, lastNoteAdded: " + note + " " + lastNoteAdded);
+		    			log.trace("   note, lastNoteAdded: " + note + " " + lastNoteAdded);
 	    			}
 	    			tupletGroup = null;
 	    			unitsCount = unitsNextMeasure;

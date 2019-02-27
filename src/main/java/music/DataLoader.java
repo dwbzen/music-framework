@@ -2,7 +2,6 @@ package music;
 
 import java.util.Properties;
 
-import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
@@ -26,7 +25,6 @@ public class DataLoader  implements Runnable {
 	private String dataSourceName = null;
 	private Configuration configuration = null;
 	
-	private Connection connection = null;
 	private Session session = null;
 	
 	private ScorePart.State state = State.UNKNOWN;
@@ -40,14 +38,13 @@ public class DataLoader  implements Runnable {
 	 * @param connection a java.jms.Connection to ApacheMQ
 	 * @param session a javax.jms.Session instance to create a java.jms.TextMessage
 	 */
-	public DataLoader(String instrumentName, Configuration configuration, MessageProducer producer, String dataSourceName, Connection connection, Session session) {
+	public DataLoader(String instrumentName, Configuration configuration, MessageProducer producer, String dataSourceName, Session session) {
 		state = State.INIT;
 		this.configuration = configuration;
 		this.instrumentName = instrumentName;
 		this.producer = producer;
 		configProperties = configuration.getProperties();
 		this.session = session;
-		this.connection = connection;
 		this.dataSourceName = dataSourceName;
 	}
 	

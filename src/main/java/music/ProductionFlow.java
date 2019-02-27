@@ -267,6 +267,11 @@ public class ProductionFlow implements Runnable {
 			analyzer.analyze();
 			analyzer.displayAnalysis(printStream);
 		}
+		try {
+			connection.close();
+		} catch (JMSException e) {
+			log.error("JMS Exception on close");
+		}
 	}
 
 	private void createXML(String filename) {
@@ -393,7 +398,7 @@ public class ProductionFlow implements Runnable {
 		try {
 			for(String instrumentName : instrumentNames) {
 				MessageProducer producer = producers.get(instrumentName);
-				dataLoader = new DataLoader(instrumentName, configuration, producer, dataSourceName, connection, session);
+				dataLoader = new DataLoader(instrumentName, configuration, producer, dataSourceName, session);
 				Thread thread = new Thread(dataLoader);
 				thread.start();
 			}
