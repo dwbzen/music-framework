@@ -19,7 +19,7 @@ public class Koto  extends Instrument {
 		this.abreviation = "Koto";
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(108);
-		cleffs.add(Cleff.G8va);
+		cleffs.add(Cleff.G);
 		setName(NAME);
 		setPartName(NAME);
 		setMidiProgram(108);

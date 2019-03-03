@@ -104,7 +104,7 @@ public class ScorePart implements Serializable, Runnable {
 		try {
 			configure();
 			collectScorePartData();
-			log.info("collectScorePartData completed. Closing connection");
+			log.info("collectScorePartData completed.");
 			connection.close();
 		} catch (Exception e) {
 			log.error("exception: " + e.toString());

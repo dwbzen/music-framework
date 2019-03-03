@@ -81,7 +81,12 @@ public class DataLoader  implements Runnable {
 			else if(dataSourceName.equalsIgnoreCase("mongodb") || instrumentSource.equalsIgnoreCase("mongodb")) {
 				ds = new MongoDBDataSource(configuration, instrumentName);
 			}
-			
+			/********************************************************
+			 * TODO Load data from an IteratedFunctionSystem builtin
+			 ********************************************************/
+			else if(instrumentSource.equalsIgnoreCase("ifs")) {
+				// ds = new IfsDataSource(configuration, instrumentName);
+			}
 			ds.stream().forEach(rec ->{
 				try {
 					producer.send(session.createTextMessage(rec));
