@@ -54,9 +54,9 @@ public class DataLoader  implements Runnable {
 
 	@Override
 	public void run() {
-		log.debug("DataLoader(" +instrumentName + ")");
+		log.info("DataLoader(" +instrumentName + ")");
 		try {
-			state = State.WORKING;
+			updateState(State.WORKING);
 			String instrumentSource = configProperties.getProperty("dataSource." + instrumentName);
 			log.info("loadData for " + instrumentName + " source: " + instrumentSource);
 			DataSource ds = null;
@@ -98,12 +98,16 @@ public class DataLoader  implements Runnable {
 				}
 			});
 			ds.close();
-			state = State.COMPLETE;
+			updateState(State.COMPLETE);
 		} catch (Exception e) {
 			log.error("loadData exception: " +e.toString());
 			e.printStackTrace(System.err);
-			state = State.ERROR;
+			updateState(State.ERROR);
 		}
 		return;
+	}
+	
+	synchronized void updateState(State s) {
+		state = s;
 	}
 }

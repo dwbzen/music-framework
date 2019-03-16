@@ -71,7 +71,7 @@ public class PitchScaler extends Scaler {
 		p = round(d);	// rounds and transposes if needed for transposing instrument
 		log.debug(" num: " + num + " d: " + d + "  pitch: " + p);
 		if(p.compareTo(pr.getLow()) < 0) {
-			log.warn("PitchScaler out of bounds " + num);
+			log.warn("PitchScaler for " + instrument.getName() + " out of bounds " + num);
 		}
 		return p;
 	}
