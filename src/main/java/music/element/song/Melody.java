@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import music.element.Key;
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 /**
  * The melody part of a SongMeasure. For example, given 192 divisions in 4/4 time:

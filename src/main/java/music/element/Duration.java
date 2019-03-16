@@ -3,8 +3,8 @@ package music.element;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.IntegerPair;
-import mathlib.util.IJson;
+import org.dwbzen.common.math.IntegerPair;
+import org.dwbzen.common.util.IJson;
 import util.Ratio;
 
 public class Duration implements IJson, Comparable<Duration> {

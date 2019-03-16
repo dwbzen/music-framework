@@ -8,8 +8,8 @@ import java.util.Map;
 
 import music.element.Key.Mode;
 import music.element.Scales;
-import mathlib.util.IJson;
-import mathlib.util.INameable;
+import org.dwbzen.common.util.IJson;
+import org.dwbzen.common.util.INameable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

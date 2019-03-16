@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import mathlib.IntegerPair;
+import org.dwbzen.common.math.IntegerPair;
 import music.element.Chord;
 import music.element.Duration;
 import music.element.Measurable;

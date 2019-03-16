@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 import util.IMapped;
 
 /**

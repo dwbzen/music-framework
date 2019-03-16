@@ -3,7 +3,7 @@ package music.transform;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import mathlib.IntegerPair;
+import org.dwbzen.common.math.IntegerPair;
 import music.element.PitchRange;
 
 import org.apache.log4j.Logger;
@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 public abstract class AbstractExploder implements IJson, IExploder {
 

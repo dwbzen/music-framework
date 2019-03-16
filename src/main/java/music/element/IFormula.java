@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import mathlib.util.INameable;
+import org.dwbzen.common.util.INameable;
 
 
 /**

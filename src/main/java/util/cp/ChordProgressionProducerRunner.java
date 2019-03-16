@@ -5,8 +5,8 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import mathlib.cp.CollectorStats;
-import mathlib.cp.MarkovChain;
+import org.dwbzen.common.cp.CollectorStats;
+import org.dwbzen.common.cp.MarkovChain;
 import music.element.song.ChordFormula;
 import music.element.song.ChordProgression;
 import music.element.song.ChordProgressionScrapbook;

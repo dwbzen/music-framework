@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import junit.framework.TestCase;
-import mathlib.MathUtil;
+import org.dwbzen.common.math.MathUtil;
 import music.element.Duration;
 import music.element.IRhythmExpression;
 import music.element.Note;

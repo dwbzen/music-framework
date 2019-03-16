@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 
 /**

@@ -8,7 +8,7 @@ import music.element.TimeSignature;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 /**
  * A pitch + Duration. Can also be a rest (no pitch).

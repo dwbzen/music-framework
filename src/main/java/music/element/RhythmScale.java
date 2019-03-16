@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.MathUtil;
+import org.dwbzen.common.math.MathUtil;
 import music.action.ExpressionSelector;
 import music.element.rhythm.IRhythmTextureMap;
 import music.transform.ITransformer.Preference;

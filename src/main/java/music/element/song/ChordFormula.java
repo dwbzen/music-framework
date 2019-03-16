@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 import music.element.IFormula;
 import music.element.Key;
 import music.element.Pitch;

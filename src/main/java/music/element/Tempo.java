@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import mathlib.Point;
+import org.dwbzen.common.math.Point;
 import music.element.Duration.BeatUnit;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

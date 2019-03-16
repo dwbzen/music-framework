@@ -12,8 +12,7 @@ import javax.jms.TextMessage;
 import org.apache.activemq.command.ActiveMQMapMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import mathlib.JsonObject;
+import org.dwbzen.common.math.JsonObject;
 
 public class ScorePartMessageListener implements Runnable, MessageListener, ExceptionListener {
 	protected static final Logger log = LogManager.getLogger(ScorePartMessageListener.class);

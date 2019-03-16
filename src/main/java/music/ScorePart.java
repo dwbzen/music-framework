@@ -17,13 +17,8 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import mathlib.BaseJsonObject;
-import mathlib.CommandMessage;
-import mathlib.JsonObject;
-import mathlib.Point2D;
-import mathlib.PointSet;
-import mathlib.PointSetStats;
-import mathlib.ifs.IteratedFunctionSystem;
+import org.dwbzen.common.math.*;
+import org.dwbzen.common.math.ifs.IteratedFunctionSystem;
 import music.action.DurationScaler;
 import music.action.ExpressionSelector;
 import music.action.PitchScaler;

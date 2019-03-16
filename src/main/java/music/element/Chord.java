@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 /**
  * A Chord is a vertical arrangement of Notes

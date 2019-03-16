@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import music.ScorePart;
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 /**
  * A Measure is a horizontal arrangement of Note and/or Chord : i.e. a Measurable

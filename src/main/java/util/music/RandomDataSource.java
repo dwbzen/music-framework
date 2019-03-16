@@ -3,10 +3,10 @@ package util.music;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-import mathlib.CommandMessage;
-import mathlib.Point2D;
-import mathlib.PointSet;
-import mathlib.ProbabilityDensityFunction;
+import org.dwbzen.common.math.CommandMessage;
+import org.dwbzen.common.math.Point2D;
+import org.dwbzen.common.math.PointSet;
+import org.dwbzen.common.math.ProbabilityDensityFunction;
 import util.Configuration;
 
 /**

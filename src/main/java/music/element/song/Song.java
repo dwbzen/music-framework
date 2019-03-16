@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import mathlib.RaggedArray;
-import mathlib.util.IJson;
-import mathlib.util.INameable;
+import org.dwbzen.common.math.RaggedArray;
+import org.dwbzen.common.util.IJson;
+import org.dwbzen.common.util.INameable;
 
 /**
  * A Song encapsulates a song as it would appear in a Guitar Fake Book

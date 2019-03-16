@@ -11,7 +11,7 @@ import java.util.TreeMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import mathlib.Matrix;
+import org.dwbzen.common.math.Matrix;
 import music.element.Chord;
 import music.element.Duration;
 import music.element.IMeasurableContainer;

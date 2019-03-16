@@ -2,7 +2,7 @@ package music.element;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 /**
  * Immutable class encapsulates time signature as in 4/4 or 3/8.

@@ -5,7 +5,7 @@ import music.element.Measurable.TupletType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 /**
  * Provide note type (half, quarter etc. ),  tuplet and tie information.

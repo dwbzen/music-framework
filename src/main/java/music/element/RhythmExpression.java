@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 import util.Ratio;
 
 public class RhythmExpression implements IJson, IRhythmExpression {

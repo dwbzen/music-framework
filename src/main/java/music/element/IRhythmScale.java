@@ -7,8 +7,8 @@ import java.util.SortedSet;
 import music.action.ExpressionSelector;
 import music.element.rhythm.IRhythmTextureMap;
 import music.transform.ITransformer.Preference;
-import mathlib.util.IJson;
-import mathlib.util.INameable;
+import org.dwbzen.common.util.IJson;
+import org.dwbzen.common.util.INameable;
 
 public interface IRhythmScale extends IJson, INameable {
 	

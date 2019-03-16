@@ -2,7 +2,7 @@ package music.action;
 
 import org.apache.log4j.Logger;
 
-import mathlib.Point2D;
+import org.dwbzen.common.math.Point2D;
 import music.element.Key;
 import music.element.Pitch;
 import music.element.PitchRange;

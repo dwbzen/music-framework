@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import mathlib.util.INameable;
+import org.dwbzen.common.util.INameable;
 
 /**
  * A collection of Song(s) treated as a unit.

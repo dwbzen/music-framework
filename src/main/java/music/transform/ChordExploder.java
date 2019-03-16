@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import mathlib.IntegerPair;
+import org.dwbzen.common.math.IntegerPair;
 import music.element.Measurable;
 import music.element.Measure;
 

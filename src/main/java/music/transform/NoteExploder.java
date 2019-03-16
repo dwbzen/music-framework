@@ -3,9 +3,9 @@ package music.transform;
 import java.util.ArrayList;
 import java.util.List;
 
-import mathlib.Factor;
-import mathlib.IntegerPair;
-import mathlib.Partition;
+import org.dwbzen.common.math.Factor;
+import org.dwbzen.common.math.IntegerPair;
+import org.dwbzen.common.math.Partition;
 import music.ScoreHelper;
 import music.element.Chord;
 import music.element.Duration;

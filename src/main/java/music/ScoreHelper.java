@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import mathlib.Factor;
-import mathlib.MathUtil;
-import mathlib.Partition;
+import org.dwbzen.common.math.Factor;
+import org.dwbzen.common.math.MathUtil;
+import org.dwbzen.common.math.Partition;
 import music.element.Duration;
 import music.element.Measure;
 import music.element.Note;

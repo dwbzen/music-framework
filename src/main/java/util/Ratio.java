@@ -2,7 +2,7 @@ package util;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 public class Ratio  implements IJson {
 

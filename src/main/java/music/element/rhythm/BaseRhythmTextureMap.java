@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import music.element.IRhythmExpression;
 import music.element.TextureType;
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 public class BaseRhythmTextureMap  implements IJson, IRhythmTextureMap {
 

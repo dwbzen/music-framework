@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import util.Configurable;
 import util.Configuration;
-import mathlib.Point2D;
+import org.dwbzen.common.math.Point2D;
 import music.action.DurationScaler;
 import music.action.PitchScaler;
 import music.element.Cleff;

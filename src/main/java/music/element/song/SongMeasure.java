@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import music.element.TimeSignature;
-import mathlib.util.IJson;
+import org.dwbzen.common.util.IJson;
 
 /**
  * A simplified Measure as it might appear in a guitar Fake Book.

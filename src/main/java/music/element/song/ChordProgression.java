@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import mathlib.cp.ICollectable;
+import org.dwbzen.common.cp.ICollectable;
 
 /**
  * A ChordProgression is just a List of HarmonyChord.

@@ -11,7 +11,7 @@ import music.element.Key.Mode;
 import music.element.Pitch;
 import music.element.PitchClass;
 import music.element.PitchRange;
-import mathlib.util.INameable;
+import org.dwbzen.common.util.INameable;
 
 public interface IInstrument extends INameable, Serializable {
 

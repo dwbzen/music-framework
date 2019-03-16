@@ -9,9 +9,9 @@ import org.apache.log4j.Logger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.cp.ICollectable;
-import mathlib.util.IJson;
-import mathlib.util.INameable;
+import org.dwbzen.common.cp.ICollectable;
+import org.dwbzen.common.util.IJson;
+import org.dwbzen.common.util.INameable;
 import music.element.Alteration;
 import music.element.Key;
 import music.element.Pitch;

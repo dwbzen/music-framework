@@ -9,8 +9,8 @@ import music.element.Scales;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mathlib.util.IJson;
-import mathlib.util.INameable;
+import org.dwbzen.common.util.IJson;
+import org.dwbzen.common.util.INameable;
 
 /**
  * A simplified Harmony Chord. Has the bare minimum of information  - the chord name and a beat
