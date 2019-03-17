@@ -14,16 +14,21 @@ apply plugin: 'eclipse'
 
 sourceCompatibility = 10
 targetCompatibility = 10
-group = 'music_framework'
 version = '2.0'
-description = 'Music Framework'
+project.group = 'music_framework'
+project.description = 'Music Framework'
 project.tasks["sonarqube"].dependsOn "build"
-
 
 jar {
     manifest {
         attributes 'Implementation-Title': 'music-framework',
                    'Implementation-Version': version
+    }
+}
+
+sonarqube {
+    properties {
+        property 'sonar.projectName', 'music-framework'
     }
 }
 
