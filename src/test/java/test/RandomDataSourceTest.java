@@ -1,7 +1,7 @@
 package test;
 
-import util.Configuration;
-import util.music.RandomDataSource;
+import org.dwbzen.util.Configuration;
+import org.dwbzen.util.music.RandomDataSource;
 
 public class RandomDataSourceTest {
 

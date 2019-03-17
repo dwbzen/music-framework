@@ -2,14 +2,14 @@ package test;
 
 import java.util.List;
 
-import music.element.IScaleFormula;
-import music.element.Key;
-import music.element.Note;
-import music.element.Pitch;
-import music.element.Scale;
-import music.element.Scales;
-import music.transform.ScaleTransformer;
-import music.transform.ITransformer.Preference;
+import org.dwbzen.music.element.IScaleFormula;
+import org.dwbzen.music.element.Key;
+import org.dwbzen.music.element.Note;
+import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.element.Scale;
+import org.dwbzen.music.element.Scales;
+import org.dwbzen.music.transform.ScaleTransformer;
+import org.dwbzen.music.transform.ITransformer.Preference;
 
 public class TransformTest {
 

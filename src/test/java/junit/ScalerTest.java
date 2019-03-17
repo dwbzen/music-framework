@@ -4,11 +4,11 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import music.action.PitchScaler;
-import music.element.Pitch;
-import music.element.PitchRange;
-import music.instrument.Flute;
-import music.instrument.Instrument;
+import org.dwbzen.music.action.PitchScaler;
+import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.element.PitchRange;
+import org.dwbzen.music.instrument.Flute;
+import org.dwbzen.music.instrument.Instrument;
 
 public class ScalerTest extends TestCase  {
 	static final org.apache.log4j.Logger log = Logger.getLogger(ScalerTest.class);

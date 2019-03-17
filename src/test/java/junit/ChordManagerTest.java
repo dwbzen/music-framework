@@ -8,10 +8,10 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import music.element.Pitch;
-import music.element.song.ChordFormula;
-import music.element.song.HarmonyChord;
-import util.music.ChordManager;
+import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.element.song.ChordFormula;
+import org.dwbzen.music.element.song.HarmonyChord;
+import org.dwbzen.util.music.ChordManager;
 
 public class ChordManagerTest extends TestCase {
 

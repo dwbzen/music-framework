@@ -2,10 +2,10 @@ package test;
 
 import java.util.List;
 
-import music.element.Pitch;
-import music.element.PitchRange;
-import music.instrument.Bassoon;
-import music.action.PitchScaler;
+import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.element.PitchRange;
+import org.dwbzen.music.instrument.Bassoon;
+import org.dwbzen.music.action.PitchScaler;
 
 public class BassoonTest {
 

@@ -1,9 +1,9 @@
 package test;
 
-import music.action.PitchScaler;
-import music.element.Pitch;
-import music.instrument.Piano;
-import music.instrument.PianoRH;
+import org.dwbzen.music.action.PitchScaler;
+import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.instrument.Piano;
+import org.dwbzen.music.instrument.PianoRH;
 
 public class PianoTest {
 	

@@ -3,9 +3,9 @@ package junit;
 import org.apache.log4j.Logger;
 
 import junit.framework.TestCase;
-import music.element.Pitch;
-import music.element.Scale;
-import util.music.ScaleManager;
+import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.element.Scale;
+import org.dwbzen.util.music.ScaleManager;
 
 public class ScaleManagerTest   extends TestCase {
 	static final org.apache.log4j.Logger log = Logger.getLogger(ScaleManagerTest.class);

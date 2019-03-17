@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import music.element.song.ChordInfo;
+import org.dwbzen.music.element.song.ChordInfo;
 
 public class ChordUtilTest extends TestCase {
 	static final org.apache.log4j.Logger log = Logger.getLogger(ChordUtilTest.class);

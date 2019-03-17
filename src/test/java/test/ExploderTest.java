@@ -1,7 +1,7 @@
 package test;
 
-import music.transform.IExploder.ExploderType;
-import music.transform.NoteExploder;
+import org.dwbzen.music.transform.IExploder.ExploderType;
+import org.dwbzen.music.transform.NoteExploder;
 
 public class ExploderTest {
 

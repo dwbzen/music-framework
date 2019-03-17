@@ -14,7 +14,7 @@ apply plugin: 'eclipse'
 
 sourceCompatibility = 10
 targetCompatibility = 10
-version = '2.0'
+version = '3.0'
 project.group = 'music_framework'
 project.description = 'Music Framework'
 project.tasks["sonarqube"].dependsOn "build"

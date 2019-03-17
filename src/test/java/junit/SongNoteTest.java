@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import music.element.song.Notation;
-import music.element.song.SongNote;
+import org.dwbzen.music.element.song.Notation;
+import org.dwbzen.music.element.song.SongNote;
 
 public class SongNoteTest extends TestCase {
 	static final org.apache.log4j.Logger log = Logger.getLogger(SongNoteTest.class);

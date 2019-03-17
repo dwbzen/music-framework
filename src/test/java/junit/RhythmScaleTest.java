@@ -6,14 +6,14 @@ import org.apache.log4j.Logger;
 
 import junit.framework.TestCase;
 import org.dwbzen.common.math.MathUtil;
-import music.element.Duration;
-import music.element.IRhythmExpression;
-import music.element.Note;
-import music.element.Pitch;
-import music.element.RhythmScale;
-import music.element.rhythm.IRhythmTextureMap;
-import util.Ratio;
-import util.music.Monophonic16StandardRhythmScaleFactory;
+import org.dwbzen.music.element.Duration;
+import org.dwbzen.music.element.IRhythmExpression;
+import org.dwbzen.music.element.Note;
+import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.element.RhythmScale;
+import org.dwbzen.music.element.rhythm.IRhythmTextureMap;
+import org.dwbzen.util.Ratio;
+import org.dwbzen.util.music.Monophonic16StandardRhythmScaleFactory;
 
 public class RhythmScaleTest extends TestCase  {
 	static final org.apache.log4j.Logger log = Logger.getLogger(RhythmScaleTest.class);

@@ -3,7 +3,7 @@ package junit;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import music.element.Chord;
+import org.dwbzen.music.element.Chord;
 
 public class ChordTest extends TestCase {
 

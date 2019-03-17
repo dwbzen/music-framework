@@ -10,7 +10,7 @@ apply plugin: 'eclipse'
 sourceCompatibility = 10
 targetCompatibility = 10
 group = 'music_framework'
-version = '2.0'
+version = '3.0'
 description = 'Music Framework'
 
 jar {

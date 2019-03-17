@@ -9,9 +9,9 @@ import org.apache.logging.log4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import music.element.Key;
-import music.element.Pitch;
-import music.element.ScaleFormula;
+import org.dwbzen.music.element.Key;
+import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.element.ScaleFormula;
 
 public class ScaleFormulaTest {
 	static ObjectMapper mapper = new ObjectMapper();

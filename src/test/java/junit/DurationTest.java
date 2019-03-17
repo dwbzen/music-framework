@@ -1,7 +1,7 @@
 package junit;
 
 import junit.framework.TestCase;
-import music.element.Duration;
+import org.dwbzen.music.element.Duration;
 
 public class DurationTest  extends TestCase {
 	

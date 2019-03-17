@@ -1,6 +1,6 @@
 package test;
 
-import music.element.Interval;
+import org.dwbzen.music.element.Interval;
 
 public class IntervalTest {
 	

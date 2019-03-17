@@ -7,12 +7,12 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import music.element.Alteration;
-import music.element.Key;
-import music.element.Pitch;
-import music.element.Scale;
-import music.element.Scales;
-import music.element.Step;
+import org.dwbzen.music.element.Alteration;
+import org.dwbzen.music.element.Key;
+import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.element.Scale;
+import org.dwbzen.music.element.Scales;
+import org.dwbzen.music.element.Step;
 
 public class PitchTest extends TestCase {
 	static final org.apache.log4j.Logger log = Logger.getLogger(PitchTest.class);

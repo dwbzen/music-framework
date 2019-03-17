@@ -4,13 +4,13 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import music.element.Key;
-import music.element.TimeSignature;
-import music.element.song.KeyLite;
-import music.element.song.Melody;
-import music.element.song.Notation;
-import music.element.song.SongMeasure;
-import music.element.song.SongNote;
+import org.dwbzen.music.element.Key;
+import org.dwbzen.music.element.TimeSignature;
+import org.dwbzen.music.element.song.KeyLite;
+import org.dwbzen.music.element.song.Melody;
+import org.dwbzen.music.element.song.Notation;
+import org.dwbzen.music.element.song.SongMeasure;
+import org.dwbzen.music.element.song.SongNote;
 
 public class SongMeasureTest extends TestCase {
 	static final org.apache.log4j.Logger log = Logger.getLogger(SongMeasureTest.class);
