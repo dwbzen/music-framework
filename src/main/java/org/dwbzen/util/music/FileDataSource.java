@@ -34,7 +34,10 @@ public class FileDataSource extends DataSource {
 	 */
 	public void configure() {
 		fileKey = "dataSource.".concat(instrumentName);
-		// typically: stats,point,message
+		/*
+		/* typically: IFS,Point2D,message,stats
+		 *
+		 */
 		String queryString = configuration.getProperties().getProperty("dataSource.file.queryString");
 		filters = queryString.split(",");
 		filePath = configuration.getProperties().getProperty("dataSource.file.path");
@@ -53,14 +56,14 @@ public class FileDataSource extends DataSource {
 		Stream<String> stream2 = null;
 		Stream<String> stream3 = null;
 		try {
-			stream1 = Files.lines(path).filter(w -> w.contains(filters[0]));
-			if(randomSelection) {
+			stream1 = Files.lines(path).filter(w -> (w.contains(filters[0]) || w.contains(filters[3])) );	// "type":"IFS" or "type":"stats"
+			if(randomSelection) {	// "type":"Point2D"
 				stream2 = Files.lines(path).filter(w -> w.contains(filters[1])).skip(randomPredicate.getAsInt()).limit(maxSize);
 			}
 			else {
 				stream2 = Files.lines(path).filter(w -> w.contains(filters[1])).limit(maxSize);
 			}
-			stream3 = Files.lines(path).filter(w -> w.contains(filters[2]));
+			stream3 = Files.lines(path).filter(w -> w.contains(filters[2]));	// "type":"message"
 			stream = Stream.concat(Stream.concat(stream1, stream2), stream3);
 		} catch (IOException e) {
 			log.error("IOException: " + e.getMessage());

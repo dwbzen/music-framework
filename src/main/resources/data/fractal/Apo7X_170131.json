@@ -1,6 +1,6 @@
 {"name":"Apo7X-171203-2b","type":"message","command":"START"}
 {"name":"Apo7X-171203-2b","type":"IFS","functions":[{"name":"F0","function":{"array":[[0.7941100,-0.5979300,-0.005497800],[0.5979300,0.7941100,-0.1627300]]},"type":"LinearFunction","weight":0.585390790140198},{"name":"F1","function":{"array":[[-0.7629500,-0.3640700,0.1366300],[0.6379000,-0.6026000,0.04368500]]},"type":"LinearFunction","weight":0.414609209859801}],"range":2.0,"low":-1.0}
-{"name":"unknown","type":"stats","minPoint":{"name":"unknown","type":"Point2D","x":0.001279,"y":0.0080546,"count":1},"maxPoint":{"name":"unknown","type":"Point2D","x":-0.7155,"y":-1.4387,"count":1},"minX":-1.3427,"minY":-1.4387,"maxX":1.3865,"maxY":1.3579}
+{"name":"Apo7X-171203-2b","type":"stats","minPoint":{"name":"unknown","type":"Point2D","x":0.001279,"y":0.0080546,"count":1},"maxPoint":{"name":"unknown","type":"Point2D","x":-0.7155,"y":-1.4387,"count":1},"minX":-1.3427,"minY":-1.4387,"maxX":1.3865,"maxY":1.3579}
 {"name":"Apo7X-171203-2b","type":"Point2D","x":-0.21042,"y":0.19024,"count":1}
 {"name":"Apo7X-171203-2b","type":"Point2D","x":-0.28634,"y":-0.13747,"count":1}
 {"name":"Apo7X-171203-2b","type":"Point2D","x":-0.15069,"y":-0.44311,"count":1}

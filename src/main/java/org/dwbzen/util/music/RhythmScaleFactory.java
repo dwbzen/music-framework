@@ -16,7 +16,7 @@ public class RhythmScaleFactory  {
 	public final static int[] standardBaseUnits = {1, 2, 3, 4, 6, 8, 10, 12, 14, 16};
 	
 	public static int standardRoot = 16;
-	public static final String DEFAULT_RHYTHM_SCALE_FACTORY = "util.music.Monophonic16StandardRhythmScaleFactory";
+	public static final String DEFAULT_RHYTHM_SCALE_FACTORY = "org.dwbzen.util.music.Monophonic16StandardRhythmScaleFactory";
 	public static final String DEFAULT_RHYTHM_SCALE_NAME = "Monophonic16StandardRhythmScale";
 	
 	static Map<String,  IRhythmScaleFactory> factoryClassMap = new HashMap<String, IRhythmScaleFactory>();
@@ -29,8 +29,8 @@ public class RhythmScaleFactory  {
 	 *     score.rhythmScale.instrument.PianoLH.factory=Monophonic16StandardRhythmScaleFactory
 	 */
 	static String[] RHYTHM_SCALE_FACTORIES = { 
-			"util.music.Standard16RhythmScaleFactory",
-			"util.music.Monophonic16StandardRhythmScaleFactory"
+			"org.dwbzen.util.music.Standard16RhythmScaleFactory",
+			"org.dwbzen.util.music.Monophonic16StandardRhythmScaleFactory"
 	};
 	static String[] RHYTHM_SCALE_FACTORY_NAMES = { 
 			"Standard16RhythmScale",

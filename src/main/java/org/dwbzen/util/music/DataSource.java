@@ -40,15 +40,17 @@ public abstract class DataSource implements IDataSource {
 	protected Stream<String> stream;
 	protected Random randomPredicate = null;
 	protected String instrumentName;
-	protected int skipFactor = 20;
+	protected int skipFactor = 20;		// How many records to initially skip for RANDOM selection
 
 	static final String SEQUENTIAL = "sequential";
 	static final String RANDOM = "random";
 	
 	/**
 	 * Sets configuration properties that are common across data sources: instrumentNames, randomSelection
-	 * Then invokes configure() in derived class.
-	 * @param config
+	 * Then invokes configure() in derived class.</br>
+	 * Maximum number of records to read is estimated as the #measures x score divisions x 2
+	 * @param config global Configuration
+	 * @param String instrumentName
 	 */
 	public DataSource(Configuration config, String instrumentName) {
 		configuration = config;

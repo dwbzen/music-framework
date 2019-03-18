@@ -422,6 +422,11 @@ public class ProductionFlow implements Runnable {
 				else if(state.equals(State.COMPLETE)) {
 					log.info("data for " + instrumentName + " loaded");
 				}
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					log.error("Thread interrupted");
+				}
 			}
 		} while (!complete);
 		return;
