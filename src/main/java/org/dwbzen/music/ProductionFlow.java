@@ -21,11 +21,6 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bson.Document;
-
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-
 import org.dwbzen.music.ScorePart.State;
 import org.dwbzen.music.action.ScoreAnalyzer;
 import org.dwbzen.music.element.IRhythmScale;
@@ -38,13 +33,13 @@ import org.dwbzen.util.Configuration;
 import org.dwbzen.util.ConfigurationException;
 import org.dwbzen.util.messaging.MessageProducerImpl;
 import org.dwbzen.util.messaging.SessionImpl;
-import org.dwbzen.util.mongo.MongoDBDataSource;
 import org.dwbzen.util.music.DataLoadException;
-import org.dwbzen.util.music.DataSource;
-import org.dwbzen.util.music.FileDataSource;
 import org.dwbzen.util.music.IRhythmScaleFactory;
-import org.dwbzen.util.music.RandomDataSource;
 import org.dwbzen.util.music.RhythmScaleFactory;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 /**
  * This creates and executes a workflow to produce a MusicXML file.</p>
