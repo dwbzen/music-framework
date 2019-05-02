@@ -6,10 +6,9 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Stream;
-
-import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,7 +31,7 @@ import org.dwbzen.music.element.Scales;
  *
  */
 public class ScaleExportManager  {
-	static final org.apache.log4j.Logger log = Logger.getLogger(ScaleExportManager.class);
+	static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(ScaleExportManager.class);
 
 	private StringBuilder stringBuilder = null;
 	ObjectMapper mapper = new ObjectMapper();
@@ -130,8 +129,8 @@ public class ScaleExportManager  {
 	 */
 	public String exportScaleFormulas() {
 		stringBuilder = new StringBuilder("[\n");
-		scaleFormulas.keySet()
-			.stream()
+		Set<String> kset = scaleFormulas.keySet();
+			kset.stream()
 			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
 			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
 			.forEach(s ->  exportScaleFormula(scaleFormulas.get(s)));
@@ -266,7 +265,7 @@ public class ScaleExportManager  {
 	 */
 	public void accept(String formulaString) {
 		ScaleFormula scaleFormula = null;
-		log.debug(formulaString);
+		log.info(formulaString);
 		try {
 			scaleFormula = mapper.readValue(formulaString, ScaleFormula.class);
 		} catch (Exception e) {

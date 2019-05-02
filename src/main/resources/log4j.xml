@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-
-<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
-
-	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+<Configuration status="debug" name="XMLConfig" packages="org.apache.logging.log4j.test">
+  <Properties>
+    <Property name="filename">target/test.log</Property>
+  </Properties>
+  <ThresholdFilter level="trace"/>
+  
+  <Appenders>
+  	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{DATE} | %p | %t | %m%n"/>
 		</layout>
@@ -24,51 +27,28 @@
 			<param name="ConversionPattern" value="%d{DATE} | %p | %t | %m%n"/>
 		</layout>
 	</appender>
+  </Appenders>
 
-    <logger name="util" additivity="false">
-		<level value="WARN"/>
+  <Loggers>
+      <Logger name="org.dwbzen.common" additivity="false">
+		<level value="INFO"/>
 		<appender-ref ref="STDOUT"/>
-		<appender-ref ref="FILE"/>
-	</logger>
-
-    <logger name="music" additivity="false">
-		<level value="DEBUG"/>
-		<appender-ref ref="STDOUT"/>
-		<appender-ref ref="FILE"/>
-	</logger>
-
-    <logger name="music.action" additivity="false">
-		<level value="WARN"/>
-		<appender-ref ref="STDOUT"/>
-		<appender-ref ref="FILE"/>
-	</logger>
-
-    <logger name="music.element.song" additivity="false">
-		<level value="WARN"/>
-		<appender-ref ref="STDOUT"/>
-		<appender-ref ref="FILE"/>
-	</logger>
+	</Logger>
 	
-    <logger name="music.transform" additivity="false">
+    <Logger name="org.dwbzen.music" additivity="false">
 		<level value="DEBUG"/>
 		<appender-ref ref="STDOUT"/>
-		<appender-ref ref="FILE"/>
-	</logger>
+	</Logger>
 
-    <logger name="math" additivity="false">
-		<level value="WARN"/>
+	<Logger name="org.dwbzen.music.cp" additivity="false">
+		<level value="INFO"/>
 		<appender-ref ref="STDOUT"/>
-	</logger>
-
-	<logger name="util.cp" additivity="false">
-		<level value="DEBUG"/>
+	</Logger>
+	
+	<Logger name="org.dwbzen" additivity="false">
+		<level value="INFO"/>
 		<appender-ref ref="STDOUT"/>
-	</logger>
-
-	<logger name="com" additivity="false">
-		<level value="WARN"/>
-		<appender-ref ref="STDOUT"/>
-	</logger>
+	</Logger>
 
 	<logger name=" org.mongodb" additivity="false">
 		<level value="ERROR"/>
@@ -76,9 +56,11 @@
 	</logger>
 	
     <root>
-        <level value="ERROR" /> 
+        <level value="INFO" /> 
 		<appender-ref ref="STDOUT"/>
     </root>
-</log4j:configuration>
+  </Loggers>
+
+</Configuration>
 
 
