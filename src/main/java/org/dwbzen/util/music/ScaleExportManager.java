@@ -267,7 +267,7 @@ public class ScaleExportManager  {
 		ScaleFormula scaleFormula = null;
 		log.info(formulaString);
 		try {
-			scaleFormula = mapper.readValue(formulaString, ScaleFormula.class);
+			scaleFormula = ScaleFormula.deserialize(formulaString);
 		} catch (Exception e) {
 			log.error("Cannot deserialize " + formulaString + "\nbecause " + e.toString());
 		}

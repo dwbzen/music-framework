@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration status="error" name="XMLConfig" packages="org.apache.logging.log4j.test">
-  <Properties>
-    <Property name="filename">test.log</Property>
-  </Properties>
-  <ThresholdFilter level="trace"/>
-  
-  <Appenders>
-    <Console name="STDOUT">
-    	 <PatternLayout pattern="%d{Date} [%t] - %msg%n"/>
-    </Console>
-    <File name="File" fileName="${filename}">
-      <PatternLayout>
-        <pattern>%d %p %C{1.} [%t] %m%n</pattern>
-      </PatternLayout>
-    </File>
-  </Appenders>
+<Configuration>
+<Appenders>
+	<Console name="STDOUT"  target="SYSTEM_OUT">
+		<PatternLayout pattern="%d{DATE} | %p | %t | %m%n"/>
+	</Console>
 
-  <Loggers>
-      <Logger name="org.dwbzen.common" level="info" additivity="false">
-		<AppenderRef ref="STDOUT"/>
+	<File name="FILE" filename="c:/temp/app.log" append="false" createOnDemand="true">
+		<PatternLayout pattern="%d{DATE} | %p | %t | message: %m%n"/>
+	</File>
+</Appenders>
+<Loggers>
+
+    <Logger name="org.dwbzen.music" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="STDOUT"/>
 	</Logger>
 	
-    <Logger name="org.dwbzen" level="info" additivity="false">
-		<AppenderRef ref="STDOUT"/>
+	<Logger name="org.dwbzen.common" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="STDOUT"/>
 	</Logger>
 	
-    <root>
-        <level value="INFO" /> 
-		<AppenderRef ref="STDOUT"/>
-    </root>
-  </Loggers>
-
+    <Root level="info">
+      <AppenderRef ref="STDOUT"/>
+    </Root>
+</Loggers>
 </Configuration>

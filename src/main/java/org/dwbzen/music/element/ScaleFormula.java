@@ -35,7 +35,7 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 	static final Logger log = LogManager.getLogger(ScaleFormula.class);
 	static ObjectMapper mapper = new ObjectMapper();
 	
-	private final String name;
+	private String name;
 	@JsonInclude(Include.NON_EMPTY)
 	private List<String> alternateNames = new ArrayList<String>();
 	private List<String> groups = new ArrayList<String>();
@@ -198,8 +198,7 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 
 	@Override
 	public void setName(String name) {
-		// TODO Auto-generated method stub
-		
+		this.name = name;
 	}
 
 
