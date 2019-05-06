@@ -8,20 +8,31 @@
 	<File name="FILE" filename="c:/temp/app.log" append="false" createOnDemand="true">
 		<PatternLayout pattern="%d{DATE} | %p | %t | message: %m%n"/>
 	</File>
+
 </Appenders>
 <Loggers>
 
     <Logger name="org.dwbzen.music" additivity="false">
+		<level value="TRACE"/>
+		<appender-ref ref="STDOUT"/>
+	</Logger>
+	
+	<Logger name="org.dwbzen.music.cp" additivity="false">
+		<level value="DEBUG"/>
+		<appender-ref ref="STDOUT"/>
+	</Logger>
+
+	<Logger name="org.dwbzen.music.element" additivity="false">
+		<level value="DEBUG"/>
+		<appender-ref ref="STDOUT"/>
+	</Logger>
+	
+	<Logger name="org.dwbzen.util" additivity="false">
 		<level value="INFO"/>
 		<appender-ref ref="STDOUT"/>
 	</Logger>
 	
-	<Logger name="org.dwbzen.common" additivity="false">
-		<level value="info"/>
-		<appender-ref ref="STDOUT"/>
-	</Logger>
-	
-    <Root level="info">
+    <Root level="INFO">
       <AppenderRef ref="STDOUT"/>
     </Root>
 </Loggers>
