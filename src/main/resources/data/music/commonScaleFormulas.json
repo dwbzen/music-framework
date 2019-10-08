@@ -1,4 +1,4 @@
-[
+{"commonScaleFormulas":[
 {"(as 7/367/1 in 12edo)":{"groups":[ "untitled" ],"formula":[ 1, 3, 3, 2, 3 ],"size":5} },
 {"Adonai Malakh (Israel) 2b 1#":{"groups":[ "adonai" ],"formula":[ 1, 1, 1, 2, 2, 2, 1, 2 ],"size":8} },
 {"Adonai Malakh (Israel) 3b's":{"groups":[ "adonai" ],"formula":[ 1, 1, 1, 2, 2, 2, 1, 2 ],"size":8} },
@@ -607,4 +607,4 @@
 {"untitled Nonatonic 2 - 4#'s":{"groups":[ "untitled" ],"formula":[ 1, 2, 1, 1, 1, 1, 2, 1, 2 ],"size":9} },
 {"whole tone #'s in 12edo)":{"alternateNames":[ "Raga Gopriya (India) Anhemitonic Hexatonic" ],"groups":[ "whole" ],"formula":[ 2, 2, 2, 2, 2, 2 ],"size":6} },
 {"whole tone b's in 12edo)":{"alternateNames":[ "Raga Gopriya (India) Anhemitonic Hexatonic" ],"groups":[ "whole" ],"formula":[ 2, 2, 2, 2, 2, 2 ],"size":6} }
-]
+]}
