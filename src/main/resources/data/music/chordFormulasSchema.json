@@ -1,0 +1,128 @@
+  1 {
+  2   "definitions": {},
+  3   "$schema": "http://json-schema.org/draft-07/schema#",
+  4   "$id": "http://example.com/root.json",
+  5   "type": "object",
+  6   "title": "The Root Schema",
+  7   "required": [
+  8     "chordFormulas"
+  9   ],
+ 10   "properties": {
+ 11     "chordFormulas": {
+ 12       "$id": "#/properties/chordFormulas",
+ 13       "type": "array",
+ 14       "title": "The Chordformulas Schema",
+ 15       "items": {
+ 16         "$id": "#/properties/chordFormulas/items",
+ 17         "type": "object",
+ 18         "title": "The Items Schema",
+ 19         "required": [
+ 20           "Augmented"
+ 21         ],
+ 22         "properties": {
+ 23           "Augmented": {
+ 24             "$id": "#/properties/chordFormulas/items/properties/Augmented",
+ 25             "type": "object",
+ 26             "title": "The Augmented Schema",
+ 27             "required": [
+ 28               "symbols",
+ 29               "groups",
+ 30               "formula",
+ 31               "size",
+ 32               "chordSize",
+ 33               "formulaNumber",
+ 34               "template"
+ 35             ],
+ 36             "properties": {
+ 37               "symbols": {
+ 38                 "$id": "#/properties/chordFormulas/items/properties/Augmented/properties/symbols",
+ 39                 "type": "array",
+ 40                 "title": "The Symbols Schema",
+ 41                 "items": {
+ 42                   "$id": "#/properties/chordFormulas/items/properties/Augmented/properties/symbols/items",
+ 43                   "type": "string",
+ 44                   "title": "The Items Schema",
+ 45                   "default": "",
+ 46                   "examples": [
+ 47                     "aug",
+ 48                     "+"
+ 49                   ],
+ 50                   "pattern": "^(.*)$"
+ 51                 }
+ 52               },
+ 53               "groups": {
+ 54                 "$id": "#/properties/chordFormulas/items/properties/Augmented/properties/groups",
+ 55                 "type": "array",
+ 56                 "title": "The Groups Schema",
+ 57                 "items": {
+ 58                   "$id": "#/properties/chordFormulas/items/properties/Augmented/properties/groups/items",
+ 59                   "type": "string",
+ 60                   "title": "The Items Schema",
+ 61                   "default": "",
+ 62                   "examples": [
+ 63                     "triad"
+ 64                   ],
+ 65                   "pattern": "^(.*)$"
+ 66                 }
+ 67               },
+ 68               "formula": {
+ 69                 "$id": "#/properties/chordFormulas/items/properties/Augmented/properties/formula",
+ 70                 "type": "array",
+ 71                 "title": "The Formula Schema",
+ 72                 "items": {
+ 73                   "$id": "#/properties/chordFormulas/items/properties/Augmented/properties/formula/items",
+ 74                   "type": "integer",
+ 75                   "title": "The Items Schema",
+ 76                   "default": 0,
+ 77                   "examples": [
+ 78                     4,
+ 79                     4
+ 80                   ]
+ 81                 }
+ 82               },
+ 83               "size": {
+ 84                 "$id": "#/properties/chordFormulas/items/properties/Augmented/properties/size",
+ 85                 "type": "integer",
+ 86                 "title": "The Size Schema",
+ 87                 "default": 0,
+ 88                 "examples": [
+ 89                   2
+ 90                 ]
+ 91               },
+ 92               "chordSize": {
+ 93                 "$id": "#/properties/chordFormulas/items/properties/Augmented/properties/chordSize",
+ 94                 "type": "integer",
+ 95                 "title": "The Chordsize Schema",
+ 96                 "default": 0,
+ 97                 "examples": [
+ 98                   3
+ 99                 ]
+100               },
+101               "formulaNumber": {
+102                 "$id": "#/properties/chordFormulas/items/properties/Augmented/properties/formulaNumber",
+103                 "type": "integer",
+104                 "title": "The Formulanumber Schema",
+105                 "default": 0,
+106                 "examples": [
+107                   273
+108                 ]
+109               },
+110               "template": {
+111                 "$id": "#/properties/chordFormulas/items/properties/Augmented/properties/template",
+112                 "type": "string",
+113                 "title": "The Template Schema",
+114                 "default": "",
+115                 "examples": [
+116                   "C E Ab"
+117                 ],
+118                 "pattern": "^(.*)$"
+119               }
+120             }
+121           }
+122         }
+123       }
+124     }
+125   }
+126 }
+
+

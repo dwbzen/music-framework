@@ -59,7 +59,13 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 
 	private static final long serialVersionUID = 3941757049122502147L;
 	static final org.apache.log4j.Logger log = Logger.getLogger(ChordFormula.class);
-	private  ObjectMapper mapper = new ObjectMapper();
+	
+	@JsonIgnore	private  ObjectMapper mapper = new ObjectMapper();
+
+	@JsonProperty("name")			private String name;
+	@JsonProperty("symbols")		private List<String> symbols = new ArrayList<String>();
+	@JsonProperty("groups")			private List<String> groups = new ArrayList<String>();
+	@JsonProperty("formula")		private List<Integer> formula = new ArrayList<Integer>();
 
 	/**
 	 * Number of notes in the chord.
@@ -69,27 +75,24 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	 * size (#elements) of formula
 	 */
 	@JsonIgnore		private int size;
+	
 	/**
 	 * chordSpellingNumber - double word binary, 32 bits, accommodates 2 octave + 8 step span
 	 */
-	private int spellingNumber = 0xFFFFFFFF;
-	private String name;
-	@JsonInclude(Include.NON_EMPTY)
-	private List<String> alternateNames = new ArrayList<String>();
-	private List<String> groups = new ArrayList<String>();
-	private List<Integer> formula = new ArrayList<Integer>();
-	private List<String> symbols = new ArrayList<String>();
-	private String description = null;	// optional descriptive text
-	private List<String> intervals = new ArrayList<String>();
+	@JsonProperty("spellingNumber")			private int spellingNumber = 0xFFFFFFFF;
+	@JsonInclude(Include.NON_EMPTY)			private List<String> alternateNames = new ArrayList<String>();
+	@JsonInclude(Include.NON_EMPTY)			private String description = null;	// optional descriptive text
+	
+	@JsonProperty("intervals")				private List<String> intervals = new ArrayList<String>();
 	/**
 	 * The pitches, octave neutral root of "C", derived from the formula
 	 */
-	private List<Pitch> template = new ArrayList<Pitch>();
+	@JsonProperty("template")				private List<Pitch> template = new ArrayList<Pitch>();
 	/**
 	 * formulaNumber is a 3-byte binary (12 bits) where each bit corresponds to the scale degree-1
 	 * Works for a scale or a chord.
 	 */
-	private int formulaNumber = 0;
+	@JsonProperty("formulaNumber")			private int formulaNumber = 0;
 	
 	public static final ChordFormula SILENT = new ChordFormula();
 
@@ -142,6 +145,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		setFormulaNumber(computeFormulaNumber(frmla));
 	}
 	
+	@JsonIgnore	
 	public boolean isSilent() {
 		return chordSize==0;
 	}
