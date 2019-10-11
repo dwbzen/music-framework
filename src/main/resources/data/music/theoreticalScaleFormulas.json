@@ -1,4 +1,5 @@
-{"theoreticalScaleFormulas": [
+{"collection": "Theoretical Scales",
+ "scaleFormulas": [
 {"Theoretical-1-1-1-1-1-1-1-1-2-2":{"groups":[ "theoretical" ],"formula":[ 1, 1, 1, 1, 1, 1, 1, 1, 2, 2 ],"size":10} },
 {"Theoretical-1-1-1-1-1-1-1-1-3-1":{"groups":[ "theoretical" ],"formula":[ 1, 1, 1, 1, 1, 1, 1, 1, 3, 1 ],"size":10} },
 {"Theoretical-1-1-1-1-1-1-1-2-1-1-1":{"groups":[ "theoretical" ],"formula":[ 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1 ],"size":11} },

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -61,6 +62,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	static final org.apache.log4j.Logger log = Logger.getLogger(ChordFormula.class);
 	
 	@JsonIgnore	private  ObjectMapper mapper = new ObjectMapper();
+	@JsonPropertyOrder({"name","symbols"})
 
 	@JsonProperty("name")			private String name;
 	@JsonProperty("symbols")		private List<String> symbols = new ArrayList<String>();
@@ -87,7 +89,9 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	/**
 	 * The pitches, octave neutral root of "C", derived from the formula
 	 */
-	@JsonProperty("template")				private List<Pitch> template = new ArrayList<Pitch>();
+	@JsonProperty("spelling")				private List<String> spelling = new ArrayList<String>();	
+	
+	@JsonIgnore	private List<Pitch> template = new ArrayList<Pitch>();
 	/**
 	 * formulaNumber is a 3-byte binary (12 bits) where each bit corresponds to the scale degree-1
 	 * Works for a scale or a chord.
@@ -184,7 +188,9 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	}
 	
 	public  List<Pitch> createPitches(Pitch root, Key akey) {
-		return IFormula.createPitches(formula, root, akey);
+		List<Pitch> pitches = IFormula.createPitches(formula, root, akey);
+		pitches.forEach(p -> spelling.add(p.toString(-1)));
+		return pitches;
 	}
 	
 	public String toJSON() {
@@ -223,6 +229,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	 * Gets the first symbol only, which is the most common.
 	 * @return
 	 */
+	@JsonIgnore
 	public String getSymbol() {
 		return (symbols.size()>0) ? symbols.get(0) : "";
 	}
@@ -283,6 +290,10 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		return template;
 	}
 	
+	public List<String> getSpelling() {
+		return spelling;
+	}
+	
 	public void addTemplate() {
 		template.addAll(createPitches(Pitch.C, Key.C_MAJOR));
 	}
@@ -319,8 +330,8 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		int[] cf = {5, 2, 3, 4};
 		String[] intervals = {"P4", "M2", "m3", "M3"};
 		ChordFormula f = new ChordFormula("9Sus4", "9sus4", "suspended", cf, intervals);
-		System.out.println(f.toString());
-		System.out.println(f.toJson());
+		//System.out.println(f.toString());
+		System.out.println(f.toJson(true));
 	}
 	
 }
