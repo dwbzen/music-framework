@@ -1,5 +1,6 @@
 package org.dwbzen.music.element.song;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -26,16 +27,30 @@ public class ChordFormulas implements IJson {
 		return chordFormulas.add(f);
 	}
 	
+	public Collection<ChordFormula> getChordFormulas() {
+		return chordFormulas;
+	}
 	
 	public static void main(String...strings) {
-		int[] cf = {5, 2, 3, 4};
-		String[] intervals = {"P4", "M2", "m3", "M3"};
-		ChordFormula f = new ChordFormula("9Sus4", "9sus4", "suspended", cf, intervals);
+		ChordFormula f = ChordLibrary.HALF_DIMINISHED_SEVENTH;
 		ChordFormula f2 = ChordLibrary.MINOR_SEVENTH_FLAT_FIFTH;
 		ChordFormulas formulas = new ChordFormulas();
 		formulas.addChordFormula(f);
 		formulas.addChordFormula(f2);
-		System.out.println(formulas.toJson(true));
+		String jstr = formulas.toJson(true);
+		System.out.println(jstr);
+		
+		ObjectMapper mapper = new ObjectMapper();
+
+		formulas = null;
+		try {
+			formulas = mapper.readValue(jstr, ChordFormulas.class);
+		} catch (IOException e) {
+			log.error("Cannot deserialize " + jstr + "\nbecause " + e.toString());
+		}
+		if(formulas != null) {
+			System.out.println(formulas.toJson());
+		}
 	}
 	
 }

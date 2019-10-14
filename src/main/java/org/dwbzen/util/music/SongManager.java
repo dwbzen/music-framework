@@ -19,6 +19,7 @@ import com.mongodb.client.MongoCursor;
 
 import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.song.ChordFormula;
+import org.dwbzen.music.element.song.ChordFormulas;
 import org.dwbzen.music.element.song.Harmony;
 import org.dwbzen.music.element.song.HarmonyChord;
 import org.dwbzen.music.element.song.Section;
@@ -43,7 +44,7 @@ public class SongManager {
 	
 	static final String[] songKeys = {"name", "album", "artist" };
 	
-	private Map<String,ChordFormula> chordFormulas = null;
+	private Map<String, ChordFormula> chordFormulas = null;
 	private Key key = null;
 	private Map<String, Song> songMap = new HashMap<String, Song>();	// Map of songs by name
 	private Songbook songbook = null;
@@ -104,7 +105,14 @@ public class SongManager {
 	 */
 	public SongManager(String collection, String filename, String query) {
 		chordManager = new ChordManager();	// also loads chord_formulas
-		chordFormulas = chordManager.getChordFormulas();
+		ChordFormulas cf = chordManager.getChordFormulas();
+		for(ChordFormula chordFormula : cf.getChordFormulas()) {
+			chordFormulas.put(chordFormula.getName(), chordFormula);
+			for(String s : chordFormula.getSymbols()) {
+				chordFormulas.put(s, chordFormula);
+			}
+		}
+		
 		configuration =  Configuration.getInstance(CONFIG_FILENAME);
 		configProperties = configuration.getProperties();
 		dbname = configProperties.getProperty("dataSource.mongodb.db.name", "music");
@@ -226,7 +234,7 @@ public class SongManager {
 		songMap.put(song.getName(), song);
 	}
 
-	public Map<String,ChordFormula> getChordFormulas() {
+	public Map<String, ChordFormula> getChordFormulas() {
 		return chordFormulas;
 	}
 

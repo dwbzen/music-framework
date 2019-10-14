@@ -1,5 +1,7 @@
 package junit;
 
+import static org.junit.Assert.assertNotEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.song.ChordFormula;
+import org.dwbzen.music.element.song.ChordFormulas;
 import org.dwbzen.music.element.song.HarmonyChord;
 import org.dwbzen.util.music.ChordManager;
 
@@ -18,13 +21,15 @@ public class ChordManagerTest extends TestCase {
 	public static final String CONFIG_FILENAME = "/config.properties";
 	static final org.apache.log4j.Logger log = Logger.getLogger(ChordManagerTest.class);
 	static List<Pitch> rootPitches = new ArrayList<Pitch>();
-	static Map<String,ChordFormula> chordFormulas = null;
+	static ChordFormulas chordFormulas = null;
 	static ChordManager chordManager = new ChordManager();
 
 	@Test
 	public void testLoadChordFormulas() {
 		chordFormulas = chordManager.getChordFormulas();
-		log.debug(chordFormulas.size() + " chords loaded");
+		int nchords = chordFormulas.getChordFormulas().size();
+		log.debug(nchords + " chords loaded");
+		assertNotEquals(0, nchords);
 	}
 	
 	

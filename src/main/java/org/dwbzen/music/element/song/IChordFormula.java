@@ -16,6 +16,5 @@ public interface IChordFormula extends IFormula {
 	public void setSpellingNumber(int chordSpellingNumber);
 	
 	public List<String> getSymbols();
-	public void setSymbols(List<String> symbols);
 	
 }

@@ -1,0 +1,4 @@
+{"chordFormulas":[
+{"name":"13Sus4","symbols":["13sus4"],"groups":["suspended"],"formula":[5,2,3,11],"intervals": ["P4", "M2", "m3", "M7"],"size":4,"chordSize":5,"formulaNumber":1697,"spelling":"C F G Bb A" },
+{"name":"5","symbols":["5"],"groups":["suspended"],"formula":[7], "intervals": ["P5"],"size":1,"chordSize":2,"formulaNumber":129,"spelling":"C G" }
+]}

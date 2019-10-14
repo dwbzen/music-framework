@@ -1,5 +1,6 @@
 package org.dwbzen.music.element.song;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -7,6 +8,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dwbzen.common.util.IJson;
+import org.dwbzen.music.element.IFormula;
+import org.dwbzen.music.element.Key;
+import org.dwbzen.music.element.Pitch;
+import org.dwbzen.util.IMapped;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,12 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.dwbzen.common.util.IJson;
-import org.dwbzen.music.element.IFormula;
-import org.dwbzen.music.element.Key;
-import org.dwbzen.music.element.Pitch;
-import org.dwbzen.util.IMapped;
 
 /**
  * Encapsulates meta-information about a chord:
@@ -61,8 +61,8 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	private static final long serialVersionUID = 3941757049122502147L;
 	static final org.apache.log4j.Logger log = Logger.getLogger(ChordFormula.class);
 	
-	@JsonIgnore	private  ObjectMapper mapper = new ObjectMapper();
-	@JsonPropertyOrder({"name","symbols"})
+	private  ObjectMapper mapper = new ObjectMapper();
+	@JsonPropertyOrder({"name"})
 
 	@JsonProperty("name")			private String name;
 	@JsonProperty("symbols")		private List<String> symbols = new ArrayList<String>();
@@ -89,8 +89,9 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	/**
 	 * The pitches, octave neutral root of "C", derived from the formula
 	 */
-	@JsonProperty("spelling")				private List<String> spelling = new ArrayList<String>();	
+	@JsonProperty("spelling")				private String spelling = null;
 	
+	@JsonIgnore	private List<String> spellingNotes = new ArrayList<String>();	
 	@JsonIgnore	private List<Pitch> template = new ArrayList<Pitch>();
 	/**
 	 * formulaNumber is a 3-byte binary (12 bits) where each bit corresponds to the scale degree-1
@@ -114,6 +115,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		groups.add(group);
 		setFormula(frmla);
 		template.addAll(createPitches(Pitch.C));
+		addSpelling();
 	}
 	
 	/**
@@ -127,10 +129,12 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	 */
 	public ChordFormula(String name, String[] altNames, String[] symbls, String group, int[] frmla, String[] intvls) {
 		this(name, group, frmla);
-		if(intvls != null && intvls.length > 0) { intervals = Arrays.asList(intvls); }
-		if(altNames != null && altNames.length > 0 ) { alternateNames = Arrays.asList(altNames); }
 		symbols = Arrays.asList(symbls);
 		chordSize = intvls.length;
+		if(intvls != null && intvls.length > 0) { intervals = Arrays.asList(intvls); }
+		if(altNames != null && altNames.length > 0 ) { alternateNames = Arrays.asList(altNames); }
+		setFormulaNumber(computeFormulaNumber(frmla));
+		spellingNumber = computeSpellingNumber();
 	}
 	
 	/**
@@ -147,6 +151,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		chordSize = intvls.length;
 		if(intvls != null && intvls.length > 0) { intervals = Arrays.asList(intvls); }
 		setFormulaNumber(computeFormulaNumber(frmla));
+		spellingNumber = computeSpellingNumber();
 	}
 	
 	@JsonIgnore	
@@ -189,7 +194,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	
 	public  List<Pitch> createPitches(Pitch root, Key akey) {
 		List<Pitch> pitches = IFormula.createPitches(formula, root, akey);
-		pitches.forEach(p -> spelling.add(p.toString(-1)));
+		pitches.forEach(p -> spellingNotes.add(p.toString(-1)));
 		return pitches;
 	}
 	
@@ -218,13 +223,17 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	}
 
 	public List<String> getSymbols() {
-		return symbols;
+		return this.symbols;
 	}
-
-	public void setSymbols(List<String> symbols) {
-		this.symbols = symbols;
+	
+	public void setSymbols(List<String> syms) {
+		this.symbols = syms;
 	}
-
+	
+	public void addSymbol(String asymbol) {
+		this.symbols.add(asymbol);
+	}
+	
 	/**
 	 * Gets the first symbol only, which is the most common.
 	 * @return
@@ -290,12 +299,40 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		return template;
 	}
 	
-	public List<String> getSpelling() {
+	public String getSpelling() {
 		return spelling;
 	}
 	
-	public void addTemplate() {
-		template.addAll(createPitches(Pitch.C, Key.C_MAJOR));
+	/**
+	 * Sets spelling and spellingNotes
+	 * @param sp String, for example "C Eb G Bb"
+	 */
+	public void setSpelling(String sp) {
+		spelling = sp;
+	}
+	
+	public List<String> getSpellingNotes() {
+		return spellingNotes;
+	}
+	
+	public void setSpellingNotes(List<String> notes) {
+		spellingNotes.addAll(notes);
+	}
+	
+	public void setSpellingNotes(String notes) {
+		for(String note : notes.split(" ")) {
+			spellingNotes.add(note);
+		}
+	}
+	
+	public void addSpelling() {
+		StringBuffer sb = new StringBuffer();
+		for(Pitch p : createPitches(Pitch.C, Key.C_MAJOR)) {
+			sb.append(p.toString(-1));
+			sb.append(" ");
+		}
+		spelling = sb.substring(0, sb.length()-1);
+		setSpellingNotes(spelling);
 	}
 
 	public String toString() {
@@ -308,8 +345,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 			e.printStackTrace();
 		}
 		sb.append(", formula#: " + formulaNumber);
-		sb.append(", template: ");
-		template.forEach(p -> sb.append(p.toString()+" "));
+		sb.append(", spelling: " + spelling);
 		return sb.toString();
 	}
 	
@@ -327,11 +363,21 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	}
 	
 	public static void main(String...strings) {
-		int[] cf = {5, 2, 3, 4};
-		String[] intervals = {"P4", "M2", "m3", "M3"};
-		ChordFormula f = new ChordFormula("9Sus4", "9sus4", "suspended", cf, intervals);
+		ChordFormula f =  ChordLibrary.DOMINANT_NINTH;
 		//System.out.println(f.toString());
-		System.out.println(f.toJson(true));
+		String jstr = f.toJson(true);
+		System.out.println(jstr);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		ChordFormula chordFormula = null;
+		try {
+			chordFormula = mapper.readValue(jstr, ChordFormula.class);
+		} catch (IOException e) {
+			log.error("Cannot deserialize " + jstr + "\nbecause " + e.toString());
+		}
+		if(chordFormula != null) {
+			System.out.println(chordFormula.toJson());
+		}
 	}
 	
 }

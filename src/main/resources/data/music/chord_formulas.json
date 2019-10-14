@@ -1,57 +1,57 @@
-{ "name" : "Major" , "symbols" : ["M"], "groups" : [ "triad"] , "formula" : [ 4 , 3 ] , "intervals": ["M3", "m3"], "size" : 2, "chordSize" : 3 }
-{ "name" : "Minor" , "symbols" : ["m"], "groups" : [ "triad"] , "formula" : [ 3 , 4 ] , "intervals": ["m3", "M3"], "size" : 2, "chordSize" : 3 }
-{ "name" : "Diminished" , "symbols" : ["dim"], "groups" : [ "triad"] , "formula" : [ 3 , 3 ] , "intervals": ["m3", "m3"], "size" : 2, "chordSize" : 3 }
-{ "name" : "Augmented" , "symbols" : ["aug", "+"], "groups" : [ "triad"] , "formula" : [ 4 , 4 ] , "intervals": ["M3", "M3"], "size" : 2, "chordSize" : 3 }
-{ "name" : "Diminished seventh" , "symbols" : ["dim7"], "groups" : [ "seventh"] , "formula" : [ 3, 3, 3 ] , "intervals": ["m3", "m3", "m3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Minor seventh" , "symbols" : ["m7", "min7", "-7"], "groups" : [ "seventh"] , "formula" : [ 3, 4, 3 ] , "intervals": ["m3", "M3", "m3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Half-diminished seventh" , "symbols" : ["m7-5", "m7b5", "-7b5"],  "alternateNames" : ["minor seventh flat fifth", "minor sixth"], "groups" : [ "seventh"] , "formula" : [ 3, 3, 4 ] , "intervals": ["m3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Minor seventh flat fifth" , "symbols" : ["m7b5", "m7-5", "-7b5"], "groups" : [ "seventh"] , "formula" : [ 3, 3, 4 ] , "intervals": ["m3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Minor major seventh" , "symbols" : ["m(M7)", "m maj7", "-M7"], "groups" : [ "seventh"] , "formula" : [ 3, 4, 4 ] , "intervals": ["m3", "M3", "M3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Dominant seventh" , "symbols" : ["7"], "groups" : [ "seventh"] , "formula" : [ 4, 3, 3 ] , "intervals": ["M3", "m3", "m3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Major seventh" , "symbols" : ["maj7", "M7"], "groups" : [ "seventh"] , "formula" : [ 4, 3, 4 ] , "intervals": ["M3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Augmented seventh" , "symbols" : ["+7", "aug7", "7+", "C7+5", "C7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2 ] , "intervals": ["M3", "m3", "M2"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Augmented major seventh" , "symbols" : ["+(M7)", "M7+5", "M7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 3 ] , "intervals": ["M3", "m3", "m3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Augmented seventh flat nine" , "symbols" : ["+7b9", "aug7b9", "7+b9"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2, 3 ] , "intervals": ["M3", "M3", "M2", "m3"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "Db"] }
-{ "name" : "Augmented seventh sharp nine" , "symbols" : ["+7#9", "aug7#9", "7+#9"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2, 5 ] , "intervals": ["M3", "M3", "M2", "P4"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "Eb"] }
-{ "name" : "Dominant ninth" , "symbols" : ["9"], "groups" : [ "extended"] , "formula" : [ 4, 3, 3, 4 ] , "intervals": ["M3", "m3", "m3", "M3"], "size" : 4, "chordSize" : 5 }
-{ "name" : "Major ninth" , "symbols" : ["maj9", "M9"], "groups" : [ "extended"] , "formula" : [ 4, 3, 4, 3] , "intervals": ["M3", "m3", "M3", "m3"], "size" : 4, "chordSize" : 5 }
-{ "name" : "Minor ninth" , "symbols" : ["m9"], "groups" : [ "extended"] , "formula" : [ 3, 4, 3, 4] , "intervals": ["m3", "M3", "m3", "M3"], "size" : 4, "chordSize" : 5 }
-{ "name" : "Augmented ninth" , "symbols" : ["+9", "aug9"], "groups" : [ "extended"] , "formula" : [ 4, 4, 2, 4 ] , "intervals": ["M3", "m3", "M2", "M3"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "D"] }
-{ "name" : "Minor Major nine" , "symbols" : ["mMaj9"], "groups" : [ "extended"] , "formula" : [ 3, 4, 4, 3] , "intervals": ["m3", "M3", "M3", "m3"], "size" : 4, "chordSize" : 5, "template":["C", "Eb", "G", "B", "D"] }
-{ "name" : "Dominant eleventh" , "symbols" : ["11"], "groups" : [ "extended"] , "formula" : [ 4, 3, 3, 4, 3 ] , "intervals": ["M3", "m3", "m3", "M3", "m3"], "size" : 5, "chordSize" : 6 }
-{ "name" : "Minor eleventh" , "symbols" : ["m11"], "groups" : [ "extended"] , "formula" : [ 3, 4, 3, 4, 3 ] , "intervals": ["m3", "M3", "m3", "M3", "m3"], "size" : 5, "chordSize" : 6, "template":["C", "Eb", "G", "Bb", "D", "F"] }
-{ "name" : "Dominant thirteenth" , "symbols" : ["13"], "groups" : [ "extended"] , "formula" : [ 4, 3, 3, 4, 7 ] , "intervals": ["M3", "m3", "m3", "M3", "P5"], "size" : 5, "chordSize" : 6 }
-{ "name" : "Minor thirteenth" , "symbols" : ["m13"], "groups" : [ "extended"] , "formula" : [ 3, 4, 3, 4, 7] , "intervals": ["m3", "M3", "m3", "M3", "P5"], "size" : 5, "chordSize" : 6, "template":["C", "Eb", "G", "Bb", "D", "A"] }
-{ "name" : "Major thirteenth" , "symbols" : ["Maj13"], "groups" : [ "extended"] , "formula" : [ 4, 3, 4, 3, 7 ] , "intervals": ["M3", "m3", "M3", "m3", "P5"], "size" : 5, "chordSize" : 6, "template":["C", "E", "G", "B", "D", "A"] }
-{ "name" : "Seventh raised fifth" , "symbols" : ["7#5", "7-5"], "groups" : [ "altered", "seventh"] , "formula" : [ 4, 4, 2 ] , "intervals": ["M3", "M3", "M2"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Seventh flat ninth" , "symbols" : ["7b9", "7-9"], "groups" : [ "altered","seventh"] , "formula" : [ 4, 3, 3, 3 ] , "intervals": ["M3", "m3", "m3", "m3"], "size" : 4, "chordSize" : 5 }
-{ "name" : "Seventh sharp ninth", "description" : "The Hendrix chord", "symbols" : ["7#9", "7-9"], "groups" : [ "altered", "seventh"] ,"formula" : [ 4, 3, 3, 5 ] , "intervals": ["M3", "m3", "m3", "P4"], "size" : 4, "chordSize" : 5 }
-{ "name" : "Seventh augmented eleventh", "symbols" : ["7#11", "7-11"], "groups" : [ "altered"] , "formula" : [ 4, 3, 3, 8 ] , "intervals": ["M3", "m3", "m3", "m6" ], "size" : 4, "chordSize" : 5 }
-{ "name" : "Ninth augmented eleventh", "symbols" : ["9#11", "9-11"], "groups" : [ "altered"] , "formula" : [ 4, 3, 3, 4, 4 ] , "intervals": ["M3", "m3", "m3", "M3", "M3"], "size" : 5, "chordSize" : 6 }
-{ "name" : "Seventh flat thirteenth", "symbols" : ["7b13", "7-13"], "groups" : [ "altered"] ,"formula" : [ 4, 3, 3, 4, 6 ] , "intervals": ["M3", "m3", "m3", "M3", "d5"], "size" : 5, "chordSize" : 6 }
-{ "name" : "Major Seventh augmented eleventh", "symbols" : ["Maj7#11", "Maj7-11"], "groups" : [ "altered"] , "formula" : [ 4, 3, 4, 11 ] , "intervals": ["M3", "m3", "M3", "M7" ], "size" : 4, "chordSize" : 5, "template":["C", "E", "G", "B", "A#"] }
-{ "name" : "Ninth flat fifth" , "symbols" : ["9b5"], "groups" : [ "altered"] , "formula" : [ 4, 2, 4, 4 ] , "intervals": ["M3", "M2", "M3", "M3"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Gb", "Bb", "D"] }
-{ "name" : "Ninth flat fifth sharp 11" , "symbols" : ["9b5#11", "whole tone"], "groups" : [ "altered"] , "formula" : [ 4, 2, 4, 4, 6 ] , "intervals": ["M3", "M2", "M3", "M3", "d5"], "size" : 5, "chordSize" : 6, "template":["C", "E", "Gb", "Bb", "D", "Ab"] }
-{ "name" : "Minor ninth flat fifth" , "symbols" : ["m9b5"], "groups" : [ "altered"] , "formula" : [ 3, 3, 4, 4 ] , "intervals": ["m3", "m3", "M3", "M3"], "size" : 4, "chordSize" : 5, "template":["C", "Eb", "Gb", "Bb", "D"] }
-{ "name" : "Seventh flat fifth" , "symbols" : ["7b5", "7-5"], "groups" : [ "altered", "seventh"] , "formula" : [ 4, 2, 4 ] , "intervals": ["M3", "M2", "M3"], "size" : 3, "chordSize" : 4, "template":["C", "Eb", "Gb", "Bb"] }
-{ "name" : "Seventh flat fifth sharp nine" , "symbols" : ["7b5#9"], "groups" : [ "altered", "seventh"] , "formula" : [ 4, 2, 4, 5 ] , "intervals": ["M3", "M2", "M3", "P4"], "size" : 3, "chordSize" : 4, "template":["C", "Eb", "Gb", "Bb", "Eb"] }
-{ "name" : "Add nine" , "symbols" : ["add9", "2"], "groups" : [ "added tone"] , "formula" : [ 4, 3, 7] , "intervals": ["M3", "m3", "P5"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Minor Add nine" , "symbols" : ["madd9"], "groups" : [ "added tone"] , "formula" : [ 3, 4, 7] , "intervals": ["m3", "M3", "P5"], "size" : 3, "chordSize" : 4 }
-{ "name" : "mu major-1" , "symbols" : ["mu", "add9", "Steely Dan Chord"], "groups" : [ "added tone"] , "formula" : [ 7, 7, 2] , "intervals": ["P5", "P5", "M2"], "size" : 3, "chordSize" : 4 }
-{ "name" : "mu major-2" , "symbols" : ["mu2"], "groups" : [ "added tone"] , "formula" : [ 14, 2, 3] , "intervals": ["M9", "M2", "m3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Add fourth" , "symbols" : ["add11", "4"], "groups" : [ "added tone"] , "formula" : [4, 3, 10], "intervals": ["M3", "m3", "M9"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Add six" , "symbols" : ["6", "add6"], "groups" : [ "added tone"] , "formula" : [4, 3, 2], "intervals": ["M3", "m3", "M2"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Six-nine" , "symbols" : ["6+9"], "groups" : [ "added tone"] , "formula" : [4, 3, 2, 5], "intervals": ["M3", "m3", "M2", "P4"], "size" : 4, "chordSize" : 5 }
-{ "name" : "Mixed third" , "symbols" : ["m add3"], "groups" : [ "added tone"] , "formula" : [3, 1, 3], "intervals": ["m3", "m2", "m3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Minor sixth" , "symbols" : ["m6"], "groups" : [ "added tone"] , "formula" : [ 3, 3, 4 ] , "intervals": ["m3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Sus2" , "symbols" : ["sus2"], "groups" : [ "suspended"] , "formula" : [ 2, 5] , "intervals": ["M2", "P5"], "size" : 2, "chordSize" : 3 }
-{ "name" : "Sus4" , "symbols" : ["sus4"], "groups" : [ "suspended"] , "formula" : [ 5, 2] , "intervals": ["P4", "M2"], "size" : 2, "chordSize" : 3 }
+{ "name" : "13Sus4" , "symbols" : ["13sus4"], "groups" : [ "suspended"] , "formula" : [ 5, 2, 3, 11] , "intervals": ["P4", "M2", "m3", "M7"], "size" : 4, "chordSize" : 5, "template":["C", "F", "G", "Bb", "A"] }
+{ "name" : "5" , "symbols" : ["5"], "groups" : [ "suspended"] , "formula" : [ 7] , "intervals": ["P5"], "size" : 1, "chordSize" : 2 }
 { "name" : "7Sus2" , "symbols" : ["7sus2"], "groups" : [ "suspended"] , "formula" : [ 7, 3, 4] , "intervals": ["P5", "m3", "M3"], "size" : 3, "chordSize" : 4 }
 { "name" : "7Sus4" , "symbols" : ["7sus4"], "groups" : [ "suspended"] , "formula" : [ 5, 2, 3] , "intervals": ["P4", "M2", "m3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "9Sus4" , "symbols" : ["9sus4"], "groups" : [ "suspended"] , "formula" : [ 5, 2, 3, 4] , "intervals": ["P4", "M2", "m3", "M3"], "size" : 4, "chordSize" : 5, "template":["C", "F", "G", "Bb", "D"] }
+{ "name" : "Add fourth" , "symbols" : ["add11", "4"], "groups" : [ "added tone"] , "formula" : [4, 3, 10], "intervals": ["M3", "m3", "M9"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Add nine" , "symbols" : ["add9", "2"], "groups" : [ "added tone"] , "formula" : [ 4, 3, 7] , "intervals": ["M3", "m3", "P5"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Add six" , "symbols" : ["6", "add6"], "groups" : [ "added tone"] , "formula" : [4, 3, 2], "intervals": ["M3", "m3", "M2"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Augmented major seventh" , "symbols" : ["+(M7)", "M7+5", "M7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 3 ] , "intervals": ["M3", "m3", "m3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Augmented ninth" , "symbols" : ["+9", "aug9"], "groups" : [ "extended"] , "formula" : [ 4, 4, 2, 4 ] , "intervals": ["M3", "m3", "M2", "M3"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "D"] }
+{ "name" : "Augmented seventh flat nine" , "symbols" : ["+7b9", "aug7b9", "7+b9"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2, 3 ] , "intervals": ["M3", "M3", "M2", "m3"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "Db"] }
+{ "name" : "Augmented seventh sharp nine" , "symbols" : ["+7#9", "aug7#9", "7+#9"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2, 5 ] , "intervals": ["M3", "M3", "M2", "P4"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "Eb"] }
+{ "name" : "Augmented seventh" , "symbols" : ["+7", "aug7", "7+", "C7+5", "C7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2 ] , "intervals": ["M3", "m3", "M2"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Augmented" , "symbols" : ["aug", "+"], "groups" : [ "triad"] , "formula" : [ 4 , 4 ] , "intervals": ["M3", "M3"], "size" : 2, "chordSize" : 3 }
+{ "name" : "Diminished seventh" , "symbols" : ["dim7"], "groups" : [ "seventh"] , "formula" : [ 3, 3, 3 ] , "intervals": ["m3", "m3", "m3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Diminished" , "symbols" : ["dim"], "groups" : [ "triad"] , "formula" : [ 3 , 3 ] , "intervals": ["m3", "m3"], "size" : 2, "chordSize" : 3 }
+{ "name" : "Dominant eleventh" , "symbols" : ["11"], "groups" : [ "extended"] , "formula" : [ 4, 3, 3, 4, 3 ] , "intervals": ["M3", "m3", "m3", "M3", "m3"], "size" : 5, "chordSize" : 6 }
+{ "name" : "Dominant ninth" , "symbols" : ["9"], "groups" : [ "extended"] , "formula" : [ 4, 3, 3, 4 ] , "intervals": ["M3", "m3", "m3", "M3"], "size" : 4, "chordSize" : 5 }
+{ "name" : "Dominant seventh" , "symbols" : ["7"], "groups" : [ "seventh"] , "formula" : [ 4, 3, 3 ] , "intervals": ["M3", "m3", "m3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Dominant thirteenth" , "symbols" : ["13"], "groups" : [ "extended"] , "formula" : [ 4, 3, 3, 4, 7 ] , "intervals": ["M3", "m3", "m3", "M3", "P5"], "size" : 5, "chordSize" : 6 }
+{ "name" : "Half-diminished seventh" , "symbols" : ["m7-5", "m7b5", "-7b5"],  "alternateNames" : ["minor seventh flat fifth", "minor sixth"], "groups" : [ "seventh"] , "formula" : [ 3, 3, 4 ] , "intervals": ["m3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Jazz sus" , "symbols" : ["Jazz sus"], "groups" : [ "suspended"] , "formula" : [ 5, 2, 3, 4] , "intervals": ["P4", "M2", "m3", "M3"], "size" : 4, "chordSize" : 5 }
+{ "name" : "Major Seventh augmented eleventh", "symbols" : ["Maj7#11", "Maj7-11"], "groups" : [ "altered"] , "formula" : [ 4, 3, 4, 11 ] , "intervals": ["M3", "m3", "M3", "M7" ], "size" : 4, "chordSize" : 5, "template":["C", "E", "G", "B", "A#"] }
+{ "name" : "Major ninth" , "symbols" : ["maj9", "M9"], "groups" : [ "extended"] , "formula" : [ 4, 3, 4, 3] , "intervals": ["M3", "m3", "M3", "m3"], "size" : 4, "chordSize" : 5 }
+{ "name" : "Major seventh" , "symbols" : ["maj7", "M7"], "groups" : [ "seventh"] , "formula" : [ 4, 3, 4 ] , "intervals": ["M3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Major thirteenth" , "symbols" : ["Maj13"], "groups" : [ "extended"] , "formula" : [ 4, 3, 4, 3, 7 ] , "intervals": ["M3", "m3", "M3", "m3", "P5"], "size" : 5, "chordSize" : 6, "template":["C", "E", "G", "B", "D", "A"] }
+{ "name" : "Major" , "symbols" : ["M"], "groups" : [ "triad"] , "formula" : [ 4 , 3 ] , "intervals": ["M3", "m3"], "size" : 2, "chordSize" : 3 }
+{ "name" : "Minor Add nine" , "symbols" : ["madd9"], "groups" : [ "added tone"] , "formula" : [ 3, 4, 7] , "intervals": ["m3", "M3", "P5"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Minor Major nine" , "symbols" : ["mMaj9"], "groups" : [ "extended"] , "formula" : [ 3, 4, 4, 3] , "intervals": ["m3", "M3", "M3", "m3"], "size" : 4, "chordSize" : 5, "template":["C", "Eb", "G", "B", "D"] }
+{ "name" : "Minor eleventh" , "symbols" : ["m11"], "groups" : [ "extended"] , "formula" : [ 3, 4, 3, 4, 3 ] , "intervals": ["m3", "M3", "m3", "M3", "m3"], "size" : 5, "chordSize" : 6, "template":["C", "Eb", "G", "Bb", "D", "F"] }
+{ "name" : "Minor major seventh" , "symbols" : ["m(M7)", "m maj7", "-M7"], "groups" : [ "seventh"] , "formula" : [ 3, 4, 4 ] , "intervals": ["m3", "M3", "M3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Minor ninth flat fifth" , "symbols" : ["m9b5"], "groups" : [ "altered"] , "formula" : [ 3, 3, 4, 4 ] , "intervals": ["m3", "m3", "M3", "M3"], "size" : 4, "chordSize" : 5, "template":["C", "Eb", "Gb", "Bb", "D"] }
+{ "name" : "Minor ninth" , "symbols" : ["m9"], "groups" : [ "extended"] , "formula" : [ 3, 4, 3, 4] , "intervals": ["m3", "M3", "m3", "M3"], "size" : 4, "chordSize" : 5 }
+{ "name" : "Minor seventh flat fifth" , "symbols" : ["m7b5", "m7-5", "-7b5"], "groups" : [ "seventh"] , "formula" : [ 3, 3, 4 ] , "intervals": ["m3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Minor seventh" , "symbols" : ["m7", "min7", "-7"], "groups" : [ "seventh"] , "formula" : [ 3, 4, 3 ] , "intervals": ["m3", "M3", "m3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Minor sixth" , "symbols" : ["m6"], "groups" : [ "added tone"] , "formula" : [ 3, 3, 4 ] , "intervals": ["m3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Minor thirteenth" , "symbols" : ["m13"], "groups" : [ "extended"] , "formula" : [ 3, 4, 3, 4, 7] , "intervals": ["m3", "M3", "m3", "M3", "P5"], "size" : 5, "chordSize" : 6, "template":["C", "Eb", "G", "Bb", "D", "A"] }
+{ "name" : "Minor" , "symbols" : ["m"], "groups" : [ "triad"] , "formula" : [ 3 , 4 ] , "intervals": ["m3", "M3"], "size" : 2, "chordSize" : 3 }
+{ "name" : "Mixed third" , "symbols" : ["m add3"], "groups" : [ "added tone"] , "formula" : [3, 1, 3], "intervals": ["m3", "m2", "m3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Ninth augmented eleventh", "symbols" : ["9#11", "9-11"], "groups" : [ "altered"] , "formula" : [ 4, 3, 3, 4, 4 ] , "intervals": ["M3", "m3", "m3", "M3", "M3"], "size" : 5, "chordSize" : 6 }
+{ "name" : "Ninth flat fifth sharp 11" , "symbols" : ["9b5#11", "whole tone"], "groups" : [ "altered"] , "formula" : [ 4, 2, 4, 4, 6 ] , "intervals": ["M3", "M2", "M3", "M3", "d5"], "size" : 5, "chordSize" : 6, "template":["C", "E", "Gb", "Bb", "D", "Ab"] }
+{ "name" : "Ninth flat fifth" , "symbols" : ["9b5"], "groups" : [ "altered"] , "formula" : [ 4, 2, 4, 4 ] , "intervals": ["M3", "M2", "M3", "M3"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Gb", "Bb", "D"] }
+{ "name" : "Seventh augmented eleventh", "symbols" : ["7#11", "7-11"], "groups" : [ "altered"] , "formula" : [ 4, 3, 3, 8 ] , "intervals": ["M3", "m3", "m3", "m6" ], "size" : 4, "chordSize" : 5 }
+{ "name" : "Seventh flat fifth sharp nine" , "symbols" : ["7b5#9"], "groups" : [ "altered", "seventh"] , "formula" : [ 4, 2, 4, 5 ] , "intervals": ["M3", "M2", "M3", "P4"], "size" : 3, "chordSize" : 4, "template":["C", "Eb", "Gb", "Bb", "Eb"] }
+{ "name" : "Seventh flat fifth" , "symbols" : ["7b5", "7-5"], "groups" : [ "altered", "seventh"] , "formula" : [ 4, 2, 4 ] , "intervals": ["M3", "M2", "M3"], "size" : 3, "chordSize" : 4, "template":["C", "Eb", "Gb", "Bb"] }
+{ "name" : "Seventh flat ninth" , "symbols" : ["7b9", "7-9"], "groups" : [ "altered","seventh"] , "formula" : [ 4, 3, 3, 3 ] , "intervals": ["M3", "m3", "m3", "m3"], "size" : 4, "chordSize" : 5 }
+{ "name" : "Seventh flat thirteenth", "symbols" : ["7b13", "7-13"], "groups" : [ "altered"] ,"formula" : [ 4, 3, 3, 4, 6 ] , "intervals": ["M3", "m3", "m3", "M3", "d5"], "size" : 5, "chordSize" : 6 }
+{ "name" : "Seventh raised fifth" , "symbols" : ["7#5", "7-5"], "groups" : [ "altered", "seventh"] , "formula" : [ 4, 4, 2 ] , "intervals": ["M3", "M3", "M2"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Seventh sharp ninth", "description" : "The Hendrix chord", "symbols" : ["7#9", "7-9"], "groups" : [ "altered", "seventh"] ,"formula" : [ 4, 3, 3, 5 ] , "intervals": ["M3", "m3", "m3", "P4"], "size" : 4, "chordSize" : 5 }
+{ "name" : "Six-nine" , "symbols" : ["6+9"], "groups" : [ "added tone"] , "formula" : [4, 3, 2, 5], "intervals": ["M3", "m3", "M2", "P4"], "size" : 4, "chordSize" : 5 }
+{ "name" : "Sus-7" , "symbols" : ["sus-7"], "groups" : [ "suspended"] , "formula" : [ 7, 3] , "intervals": ["P5", "m3"], "size" : 2, "chordSize" : 3 }
+{ "name" : "Sus2" , "symbols" : ["sus2"], "groups" : [ "suspended"] , "formula" : [ 2, 5] , "intervals": ["M2", "P5"], "size" : 2, "chordSize" : 3 }
+{ "name" : "Sus4" , "symbols" : ["sus4"], "groups" : [ "suspended"] , "formula" : [ 5, 2] , "intervals": ["P4", "M2"], "size" : 2, "chordSize" : 3 }
 { "name" : "Sus6" , "symbols" : ["sus6"], "groups" : [ "suspended"] , "formula" : [ 7, 2] , "intervals": ["P5", "M2"], "size" : 2, "chordSize" : 3 }
 { "name" : "Sus7" , "symbols" : ["sus7"], "groups" : [ "suspended"] , "formula" : [ 7, 4] , "intervals": ["P5", "M3"], "size" : 2, "chordSize" : 3 }
-{ "name" : "Sus-7" , "symbols" : ["sus-7"], "groups" : [ "suspended"] , "formula" : [ 7, 3] , "intervals": ["P5", "m3"], "size" : 2, "chordSize" : 3 }
-{ "name" : "Jazz sus" , "symbols" : ["Jazz sus"], "groups" : [ "suspended"] , "formula" : [ 5, 2, 3, 4] , "intervals": ["P4", "M2", "m3", "M3"], "size" : 4, "chordSize" : 5 }
-{ "name" : "5" , "symbols" : ["5"], "groups" : [ "suspended"] , "formula" : [ 7] , "intervals": ["P5"], "size" : 1, "chordSize" : 2 }
-{ "name" : "9Sus4" , "symbols" : ["9sus4"], "groups" : [ "suspended"] , "formula" : [ 5, 2, 3, 4] , "intervals": ["P4", "M2", "m3", "M3"], "size" : 4, "chordSize" : 5, "template":["C", "F", "G", "Bb", "D"] }
-{ "name" : "13Sus4" , "symbols" : ["13sus4"], "groups" : [ "suspended"] , "formula" : [ 5, 2, 3, 11] , "intervals": ["P4", "M2", "m3", "M7"], "size" : 4, "chordSize" : 5, "template":["C", "F", "G", "Bb", "A"] }
+{ "name" : "mu major-1" , "symbols" : ["mu", "add9", "Steely Dan Chord"], "groups" : [ "added tone"] , "formula" : [ 7, 7, 2] , "intervals": ["P5", "P5", "M2"], "size" : 3, "chordSize" : 4 }
+{ "name" : "mu major-2" , "symbols" : ["mu2"], "groups" : [ "added tone"] , "formula" : [ 14, 2, 3] , "intervals": ["M9", "M2", "m3"], "size" : 3, "chordSize" : 4 }

@@ -24,6 +24,7 @@ import org.dwbzen.music.element.IFormula;
 import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.song.ChordFormula;
+import org.dwbzen.music.element.song.ChordFormulas;
 import org.dwbzen.music.element.song.ChordInfo;
 import org.dwbzen.music.element.song.HarmonyChord;
 
@@ -67,6 +68,8 @@ public class ChordManager {
 	private StringBuffer stringBuffer = null;
 	private List<String> groupsFilter = new ArrayList<String>();
 	
+	private ChordFormulas chordFormulas = null;
+	
 	public static final String CONFIG_FILENAME = "/config.properties";
 	static String TAB = "\t";
 	public static boolean showAllSymbols = false;
@@ -78,7 +81,7 @@ public class ChordManager {
 	}
 	
 	public ChordManager() {
-		this("chord_formulas.json");
+		this("allChordFormulas.json");
 	}
 	
 	public ChordManager(String resource) {
@@ -164,13 +167,13 @@ public class ChordManager {
 		return hc;
 	}
 	
-	public static HarmonyChord createHarmonyChord(String chordName, Map<String,ChordFormula> chordFormulas) {
+	public static HarmonyChord createHarmonyChord(String chordName, Map<String,ChordFormula> chordFormulaMap) {
 		HarmonyChord hc = null;
 		ChordFormula formula = null;
 		ChordInfo chordInfo =  ChordInfo.parseChordName(chordName);
 		Pitch root = new Pitch( chordInfo.getRootNote());
-		if(chordFormulas.containsKey(chordInfo.getChordSymbol())) {
-			formula = chordFormulas.get(chordInfo.getChordSymbol());
+		if(chordFormulaMap.containsKey(chordInfo.getChordSymbol())) {
+			formula = chordFormulaMap.get(chordInfo.getChordSymbol());
 			hc = new HarmonyChord(formula, root);
 		}
 		return hc;
@@ -307,8 +310,8 @@ public class ChordManager {
 				stringBuffer.append("\"formulaNumber\":");
 				stringBuffer.append(chordFormula.getFormulaNumber() + ",");
 				
-				stringBuffer.append("\"template\":\"");
-				chordFormula.getTemplate().forEach(p -> stringBuffer.append(p.toString()+" "));
+				//stringBuffer.append("\"template\":\"");
+				//chordFormula.getTemplate().forEach(p -> stringBuffer.append(p.toString()+" "));
 				stringBuffer.deleteCharAt(stringBuffer.length()-1);
 				stringBuffer.append("\" }");
 			} catch(JsonProcessingException e) {
@@ -389,33 +392,25 @@ public class ChordManager {
 	 * @throws IOException RuntimeException if file not found
 	 */
 	public void loadChordFormulas(String resourceFile) throws IOException {
+		StringBuffer sb = new StringBuffer();
 		InputStream is = this.getClass().getResourceAsStream("/data/music/" + resourceFile);
     	Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines();
-    	stream.filter(s -> !s.startsWith("/") && s.length() > 1).forEach(s -> accept(s));
+    	stream.filter(s -> !s.startsWith("/") && s.length() > 1).forEach(s -> sb.append(s));
     	stream.close();
+    	try {
+    		chordFormulas = mapper.readValue(sb.toString(), ChordFormulas.class);
+    	} catch (Exception e) {
+    		log.error("Cannot deserialize ChordFormulas because " + e.toString());
+    	}
+    	if(chordFormulas != null) {
+    		for(ChordFormula chordFormula : chordFormulas.getChordFormulas()) {
+    			chordFormulasMap.put(chordFormula.getName(), chordFormula);
+    			for(String s : chordFormula.getSymbols()) {
+    				chordFormulasMap.put(s, chordFormula);
+    			}
+    		}
+    	}
 		return;
-	}
-
-	/**
-	 * Deserializes a JSON ChordFormula and adds to chordFormulasMap
-	 * Filters by groups listed in groupFilter list.
-	 */
-	public void accept(String formulaString) {
-		ChordFormula chordFormula = null;
-		log.debug(formulaString);
-		try {
-			chordFormula = mapper.readValue(formulaString, ChordFormula.class);
-		} catch (Exception e) {
-			log.error("Cannot deserialize " + formulaString + "\nbecause " + e.toString());
-		}
-		if(chordFormula.getTemplate().size() == 0) {
-			chordFormula.addTemplate();
-		}
-		chordFormula.getGroups();
-		chordFormulasMap.put(chordFormula.getName(), chordFormula);
-		for(String s : chordFormula.getSymbols()) {
-			chordFormulasMap.put(s, chordFormula);
-		}
 	}
 	
 	private boolean filter(List<String> includeList, List<String> myList) {
@@ -448,8 +443,8 @@ public class ChordManager {
 	 * 
 	 * @return Map<String,ChordFormula> could be empty map if not loaded!
 	 */
-	public Map<String,ChordFormula> getChordFormulas() {
-		return chordFormulasMap;
+	public ChordFormulas getChordFormulas() {
+		return chordFormulas;
 	}
 
 	public List<Pitch> getRootPitches() {
