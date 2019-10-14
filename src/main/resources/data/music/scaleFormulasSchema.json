@@ -1,0 +1,109 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "collection",
+    "scaleFormulas"
+  ],
+  "properties": {
+    "collection": {
+      "$id": "#/properties/collection",
+      "type": "string",
+      "title": "The Collection Schema",
+      "default": "",
+      "examples": [
+        "Common Scales"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "scaleFormulas": {
+      "$id": "#/properties/scaleFormulas",
+      "type": "array",
+      "title": "The Scaleformulas Schema",
+      "items": {
+        "$id": "#/properties/scaleFormulas/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "name",
+          "alternateNames",
+          "groups",
+          "formula",
+          "size"
+        ],
+        "properties": {
+          "name": {
+            "$id": "#/properties/scaleFormulas/items/properties/name",
+            "type": "string",
+            "title": "The Name Schema",
+            "default": "",
+            "examples": [
+              "Aeolian Natural Minor"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "alternateNames": {
+            "$id": "#/properties/scaleFormulas/items/properties/alternateNames",
+            "type": "array",
+            "title": "The Alternatenames Schema",
+            "items": {
+              "$id": "#/properties/scaleFormulas/items/properties/alternateNames/items",
+              "type": "string",
+              "title": "The Items Schema",
+              "default": "",
+              "examples": [
+                "Chord Cm9b6sus4 - Gregorian Scale 2",
+                " Assari Thaat (India)",
+                " Se (China) Kitmun (Sumarian)",
+                "Asavari Asc Nats. A to G"
+              ],
+              "pattern": "^(.*)$"
+            }
+          },
+          "groups": {
+            "$id": "#/properties/scaleFormulas/items/properties/groups",
+            "type": "array",
+            "title": "The Groups Schema",
+            "items": {
+              "$id": "#/properties/scaleFormulas/items/properties/groups/items",
+              "type": "string",
+              "title": "The Items Schema",
+              "default": "",
+              "examples": ["aeolian"],
+              "pattern": "^(.*)$"
+            }
+          },
+          "formula": {
+            "$id": "#/properties/scaleFormulas/items/properties/formula",
+            "type": "array",
+            "title": "The Formula Schema",
+            "items": {
+              "$id": "#/properties/scaleFormulas/items/properties/formula/items",
+              "type": "integer",
+			  "minItems": 2,
+			  "maxItems": 12,
+              "title": "The Items Schema",
+              "default": 0,
+              "examples": [2, 1, 2, 2, 1, 2, 2 ]
+            }
+          },
+          "size": {
+            "$id": "#/properties/scaleFormulas/items/properties/size",
+            "type": "integer",
+			"minimum": 2,
+			"maximum": 12,
+            "title": "The Size Schema",
+            "default": 0,
+            "examples": [ 7 ]
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
