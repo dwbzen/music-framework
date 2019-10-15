@@ -370,7 +370,7 @@ public class ChordManager {
 				stringBuffer.append(formulaArrayString + ",");
 				
 				stringBuffer.append("\"chordPitches\":[ ");
-				harmonyChord.getChordPitches().forEach(p -> stringBuffer.append("\"" + p.toString() + "\", "));
+				harmonyChord.getChordPitches().forEach(p -> stringBuffer.append("\"" + p.toString(-1) + "\", "));
 				stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
 				stringBuffer.append("]");
 				stringBuffer.append(" } ");
@@ -486,7 +486,7 @@ public class ChordManager {
 	 */
 	public static void main(String[] args) throws IOException {
 		String[] roots = {"C"};
-		String resourceFile = "chord_formulas.json";
+		String resourceFile = "allChordFormulas.json";
 		String jsonFormat = "JSON";	// the default, for Mathematica use "RawJSON"
 		boolean printResults = false;
 		PrintStream ps = System.out;
@@ -554,5 +554,12 @@ class PitchComparator implements Comparator<Pitch>{
 	public int compare(Pitch o1, Pitch o2) {
 		return o1.toString(-1).compareTo(o2.toString(-1));
 	}
-	
+}
+
+class PitchStringComparator implements Comparator<String>{
+
+	@Override
+	public int compare(String o1, String o2) {
+		return o1.compareTo(o2);
+	}
 }

@@ -108,7 +108,7 @@ public class ChordProgressionProducerRunner {
 		songMgr.loadSongs();
 		Songbook songbook = songMgr.getSongbook();
 
-		Map<String, ChordFormula> chordFormulas = songMgr.getChordFormulas();
+		Map<String, ChordFormula> chordFormulaMap = songMgr.getChordFormulaMap();
 		HarmonyChordCollector collector = new HarmonyChordCollector(order);
 		CollectorStats.trace = trace;
 		collector.setTrace(trace);
@@ -123,7 +123,7 @@ public class ChordProgressionProducerRunner {
 			/*
 			 * Create a ChordProgression from the seed on the command line
 			 */
-			seedProgression = ChordProgressionProducer.createSeedChordProgression(chordFormulas, seedString);
+			seedProgression = ChordProgressionProducer.createSeedChordProgression(chordFormulaMap, seedString);
 		}
 		else {
 			seedProgression = new ChordProgression();	// let the Producer pick the seed

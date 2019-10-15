@@ -44,7 +44,8 @@ public class SongManager {
 	
 	static final String[] songKeys = {"name", "album", "artist" };
 	
-	private Map<String, ChordFormula> chordFormulas = null;
+	private Map<String, ChordFormula> chordFormulaMap = null;
+	private ChordFormulas chordFormulas = null;
 	private Key key = null;
 	private Map<String, Song> songMap = new HashMap<String, Song>();	// Map of songs by name
 	private Songbook songbook = null;
@@ -105,13 +106,8 @@ public class SongManager {
 	 */
 	public SongManager(String collection, String filename, String query) {
 		chordManager = new ChordManager();	// also loads chord_formulas
-		ChordFormulas cf = chordManager.getChordFormulas();
-		for(ChordFormula chordFormula : cf.getChordFormulas()) {
-			chordFormulas.put(chordFormula.getName(), chordFormula);
-			for(String s : chordFormula.getSymbols()) {
-				chordFormulas.put(s, chordFormula);
-			}
-		}
+		chordFormulaMap = chordManager.getChordFormulasMap();
+		chordFormulas = chordManager.getChordFormulas();
 		
 		configuration =  Configuration.getInstance(CONFIG_FILENAME);
 		configProperties = configuration.getProperties();
@@ -234,10 +230,14 @@ public class SongManager {
 		songMap.put(song.getName(), song);
 	}
 
-	public Map<String, ChordFormula> getChordFormulas() {
+	public ChordFormulas getChordFormulas() {
 		return chordFormulas;
 	}
 
+	public Map<String, ChordFormula> getChordFormulaMap() {
+		return chordFormulaMap;
+	}
+	
 	public Key getKey() {
 		return key;
 	}
