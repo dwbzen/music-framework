@@ -36,6 +36,9 @@ import org.dwbzen.util.music.ChordManager;
 public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>, ICollectable<Pitch> {
 
 	private static final long serialVersionUID = -5601371412350435601L;
+	
+	public static enum OutputFormat {FULL, SIMPLE};		// JSON Output
+	
 	private static boolean includeSpellingInToString = true;
 	static final org.apache.log4j.Logger log = Logger.getLogger(HarmonyChord.class);
 	public static final HarmonyChord SILENT = new HarmonyChord();
@@ -50,12 +53,13 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 	
 	@JsonProperty	private String name = null;				// root + symbol, "C9+11" for example
 	@JsonProperty	private List<String> spelling = null;	// for readability, just the pitches as in C Eb G Db
+	@JsonProperty	private Pitch root = null;
+	@JsonProperty	private List<Pitch> chordPitches = new ArrayList<Pitch>();
+
 	@JsonIgnore		private ChordFormula chordFormula = null;	// info about the chord - cannot be null
 	@JsonIgnore  	private Pitch bassNote = null;		// a slash chord has something other than the root in the bass
 	@JsonIgnore		private List<String> alternateNames = new ArrayList<String>();
 	
-	@JsonProperty	private Pitch root = null;
-	@JsonProperty	private List<Pitch> chordPitches = new ArrayList<Pitch>();
 	
 	/**
 	 * Create a silent HarmonyChord (no chord is sounded).
@@ -359,4 +363,18 @@ public class HarmonyChord implements IJson, INameable, Comparable<HarmonyChord>,
 		return NULL_VALUE;
 	}
 
+	public String toJson(OutputFormat format) {
+		var json = "";
+		if(format == OutputFormat.FULL) {
+			json = toJson();
+		}
+		else if(format == OutputFormat.SIMPLE) {
+			StringBuilder sb = new StringBuilder("{");
+			sb.append(quoteString("name", name) + ",");
+			sb.append(quoteString("spelling", spelling.toString()));
+			sb.append("}");
+			json = sb.toString();
+		}
+		return json;
+	}
 }

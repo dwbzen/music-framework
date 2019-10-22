@@ -260,11 +260,6 @@ public class ChordManager {
 	}
 	
 	/**
-	 * Sample RawJSON format:
-	 * { "Major seventh": { 
-	 * 		"symbols" : ["maj7", "M7"], "groups" : [ "seventh"] , "formula" : [ 4, 3, 4 ] , 
-	 * 		"intervals": ["M3", "m3", "M3"], "chordSize" : 3, "chordSize" : 4, "formulaNumber" : 2193 } 
-	 * }
 	 * @param chordFormula
 	 * @return
 	 */
@@ -273,15 +268,15 @@ public class ChordManager {
 		 * write the formula as a JSON string according to the specified format
 		 */
 
-		if(jsonFormat.equalsIgnoreCase("JSON")) {
+		if(jsonFormat.equalsIgnoreCase("RawJSON")) {
 			stringBuffer.append(chordFormula.toJson() + ",\n");
 		}
-		else if(jsonFormat.equalsIgnoreCase("RawJSON")) {
+		else if(jsonFormat.equalsIgnoreCase("JSON")) {
 			String symbols = null;
 			String groups = null;
 			String formulaArrayString = null;
 			String intervalsArrayString = null;
-			stringBuffer.append("{\"" + chordFormula.getName() + "\":{");
+			stringBuffer.append("{\"name\":" + chordFormula.getName() + "\"");
 			
 			try {
 				if(!chordFormula.getSymbols().isEmpty()) {
@@ -310,10 +305,8 @@ public class ChordManager {
 				stringBuffer.append("\"formulaNumber\":");
 				stringBuffer.append(chordFormula.getFormulaNumber() + ",");
 				
-				//stringBuffer.append("\"template\":\"");
-				//chordFormula.getTemplate().forEach(p -> stringBuffer.append(p.toString()+" "));
 				stringBuffer.deleteCharAt(stringBuffer.length()-1);
-				stringBuffer.append("\" }");
+				stringBuffer.append("\"");
 			} catch(JsonProcessingException e) {
 				log.error("JsonProcessingException");
 			}
@@ -323,10 +316,10 @@ public class ChordManager {
 	}
 
 	public String exportChords() {
-		stringBuffer = new StringBuffer("[");
+		stringBuffer = new StringBuffer("{\"chords\":[");
 		for(Pitch root : harmonyChordsRootMap.keySet()) {
-			log.info("WORKING on root: " + root.toString());
-			stringBuffer.append("\n{\"" + root.toString(-1) + "\":[\n");
+			log.debug("WORKING on root: " + root.toString());
+			stringBuffer.append("\n{\"root\":\"" + root.toString(-1) + "\":[\n");
 			Map<String, HarmonyChord> hcmap = harmonyChordsRootMap.get(root);
 			for(String name : hcmap.keySet()) {
 				HarmonyChord hc = hcmap.get(name);
@@ -336,7 +329,7 @@ public class ChordManager {
 			stringBuffer.append("  ]\n},");
 		}
 		stringBuffer.deleteCharAt(stringBuffer.length()-1);		// drop the trailing comma
-		stringBuffer.append("\n]\n");
+		stringBuffer.append("\n]}\n");
 		return stringBuffer.toString();
 	}
 	
@@ -345,35 +338,34 @@ public class ChordManager {
 		 * write the chord as a JSON string according to the specified format
 		 */
 
-		if(jsonFormat.equalsIgnoreCase("JSON")) {
-			stringBuffer.append(harmonyChord.toJson() + ",\n");
+		if(jsonFormat.equalsIgnoreCase("RawJSON")) {
+			stringBuffer.append(harmonyChord.toJson(HarmonyChord.OutputFormat.FULL) + ",\n");
 		}
-		else if(jsonFormat.equalsIgnoreCase("RawJSON")) {
+		else if(jsonFormat.equalsIgnoreCase("JSON")) {
 			String symbols = null;
 			String groups = null;
 			String formulaArrayString = null;
 			ChordFormula chordFormula = harmonyChord.getChordFormula();
-			stringBuffer.append("  {\"" + harmonyChord.getName() + "\":{");
+			stringBuffer.append("  {\"name\":\"" + harmonyChord.getName() + "\", ");
 			try {
 				if(!chordFormula.getSymbols().isEmpty()) {
 					symbols = mapper.writeValueAsString(chordFormula.getSymbols());
 					stringBuffer.append("\"symbols\":");
-					stringBuffer.append(symbols + ",");
+					stringBuffer.append(symbols + ", ");
 				}
 				if(!chordFormula.getGroups().isEmpty()) {
 					groups = mapper.writeValueAsString(chordFormula.getGroups());
 					stringBuffer.append("\"groups\":");
-					stringBuffer.append(groups + ",");
+					stringBuffer.append(groups + ", ");
 				}
 				formulaArrayString = mapper.writeValueAsString(chordFormula.getFormula());
 				stringBuffer.append("\"formula\":");
-				stringBuffer.append(formulaArrayString + ",");
+				stringBuffer.append(formulaArrayString + ", ");
 				
-				stringBuffer.append("\"chordPitches\":[ ");
+				stringBuffer.append("\"spelling\":[ ");
 				harmonyChord.getChordPitches().forEach(p -> stringBuffer.append("\"" + p.toString(-1) + "\", "));
 				stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
 				stringBuffer.append("]");
-				stringBuffer.append(" } ");
 				
 			} catch(JsonProcessingException e) {
 				log.error("JsonProcessingException");

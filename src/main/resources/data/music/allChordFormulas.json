@@ -5,7 +5,7 @@
 {"name":"7Sus4","symbols":["7sus4"],"groups":["suspended"],"formula":[5,2,3], "intervals": ["P4", "M2", "m3"], "size":3,"chordSize":4,"formulaNumber":1185,"spelling":"C F G Bb" },
 {"name":"9Sus4","symbols":["9sus4"],"groups":["suspended"],"formula":[5,2,3,4], "intervals": ["P4", "M2", "m3", "M3"], "size":4,"chordSize":5,"formulaNumber":1189,"spelling":"C F G Bb D" },
 {"name":"Add fourth","symbols":["add11","4"],"groups":["added tone"],"formula":[4,3,10], "intervals": ["M3", "m3", "M9"], "size":3,"chordSize":4,"formulaNumber":177,"spelling":"C E G F" },
-{"name":"Add nine","symbols":["add9","2"],"groups":["added tone"],"formula":[4,3,7], "intervals": ["M3", "m3", "M2"], "intervals": ["M3", "m3", "P5"], "size":3,"chordSize":4,"formulaNumber":149,"spelling":"C E G D" },
+{"name":"Add nine","symbols":["add9","2"],"groups":["added tone"],"formula":[4,3,7], "intervals": ["M3", "m3", "M2"], "size":3,"chordSize":4,"formulaNumber":149,"spelling":"C E G D" },
 {"name":"Add six","symbols":["6","add6"],"groups":["added tone"],"formula":[4,3,2],"size":3,"chordSize":4,"formulaNumber":657,"spelling":"C E G A" },
 {"name":"Augmented major seventh","symbols":["+(M7)","M7+5","M7#5"],"groups":["seventh"],"formula":[4,4,3], "intervals": ["M3", "m3", "m3"], "size":3,"chordSize":4,"formulaNumber":2321,"spelling":"C E Ab B" },
 {"name":"Augmented ninth","symbols":["+9","aug9"],"groups":["extended"],"formula":[4,4,2,4], "intervals": ["M3", "m3", "M2", "M3"], "size":4,"chordSize":5,"formulaNumber":1301,"spelling":"C E Ab Bb D" },
