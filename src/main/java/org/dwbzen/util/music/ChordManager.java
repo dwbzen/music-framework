@@ -316,10 +316,12 @@ public class ChordManager {
 	}
 
 	public String exportChords() {
-		stringBuffer = new StringBuffer("{\"chords\":[");
+		stringBuffer = new StringBuffer("{\"chordLibrary\":[");
 		for(Pitch root : harmonyChordsRootMap.keySet()) {
 			log.debug("WORKING on root: " + root.toString());
-			stringBuffer.append("\n{\"root\":\"" + root.toString(-1) + "\":[\n");
+			stringBuffer.append("\n{ \"root\":\"" + root.toString(-1) + "\",");
+			stringBuffer.append(" \"chords\":[\n" );
+			
 			Map<String, HarmonyChord> hcmap = harmonyChordsRootMap.get(root);
 			for(String name : hcmap.keySet()) {
 				HarmonyChord hc = hcmap.get(name);
