@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-
 import org.dwbzen.common.math.IntegerPair;
 import org.dwbzen.music.element.Measurable;
 import org.dwbzen.music.element.Measure;
@@ -24,7 +23,6 @@ import org.dwbzen.music.element.Measure;
  * TODO: finish this
  */
 public class ChordExploder extends AbstractExploder {
-	private static final long serialVersionUID = 3462947065561693138L;
 
 	protected static final org.apache.log4j.Logger log = Logger.getLogger(ExplodeTransformer.class);
 

@@ -1,15 +1,13 @@
 package org.dwbzen.music.element;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.dwbzen.common.math.IntegerPair;
 import org.dwbzen.common.util.IJson;
 import org.dwbzen.util.Ratio;
 
-public class Duration implements IJson, Comparable<Duration> {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	private static final long serialVersionUID = -2806795943905155955L;
+public class Duration implements IJson, Comparable<Duration> {
 	
 	/**
 	 * total units including added dots. In MusicXML: <duration>n</duration>

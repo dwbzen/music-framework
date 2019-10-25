@@ -3,11 +3,11 @@ package org.dwbzen.music.element.song;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dwbzen.common.util.IJson;
+import org.dwbzen.music.element.Key;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.dwbzen.music.element.Key;
-import org.dwbzen.common.util.IJson;
 
 /**
  * The melody part of a SongMeasure. For example, given 192 divisions in 4/4 time:
@@ -21,7 +21,6 @@ import org.dwbzen.common.util.IJson;
  */
 public class Melody implements IJson {
 
-	private static final long serialVersionUID = 8282039435484302599L;
 	public static String NO_MELODY_KEY = "NONE";	// Pitch is "0"
 
 	@JsonProperty("notes")  private List<SongNote> songNotes = new ArrayList<SongNote>();

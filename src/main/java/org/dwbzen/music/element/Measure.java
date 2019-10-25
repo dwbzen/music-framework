@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import org.dwbzen.common.util.IJson;
+import org.dwbzen.music.ScorePart;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.dwbzen.music.ScorePart;
-import org.dwbzen.common.util.IJson;
 
 /**
  * A Measure is a horizontal arrangement of Note and/or Chord : i.e. a Measurable
@@ -29,7 +29,6 @@ import org.dwbzen.common.util.IJson;
  */
 public class Measure implements IJson, Consumer<Measurable> {
 
-	private static final long serialVersionUID = -704281345619181452L;
 	public static final int DEFAULT_DIVISIONS_PER_MEASURE = 16;
 	private static int divisionsPerMeasure = DEFAULT_DIVISIONS_PER_MEASURE;		// default value
 

@@ -1,11 +1,10 @@
 package org.dwbzen.music.element.song;
 
+import org.dwbzen.common.util.IJson;
 import org.dwbzen.music.element.Measurable.TieType;
 import org.dwbzen.music.element.Measurable.TupletType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.dwbzen.common.util.IJson;
 
 /**
  * Provide note type (half, quarter etc. ),  tuplet and tie information.
@@ -14,8 +13,6 @@ import org.dwbzen.common.util.IJson;
  *
  */
 public class Notation implements IJson {
-
-	private static final long serialVersionUID = -3719234783577601054L;
 	
 	/**
 	 * derived from Duration and time signature: whole, half, quarter, eighth, 16th, 32nd, 64th

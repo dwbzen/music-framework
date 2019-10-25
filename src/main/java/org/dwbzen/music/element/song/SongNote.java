@@ -1,5 +1,6 @@
 package org.dwbzen.music.element.song;
 
+import org.dwbzen.common.util.IJson;
 import org.dwbzen.music.element.Duration;
 import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.Pitch;
@@ -7,8 +8,6 @@ import org.dwbzen.music.element.TimeSignature;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.dwbzen.common.util.IJson;
 
 /**
  * A pitch + Duration. Can also be a rest (no pitch).
@@ -25,8 +24,6 @@ import org.dwbzen.common.util.IJson;
  *
  */
 public class SongNote implements IJson, Comparable<SongNote> {
-
-	private static final long serialVersionUID = 1282905330533960496L;
 
 	@JsonProperty("pitch")		private String pitch = null;
 	@JsonProperty("notations")	private Notation notation;

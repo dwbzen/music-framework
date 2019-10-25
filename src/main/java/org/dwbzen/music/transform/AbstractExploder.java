@@ -3,19 +3,16 @@ package org.dwbzen.music.transform;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.dwbzen.common.math.IntegerPair;
-import org.dwbzen.music.element.PitchRange;
-
 import org.apache.log4j.Logger;
+import org.dwbzen.common.math.IntegerPair;
+import org.dwbzen.common.util.IJson;
+import org.dwbzen.music.element.PitchRange;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.dwbzen.common.util.IJson;
-
 public abstract class AbstractExploder implements IJson, IExploder {
 
-	private static final long serialVersionUID = -3056868476406574952L;
 	protected static final org.apache.log4j.Logger log = Logger.getLogger(ExplodeTransformer.class);
 		
 	@JsonIgnore				private ThreadLocalRandom random = ThreadLocalRandom.current();

@@ -7,8 +7,6 @@ import org.dwbzen.music.element.IRhythmExpression;
 import org.dwbzen.music.element.TextureType;
 
 public class RhythmTextureMap extends BaseRhythmTextureMap {
-
-	private static final long serialVersionUID = -8651838440123201434L;
 	
 	public RhythmTextureMap() {
 		super();

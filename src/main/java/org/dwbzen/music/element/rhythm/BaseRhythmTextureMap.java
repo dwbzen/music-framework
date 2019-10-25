@@ -5,15 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import org.dwbzen.common.util.IJson;
 import org.dwbzen.music.element.IRhythmExpression;
 import org.dwbzen.music.element.TextureType;
-import org.dwbzen.common.util.IJson;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BaseRhythmTextureMap  implements IJson, IRhythmTextureMap {
 
-	private static final long serialVersionUID = 9179677215188237234L;
 	@JsonProperty	protected Map<TextureType, List<IRhythmExpression>> textureMap = new HashMap<TextureType, List<IRhythmExpression>>();
 	
 	public BaseRhythmTextureMap() {

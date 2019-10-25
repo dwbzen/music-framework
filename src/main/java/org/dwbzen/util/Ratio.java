@@ -1,13 +1,11 @@
 package org.dwbzen.util;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.dwbzen.common.util.IJson;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Ratio  implements IJson {
 
-	private static final long serialVersionUID = -768395102730445320L;
-	
 	/*
 	 * some common ratios
 	 */

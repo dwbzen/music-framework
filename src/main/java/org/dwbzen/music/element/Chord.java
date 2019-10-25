@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.dwbzen.common.util.IJson;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.dwbzen.common.util.IJson;
 
 /**
  * A Chord is a vertical arrangement of Notes
@@ -27,7 +27,6 @@ import org.dwbzen.common.util.IJson;
  */
 public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeasurableContainer<Note> {
 
-	private static final long serialVersionUID = -573501626988564230L;
 	/*
 	 * Notes in the Chord sorted in increasing Pitch order
 	 */

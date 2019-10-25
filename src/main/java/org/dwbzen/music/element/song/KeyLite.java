@@ -12,8 +12,6 @@ import org.dwbzen.music.element.Key;
  */
 public class KeyLite extends Key {
 
-	private static final long serialVersionUID = 8904006604147329449L;
-
 	public KeyLite() { }
 	
 	public KeyLite(Key other) {

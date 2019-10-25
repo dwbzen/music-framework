@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ChordFormulas implements IJson {
 
-	private static final long serialVersionUID = 1364359049363338964L;
 	static final org.apache.log4j.Logger log = Logger.getLogger(ChordFormula.class);
 	
 	@JsonIgnore	private  ObjectMapper mapper = new ObjectMapper();

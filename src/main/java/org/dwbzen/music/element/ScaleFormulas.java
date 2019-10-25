@@ -13,9 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ScaleFormulas implements IJson {
 
-	private static final long serialVersionUID = -549037646756549231L;
-
-	
 	static final org.apache.log4j.Logger log = Logger.getLogger(ScaleFormulas.class);
 	
 	@JsonIgnore	private  ObjectMapper mapper = new ObjectMapper();

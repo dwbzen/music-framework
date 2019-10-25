@@ -3,11 +3,11 @@ package org.dwbzen.music.element.song;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dwbzen.common.util.IJson;
+import org.dwbzen.music.element.TimeSignature;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.dwbzen.music.element.TimeSignature;
-import org.dwbzen.common.util.IJson;
 
 /**
  * A simplified Measure as it might appear in a guitar Fake Book.
@@ -29,8 +29,6 @@ import org.dwbzen.common.util.IJson;
  *
  */
 public class SongMeasure  implements IJson {
-
-	private static final long serialVersionUID = -2130722449811491021L;
 	
 	@JsonProperty("key")			private KeyLite	key = null;						// optional - include if number == 1 or it changed
 	@JsonProperty("timeSignature")	private TimeSignature timeSignature = null;		// optional - include if number == 1 or it changed

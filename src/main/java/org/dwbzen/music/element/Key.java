@@ -4,14 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.dwbzen.common.util.IJson;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.dwbzen.common.util.IJson;
-
 public class Key implements IJson {
-
-	private static final long serialVersionUID = 8877503587449790917L;
 
 	@JsonProperty("name")	private String name;
 	@JsonProperty("mode")	private Mode mode = Mode.MAJOR;		// or Mode.MINOR

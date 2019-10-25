@@ -6,15 +6,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.dwbzen.common.util.IJson;
 import org.dwbzen.util.Ratio;
 
-public class RhythmExpression implements IJson, IRhythmExpression {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	private static final long serialVersionUID = -1537702606983613050L;
+public class RhythmExpression implements IJson, IRhythmExpression {
 	
 	@JsonProperty("units")			private int units;
 	@JsonProperty("ratio")			private Ratio ratio = Ratio.ONE_TO_ONE;

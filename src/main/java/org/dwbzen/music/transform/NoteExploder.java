@@ -3,6 +3,7 @@ package org.dwbzen.music.transform;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.dwbzen.common.math.Factor;
 import org.dwbzen.common.math.IntegerPair;
 import org.dwbzen.common.math.Partition;
@@ -14,8 +15,6 @@ import org.dwbzen.music.element.Measurable.TupletType;
 import org.dwbzen.music.element.Measure;
 import org.dwbzen.music.element.Note;
 import org.dwbzen.music.element.Pitch;
-
-import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -44,7 +43,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class NoteExploder extends AbstractExploder {
 
-	private static final long serialVersionUID = -5725725372694711902L;
 	protected static final org.apache.log4j.Logger log = Logger.getLogger(ExplodeTransformer.class);
 	/*
 	 *  if true, breaks ties when forming chords - this value is configured in the ExplodeTransformer
