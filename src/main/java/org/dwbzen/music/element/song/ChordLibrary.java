@@ -2,12 +2,12 @@ package org.dwbzen.music.element.song;
 
 import java.util.TreeMap;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Loads all the chord formulas into memory.
  * All the chords in chords.json (resources/data/music) are available in a map
  * indexed by name, symbol(s) and alternate names.
- * Chord info is hard-coded - this does not reference the JSON file
- * TODO - sync with chord_formulas.json
  * 
  * @author don_bacon
  * @see music.element.song.ChordManager loadChordFormulas
@@ -142,5 +142,12 @@ public class ChordLibrary {
 	
 	public static  TreeMap<String,ChordFormula> getChordFormulas() {
 		return chordFormulas;
+	}
+	
+	static ObjectMapper mapper = new ObjectMapper();
+	static final String CHORD_FORMULAS = "/data/music/songs/allChordFormulas.json";
+	
+	public ChordLibrary() {
+		
 	}
 }
