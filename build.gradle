@@ -9,8 +9,8 @@ apply plugin: 'eclipse'
 
 sourceCompatibility = 11
 targetCompatibility = 11
-group = 'music_framework'
-version = '3.0'
+group = 'org.dwbzen.music-framework'
+version = '4.0'
 description = 'Music Framework'
 
 jar {
