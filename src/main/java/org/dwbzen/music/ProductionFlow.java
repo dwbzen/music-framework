@@ -231,7 +231,6 @@ public class ProductionFlow implements Runnable {
 		if(createScore) {
 			layer = new Layer("Layer 1");
 			score = createScore();
-			score.getInstrumentNames().addAll(instrumentNames);
 			layer.setScore(score);
 			log.info("*** Score created ***");
 			/*
@@ -338,38 +337,14 @@ public class ProductionFlow implements Runnable {
 
 	/**
 	 * Create a Score with configured and command-line parameters
-	 * Each Instrument corresponds to a ScorePart
-	 * A thread is created for each ScorePart
+	 * Each ScorePart corresponds to an Instrument.
 	 * @return Score instance
 	 */
 	public Score createScore() {
 		log.debug("createScore()");
-		score = new Score(configuration, title);
-		score.setWorkNumber(workNumber);
-		for(String instrumentName : instrumentNames) {
-			Instrument instrument = instruments.get(instrumentName);
-			String partName = configProperties.getProperty("score.parts."+ instrumentName + ".partName", instrumentName);
-			ScorePart scorePart = new ScorePart(score, partName, instrument);
-			// set the max# measures to generate if specified
-			scorePart.setMaxMeasures(measures);
-			score.addPart(scorePart);
-			Thread thread = new Thread(scorePart);
-			scorePartThreads.put(instrumentName, thread);
-			scoreParts.put(instrumentName, scorePart);
-			thread.start();
-		}
-		/*
-		 * wait for threads to complete
-		 */
-		boolean complete;
-		do {
-			complete = true;
-			for(String instrumentName : instrumentNames) {
-				State state = scoreParts.get(instrumentName).getState();
-				log.trace(instrumentName + " state: " + state);
-				complete &= state.equals(State.COMPLETE);
-			}
-		} while (!complete);
+		IScoreFactory scoreFactory = new ScoreFactory(configuration, instruments, measures, title, workNumber);				
+		score = scoreFactory.createScore();
+
 		return score;
 	}
 
@@ -385,7 +360,8 @@ public class ProductionFlow implements Runnable {
 	 * To give some variety to data sets, DataSource can be configured to select points randomly
 	 * This depends on setting of sequentialSelection (if false, use random selection)
 	 * @throws DataLoadException (RuntimeException)
-	 * @throws  
+	 * 
+	 * TODO - make Async
 	 */
 	public void loadData() throws DataLoadException  {
 		log.debug("loadData()");

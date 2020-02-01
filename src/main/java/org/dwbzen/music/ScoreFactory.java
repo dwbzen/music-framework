@@ -1,8 +1,12 @@
 package org.dwbzen.music;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 import org.dwbzen.music.element.Score;
@@ -22,6 +26,7 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 	private int measures;
 	private String title = null;
 	private String opus = null;
+	private ExecutorService executorService = null;
 	
 	public ScoreFactory(Configuration configuration, Map<String, Instrument> instruments, int nMeasures, String title, String opus) {
 		this.configuration = configuration;
@@ -29,29 +34,38 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 		measures = nMeasures;
 		this.title = title;
 		this.opus = opus;
+		executorService = Executors.newFixedThreadPool(Math.min(instruments.size(), 100), r -> {
+		    Thread thread = new Thread(r);
+		    thread.setDaemon(true);
+		    return thread;
+		});
 	}
 
 	@Override
-	public Score createScore(String title, String opus) {
+	public Score createScore() {
 		Properties configProperties = configuration.getProperties();
 		score = new Score(configuration, title);
 		score.setWorkNumber(opus);
+		List<CompletableFuture<Void>> futures = new ArrayList<>();
+		
 		for(String instrumentName : instruments.keySet()) {
 			Instrument instrument = instruments.get(instrumentName);
 			score.getInstrumentNames().add(instrumentName);
 			String partName = configProperties.getProperty("score.parts."+ instrumentName + ".partName", instrumentName);
 			ScorePart scorePart = new ScorePart(score, partName, instrument);
+			score.addPart(scorePart);
 			// set the max# measures to generate
 			scorePart.setMaxMeasures(measures);
-			score.addPart(scorePart);
-			CompletableFuture<Void> future = CompletableFuture.runAsync(scorePart);
+			
+			futures.add(CompletableFuture.runAsync(scorePart, executorService));	
 		}
+		futures.stream().map(CompletableFuture::join);
 		return score;
 	}
 
 	@Override
 	public void run() {
-		score = createScore(title, opus);
+		score = createScore();
 	}
 
 	public Map<String, Instrument> getInstruments() {
