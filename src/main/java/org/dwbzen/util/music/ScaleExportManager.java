@@ -265,7 +265,7 @@ public class ScaleExportManager  {
 	 */
 	public void accept(String formulaString) {
 		ScaleFormula scaleFormula = null;
-		log.info(formulaString);
+		log.debug(formulaString);
 		try {
 			scaleFormula = ScaleFormula.deserialize(formulaString);
 		} catch (Exception e) {

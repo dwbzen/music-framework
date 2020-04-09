@@ -1,7 +1,6 @@
 package org.dwbzen.music.element;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -162,11 +161,10 @@ public final class Scale implements IJson, INameable, Cloneable  {
 	 */
 	public String toString(boolean quote) {
 		StringBuilder sb = new StringBuilder();
-		Iterator<Pitch> pit = pitches.iterator();
-		sb.append(pit.next().toString(quote));
-		while(pit.hasNext()) {
-			sb.append(", ");
-			sb.append(pit.next().toString(quote));
+		int i = 0;
+		for(Pitch p:pitches) {
+			sb.append(p.toString(quote));
+			sb.append(++i < pitches.size() ? ", " : "" );
 		}
 		return sb.toString();
 	}
