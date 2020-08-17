@@ -145,7 +145,7 @@ public class ChordLibrary {
 	}
 	
 	static ObjectMapper mapper = new ObjectMapper();
-	static final String CHORD_FORMULAS = "/data/music/songs/allChordFormulas.json";
+	static final String CHORD_FORMULAS = "/data/music/allChordFormulas.json";
 	
 	public ChordLibrary() {
 		

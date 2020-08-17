@@ -29,10 +29,11 @@ meaning pitches are normalized to a single octave range
       
 "spellingNumber" is similar but uses the actual chord spelling over a 2-octave range.
 
-For example, Dominant ninth (formula "9") spelling is C, E ,G, Bb, D. 
+For example, C Dominant ninth (formula "9") spelling is C, E ,G, Bb, D. 
 scale degree-1 == 10,7,4,2,0 as binary:  0100 1001 0101 or HEX(495)
 
 To find the relative chord number, rotate left by the degree-1 of the desired root.
 So E9 would be rotateLeft(0100 1001 0101 , 4) == 1001 0101 0100 or HEX(954)
 In the chord formulas definitions the formulaNumber is given in Decimal (145 instead of 0X91 for example)
+
   

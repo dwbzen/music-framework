@@ -21,18 +21,19 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
 
 /**
- * Wrapper for db.collection.find()
- * Usage: 
- *  -db dbname			(optional, default = "test")
- *  -collection name
- *  -limit <num>		(limits # of results, defaults to 100 if not specified)
- *  -query <string>		query string (see examples below)
- *  				    delimit regular expressions with / /
- *
- * Example command line arguments:
+ * Wrapper for db.collection.find()<br>
+ * Uses the legacy version of the MongoDB driver. TODO: update to mongodb-driver-sync <p>
+ * <code>
+ * Usage: <br>
+ *  -db dbname			(optional, default = "test")<br>
+ *  -collection name<br>
+ *  -limit <num>		(limits # of results, defaults to 100 if not specified)<br>
+ *  -query <string>		query string (see examples below). delimit regular expressions with / /<br>
+ * </code>
+ * Example command line arguments:<br>
  * -db music -collection songs -query "name:Lovely Rita"
  *  
- * @author dbacon
+ * @author don_bacon
  *
  */
 public class Find {
@@ -88,7 +89,7 @@ public class Find {
 			db = mongoClient.getDatabase( databaseName );
 			collectionName = cname;
 			collection = db.getCollection(collectionName);
-			log.debug("collection size: " + collection.count());
+			log.debug("collection size: " + collection.countDocuments());
 		} catch (Exception e) {
 			System.err.println("Execption: " + e.toString());
 			e.printStackTrace();
@@ -102,7 +103,7 @@ public class Find {
 			db = mongoClient.getDatabase(databaseName);
 			collectionName = cname;
 			collection = db.getCollection(collectionName);
-			log.debug("collection size: " + collection.count());
+			log.debug("collection size: " + collection.countDocuments());
 		} catch (Exception e) {
 			System.err.println("Mongo Connection Exception: " + e.toString());
 			e.printStackTrace();
@@ -170,7 +171,7 @@ public class Find {
 	public long getCount() {
 		long count = 0;
 		BasicDBObject dbObject = buildDBObject(getQuery());
-		count = collection.count(dbObject);
+		count = collection.countDocuments(dbObject);
 		return count;
 	}
 	
