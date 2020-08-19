@@ -6,7 +6,7 @@
 { "name" : "Add fourth" , "symbols" : ["add11", "4"], "groups" : [ "added tone"] , "formula" : [4, 3, 10], "intervals": ["M3", "m3", "M9"], "size" : 3, "chordSize" : 4 }
 { "name" : "Add nine" , "symbols" : ["add9", "2"], "groups" : [ "added tone"] , "formula" : [ 4, 3, 7] , "intervals": ["M3", "m3", "P5"], "size" : 3, "chordSize" : 4 }
 { "name" : "Add six" , "symbols" : ["6", "add6"], "groups" : [ "added tone"] , "formula" : [4, 3, 2], "intervals": ["M3", "m3", "M2"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Augmented major seventh" , "symbols" : ["+(M7)", "M7+5", "M7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 3 ] , "intervals": ["M3", "m3", "m3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Augmented major seventh" , "symbols" : ["+(M7)", "M7+5", "M7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 3 ] , "intervals": ["M3", "M3", "m3"], "size" : 3, "chordSize" : 4 }
 { "name" : "Augmented ninth" , "symbols" : ["+9", "aug9"], "groups" : [ "extended"] , "formula" : [ 4, 4, 2, 4 ] , "intervals": ["M3", "m3", "M2", "M3"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "D"] }
 { "name" : "Augmented seventh flat nine" , "symbols" : ["+7b9", "aug7b9", "7+b9"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2, 3 ] , "intervals": ["M3", "M3", "M2", "m3"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "Db"] }
 { "name" : "Augmented seventh sharp nine" , "symbols" : ["+7#9", "aug7#9", "7+#9"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2, 5 ] , "intervals": ["M3", "M3", "M2", "P4"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "Eb"] }

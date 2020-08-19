@@ -10,7 +10,7 @@
 { "name" : "Dominant seventh" , "symbols" : ["7"], "groups" : [ "seventh"] , "formula" : [ 4, 3, 3 ] , "intervals": ["M3", "m3", "m3"], "size" : 3, "chordSize" : 4 }
 { "name" : "Major seventh" , "symbols" : ["maj7", "M7"], "groups" : [ "seventh"] , "formula" : [ 4, 3, 4 ] , "intervals": ["M3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
 { "name" : "Augmented seventh" , "symbols" : ["+7", "aug7", "7+", "C7+5", "C7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2 ] , "intervals": ["M3", "m3", "M2"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Augmented major seventh" , "symbols" : ["+(M7)", "M7+5", "M7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 3 ] , "intervals": ["M3", "m3", "m3"], "size" : 3, "chordSize" : 4 }
+{ "name" : "Augmented major seventh" , "symbols" : ["+(M7)", "M7+5", "M7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 3 ] , "intervals": ["M3", "M3", "m3"], "size" : 3, "chordSize" : 4 }
 { "name" : "Augmented seventh flat nine" , "symbols" : ["+7b9", "aug7b9", "7+b9"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2, 3 ] , "intervals": ["M3", "M3", "M2", "m3"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "Db"] }
 { "name" : "Augmented seventh sharp nine" , "symbols" : ["+7#9", "aug7#9", "7+#9"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2, 5 ] , "intervals": ["M3", "M3", "M2", "P4"], "size" : 4, "chordSize" : 5, "template":["C", "E", "Ab", "Bb", "Eb"] }
 { "name" : "Dominant ninth" , "symbols" : ["9"], "groups" : [ "extended"] , "formula" : [ 4, 3, 3, 4 ] , "intervals": ["M3", "m3", "m3", "M3"], "size" : 4, "chordSize" : 5 }
