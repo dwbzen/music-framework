@@ -5,9 +5,10 @@ import java.util.TreeMap;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Loads all the chord formulas into memory.
+ * Loads all the chord formulas into memory.<br>
  * All the chords in chords.json (resources/data/music) are available in a map
- * indexed by name, symbol(s) and alternate names.
+ * indexed by name, symbol(s) and alternate names.<p>
+ * TODO: complete by adding missing chords
  * 
  * @author don_bacon
  * @see music.element.song.ChordManager loadChordFormulas
@@ -56,7 +57,7 @@ public class ChordLibrary {
 	// { "name" : "Dominant seventh" , "symbols" : ["7"], "groups" : [ "seventh"] , "formula" : [ 4, 3, 3 ] , "intervals": ["M3", "m3", "m3"], "size" : 3, "chordSize" : 4, "formulaNumber" : "1169" }
 	// { "name" : "Major seventh" , "symbols" : ["M7", "maj7"], "groups" : [ "seventh"] , "formula" : [ 4, 3, 4 ] , "intervals": ["M3", "m3", "M3"], "size" : 3, "chordSize" : 4, "formulaNumber" : "2193" }
 	// { "name" : "Augmented seventh" , "symbols" : ["+7", "aug7", "7+", "C7+5", "C7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 2 ] , "intervals": ["M3", "m3", "M2"], "size" : 3, "chordSize" : 4, "formulaNumber" : "1297" }
-	// { "name" : "Augmented major seventh" , "symbols" : ["+(M7)", "M7+5", "M7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 3 ] , "intervals": ["M3", "m3", "m3"], "size" : 3, "chordSize" : 4, "formulaNumber" : "2321" }
+	// { "name" : "Augmented major seventh" , "symbols" : ["+(M7)", "M7+5", "M7#5"], "groups" : [ "seventh"] , "formula" : [ 4, 4, 3 ] , "intervals": ["M3", "M3", "m3"], "size" : 3, "chordSize" : 4, "formulaNumber" : "2321" }
 	public static final int[] DIMINISHED_SEVENTH_FORMULA = {3,3,3};
 	public static final String[] DIMINISHED_SEVENTH_INTERVALS = {"m3", "m3", "m3"};
 	public static final String[] DIMINISHED_SEVENTH_SYMBOLS = {"dim7"};
@@ -109,14 +110,15 @@ public class ChordLibrary {
 	// { "name" : "Seventh flat thirteenth", "symbols" : ["7-13", "7b13"], "groups" : [ "altered"] ,"formula" : [ 4, 3, 3, 4, 6 ] , "intervals": ["M3", "m3", "m3", "M3", "d5"], "size" : 5, "chordSize" : 6, "formulaNumber" : "1429" }
 
 	// added tone
-	// { "name" : "Add ninth" , "symbols" : ["add9", "2"], "groups" : [ "added tone"] , "formula" : [ 4, 3, 7] , "intervals": ["M3", "m3", "P5"], "size" : 3, "chordSize" : 4, "formulaNumber" : "149" }
-	// { "name" : "mu major-1" , "symbols" : ["mu", "add9", "Steely Dan Chord"], "groups" : [ "added tone"] , "formula" : [ 7, 7, 2] , "intervals": ["P5", "P5", "M2"], "size" : 3, "chordSize" : 4, "formulaNumber" : "149" }
-	// { "name" : "mu major-2" , "symbols" : ["mu2"], "groups" : [ "added tone"] , "formula" : [ 14, 2, 3] , "intervals": ["M9", "M2", "m3"], "size" : 3, "chordSize" : 4, "formulaNumber" : "149" }
-	// { "name" : "Add fourth" , "symbols" : ["add11", "4"], "groups" : [ "added tone"] , "formula" : [4, 3, 10], "intervals": ["M3", "m3", "M9"], "size" : 3, "chordSize" : 4, "formulaNumber" : "177" }
-	// { "name" : "Add six" , "symbols" : ["6", "add6"], "groups" : [ "added tone"] , "formula" : [4, 3, 2], "intervals": ["M3", "m3", "M2"], "size" : 3, "chordSize" : 4, "formulaNumber" : "657" }
-	// { "name" : "Six-nine" , "symbols" : ["6+9"], "groups" : [ "added tone"] , "formula" : [4, 3, 2, 5], "intervals": ["M3", "m3", "M2", "P4"], "size" : 4, "chordSize" : 5, "formulaNumber" : "661" }
-	// { "name" : "Mixed third" , "symbols" : ["m add3"], "groups" : [ "added tone"] , "formula" : [3, 1, 3], "intervals": ["m3", "m2", "m3"], "size" : 3, "chordSize" : 4, "formulaNumber" : "153" }
-	// { "name" : "Minor sixth" , "symbols" : ["m6"], "groups" : [ "added tone"] , "formula" : [ 3, 3, 4 ] , "intervals": ["m3", "m3", "M3"], "size" : 3, "chordSize" : 4, "formulaNumber" : "1097" }
+	// { "name" : "Add fourth" , "symbols" : ["add11", "4"], "groups" : [ "added tone"] , "formula" : [4, 3, 10], "intervals": ["M3", "m3", "M9"], "size" : 3, "chordSize" : 4 }
+	// { "name" : "Add nine" , "symbols" : ["add9", "2"], "groups" : [ "added tone"] , "formula" : [ 4, 3, 7] , "intervals": ["M3", "m3", "P5"], "size" : 3, "chordSize" : 4 }
+	// { "name" : "Add six" , "symbols" : ["6", "add6"], "groups" : [ "added tone"] , "formula" : [4, 3, 2], "intervals": ["M3", "m3", "M2"], "size" : 3, "chordSize" : 4 }
+	// { "name" : "Minor Add nine" , "symbols" : ["madd9"], "groups" : [ "added tone"] , "formula" : [ 3, 4, 7] , "intervals": ["m3", "M3", "P5"], "size" : 3, "chordSize" : 4 }
+	// { "name" : "Minor sixth" , "symbols" : ["m6"], "groups" : [ "added tone"] , "formula" : [ 3, 3, 4 ] , "intervals": ["m3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
+	// { "name" : "Mixed third" , "symbols" : ["m add3"], "groups" : [ "added tone"] , "formula" : [3, 1, 3], "intervals": ["m3", "m2", "m3"], "size" : 3, "chordSize" : 4 }
+	// { "name" : "Six-nine" , "symbols" : ["6+9"], "groups" : [ "added tone"] , "formula" : [4, 3, 2, 5], "intervals": ["M3", "m3", "M2", "P4"], "size" : 4, "chordSize" : 5 }
+	// { "name" : "mu major-1" , "symbols" : ["mu", "add9", "Steely Dan Chord"], "groups" : [ "added tone"] , "formula" : [ 7, 7, 2] , "intervals": ["P5", "P5", "M2"], "size" : 3, "chordSize" : 4 }
+	// { "name" : "mu major-2" , "symbols" : ["mu2"], "groups" : [ "added tone"] , "formula" : [ 14, 2, 3] , "intervals": ["M9", "M2", "m3"], "size" : 3, "chordSize" : 4 }
 	
 	// suspended chords
 	// { "name" : "Sus2" , "symbols" : ["sus2"], "groups" : [ "suspended"] , "formula" : [ 2, 7] , "intervals": ["M2", "P5"], "size" : 2, "chordSize" : 3, "formulaNumber" : "517" }

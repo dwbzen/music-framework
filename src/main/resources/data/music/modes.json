@@ -1,0 +1,17 @@
+{"collection": "Modern Modes",
+ "scaleFormulas":[
+ {"Ionian":
+	{ "groups":[ "major", "modes" ],"formula":[ 2, 2, 1, 2, 2, 2, 1 ],"size":7}, "description":"Mode I: major scale. C-B" },
+ {"Dorian":
+	{ "groups":[ "dorian", "modes" ],"formula":[ 2, 1, 2, 2, 2, 1, 2 ],"size":7}, "description":"Mode II: minor scale with a raised 6. D-C" },
+ {"Phrygian":
+	{ "groups":[ "phrygian", "modes"],"formula":[ 1, 2, 2, 2, 1, 2, 2 ],"size":7}, "description":"Mode III: minor scale with a lowered 2. E-D" },
+ {"Lydian":
+    { "groups":[ "lydian", "modes"], "formula":[ 2, 2, 2, 1, 2, 2, 1 ],"size":7}, "description":"Mode IV: major scale with a raised 4. F-E" },
+ {"Mixolydian": 
+    { "groups":[ "mixolydian", "modes"], "formula":[ 2, 2, 1, 2, 2, 1, 2 ],"size":7}, "description":"Mode V: major scale with a lowered 7. G-F" },
+ {"Aeolian": 
+    { "groups":[ "aeolian", "modes"], "formula":[ 2, 1, 2, 2, 1, 2, 2 ],"size":7}, "description":"Mode VI: natural minor scale. A-G" },
+ {"Locrian":
+    { "groups":[ "locrian", "modes" ], "formula":[ 1, 2, 2, 1, 2, 2, 2 ], "size":7}, "description":"Mode VII: minor scale with a lowered 2 and 5. B-A" }
+] }

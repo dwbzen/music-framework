@@ -8,8 +8,8 @@ See [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/
 `mongoimport --type json --collection chord_formulas --db music --file "chord_formulas.json"`
 
 # Scale Files
-* `mongoimport --type json --db music --collection scale_formulas --file "common_scaleFormula.json"`
-* `mongoimport --type json --db music --collection scale_formulas --file "theoretical_scaleFormula.json"`
+* `mongoimport --type json --db music --collection scale_formulas --file "common_scaleFormulas.json"`
+* `mongoimport --type json --db music --collection scale_formulas --file "theoretical_scaleFormulas.json"`
 * `mongoimport --type json --db music --collection scales_C --file "scales-C.json"`
 
 # Importing songs
