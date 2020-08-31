@@ -85,8 +85,8 @@ public class Standard16RhythmScaleFactory extends Monophonic16StandardRhythmScal
 	@Override
 	/**
 	 * Creates an ExpressionSelector for standard rhythm scale.
-	 * Set CHORDAL texture probablilities to the chordalProbability default value
-	 * Set MONOPONIC texture probablilities to the monophonicProbability default value
+	 * Set CHORDAL texture probabilities to the chordalProbability default value.
+	 * Set MONOPONIC texture probabilities to the monophonicProbability default value.<br>
 	 * Either can be changed by instrument configuration.
 	 * 
 	 * @param RhythmScale rhythmScale
