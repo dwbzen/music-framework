@@ -38,14 +38,15 @@ import org.dwbzen.music.element.song.HarmonyChord;
  * Load and/or export chord formulas or chords (HarmonyChords instanced from root list)
  * <code>
  * Usage: ChordManager -export formulas -format RawJSON
- * 		  ChordManager -print -roots C4 -resource my_formulas.json
- * 		  ChordManager -print -resource "chord_formulas.json" -roots C4
+ * 		  ChordManager -export chords -root C,D
+ * 		  ChordManager -print -root C -resource my_formulas.json
+ * 		  ChordManager -print -group "altered" -root C4
  * </code>
  * 
  * Use -print To display a tab-delimited table of harmony chords with corresponding chord formula(s),<br>
  * chord number (decimal and hex) and spelling number (hex). Suitable for import into Excel.</p>
  * Use RawJSON format for Mathematica import.<br>
- * If unspecified, resource file defaults to "chord_formulas.json"<br>
+ * If unspecified, resource file defaults to "allChordFormulas.json"<br>
  * Specify -roots all for all 24 root notes.<br>
  * All roots: { "Ab", "A", "A#", "Bb", "B", "B#", "Cb", "C", "C#", "Db", "D", "D#", "Eb", "E", "E#", "Fb", "F", "F#", "Gb", "G", "G#" }<br>
  * If unspecified, roots defaults to { "C" }<br>
@@ -62,7 +63,8 @@ public class ChordManager {
 	private List<Pitch> rootPitches = new ArrayList<Pitch>();
 	private Map<String, HarmonyChord> harmonyChords = null;
 	private Map<Pitch, Map<String, HarmonyChord>> harmonyChordsRootMap = new TreeMap<Pitch, Map<String, HarmonyChord>>(new PitchComparator());
-	private Map<String,ChordFormula> chordFormulasMap = new TreeMap<String, ChordFormula>();
+	private Map<String,ChordFormula> chordFormulasMap = new TreeMap<String, ChordFormula>();	// by name and symbol(s)
+	private Map<String,ChordFormula> chordFormulasByNameMap = new TreeMap<String, ChordFormula>();	// by name only
 	private String resourceFile = null;
 	private String jsonFormat = null;
 	private StringBuffer stringBuffer = null;
@@ -113,12 +115,12 @@ public class ChordManager {
 	}
 		
 	public Map<String, HarmonyChord> createHarmonyChords() {
-		createHarmonyChords(rootPitches, chordFormulasMap);
+		createHarmonyChords(rootPitches, chordFormulasByNameMap);
 		return harmonyChords;
 	}
 	
 	public Map<String, HarmonyChord> createHarmonyChords(List<Pitch> rootPitches) {
-		createHarmonyChords(rootPitches, chordFormulasMap);
+		createHarmonyChords(rootPitches, chordFormulasByNameMap);
 		return harmonyChords;
 	}
 	
@@ -140,7 +142,7 @@ public class ChordManager {
 					Key key = Key.rootKeyMap.get(root.toString(-1));
 					HarmonyChord harmonyChord = new HarmonyChord(formula, root, key);
 					if(harmonyChord != null) {
-						formula.getSymbols().forEach(symbol -> harmonyChords.put(root.getStep().name() + symbol, harmonyChord));
+						 harmonyChords.put(root.getStep().name() + formula.getSymbols().get(0), harmonyChord);
 					}
 				}
 			}
@@ -347,6 +349,7 @@ public class ChordManager {
 			String symbols = null;
 			String groups = null;
 			String formulaArrayString = null;
+			String intervalsArrayString = null;
 			ChordFormula chordFormula = harmonyChord.getChordFormula();
 			stringBuffer.append("  {\"name\":\"" + harmonyChord.getName() + "\", ");
 			try {
@@ -363,6 +366,10 @@ public class ChordManager {
 				formulaArrayString = mapper.writeValueAsString(chordFormula.getFormula());
 				stringBuffer.append("\"formula\":");
 				stringBuffer.append(formulaArrayString + ", ");
+				
+				intervalsArrayString = mapper.writeValueAsString(chordFormula.getIntervals());
+				stringBuffer.append("\"intervals\":");
+				stringBuffer.append(intervalsArrayString + ", ");
 				
 				stringBuffer.append("\"spelling\":[ ");
 				harmonyChord.getChordPitches().forEach(p -> stringBuffer.append("\"" + p.toString(-1) + "\", "));
@@ -399,6 +406,7 @@ public class ChordManager {
     	if(chordFormulas != null) {
     		for(ChordFormula chordFormula : chordFormulas.getChordFormulas()) {
     			chordFormulasMap.put(chordFormula.getName(), chordFormula);
+    			chordFormulasByNameMap.put(chordFormula.getName(), chordFormula);
     			for(String s : chordFormula.getSymbols()) {
     				chordFormulasMap.put(s, chordFormula);
     			}

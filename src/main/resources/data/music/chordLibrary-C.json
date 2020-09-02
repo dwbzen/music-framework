@@ -25,7 +25,7 @@
   {"name":"C9", "symbols":["9"], "groups":["extended"], "formula":[4,3,3,4], "spelling":[ "C", "E", "G", "Bb", "D" ]},
   {"name":"C9#11", "symbols":["9#11","9-11"], "groups":["altered"], "formula":[4,3,3,4,4], "spelling":[ "C", "E", "G", "Bb", "D", "Gb" ]},
   {"name":"C9b5", "symbols":["9b5"], "groups":["altered"], "formula":[4,2,4,4], "spelling":[ "C", "E", "Gb", "Bb", "D" ]},
-  {"name":"C9b5#11", "symbols":["9b5#11","whole tone"], "groups":["altered"], "formula":[4,2,4,4,6], "spelling":[ "C", "E", "Gb", "Bb", "D", "Ab" ]}
+  {"name":"C9b5#11", "symbols":["9b5#11","whole tone"], "groups":["altered"], "formula":[4,2,4,4,6], "spelling":[ "C", "E", "Gb", "Bb", "D", "Ab" ]},
   {"name":"C9b5#11", "symbols":["9b5#11","whole tone"], "groups":["altered"], "formula":[4,2,4,4,6], "spelling":[ "C", "E", "Gb", "Bb", "D", "Ab" ]},
   {"name":"C9sus4", "symbols":["9sus4"], "groups":["suspended"], "formula":[5,2,3,4], "spelling":[ "C", "F", "G", "Bb", "D" ]},
   {"name":"CJazz sus", "symbols":["Jazz sus"], "groups":["suspended"], "formula":[5,2,3,4], "spelling":[ "C", "F", "G", "Bb", "D" ]},
@@ -56,6 +56,6 @@
   {"name":"Csus2", "symbols":["sus2"], "groups":["suspended"], "formula":[2,7], "spelling":[ "C", "D", "A" ]},
   {"name":"Csus4", "symbols":["sus4"], "groups":["suspended"], "formula":[5,2], "spelling":[ "C", "F", "G" ]},
   {"name":"Csus6", "symbols":["sus6"], "groups":["suspended"], "formula":[7,2], "spelling":[ "C", "G", "A" ]},
-  {"name":"Csus7", "symbols":["sus7"], "groups":["suspended"], "formula":[7,4], "spelling":[ "C", "G", "B" ]},
+  {"name":"Csus7", "symbols":["sus7"], "groups":["suspended"], "formula":[7,4], "spelling":[ "C", "G", "B" ]}
   ]
 } ]}
