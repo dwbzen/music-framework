@@ -12,38 +12,38 @@ import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
 
-import com.audiveris.proxymusic.AboveBelow;
-import com.audiveris.proxymusic.Attributes;
-import com.audiveris.proxymusic.Clef;
-import com.audiveris.proxymusic.ClefSign;
-import com.audiveris.proxymusic.Direction;
-import com.audiveris.proxymusic.DirectionType;
-import com.audiveris.proxymusic.Empty;
-import com.audiveris.proxymusic.EmptyPlacement;
-import com.audiveris.proxymusic.FormattedText;
-import com.audiveris.proxymusic.Identification;
-import com.audiveris.proxymusic.Notations;
-import com.audiveris.proxymusic.NoteType;
-import com.audiveris.proxymusic.PartList;
-import com.audiveris.proxymusic.PartName;
-import com.audiveris.proxymusic.ScoreInstrument;
-import com.audiveris.proxymusic.ScorePartwise;
-import com.audiveris.proxymusic.ScorePartwise.Part;
-import com.audiveris.proxymusic.Sound;
-import com.audiveris.proxymusic.StaffDetails;
-import com.audiveris.proxymusic.StartStop;
-import com.audiveris.proxymusic.StartStopContinue;
-import com.audiveris.proxymusic.Tie;
-import com.audiveris.proxymusic.Tied;
-import com.audiveris.proxymusic.Time;
-import com.audiveris.proxymusic.TimeModification;
-import com.audiveris.proxymusic.Transpose;
-import com.audiveris.proxymusic.Tuplet;
-import com.audiveris.proxymusic.TypedText;
-import com.audiveris.proxymusic.Work;
-import com.audiveris.proxymusic.YesNo;
-import com.audiveris.proxymusic.util.Marshalling;
-import com.audiveris.proxymusic.util.Marshalling.MarshallingException;
+import org.audiveris.proxymusic.AboveBelow;
+import org.audiveris.proxymusic.Attributes;
+import org.audiveris.proxymusic.Clef;
+import org.audiveris.proxymusic.ClefSign;
+import org.audiveris.proxymusic.Direction;
+import org.audiveris.proxymusic.DirectionType;
+import org.audiveris.proxymusic.Empty;
+import org.audiveris.proxymusic.EmptyPlacement;
+import org.audiveris.proxymusic.FormattedText;
+import org.audiveris.proxymusic.Identification;
+import org.audiveris.proxymusic.Notations;
+import org.audiveris.proxymusic.NoteType;
+import org.audiveris.proxymusic.PartList;
+import org.audiveris.proxymusic.PartName;
+import org.audiveris.proxymusic.ScoreInstrument;
+import org.audiveris.proxymusic.ScorePartwise;
+import org.audiveris.proxymusic.ScorePartwise.Part;
+import org.audiveris.proxymusic.Sound;
+import org.audiveris.proxymusic.StaffDetails;
+import org.audiveris.proxymusic.StartStop;
+import org.audiveris.proxymusic.StartStopContinue;
+import org.audiveris.proxymusic.Tie;
+import org.audiveris.proxymusic.Tied;
+import org.audiveris.proxymusic.Time;
+import org.audiveris.proxymusic.TimeModification;
+import org.audiveris.proxymusic.Transpose;
+import org.audiveris.proxymusic.Tuplet;
+import org.audiveris.proxymusic.TypedText;
+import org.audiveris.proxymusic.Work;
+import org.audiveris.proxymusic.YesNo;
+import org.audiveris.proxymusic.util.Marshalling;
+import org.audiveris.proxymusic.util.Marshalling.MarshallingException;
 
 import org.dwbzen.music.element.Chord;
 import org.dwbzen.music.element.Cleff;
@@ -66,7 +66,7 @@ import org.dwbzen.util.Ratio;
 
 /**
  * Turns a Score into MusicXML, specifically ScorePartwise instance
- * For clarity, all com.audiveris.proxymusic instance
+ * For clarity, all org.audiveris.proxymusic instance
  * variables prefixed with an underscore (_)
  * 
  * NOTE - there's a problem with playback of certain percussion instruments
@@ -151,7 +151,7 @@ public class MusicXMLHelper {
 	
 	/**
 	 * convert the Score to a MusicXML ScorePartwise
-	 * For clarity, all com.audiveris.proxymusic class instance
+	 * For clarity, all org.audiveris.proxymusic class instance
 	 * variables start with an underscore (_)
 	 * @return
 	 */
@@ -163,7 +163,7 @@ public class MusicXMLHelper {
 		_work.setWorkTitle(score.getTitle());
 		_scorePartwise.setWork(_work);
 		Identification _id = new Identification();
-		com.audiveris.proxymusic.ScorePartwise.Part.Measure _measure = null;
+		org.audiveris.proxymusic.ScorePartwise.Part.Measure _measure = null;
 		for(String type : score.getCreators().keySet()) {
 			TypedText _tt = new TypedText(); 
 			_tt.setType(type);
@@ -177,9 +177,9 @@ public class MusicXMLHelper {
 		
 		_scorePartwise.setIdentification(_id);
 		List<ScorePartwise.Part> _parts = _scorePartwise.getPart();
-		PartList _partList = new PartList();	// add com.audiveris.proxymusic.ScorePart
+		PartList _partList = new PartList();	// add org.audiveris.proxymusic.ScorePart
 		int partnum = 1;
-		com.audiveris.proxymusic.MidiInstrument _midiInstrument = null;
+		org.audiveris.proxymusic.MidiInstrument _midiInstrument = null;
 		for(String instrumentName : score.getInstrumentNames()) {
 			ScorePartEntity scorePartEntity = score.getScorePartEntityForInstrument(instrumentName);
 			Instrument instrument = scorePartEntity.getInstrument();
@@ -187,7 +187,7 @@ public class MusicXMLHelper {
 			MidiInstrument midiInstrument = instrument.getMidiInstrument();
 			midiInstrument.setMidiChannel(partnum);
 
-			com.audiveris.proxymusic.ScorePart _scorePart = new com.audiveris.proxymusic.ScorePart();
+			org.audiveris.proxymusic.ScorePart _scorePart = new org.audiveris.proxymusic.ScorePart();
 			PartName _partName = new PartName();
 			PartName _abbreviationPartName = new PartName();
 			_partName.setValue(partname);
@@ -201,7 +201,7 @@ public class MusicXMLHelper {
 			_scoreInstrument.setInstrumentName(instrument.getInstrumentName());
 			_scoreInstrument.setInstrumentAbbreviation(instrument.getAbreviation());
 			_scoreInstrument.setInstrumentSound(instrument.getInstrumentSound());
-			com.audiveris.proxymusic.VirtualInstrument _virtualInstrument = new com.audiveris.proxymusic.VirtualInstrument();
+			org.audiveris.proxymusic.VirtualInstrument _virtualInstrument = new org.audiveris.proxymusic.VirtualInstrument();
 			_virtualInstrument.setVirtualLibrary(instrument.getVirtualLibrary());
 			_virtualInstrument.setVirtualName(instrument.getVirtualName());
 			_scoreInstrument.setVirtualInstrument(_virtualInstrument);
@@ -209,7 +209,7 @@ public class MusicXMLHelper {
 			 * Score midi instrument (optional)
 			 */
 			if(scoreMidi) {
-				_midiInstrument = new com.audiveris.proxymusic.MidiInstrument();
+				_midiInstrument = new org.audiveris.proxymusic.MidiInstrument();
 				// _midiInstrument.setId(partId);
 				_midiInstrument.setMidiChannel(midiInstrument.getMidiChannel());
 				_midiInstrument.setVolume(BigDecimal.valueOf(80));
@@ -222,7 +222,7 @@ public class MusicXMLHelper {
 			Part _part = new Part();
 			_part.setId(_scorePart);
 			_parts.add(_part);
-			_measure = new com.audiveris.proxymusic.ScorePartwise.Part.Measure();
+			_measure = new org.audiveris.proxymusic.ScorePartwise.Part.Measure();
 			_measure.setImplicit(YesNo.YES);
 			_measure.setNumber("0");
 			Attributes _attributes = new Attributes();
@@ -233,7 +233,7 @@ public class MusicXMLHelper {
 				 */
 				if(measNum == 0) {
 					_attributes.setDivisions(BigDecimal.valueOf(measure.getDivisions()));
-					com.audiveris.proxymusic.Key _key = new com.audiveris.proxymusic.Key();
+					org.audiveris.proxymusic.Key _key = new org.audiveris.proxymusic.Key();
 					org.dwbzen.music.element.Key key = measure.getKey();
 					if(instrument.isTransposes()) {
 						// create <transpose> section
@@ -294,7 +294,7 @@ public class MusicXMLHelper {
 						_measure.getNoteOrBackupOrForward().add(_direction);
 					}
 				}
-				_measure = new com.audiveris.proxymusic.ScorePartwise.Part.Measure();
+				_measure = new org.audiveris.proxymusic.ScorePartwise.Part.Measure();
 				_measure.setNumber(String.valueOf(++measNum));
 				for(Measurable m : measure.getMeasureables()) {
 					log.trace("xml measure: " + measure.getNumber() + " note: " + m);
@@ -324,7 +324,7 @@ public class MusicXMLHelper {
 		return _scorePartwise;
 	}
 
-	private void convertNote(Instrument instrument, Measure measure, Measurable m, boolean inChord, com.audiveris.proxymusic.ScorePartwise.Part.Measure _measure) {
+	private void convertNote(Instrument instrument, Measure measure, Measurable m, boolean inChord, org.audiveris.proxymusic.ScorePartwise.Part.Measure _measure) {
 		Note note = (Note)m;
 		if(instrument.isTransposes()) {
 			// note.getPitch().increment(instrument.getTranspositionSteps());
@@ -341,7 +341,7 @@ public class MusicXMLHelper {
 		Ratio ratio = duration.getRatio();	// tuplets
 		boolean isTuplet = !duration.isRatioSame();
 		
-		com.audiveris.proxymusic.Note _note = new com.audiveris.proxymusic.Note();
+		org.audiveris.proxymusic.Note _note = new org.audiveris.proxymusic.Note();
 		
 		/*
 		 * Sample unpitched
@@ -353,21 +353,21 @@ public class MusicXMLHelper {
 		int octave = 0;
 		int octaveShift = 0;
 		int alt = 0;
-		com.audiveris.proxymusic.Step _step = null;
+		org.audiveris.proxymusic.Step _step = null;
 		switch(pitchClass) {
 		case UNPITCHED:
 		case DISCRETE_1LINE:
 		case DISCRETE_2LINE:
 			octave = note.getPitch().getOctave();
 			_step = getStep(note);
-			com.audiveris.proxymusic.Unpitched _unpitched = new com.audiveris.proxymusic.Unpitched();
+			org.audiveris.proxymusic.Unpitched _unpitched = new org.audiveris.proxymusic.Unpitched();
 			_unpitched.setDisplayOctave(octave);
 			_unpitched.setDisplayStep(_step);
 			_note.setUnpitched(_unpitched);
 			break;
 		case DISCRETE_5LINE:
 		case PITCHED:
-			com.audiveris.proxymusic.Pitch _pitch = new com.audiveris.proxymusic.Pitch();
+			org.audiveris.proxymusic.Pitch _pitch = new org.audiveris.proxymusic.Pitch();
 			octave = note.getPitch().getOctave();
 			octaveShift = currentClef.getOctaveShift();
 			_step = getStep(note);
@@ -502,14 +502,14 @@ public class MusicXMLHelper {
 		}
 	}
 	
-	private void createTupletNote(Note note, com.audiveris.proxymusic.Note _note, Ratio ratio, String noteType) {
+	private void createTupletNote(Note note, org.audiveris.proxymusic.Note _note, Ratio ratio, String noteType) {
 		TimeModification _timeModification = new TimeModification();
 		_timeModification.setActualNotes(BigInteger.valueOf(ratio.getNumberOfNotes()));
 		_timeModification.setNormalNotes(BigInteger.valueOf(ratio.getTimeOf()));
 		_note.setTimeModification(_timeModification);
 		Notations _notations = null;
 		Tuplet _tuplet = null;
-		com.audiveris.proxymusic.TupletType _tupletType = null;
+		org.audiveris.proxymusic.TupletType _tupletType = null;
 		if(note.getTupletType().equals(TupletType.START)) {
 			_notations = new Notations();
 			_tuplet = new Tuplet();
@@ -554,46 +554,46 @@ public class MusicXMLHelper {
 		return _scorePartwise;
 	}
 	
-	public static com.audiveris.proxymusic.Step getStep(Note note) {
+	public static org.audiveris.proxymusic.Step getStep(Note note) {
 		return getStep(note.getPitch().getStep());
 	}
 	
-	public static com.audiveris.proxymusic.Step getStep(Step step) {
-		com.audiveris.proxymusic.Step _step = null;
+	public static org.audiveris.proxymusic.Step getStep(Step step) {
+		org.audiveris.proxymusic.Step _step = null;
 		switch(step) {
-		case A:	_step = com.audiveris.proxymusic.Step.A;
+		case A:	_step = org.audiveris.proxymusic.Step.A;
 			break;
-		case B: _step = com.audiveris.proxymusic.Step.B;
+		case B: _step = org.audiveris.proxymusic.Step.B;
 			break;
-		case C: _step = com.audiveris.proxymusic.Step.C;
+		case C: _step = org.audiveris.proxymusic.Step.C;
 			break;
-		case D: _step = com.audiveris.proxymusic.Step.D;
+		case D: _step = org.audiveris.proxymusic.Step.D;
 			break;
-		case E: _step = com.audiveris.proxymusic.Step.E;
+		case E: _step = org.audiveris.proxymusic.Step.E;
 			break;
-		case F: _step = com.audiveris.proxymusic.Step.F;
+		case F: _step = org.audiveris.proxymusic.Step.F;
 			break;
-		case G: _step = com.audiveris.proxymusic.Step.G;
+		case G: _step = org.audiveris.proxymusic.Step.G;
 			break;
-		case AFLAT: _step = com.audiveris.proxymusic.Step.A;
+		case AFLAT: _step = org.audiveris.proxymusic.Step.A;
 			break;
-		case ASHARP: _step = com.audiveris.proxymusic.Step.A;
+		case ASHARP: _step = org.audiveris.proxymusic.Step.A;
 			break;
-		case BFLAT: _step = com.audiveris.proxymusic.Step.B;
+		case BFLAT: _step = org.audiveris.proxymusic.Step.B;
 			break;
-		case CSHARP: _step = com.audiveris.proxymusic.Step.C;
+		case CSHARP: _step = org.audiveris.proxymusic.Step.C;
 			break;
-		case DFLAT: _step = com.audiveris.proxymusic.Step.D;
+		case DFLAT: _step = org.audiveris.proxymusic.Step.D;
 			break;
-		case DSHARP: _step = com.audiveris.proxymusic.Step.D;
+		case DSHARP: _step = org.audiveris.proxymusic.Step.D;
 			break;
-		case EFLAT: _step = com.audiveris.proxymusic.Step.E;
+		case EFLAT: _step = org.audiveris.proxymusic.Step.E;
 			break;
-		case FSHARP: _step = com.audiveris.proxymusic.Step.F;
+		case FSHARP: _step = org.audiveris.proxymusic.Step.F;
 			break;
-		case GFLAT: _step = com.audiveris.proxymusic.Step.G;
+		case GFLAT: _step = org.audiveris.proxymusic.Step.G;
 			break;
-		case GSHARP: _step = com.audiveris.proxymusic.Step.G;
+		case GSHARP: _step = org.audiveris.proxymusic.Step.G;
 			break;
 		default:
 			break;

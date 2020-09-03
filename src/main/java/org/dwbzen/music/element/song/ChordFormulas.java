@@ -31,6 +31,7 @@ public class ChordFormulas implements IJson {
 	}
 	
 	public static void main(String...strings) {
+		// just a quick test
 		ChordFormula f = ChordLibrary.HALF_DIMINISHED_SEVENTH;
 		ChordFormula f2 = ChordLibrary.MINOR_SEVENTH_FLAT_FIFTH;
 		ChordFormulas formulas = new ChordFormulas();
@@ -48,7 +49,7 @@ public class ChordFormulas implements IJson {
 			log.error("Cannot deserialize " + jstr + "\nbecause " + e.toString());
 		}
 		if(formulas != null) {
-			System.out.println(formulas.toJson());
+			System.out.println(formulas.toJson(true));
 		}
 	}
 	

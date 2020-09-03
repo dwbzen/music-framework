@@ -35,23 +35,31 @@ import org.dwbzen.music.element.song.HarmonyChord;
  * parse chords from the String representation (for example, "D7-5/C").<br>
  * chordFormulasMap maps chordFormula by both name and all the symbols.<br>
  * 
- * Load and/or export chord formulas or chords (HarmonyChords instanced from root list)
+ * Load and/or export chord formulas or chords (HarmonyChords instanced from root list)<br>
+ * Usage examples:
+ * <p>
  * <code>
- * Usage: ChordManager -export formulas -format RawJSON
- * 		  ChordManager -export chords -root C,D
- * 		  ChordManager -print -root C -resource my_formulas.json
- * 		  ChordManager -print -group "altered" -root C4
- * </code>
- * 
+ * 	ChordManager -export formulas -format mathJSON<br>
+ *  ChordManager -export chords -root C,D<br>
+ * 	ChordManager -print -root C -resource my_formulas.json<br>
+ * 	ChordManager -print -group "altered" -root C4<br>
+ * </code></p>
+ * <p>
  * Use -print To display a tab-delimited table of harmony chords with corresponding chord formula(s),<br>
  * chord number (decimal and hex) and spelling number (hex). Suitable for import into Excel.</p>
- * Use RawJSON format for Mathematica import.<br>
+ * Use mathJSON format for Mathematica import.<br>
  * If unspecified, resource file defaults to "allChordFormulas.json"<br>
  * Specify -roots all for all 24 root notes.<br>
  * All roots: { "Ab", "A", "A#", "Bb", "B", "B#", "Cb", "C", "C#", "Db", "D", "D#", "Eb", "E", "E#", "Fb", "F", "F#", "Gb", "G", "G#" }<br>
- * If unspecified, roots defaults to { "C" }<br>
+ * If unspecified, roots defaults to { "C" }
+ * <p>Valid -format values are "JSON", "mathJSON" and "rawJSON" (not case sensitive)<br>
+ * JSON is the default for export. Results can be imported into MongoDB.<br>
+ * Use mathJSON for importing the result into Mathematica.<br>
+ * rawJSON deserializes ChordFormulas directly using the "pretty" option which indents the output for readability.
+ * </p>
  * 
  * @author don_bacon
+ * @see org.dwbzen.common.util.IJson
  *
  */
 public class ChordManager {
@@ -63,12 +71,16 @@ public class ChordManager {
 	private List<Pitch> rootPitches = new ArrayList<Pitch>();
 	private Map<String, HarmonyChord> harmonyChords = null;
 	private Map<Pitch, Map<String, HarmonyChord>> harmonyChordsRootMap = new TreeMap<Pitch, Map<String, HarmonyChord>>(new PitchComparator());
-	private Map<String,ChordFormula> chordFormulasMap = new TreeMap<String, ChordFormula>();	// by name and symbol(s)
-	private Map<String,ChordFormula> chordFormulasByNameMap = new TreeMap<String, ChordFormula>();	// by name only
+	private Map<String,ChordFormula> chordFormulasMap = new TreeMap<String, ChordFormula>();
 	private String resourceFile = null;
 	private String jsonFormat = null;
 	private StringBuffer stringBuffer = null;
 	private List<String> groupsFilter = new ArrayList<String>();
+	/**
+	 * Used for exporting chords. If true, exports unique chords by Name.
+	 * Otherwise exports a chord for each symbol. Default is true.
+	 */
+	private boolean exportUnique = true;
 	
 	private ChordFormulas chordFormulas = null;
 	
@@ -115,12 +127,12 @@ public class ChordManager {
 	}
 		
 	public Map<String, HarmonyChord> createHarmonyChords() {
-		createHarmonyChords(rootPitches, chordFormulasByNameMap);
+		createHarmonyChords(rootPitches, chordFormulasMap);
 		return harmonyChords;
 	}
 	
 	public Map<String, HarmonyChord> createHarmonyChords(List<Pitch> rootPitches) {
-		createHarmonyChords(rootPitches, chordFormulasByNameMap);
+		createHarmonyChords(rootPitches, chordFormulasMap);
 		return harmonyChords;
 	}
 	
@@ -142,7 +154,13 @@ public class ChordManager {
 					Key key = Key.rootKeyMap.get(root.toString(-1));
 					HarmonyChord harmonyChord = new HarmonyChord(formula, root, key);
 					if(harmonyChord != null) {
-						 harmonyChords.put(root.getStep().name() + formula.getSymbols().get(0), harmonyChord);
+						if(exportUnique) {
+							harmonyChords.put(root.getStep().name() + formula.getSymbols().get(0), harmonyChord);
+						}
+						else {
+							formula.getSymbols().forEach(symbol -> harmonyChords.put(root.getStep().name() + symbol, harmonyChord));
+						}
+						 
 					}
 				}
 			}
@@ -249,15 +267,23 @@ public class ChordManager {
 	}
 	
 	public String exportChordFormulas() {
-		stringBuffer = new StringBuffer("[\n");
-		if(groupsFilter.size() > 0) {
-			chordFormulasMap.keySet().stream().filter(s -> groupsFilter.contains(s)).forEach(s ->  exportChordFormula(chordFormulasMap.get(s)));
+		stringBuffer = new StringBuffer();
+		if(jsonFormat.equalsIgnoreCase("rawjson")) {
+			stringBuffer.append(this.chordFormulas.toJson(true));
 		}
 		else {
-			chordFormulasMap.keySet().forEach(s ->  exportChordFormula(chordFormulasMap.get(s)));
+			stringBuffer = stringBuffer.append("[\n");
+			if(groupsFilter.size() > 0) {
+				chordFormulasMap.keySet().stream().filter(s -> groupsFilter.contains(s)).forEach(s ->  exportChordFormula(chordFormulasMap.get(s)));
+			}
+			else {
+				for(ChordFormula chordFormula : chordFormulas.getChordFormulas()) {
+					exportChordFormula(chordFormula);
+				}
+			}
+			stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
+			stringBuffer.append("]");
 		}
-		stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
-		stringBuffer.append("]");
 		return stringBuffer.toString();
 	}
 	
@@ -270,7 +296,7 @@ public class ChordManager {
 		 * write the formula as a JSON string according to the specified format
 		 */
 
-		if(jsonFormat.equalsIgnoreCase("RawJSON")) {
+		if(jsonFormat.equalsIgnoreCase("mathJSON")) {
 			stringBuffer.append(chordFormula.toJson() + ",\n");
 		}
 		else if(jsonFormat.equalsIgnoreCase("JSON")) {
@@ -342,7 +368,7 @@ public class ChordManager {
 		 * write the chord as a JSON string according to the specified format
 		 */
 
-		if(jsonFormat.equalsIgnoreCase("RawJSON")) {
+		if(jsonFormat.equalsIgnoreCase("mathJSON")) {
 			stringBuffer.append(harmonyChord.toJson(HarmonyChord.OutputFormat.FULL) + ",\n");
 		}
 		else if(jsonFormat.equalsIgnoreCase("JSON")) {
@@ -406,7 +432,6 @@ public class ChordManager {
     	if(chordFormulas != null) {
     		for(ChordFormula chordFormula : chordFormulas.getChordFormulas()) {
     			chordFormulasMap.put(chordFormula.getName(), chordFormula);
-    			chordFormulasByNameMap.put(chordFormula.getName(), chordFormula);
     			for(String s : chordFormula.getSymbols()) {
     				chordFormulasMap.put(s, chordFormula);
     			}
@@ -453,6 +478,12 @@ public class ChordManager {
 		return rootPitches;
 	}
 
+	/**
+	 * ChordFormulasMap is keyed by chord name AND symbol(s).<br>
+	 * For example,"Augmented seventh sharp nine" has 4 entries as there are<br>
+	 * 3 symbols:"+7#9", "aug7#9" and "7+#9"
+	 * @return Map<String, ChordFormula> 
+	 */
 	public Map<String, ChordFormula> getChordFormulasMap() {
 		return chordFormulasMap;
 	}
@@ -481,6 +512,14 @@ public class ChordManager {
 		return harmonyChordsRootMap;
 	}
 
+	public boolean isExportUnique() {
+		return exportUnique;
+	}
+
+	public void setExportUnique(boolean exportUnique) {
+		this.exportUnique = exportUnique;
+	}
+
 	/**
 	 * 
 	 * @param args
@@ -489,11 +528,12 @@ public class ChordManager {
 	public static void main(String[] args) throws IOException {
 		String[] roots = {"C"};
 		String resourceFile = "allChordFormulas.json";
-		String jsonFormat = "JSON";	// the default, for Mathematica use "RawJSON"
+		String jsonFormat = "JSON";	// the default, for Mathematica use "mathJSON", "rawJSON" serializes ChordFormulas.
 		boolean printResults = false;
 		PrintStream ps = System.out;
 		String exportClass = null;		// chords or formulas
 		String[] groups = null;			// optional chord formula group(s) to export
+		boolean uniq = true;
 		for(int i=0; i<args.length; i++) {
 			if(args[i].equalsIgnoreCase("-resource")) {
 				resourceFile = args[++i];
@@ -513,9 +553,13 @@ public class ChordManager {
 			else if(args[i].equalsIgnoreCase("-export")) {
 				exportClass = args[++i];
 			}
+			else if(args[i].equalsIgnoreCase("-unique")) {
+				uniq = args[++i].equalsIgnoreCase("true");
+			}
 		}
 		ChordManager chordManager = (resourceFile != null) ? new ChordManager(resourceFile) : new ChordManager();
 		chordManager.setJsonFormat(jsonFormat);
+		chordManager.setExportUnique(uniq);
 		List<String> groupList = (groups != null) ? Arrays.asList(groups) : new ArrayList<String>();
 		chordManager.getGroupsFilter().addAll(groupList);
 		/*

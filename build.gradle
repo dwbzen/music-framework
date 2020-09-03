@@ -14,8 +14,8 @@ apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 
-sourceCompatibility = 12
-targetCompatibility = 12
+sourceCompatibility = 14
+targetCompatibility = 14
 group = 'org.dwbzen.music-framework'
 version = '3.0'
 description = 'Music Framework'
@@ -51,11 +51,13 @@ uploadArchives {
     }
 }
 
-// JDK 9: javax.xml.bind and javax.activation modules deprecated for removal
 dependencies {
-	implementation files('libs/proxymusic-3.0.jar')
-	runtimeOnly files('libs/proxymusic-3.0.jar')
+// 	https://mvnrepository.com/artifact/org.audiveris/proxymusic
+	// implementation 'org.audiveris:proxymusic:3.0.1'
 
+	implementation files('libs/proxymusic-3.0.1.jar')
+	runtimeOnly files('libs/proxymusic-3.0.1.jar')
+	
     testImplementation 'junit:junit:4.12'
 
     implementation  'org.mongodb:mongodb-driver-legacy:4.1.0'

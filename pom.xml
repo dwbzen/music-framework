@@ -20,6 +20,11 @@
   </build>
   <dependencies>
   	<dependency>
+  		<groupId>commonlib</groupId>
+  		<artifactId>commonlib</artifactId>
+  		<version>2.0</version>
+  	</dependency>
+  	  	<dependency>
   		<groupId>org.mongodb</groupId>
   		<artifactId>mongodb-driver-legacy</artifactId>
   		<version>4.1.0</version>
@@ -60,9 +65,14 @@
 		<version>2.10.2</version>
 	</dependency>
 	<dependency>
-  	<groupId>org.apache.activemq</groupId>
-  	<artifactId>activemq-all</artifactId>
-  	<version>5.14.3</version>
-  </dependency>
+  		<groupId>org.apache.activemq</groupId>
+  		<artifactId>activemq-all</artifactId>
+  		<version>5.16.0</version>
+  	</dependency>
+  	<dependency>
+       	<groupId>org.audiveris</groupId>
+    	<artifactId>proxymusic</artifactId>
+    	<version>3.0.1</version>
+    </dependency>
   </dependencies>
 </project>

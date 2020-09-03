@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 import org.dwbzen.music.element.Pitch;
-import org.dwbzen.music.element.song.ChordFormula;
 import org.dwbzen.music.element.song.ChordFormulas;
 import org.dwbzen.music.element.song.HarmonyChord;
 import org.dwbzen.util.music.ChordManager;
@@ -29,7 +28,7 @@ public class ChordManagerTest extends TestCase {
 		chordFormulas = chordManager.getChordFormulas();
 		int nchords = chordFormulas.getChordFormulas().size();
 		log.debug(nchords + " chords loaded");
-		assertNotEquals(0, nchords);
+		assertEquals(57, nchords);
 	}
 	
 	
@@ -38,8 +37,13 @@ public class ChordManagerTest extends TestCase {
 		testLoadChordFormulas();
 		Pitch p = new Pitch("C4");
 		rootPitches.add(p);
-		Map<String, HarmonyChord> harmonyChords = chordManager.createHarmonyChords(rootPitches);
+		ChordManager chordManager = new ChordManager();
 		String root = rootPitches.get(0).getStep().name();
+		chordManager.getRootPitches().add(p);
+		chordManager.setExportUnique(false);
+		chordManager.createHarmonyChords();
+		Map<String, HarmonyChord> harmonyChords = chordManager.getHarmonyChords();
+		assertNotEquals(0, harmonyChords.keySet().size());
 		if(harmonyChords != null && harmonyChords.size()>0) {
 
 			HarmonyChord hc1 = harmonyChords.get(root + "m(M7)");		// C, Eb, G, B
@@ -55,7 +59,6 @@ public class ChordManagerTest extends TestCase {
 			HarmonyChord hc7_11 = harmonyChords.get(root + "7-11");
 			HarmonyChord hc9_11 = harmonyChords.get(root + "9-11");
 			int diff = hc7_11.notesDifferent(hc9_11);
-			System.out.println("7-11 notes different than 9-11 :" +  diff);	// should be 1
 			assertEquals(diff, 1);
 			int same = hc7_11.notesSame(hc9_11);
 			log.debug("7-11 notes the same as 9-11 :" + same );	// should be 5
