@@ -24,6 +24,8 @@ public class Flute  extends Instrument {
 		setName(NAME);
 		setPartName(NAME);
 		setMidiProgram(74);
+		setInstrumentName(NAME);
+		setInstrumentSound("wind.flutes.flute");
 	}
 
 }

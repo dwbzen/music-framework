@@ -26,6 +26,8 @@ public abstract class Piano extends Instrument {
 		midiInstrument = new MidiInstrument("", 1, NAME);
 		midiInstrument.setMidiProgram(1);
 		setMidiProgram(1);
+		setInstrumentName(NAME);
+		setInstrumentSound("keyboard.piano.grand");
 	}
 
 }

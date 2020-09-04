@@ -24,6 +24,8 @@ public class Viola  extends Instrument {
 		setName(NAME);
 		setPartName(NAME);
 		setMidiProgram(42);	// Cello=43, Bass=44
+		setInstrumentName(NAME);
+		setInstrumentSound("strings.viola");
 	}
 
 }

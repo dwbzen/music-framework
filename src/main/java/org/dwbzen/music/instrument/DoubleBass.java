@@ -24,6 +24,8 @@ public class DoubleBass  extends Instrument {
 		setName(NAME);
 		setPartName(NAME);
 		setMidiProgram(44);
+		setInstrumentName(NAME);
+		setInstrumentSound("strings.bass");
 	}
 
 }

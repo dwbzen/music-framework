@@ -26,6 +26,8 @@ public class Oboe  extends Instrument {
 		cleffs.add(Cleff.G);
 		setName(NAME);
 		setMidiProgram(69);
+		setInstrumentName(NAME);
+		setInstrumentSound("wind.reed.oboe");
 		transposes = false;
 	}
 

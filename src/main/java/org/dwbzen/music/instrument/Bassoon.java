@@ -25,6 +25,8 @@ public class Bassoon extends Instrument {
 		setPartName(NAME);
 		setName(NAME);
 		setMidiProgram(71);
+		setInstrumentName(NAME);
+		setInstrumentSound("wind.reed.bassoon");
 	}
 
 }

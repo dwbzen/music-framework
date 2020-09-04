@@ -24,6 +24,8 @@ public class Violin  extends Instrument {
 		setName(NAME);
 		setPartName(NAME);
 		setMidiProgram(41);
+		setInstrumentName(NAME);
+		setInstrumentSound("strings.violin");
 	}
 
 }
