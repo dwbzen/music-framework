@@ -173,7 +173,7 @@ public class MusicXMLHelper {
 		}
 		TypedText _rights = new TypedText();
 		_rights.setType("rights");
-		_rights.setValue("Copyright (C) 2020 Donald W. Bacon");
+		_rights.setValue("Copyright (C) 2020 Donald W. Bacon");		// TODO make this configurable
 		_id.getRights().add(_rights);
 		
 		_scorePartwise.setIdentification(_id);
@@ -233,7 +233,7 @@ public class MusicXMLHelper {
 				 * Measure 0 sets Attributes, Staff & Cleff info
 				 */
 				if(measNum == 0) {
-					_attributes.setDivisions(BigDecimal.valueOf(measure.getDivisions()));
+					_attributes.setDivisions(BigDecimal.valueOf(measure.getDivisions()).divide(BigDecimal.valueOf(4)));
 					org.audiveris.proxymusic.Key _key = new org.audiveris.proxymusic.Key();
 					org.dwbzen.music.element.Key key = measure.getKey();
 					if(instrument.isTransposes()) {
@@ -255,6 +255,9 @@ public class MusicXMLHelper {
 					_attributes.getKey().add(_key);
 					_attributes.setStaves(BigInteger.valueOf(1));	// NOTE - will be 2 for piano, 3 for Organ
 					Time _time = new Time();
+					/*
+					 * Assuming 4/4 time.  TODO use score.timeSignature config parameter
+					 */
 					JAXBElement<String> _e1 = new JAXBElement<String>(new QName("beats"), String.class, "4");
 					JAXBElement<String> _e2 = new JAXBElement<String>(new QName("beat-type"), String.class, "4");
 					_time.getTimeSignature().add(_e1);

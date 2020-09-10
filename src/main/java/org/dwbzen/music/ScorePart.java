@@ -10,14 +10,19 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
+import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import org.dwbzen.common.math.*;
+import org.dwbzen.common.math.BaseJsonObject;
+import org.dwbzen.common.math.CommandMessage;
+import org.dwbzen.common.math.JsonObject;
+import org.dwbzen.common.math.Point2D;
+import org.dwbzen.common.math.PointSet;
+import org.dwbzen.common.math.PointSetStats;
 import org.dwbzen.common.math.ifs.IteratedFunctionSystem;
 import org.dwbzen.music.action.DurationScaler;
 import org.dwbzen.music.action.ExpressionSelector;
@@ -38,6 +43,7 @@ import org.dwbzen.music.element.Score;
 import org.dwbzen.music.element.ScorePartEntity;
 import org.dwbzen.music.element.Tempo;
 import org.dwbzen.music.element.TextureType;
+import org.dwbzen.music.element.rhythm.IRhythmTextureMap;
 import org.dwbzen.music.instrument.Instrument;
 import org.dwbzen.music.transform.ITransformer.Preference;
 import org.dwbzen.util.Configuration;
@@ -100,7 +106,6 @@ public class ScorePart implements Serializable, Runnable {
 			configure();
 			collectScorePartData();
 			log.info("collectScorePartData completed.");
-			connection.close();
 		} catch (Exception e) {
 			log.error("exception: " + e.toString());
 			e.printStackTrace();
@@ -112,6 +117,12 @@ public class ScorePart implements Serializable, Runnable {
 		createScorePart();
 		log.info("ScorePart " + partName + " complete");
 		state = State.COMPLETE;
+		try {
+			connection.close();
+		} catch (JMSException e) {
+			System.err.println("JMSException on close " + e.toString());
+			e.printStackTrace();
+		}
 		return;
 	}
 	
@@ -233,9 +244,9 @@ public class ScorePart implements Serializable, Runnable {
 	    			tupletGroup = new ArrayList<Measurable>();
 	    			Ratio ratio =  rhythmExpression.getRatio();
 	    			int notesInThisGroup = ratio.getNumberOfNotes();
-	    			int groupUnits = rhythmExpression.getUnits();
 	    			note.getDuration().setRatio(new Ratio(ratio));
-	    			note.getDuration().setDurationUnits(groupUnits);
+	    			int durationUnits = rhythmExpression.getFactors().get(0).getDurationUnits();	// the duration of 1 note of this tuplet type
+	    			note.getDuration().setDurationUnits(durationUnits);
 	    			String tupletNoteType = rhythmScale.getNoteType(note);
 	    			note.setNoteType(tupletNoteType);
 	    			lastNote = note;
@@ -297,9 +308,9 @@ public class ScorePart implements Serializable, Runnable {
 	    			/*
 	    			 * Create a new measure and note tied to the previous
 	 				 * Tuplets are not allowed to span across measures
-	    			 * for example, unitsCount = 14, units = 8
-	    			 * unitsNextMeasure is (unitsCount + units) - unitsPerMeasure = (14 + 8) - 16 = 6
-	    			 * unitsThisMeasure is units - unitsNextMeasure = 8 - 6 = 2
+	    			 * for example, if unitsCount = 420 and units = 120, total is 540 which exceeds total units
+	    			 * available (480) by 60 units. So the 60 is split across 2 measures as 30 units
+	    			 * tied to 30 units.
 	    			 */
 	    			int unitsNextMeasure = (unitsCount + units) - unitsPerMeasure;
 	    			int unitsThisMeasure = units - unitsNextMeasure;

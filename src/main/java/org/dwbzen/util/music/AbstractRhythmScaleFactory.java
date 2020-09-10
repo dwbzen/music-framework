@@ -56,8 +56,8 @@ public abstract class AbstractRhythmScaleFactory  implements IRhythmScaleFactory
 	}
 
 	/**
-	 * Creates the base units for this RhythmScale. Max unit == rootMetric.
-	 * example for rootMetric = 16: {1, 2, 3, 4, 6, 8, 10, 12, 14, 16}
+	 * Creates the base units for this RhythmScale. Max unit == rootMetric.<br>
+	 * example for rootMetric = 480: {30, 60, 90, 180, 120, 150, 210, 240, 270, 300, 330, 360, 390, 420, 450, 480}
 	 * 
 	 * @param rhythmScale
 	 * @return

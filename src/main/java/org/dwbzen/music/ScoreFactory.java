@@ -1,12 +1,7 @@
 package org.dwbzen.music;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 import org.dwbzen.music.element.Score;
@@ -15,7 +10,9 @@ import org.dwbzen.util.Configuration;
 
 /**
  * Creates a Score.
- * @author DBacon
+ * TODO make this multi-threaded
+ * 
+ * @author don_bacon
  *
  */
 public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
@@ -26,19 +23,21 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 	private int measures;
 	private String title = null;
 	private String opus = null;
-	private ExecutorService executorService = null;
 	
+	/**
+	 * 
+	 * @param configuration
+	 * @param instruments
+	 * @param nMeasures
+	 * @param title
+	 * @param opus
+	 */
 	public ScoreFactory(Configuration configuration, Map<String, Instrument> instruments, int nMeasures, String title, String opus) {
 		this.configuration = configuration;
 		this.instruments = instruments;
 		measures = nMeasures;
 		this.title = title;
 		this.opus = opus;
-		executorService = Executors.newFixedThreadPool(Math.min(instruments.size(), 100), r -> {
-		    Thread thread = new Thread(r);
-		    thread.setDaemon(true);
-		    return thread;
-		});
 	}
 
 	@Override
@@ -46,20 +45,17 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 		Properties configProperties = configuration.getProperties();
 		score = new Score(configuration, title);
 		score.setWorkNumber(opus);
-		List<CompletableFuture<Void>> futures = new ArrayList<>();
 		
 		for(String instrumentName : instruments.keySet()) {
 			Instrument instrument = instruments.get(instrumentName);
 			score.getInstrumentNames().add(instrumentName);
 			String partName = configProperties.getProperty("score.parts."+ instrumentName + ".partName", instrumentName);
 			ScorePart scorePart = new ScorePart(score, partName, instrument);
-			score.addPart(scorePart);
 			// set the max# measures to generate
 			scorePart.setMaxMeasures(measures);
-			
-			futures.add(CompletableFuture.runAsync(scorePart, executorService));	
+			scorePart.run();
+			score.addPart(scorePart);
 		}
-		futures.stream().map(CompletableFuture::join);
 		return score;
 	}
 

@@ -15,6 +15,9 @@ public interface IRhythmScale extends IJson, INameable {
 	int getRoot();
 	void setRoot(int root);
 	
+	int getRootUnits();
+	void setRootUnits(int rootUnits);
+	
 	void setName(String name);
 	String getName();
 	

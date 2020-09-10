@@ -136,14 +136,6 @@ public class ScaleTransformer extends Transformer {
 	}
 	
 	
-	/**
-	 * 
-	 * @param args
-	 */
-	public static void main(String... args) {
-
-	}
-	
 	@Override
 	public void transform(Layer layer) {
 		Score score = layer.getScore();
@@ -182,12 +174,7 @@ public class ScaleTransformer extends Transformer {
 				for(Measurable measurable : measurables) {
 					Duration duration = measurable.getDuration();
 					int durationUnits = duration.getDurationUnits();
-					if(duration.isRatioSame()) {
-						totalDur += durationUnits;
-					}
-					else if(measurable.getTupletType().equals(TupletType.START)) {
-						totalDur += durationUnits * duration.getRatio().getTimeOf();
-					}
+					totalDur += durationUnits;
 					if(measurable instanceof Note) {
 						Note note = (Note)measurable;
 						/*

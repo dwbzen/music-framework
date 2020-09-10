@@ -45,16 +45,18 @@ import com.mongodb.client.MongoDatabase;
  * This creates and executes a workflow to produce a MusicXML file.</p>
  * 
  * Example usage: </p>
- * <code>ProductionFlow -measures 20 -score -xml "score0814.xml" -analyze -random</code></p>
- * <code>-measures 30 -rand  -xml "C:\\Music\\Scores\\musicXML\\score20180209.xml" -analyze</code></p>
+ * <code>ProductionFlow -measures 20 -score -xml "score20200910.xml" -analyze -random</code></p>
+ * <code>ProductionFlow -measures 30 -rand  -xml "C:\\Music\\Scores\\musicXML\\score20200909.xml" -analyze</code></p>
  * <dl>
- * <dt>-measures</dt> <dd>: number of measures to create</dd>
- * <dt>-analyze</dt> <dd>: display score analysis upon completion</dd>
- * <dt>-rand</dt> <dd>: random data selection</dd>
- * <dt>-xml filename</dt> <dd>: writes musicXML score to filename</dd>
- * <dt>-save</dt> <dd>: save JSON score for import into MongoDB</dd>
- * <dt>-noscore</dt>  <dd>: do not produce score files</dd>
- * <dt>-file</dt> <dd>: output MusicXML file</dd>
+ * <dt>-measures</dt> <dd>number of measures to create</dd>
+ * <dt>-analyze</dt> <dd>display score analysis upon completion</dd>
+ * <dt>-analyzeFile filename</dt>  <dd>output analysis to this file.</dd>
+ * <dt>-rand[dom]</dt> <dd>random selection of data from the specified file</dd>
+ * <dt>-xml filename</dt> <dd>writes musicXML score to filename</dd>
+ * <dt>-save</dt> <dd>save JSON score for import into MongoDB</dd>
+ * <dt>-score  true|false</dt>  <dd>if false, do not produce score files. Default is true.</dd>
+ * <dt>-load  true|false</dt>  <dd>if false, do not load data. Default is true.</dd>
+ * <dt>-file</dt> <dd>output MusicXML file</dd>
  * </dl>
  * <p>
  * Normally data points are selected from the data set sequentially.
@@ -65,11 +67,11 @@ import com.mongodb.client.MongoDatabase;
  * ProductionFlow -measures 20 -analyze -analyzeFile "C:\\data\\music\\testScore.csv" -rand
  * </code></p>
  * 
- * This will create a Score instance and analyze pitches and durations.
+ * This will create a Score instance and analyze pitches and durations.<br>
+ * Note that if -analyzeFile is specified, the analyze flag is assumed and can be omitted.
  * If -analyzeFile not specified, results sent to stdout.</p>
+ * 
  * @see music.action.ScoreAnalysis
- * 
- * 
  * @author don_bacon
  *
  */
@@ -90,8 +92,6 @@ public class ProductionFlow implements Runnable {
 	private String recordName;
     private boolean saveScore;
     private boolean analyzeMode;
-	private Map<String, Thread> scorePartThreads = new HashMap<String, Thread>();
-	private Map<String, ScorePart> scoreParts = new HashMap<String, ScorePart>();
     private ConnectionFactory connectionFactory = null;
     private Connection connection = null;
     private String xmlFileName = null;
@@ -160,11 +160,11 @@ public class ProductionFlow implements Runnable {
     	String dataSourceName = null;
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
-    			if(args[i].equalsIgnoreCase("-noload")) {
-    				loadData = false;
+    			if(args[i].equalsIgnoreCase("-load")) {
+    				loadData = args[++i].equalsIgnoreCase("true");
     			}
-    			else if(args[i].equalsIgnoreCase("-noscore")) {
-    				createScore = false;
+    			else if(args[i].equalsIgnoreCase("-score")) {
+    				createScore = args[++i].equalsIgnoreCase("true");
     			}
     			else  if(args[i].equalsIgnoreCase("-xml")) {
     				createXML = true;
@@ -394,7 +394,7 @@ public class ProductionFlow implements Runnable {
 					log.info("data for " + instrumentName + " loaded");
 				}
 				try {
-					Thread.sleep(100);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					log.error("Thread interrupted");
 				}

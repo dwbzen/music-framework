@@ -1,32 +1,39 @@
 package org.dwbzen.music.action;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import org.dwbzen.common.util.IJson;
 import org.dwbzen.music.element.IRhythmExpression;
 import org.dwbzen.music.element.IRhythmScale;
 import org.dwbzen.music.element.TextureType;
 
-public class ExpressionSelector {
-	private IRhythmScale rhythmScale = null;
-	private ThreadLocalRandom random = ThreadLocalRandom.current();
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class ExpressionSelector implements Serializable, IJson, Comparable {
+
+	private static final long serialVersionUID = 5907780760878594744L;
 	protected static final Logger log = LogManager.getLogger(ExpressionSelector.class);
+
+	@JsonIgnore	private IRhythmScale rhythmScale = null;
+	@JsonIgnore	private ThreadLocalRandom random = ThreadLocalRandom.current();
 
 	/**
 	 * Probability of TextureType for a given #units
 	 */
-	private Map<Integer, Map<TextureType, Double>> textureProbabilityMap = new HashMap<Integer, Map<TextureType, Double>>();
+	@JsonProperty("textureProbabilityMap")	private Map<Integer, Map<TextureType, Double>> textureProbabilityMap = new HashMap<Integer, Map<TextureType, Double>>();
 	
 	/**
 	 * Probabilities of METRIC and EXTRAMETRIC RhythmExpressions for a given #units
 	 */
-	private Map<Integer, Map<IRhythmExpression, Double>> rhythmicUnitTypeProbabilityMap = new HashMap<Integer, Map<IRhythmExpression, Double>>();
+	@JsonProperty("rhythmicUnitTypeProbabilityMap")	private Map<Integer, Map<IRhythmExpression, Double>> rhythmicUnitTypeProbabilityMap = new HashMap<Integer, Map<IRhythmExpression, Double>>();
 	
-	private double tieAcrossBarlineProbability = 0.0;	// configurable as music.instrument.<instrument>.tieAcrossBarline
+	@JsonProperty("tieAcrossBarline")		private double tieAcrossBarlineProbability = 0.0;	// configurable as music.instrument.<instrument>.tieAcrossBarline
 	
 	public ExpressionSelector(IRhythmScale rs) {
 		rhythmScale = rs;
@@ -159,6 +166,14 @@ public class ExpressionSelector {
 		Object[] depthArray = rhythmExpression.getChordalDepth().toArray();
 		int index = random.nextInt(depthArray.length);
 		return (Integer)depthArray[index];
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		ExpressionSelector selector = (ExpressionSelector)o;
+		int s1 = selector.textureProbabilityMap.keySet().size();
+		int s2 = textureProbabilityMap.keySet().size();
+		return  (s1==s2) ? 0 : (s1 < s2) ? -1 : 1;
 	}
 	
 	

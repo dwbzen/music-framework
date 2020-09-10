@@ -76,7 +76,7 @@ public class ScorePartMessageListener implements Runnable, MessageListener, Exce
         if (jsonObj.getType().equals("message")) {
         	if(checkText(messageText, SHUTDOWN_COMMAND)) {
 	            try {
-	            	log.info("Shutting down " + getScorePart().getPartName() + " after " + this.messageCount + " messages");
+	            	log.info("Completed processing messages for " + getScorePart().getPartName() + " after " + this.messageCount + " messages");
 	            } catch (Exception e) {
 	                e.printStackTrace(System.out);
 	            }
@@ -99,7 +99,7 @@ public class ScorePartMessageListener implements Runnable, MessageListener, Exce
 	}
 	
 	private void processMapMessage(Map<String, Object> contentMap) {
-
+			// nothing to do - we should not be getting any MapMessages
 	}
 
 	/**

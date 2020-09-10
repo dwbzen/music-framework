@@ -27,8 +27,7 @@ import org.dwbzen.music.transform.ITransformer.Preference;
  * the tempo marking and the root, to be time-independent.
  * 
  * A "root rhythm" is the number of units in a Whole Note.
- * For example, consider a root duration of 16 (logically a whole note)
- * with units {1, 2, 3, 4, 6, 8, 10, 12, 14, 16}, where 1 unit represents in this case a 16th note.
+ * For example, consider a root duration of 480 (logically a whole note) 30 units represents in this case a 16th note.
  * 
  * Broadly speaking, there are 2 categories of rhythmic Expression:
  *  	texture type - MONOPHONIC or CHORDAL
@@ -40,9 +39,9 @@ import org.dwbzen.music.transform.ITransformer.Preference;
  * 
  * EXTRAMETRIC Expression associates each unit with an
  * allowable tuplet representation of that duration, encapsulated in the util.Ratio class.
- * 16:  "units" : 8 , "ratio" : { "beats" : 3 , "timeOf" : 2}  says that 16 units can be represented as a triplet of 8-unit notes.
+ * 16:  "units" : 120 , "ratio" : { "beats" : 3 , "timeOf" : 2}  says that 40 units can be represented as a triplet of 40-unit notes.
  *
- * Given a root of 16 for example, 4 units can be represented as a single quarter note,
+ * Given a root of 480, 120 units can be represented as a single quarter note,
  * a 3:2 eighth note tuplet, or a 5:4 sixteenth note tuplet.
  * 
  * CHORDAL texture Expression associates each allowable unit with expression(s) giving the number of notes
@@ -79,10 +78,14 @@ public class RhythmScale  implements IRhythmScale {
 	
 	@JsonProperty("name")	private String name = null;
 	/**
-	 *  #divisions in a whole note, must be a power of 2
+	 *  root = #divisions in a whole note. This defaults to 480 which allows easy divisions of n-lets for n=3,5
+	 *  rootUnits = root / time signature beats per measure. In 4/4 time with root=480, this would be 120
+	 *  meaning a quarter note has 120 units.
+	 *  
 	 *  TODO - refactor to support compound rhyhthms like 12/8 or 6/4.
 	 */
-	@JsonProperty("root")			protected int root;
+	@JsonProperty("root")			protected int root;			// number of units per measure
+	@JsonProperty("rootUnits")		protected int rootUnits;	// units per measure divided by time signature note value
 	@JsonProperty("units")			private SortedSet<Integer> baseUnits = new TreeSet<Integer>();	// permitted units for expression
 	@JsonProperty("expressions")	private Map<Integer, IRhythmTextureMap> expressions = new TreeMap<Integer, IRhythmTextureMap>();
 	@JsonProperty("chordal")		private boolean chordal = false;
@@ -263,6 +266,16 @@ public class RhythmScale  implements IRhythmScale {
 	@Override
 	public void setChordal(boolean chordal) {
 		this.chordal = chordal;
+	}
+
+	@Override
+	public int getRootUnits() {
+		return rootUnits;
+	}
+
+	@Override
+	public void setRootUnits(int rootUnits) {
+		this.rootUnits = rootUnits;
 	}
 	
 }

@@ -67,6 +67,7 @@ public final class ScoreHelper {
 	 * based on Measure parameters divisions and tempo
 	 * @param note Note
 	 * @param measure Measure
+	 * @deprecated now uses RhythmScale to set discrete duration values
 	 */
 	public static void convertNoteDuration(Note note, Measure measure) {
 		Duration duration = note.getDuration();

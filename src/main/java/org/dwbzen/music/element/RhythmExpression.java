@@ -64,7 +64,21 @@ public class RhythmExpression implements IJson, IRhythmExpression {
 		/*
 		 * Add factors from the RhythmScale
 		 */
-		factors.addAll(rs.getFactors(units));
+		List<Duration> durations = rs.getFactors(units);
+		Duration duration = null;
+		if(exp.equals(ONE_TO_ONE)) {
+			factors.addAll(durations);
+		}
+		else {
+			duration = new Duration( durations.get(0) );	// don't change the existing factors
+			int baseUnits = duration.getBaseUnits();
+			int timeOfNotes = exp.getTimeOf();
+			int numberOfNotes = exp.getNumberOfNotes();
+			int durationUnits = baseUnits * timeOfNotes / numberOfNotes;
+			duration.setDurationUnits(durationUnits);	// sets durationUnits and baseUnits
+			duration.setBaseUnits(baseUnits);			// we want the original base units
+			factors.add(duration);
+		}
 	}
 	
 	/**
