@@ -18,6 +18,8 @@ import org.apache.logging.log4j.Logger;
 public class Configuration {
 	
 	protected static final Logger log = LogManager.getLogger(Configuration.class);
+	private static Configuration _configuration = null;
+	
 	private Properties properties = null;
 	private String configurationFilename = null;
 	
@@ -57,4 +59,14 @@ public class Configuration {
 		return this.properties;
 	}
 	
+	public static Configuration getConfiguration() throws IllegalAccessError {
+		if(_configuration == null) {
+			// not set globally - raise an exception, probably a coding error
+			throw new IllegalAccessError("Global Configuration is not set");
+		}
+		return _configuration;
+	}
+	public static void setConfiguration(Configuration config) {
+		_configuration = config;
+	}
 }

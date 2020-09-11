@@ -132,14 +132,11 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 		ExpressionSelector selector = new ExpressionSelector(rhythmScale);
 		Map<Integer, IRhythmTextureMap> expressions = rhythmScale.getExpressions();
 
-		// set MONOPONIC texture probablilities to 1
+		// set MONOPONIC texture probabilities to 1
 		for(Integer units : rhythmScale.getBaseUnits()) {
 			selector.setTextureTypeProbability(units, TextureType.MONOPHONIC, 1.0);
 			// 
 			setMonophonicExpressionSelector(selector, expressions, units);
-		}
-		if(debugFlag) {
-			System.out.println(selector.toJson(true));
 		}
 		return selector;
 	}
@@ -167,14 +164,12 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 				selector.setRhythmicUnitTypeProbability(units, unitExpression, 1.0);
 			}
 		}
+		if(debugFlag) {
+			System.out.println(selector.toJson());
+		}	
 	}
 
 	public static void main(String[] args) {
-		
-		// Monophonic16StandardRhythmScaleFactory factory = Monophonic16StandardRhythmScaleFactory.getInstance();
-		// RhythmScale rs1 = factory.createRhythmScale("Rhythm Scale - no chords");
-		// System.out.println(rs1.toJSON());
-		
 		
 		IRhythmScaleFactory rsFactory = RhythmScaleFactory.getRhythmScaleFactory("Monophonic16StandardRhythmScale");
 		RhythmScale rs = rsFactory.createRhythmScale("Rhythm Scale - no chords");

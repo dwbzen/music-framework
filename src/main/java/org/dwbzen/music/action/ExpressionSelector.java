@@ -15,7 +15,7 @@ import org.dwbzen.music.element.TextureType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ExpressionSelector implements Serializable, IJson, Comparable {
+public class ExpressionSelector implements Serializable, IJson, Comparable<Object> {
 
 	private static final long serialVersionUID = 5907780760878594744L;
 	protected static final Logger log = LogManager.getLogger(ExpressionSelector.class);
@@ -65,7 +65,7 @@ public class ExpressionSelector implements Serializable, IJson, Comparable {
 			 }
 		}
 		if(tt == null) {
-			log.error("NULL? " + rand + " units " + units );
+			log.error("ExpressionSelector null TextureType " + rand + " units " + units );
 		}
 		return tt;
 	}

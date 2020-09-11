@@ -433,7 +433,11 @@ public class ProductionFlow implements Runnable {
     	 * Transport
     	 */
    		configureTransport();
-        
+   		
+   		/*
+   		 * make it globally accessible
+   		 */
+        Configuration.setConfiguration(this.configuration);
     }
 
     private void configureTransport()  throws ConfigurationException {
