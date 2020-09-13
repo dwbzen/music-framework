@@ -49,14 +49,13 @@ import com.mongodb.client.MongoDatabase;
  * <code>ProductionFlow -measures 30 -rand  -xml "C:\\Music\\Scores\\musicXML\\score20200909.xml" -analyze</code></p>
  * <dl>
  * <dt>-measures</dt> <dd>number of measures to create</dd>
- * <dt>-analyze</dt> <dd>display score analysis upon completion</dd>
+ * <dt>-analyze  true|false</dt> <dd>display score analysis upon completion. Default is False.</dd>
  * <dt>-analyzeFile filename</dt>  <dd>output analysis to this file.</dd>
- * <dt>-rand[dom]</dt> <dd>random selection of data from the specified file</dd>
+ * <dt>-rand[dom]  true|false</dt> <dd>random selection of data from the specified file. Default is false.</dd>
  * <dt>-xml filename</dt> <dd>writes musicXML score to filename</dd>
- * <dt>-save</dt> <dd>save JSON score for import into MongoDB</dd>
+ * <dt>-save  true|false</dt> <dd>save JSON score for import into MongoDB</dd>
  * <dt>-score  true|false</dt>  <dd>if false, do not produce score files. Default is true.</dd>
  * <dt>-load  true|false</dt>  <dd>if false, do not load data. Default is true.</dd>
- * <dt>-file</dt> <dd>output MusicXML file</dd>
  * </dl>
  * <p>
  * Normally data points are selected from the data set sequentially.
@@ -171,10 +170,10 @@ public class ProductionFlow implements Runnable {
     				xmlFileName = args[++i];
     			}
     			else  if(args[i].startsWith("-rand")) {
-    				randomSelection = true;
+    				randomSelection = args[++i].equalsIgnoreCase("true");
     			}
     			else  if(args[i].equalsIgnoreCase("-save")) {
-    				saveScore = true;
+    				saveScore = args[++i].equalsIgnoreCase("true");
     			}
     			else  if(args[i].equalsIgnoreCase("-host")) {
     				host = args[++i];
@@ -187,7 +186,7 @@ public class ProductionFlow implements Runnable {
     				measures = Integer.parseInt(args[++i]);
     			}
     			else  if(args[i].equalsIgnoreCase("-analyze")) {
-    				analyze = true;
+    				analyze = args[++i].equalsIgnoreCase("true");
     			}
     			else if(args[i].equalsIgnoreCase("-analyzeFile")) {
     				analyze = true;
