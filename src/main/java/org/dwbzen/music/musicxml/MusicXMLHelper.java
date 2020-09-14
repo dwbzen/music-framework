@@ -180,6 +180,7 @@ public class MusicXMLHelper {
 		List<ScorePartwise.Part> _parts = _scorePartwise.getPart();
 		PartList _partList = new PartList();	// add org.audiveris.proxymusic.ScorePart
 		int partnum = 1;
+		int midiChannel = 1;
 		org.audiveris.proxymusic.MidiInstrument _midiInstrument = null;
 		for(String instrumentName : score.getInstrumentNames()) {
 			ScorePartEntity scorePartEntity = score.getScorePartEntityForInstrument(instrumentName);
@@ -207,15 +208,15 @@ public class MusicXMLHelper {
 			_virtualInstrument.setVirtualName(instrument.getVirtualName());
 			_scoreInstrument.setVirtualInstrument(_virtualInstrument);
 			/*
-			 * Score midi instrument (optional)
+			 * Score midi instrument.
 			 */
 			if(scoreMidi) {
 				_midiInstrument = new org.audiveris.proxymusic.MidiInstrument();
 				_midiInstrument.setId(partId);
-				_midiInstrument.setMidiChannel(midiInstrument.getMidiChannel());
+				_midiInstrument.setMidiChannel(midiChannel++);
 				_midiInstrument.setVolume(BigDecimal.valueOf(80));
 				_midiInstrument.setMidiProgram(midiInstrument.getMidiProgram());
-				_midiInstrument.setPan(BigDecimal.ZERO);
+				_midiInstrument.setPan(BigDecimal.valueOf(63L));
 			}
 			_partList.getPartGroupOrScorePart().add(_scorePart);
 			_scorePart.getMidiDeviceAndMidiInstrument().add(_midiInstrument);

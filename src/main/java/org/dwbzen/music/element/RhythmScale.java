@@ -178,13 +178,14 @@ public class RhythmScale  implements IRhythmScale {
 		double diff = 0;
 		int low = 0;
 		int high = 0;
-		for(Integer bunits : baseUnits) {	// for example {1, 2, 3, 4, 6, 8, 10, 12, 14, 16}
+		for(Integer bunits : baseUnits) {	//  {30, 60, 90, 180, 120, 150, 210, 240, 270, 300, 330, 360, 390, 420, 450, 480}
 			diff = bunits.doubleValue() - rawUnits;
 			if(diff == 0) {
 				nunits = bunits;
+				low = high = nunits;
 				break;
 			}
-			else if(diff > 0) {
+			if(diff >= 0) {
 				if(diff < diffHigh) {
 					diffHigh = diff;
 					high = bunits;

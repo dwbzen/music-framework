@@ -15,6 +15,7 @@ import org.dwbzen.music.element.RhythmicUnitType;
 import org.dwbzen.music.element.TextureType;
 import org.dwbzen.music.element.rhythm.BaseRhythmTextureMap;
 import org.dwbzen.music.element.rhythm.IRhythmTextureMap;
+import org.dwbzen.music.transform.ITransformer.Preference;
 import org.dwbzen.util.Ratio;
 
 public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScaleFactory {
@@ -173,7 +174,7 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 		
 		IRhythmScaleFactory rsFactory = RhythmScaleFactory.getRhythmScaleFactory("Monophonic16StandardRhythmScale");
 		RhythmScale rs = rsFactory.createRhythmScale("Rhythm Scale - no chords");
-		
+
 		System.out.println(rs.toJson(true));
 
 	}

@@ -16,10 +16,10 @@ public class Clarinet extends Instrument {
 
 	/**
 	 * Range can be customized in config.properties
-	 * For transposing instruments, Range is given as actual pitch (not written pitch)
+	 * For transposing instruments, Range is given as written pitch
 	 */
-	public final static Pitch LOW_RANGE = new Pitch(Step.F, 3);
-	public final static Pitch HIGH_RANGE = new Pitch(Step.D, 6);
+	public final static Pitch LOW_RANGE = new Pitch(Step.E, 3);
+	public final static Pitch HIGH_RANGE = new Pitch(Step.C, 6);
 	
 	public Clarinet() {
 		this(LOW_RANGE, HIGH_RANGE);	// TODO: this causes 2 initializations, here and again in ProductionFlow.configure()
@@ -40,7 +40,7 @@ public class Clarinet extends Instrument {
 
 	@Override
 	public void establishKey() {
-		this.key = Key.BFlat_MAJOR;
+		this.key = Key.D_MAJOR;
 		/*
 		 * Note - some music notation software does this for you
 		 */
