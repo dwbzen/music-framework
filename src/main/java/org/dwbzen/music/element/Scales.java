@@ -1,10 +1,9 @@
 package org.dwbzen.music.element;
-import org.dwbzen.music.element.Scale;
-import org.dwbzen.music.element.Key.Mode;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.dwbzen.music.element.Key.Mode;
 
 public final class Scales {
 

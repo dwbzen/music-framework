@@ -11,7 +11,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
-
 import org.audiveris.proxymusic.AboveBelow;
 import org.audiveris.proxymusic.Attributes;
 import org.audiveris.proxymusic.Clef;
@@ -44,11 +43,9 @@ import org.audiveris.proxymusic.Work;
 import org.audiveris.proxymusic.YesNo;
 import org.audiveris.proxymusic.util.Marshalling;
 import org.audiveris.proxymusic.util.Marshalling.MarshallingException;
-
 import org.dwbzen.music.element.Chord;
 import org.dwbzen.music.element.Cleff;
 import org.dwbzen.music.element.Duration;
-import org.dwbzen.music.element.Interval;
 import org.dwbzen.music.element.Measurable;
 import org.dwbzen.music.element.Measurable.TieType;
 import org.dwbzen.music.element.Measurable.TupletType;
@@ -173,7 +170,7 @@ public class MusicXMLHelper {
 		}
 		TypedText _rights = new TypedText();
 		_rights.setType("rights");
-		_rights.setValue("Copyright (C) 2020 Donald W. Bacon");		// TODO make this configurable
+		_rights.setValue(configProperties.getProperty("copywriteNotice"));
 		_id.getRights().add(_rights);
 		
 		_scorePartwise.setIdentification(_id);
@@ -236,14 +233,15 @@ public class MusicXMLHelper {
 				if(measNum == 0) {
 					_attributes.setDivisions(BigDecimal.valueOf(measure.getDivisions()).divide(BigDecimal.valueOf(4)));
 					org.audiveris.proxymusic.Key _key = new org.audiveris.proxymusic.Key();
-					org.dwbzen.music.element.Key key = measure.getKey();
+					org.dwbzen.music.element.Key key = instrument.isTransposes() ? instrument.getKey() :  measure.getKey();
 					if(instrument.isTransposes()) {
 						// create <transpose> section
-						Interval transposeInterval = instrument.getTransposeInterval();
 						Transpose _transpose = new Transpose();
-						_transpose.setChromatic(BigDecimal.valueOf(transposeInterval.getInterval()));
-						_transpose.setDiatonic(BigInteger.valueOf(transposeInterval.getInterval()));
-						_transpose.setOctaveChange(BigInteger.valueOf(transposeInterval.getOctave()));
+						_transpose.setChromatic(BigDecimal.valueOf(instrument.getTransposeChromaticSteps()));
+						_transpose.setDiatonic(BigInteger.valueOf(instrument.getTransposeDiatonicSteps()));
+						if(instrument.getTransposeOctaveChange() != 0) {
+							_transpose.setOctaveChange(BigInteger.valueOf(instrument.getTransposeOctaveChange()));
+						}
 						_attributes.getTranspose().add(_transpose);
 					}
 					/*

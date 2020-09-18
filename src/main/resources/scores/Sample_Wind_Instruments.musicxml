@@ -8,7 +8,7 @@
     <creator type="composer">Don Bacon</creator>
     <encoding>
       <software>MuseScore 3.5.0</software>
-      <encoding-date>2020-09-14</encoding-date>
+      <encoding-date>2020-09-18</encoding-date>
       <supports element="accidental" type="yes"/>
       <supports element="beam" type="yes"/>
       <supports element="print" attribute="new-page" type="yes" value="yes"/>
@@ -44,7 +44,7 @@
     <credit-words default-x="612" default-y="1527.31" justify="center" valign="top" font-size="24">Sample Wind Instruments</credit-words>
     </credit>
   <credit page="1">
-    <credit-words default-x="1167.31" default-y="1450.32" justify="right" valign="bottom" font-size="12">Don Bacon</credit-words>
+    <credit-words default-x="1167.31" default-y="1450.31" justify="right" valign="bottom" font-size="12">Don Bacon</credit-words>
     </credit>
   <part-list>
     <score-part id="P1">
@@ -203,12 +203,12 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <system-layout>
           <system-margins>
             <left-margin>201.60</left-margin>
-            <right-margin>0.00</right-margin>
+            <right-margin>-0.00</right-margin>
             </system-margins>
           <top-system-distance>146.99</top-system-distance>
           </system-layout>
@@ -234,7 +234,7 @@
         </attributes>
       <direction>
         <direction-type>
-          <words relative-x="-160.01" relative-y="48.24" font-size="11">Instrument Range</words>
+          <words relative-x="-160.01" relative-y="48.24" font-size="12">Instrument Range</words>
           </direction-type>
         </direction>
       <note default-x="126.19" default-y="-45.00">
@@ -257,7 +257,7 @@
           <octave-shift type="down" size="8" number="1" default-y="40.45"/>
           </direction-type>
         </direction>
-      <note default-x="161.60" default-y="20.00">
+      <note default-x="160.41" default-y="20.00">
         <pitch>
           <step>C</step>
           <octave>7</octave>
@@ -273,100 +273,100 @@
           </direction-type>
         </direction>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="2" width="131.81">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="3" width="126.45">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="10" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="11" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <system-layout>
           <system-margins>
             <left-margin>95.20</left-margin>
-            <right-margin>0.00</right-margin>
+            <right-margin>-0.00</right-margin>
             </system-margins>
           <top-system-distance>70.00</top-system-distance>
           </system-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -471,26 +471,12 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <system-layout>
           <system-margins>
             <left-margin>95.20</left-margin>
-            <right-margin>544.41</right-margin>
+            <right-margin>-0.00</right-margin>
             </system-margins>
           <top-system-distance>70.00</top-system-distance>
           </system-layout>
@@ -501,7 +487,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -513,7 +513,7 @@
       </measure>
     </part>
   <part id="P2">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -548,7 +548,7 @@
           <octave-shift type="down" size="8" number="1" default-y="35.45"/>
           </direction-type>
         </direction>
-      <note default-x="161.60" default-y="-90.00">
+      <note default-x="160.41" default-y="-90.00">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -566,96 +566,96 @@
           </direction-type>
         </direction>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="2" width="131.81">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="3" width="126.45">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="10" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="11" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
           </staff-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -760,21 +760,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -786,7 +772,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -798,7 +798,7 @@
       </measure>
     </part>
   <part id="P3">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -828,7 +828,7 @@
         <type>half</type>
         <stem>up</stem>
         </note>
-      <note default-x="161.60" default-y="-200.00">
+      <note default-x="160.41" default-y="-200.00">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -839,96 +839,96 @@
         <stem>down</stem>
         </note>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="2" width="131.81">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="3" width="126.45">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="10" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="11" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
           </staff-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1033,21 +1033,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -1059,7 +1045,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1071,7 +1071,7 @@
       </measure>
     </part>
   <part id="P4">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -1110,7 +1110,7 @@
           <words relative-x="28.24" relative-y="28.10">sounds whole step lower than written</words>
           </direction-type>
         </direction>
-      <note default-x="161.60" default-y="-285.00">
+      <note default-x="160.41" default-y="-285.00">
         <pitch>
           <step>E</step>
           <octave>6</octave>
@@ -1121,96 +1121,96 @@
         <stem>down</stem>
         </note>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="2" width="131.81">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="3" width="126.45">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="10" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="11" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
           </staff-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1315,21 +1315,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -1341,7 +1327,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1353,7 +1353,7 @@
       </measure>
     </part>
   <part id="P5">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -1378,102 +1378,198 @@
           <octave-change>-1</octave-change>
           </transpose>
         </attributes>
+      <note default-x="126.19" default-y="-495.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        </note>
+      <direction placement="above">
+        <direction-type>
+          <words default-y="14.90" relative-x="28.24" relative-y="28.10">sounds an octave +  whole step lower than written</words>
+          </direction-type>
+        </direction>
+      <note default-x="160.41" default-y="-390.00">
+        <pitch>
+          <step>E</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>down</stem>
+        </note>
+      </measure>
+    <measure number="2" width="131.81">
+      <note default-x="10.00" default-y="-465.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note default-x="40.93" default-y="-475.00">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>3</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+        <stem>up</stem>
+        </note>
+      <note default-x="70.69" default-y="-440.00">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        </note>
+      <note default-x="100.45" default-y="-450.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      </measure>
+    <measure number="3" width="126.45">
+      <note default-x="13.80" default-y="-410.00">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        </note>
+      <note default-x="46.57" default-y="-405.00">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        </note>
+      <note default-x="72.66" default-y="-415.00">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        </note>
+      <note default-x="98.76" default-y="-425.00">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        </note>
+      </measure>
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="10" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="11" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
           </staff-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1578,21 +1674,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -1604,7 +1686,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1616,7 +1712,7 @@
       </measure>
     </part>
   <part id="P6">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -1642,96 +1738,96 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="2" width="131.81">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="3" width="126.45">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="10" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="11" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
           </staff-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1836,21 +1932,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -1862,7 +1944,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1874,7 +1970,7 @@
       </measure>
     </part>
   <part id="P7">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -1904,96 +2000,96 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="2" width="131.81">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="3" width="126.45">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="10" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="11" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
           </staff-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2098,21 +2194,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -2124,7 +2206,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2136,7 +2232,7 @@
       </measure>
     </part>
   <part id="P8">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -2166,96 +2262,96 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="2" width="131.81">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="3" width="126.45">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="10" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="11" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
           </staff-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2360,21 +2456,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -2386,7 +2468,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2398,7 +2494,7 @@
       </measure>
     </part>
   <part id="P9">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -2429,96 +2525,96 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="2" width="131.81">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="3" width="126.45">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="10" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="11" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
           </staff-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2623,21 +2719,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -2649,7 +2731,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2661,7 +2757,7 @@
       </measure>
     </part>
   <part id="P10">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -2692,96 +2788,96 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="2" width="131.81">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="3" width="126.45">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="10" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="11" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
           </staff-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2886,21 +2982,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -2912,7 +2994,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2924,7 +3020,7 @@
       </measure>
     </part>
   <part id="P11">
-    <measure number="1" width="198.98">
+    <measure number="1" width="196.58">
       <print>
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -2951,96 +3047,96 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="2" width="59.17">
+    <measure number="2" width="131.81">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="59.17">
+    <measure number="3" width="126.45">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="59.17">
+    <measure number="4" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="59.17">
+    <measure number="5" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="59.17">
+    <measure number="6" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7" width="59.17">
+    <measure number="7" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8" width="59.17">
+    <measure number="8" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="9" width="59.17">
+    <measure number="9" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="10" width="59.17">
+    <measure number="10" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="11" width="59.17">
+    <measure number="11" width="56.77">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="12" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="13" width="59.17">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="14" width="133.05">
+    <measure number="12" width="133.05">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
           </staff-layout>
         </print>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="13" width="55.15">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="14" width="55.15">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -3145,21 +3241,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="29" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="30" width="55.15">
-      <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="31" width="274.45">
+    <measure number="29" width="312.28">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>65.00</staff-distance>
@@ -3171,7 +3253,21 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="32" width="196.55">
+    <measure number="30" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="31" width="234.38">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="32" width="234.38">
       <note>
         <rest measure="yes"/>
         <duration>4</duration>

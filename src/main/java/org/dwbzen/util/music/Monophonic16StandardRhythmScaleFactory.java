@@ -15,7 +15,6 @@ import org.dwbzen.music.element.RhythmicUnitType;
 import org.dwbzen.music.element.TextureType;
 import org.dwbzen.music.element.rhythm.BaseRhythmTextureMap;
 import org.dwbzen.music.element.rhythm.IRhythmTextureMap;
-import org.dwbzen.music.transform.ITransformer.Preference;
 import org.dwbzen.util.Ratio;
 
 public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScaleFactory {
@@ -153,11 +152,11 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 		for(IRhythmExpression unitExpression : exps) {
 			if(units%60 == 0) {		// 8th, quarter, half, whole notes
 				if(unitExpression.getRhythmicUnitType().equals(RhythmicUnitType.METRIC)) {
-					selector.setRhythmicUnitTypeProbability(units, unitExpression, .6);
+					selector.setRhythmicUnitTypeProbability(units, unitExpression, .8);
 				}
 				else {	// EXTRAMETRIC
 					int nnotes = unitExpression.getRatio().getNumberOfNotes();
-					double prob = (nnotes==3) ? 0.4 : 0.2;
+					double prob = (nnotes==3) ? 0.2 : 0.1;
 					selector.setRhythmicUnitTypeProbability(units, unitExpression, prob);
 				}
 			}

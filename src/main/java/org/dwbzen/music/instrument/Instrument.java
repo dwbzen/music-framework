@@ -4,19 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.dwbzen.util.Configurable;
-import org.dwbzen.util.Configuration;
 import org.dwbzen.common.math.Point2D;
 import org.dwbzen.music.action.DurationScaler;
 import org.dwbzen.music.action.PitchScaler;
 import org.dwbzen.music.element.Cleff;
 import org.dwbzen.music.element.Duration;
 import org.dwbzen.music.element.IRhythmScale;
-import org.dwbzen.music.element.Interval;
 import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.PitchClass;
 import org.dwbzen.music.element.PitchRange;
+import org.dwbzen.util.Configurable;
+import org.dwbzen.util.Configuration;
 
 /**
  * Base class for all Instruments.
@@ -36,6 +35,8 @@ import org.dwbzen.music.element.PitchRange;
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/General_MIDI">General MIDI</a> on Wikipedia for Midi programs
  * and <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a>
+ * 
+ * <p>MuseScore 3 instrument properties are in resources/data/music/instruments.xml</p>
  * 
  * @author dbacon
  *
@@ -96,7 +97,9 @@ public abstract class Instrument implements Configurable, IInstrument {
 	protected MidiInstrument midiInstrument = null;	// associated MidiInstrument if any
 	protected int midiProgram = 0;
 	protected boolean transposes = false;
-	protected Interval transposeInterval = null;
+	protected int transposeDiatonicSteps = 0;
+	protected int transposeChromaticSteps = 0;
+	protected int transposeOctaveChange = 0;
 	protected IRhythmScale rhythmScale = null;
 	/**
 	 * Unpitched instruments such as drums, cymbals, wood blocks etc. should override this to UNPITCHED_5LINE
@@ -118,8 +121,10 @@ public abstract class Instrument implements Configurable, IInstrument {
 	private static String partNameDisplayKey;
 	private static String partAbbreviationKey;
 	private static String partAbbreviationDisplayKey;
+	private static String instrumentTransposeChromaticStepsKey;
+	private static String instrumentTransposeDiatonicStepsKey;
+	private static String instrumentTransposeOctaveChangeKey;
 
-	
 	/**
 	 * Default clef(s) for this instrument
 	 */
@@ -167,22 +172,29 @@ public abstract class Instrument implements Configurable, IInstrument {
 			setVirtualName(props.getProperty(virtualNameKey));
 		}
 		if(props.containsKey(partNameKey)) {
-			setPartName(props.getProperty(partNameKey));
+			setPartName(props.getProperty(partNameKey)); // TODO add to orchestra.properties for this instrument if needed
 		}
 		if(props.containsKey(partNameDisplayKey)) {
-			setPartNameDisplay(props.getProperty(partNameDisplayKey));
+			setPartNameDisplay(props.getProperty(partNameDisplayKey)); // TODO add to orchestra.properties for this instrument if needed
 		}
 		if(props.containsKey(partAbbreviationKey)) {
-			setAbreviation(props.getProperty(partAbbreviationKey));
+			setAbreviation(props.getProperty(partAbbreviationKey)); // TODO add to orchestra.properties for this instrument if needed
 		}
 		if(props.containsKey(partAbbreviationDisplayKey)) {
-			setAbbreviationDisplay(props.getProperty(partAbbreviationDisplayKey));
+			setAbbreviationDisplay(props.getProperty(partAbbreviationDisplayKey)); // TODO add to orchestra.properties for this instrument if needed
 		}
 		if(props.containsKey(midiProgramKey)) {
 			int midiProgram = Integer.parseInt(props.getProperty(midiProgramKey));
 			setMidiProgram(midiProgram);
 			midiInstrument = new MidiInstrument("", 1, getName());
 			midiInstrument.setMidiProgram(midiProgram);
+		}
+		if(props.containsKey(instrumentTransposeChromaticStepsKey)) {
+			setTransposeChromaticSteps(Integer.parseInt(props.getProperty(instrumentTransposeChromaticStepsKey)));
+			setTransposeDiatonicSteps(Integer.parseInt(props.getProperty(instrumentTransposeDiatonicStepsKey)));
+		}
+		if(props.containsKey(instrumentTransposeOctaveChangeKey)) {
+			setTransposeOctaveChange(Integer.parseInt(props.getProperty(instrumentTransposeOctaveChangeKey)));
 		}
 	}
 	
@@ -196,7 +208,7 @@ public abstract class Instrument implements Configurable, IInstrument {
 		setupConfigKeys();
 		establishKey();
 		if(partName == null) {
-			setPartName(getName()); // a sensible default
+			setPartName(getName());
 		}
 		createPitchScaler();
 		createDurationScaler();
@@ -214,21 +226,23 @@ public abstract class Instrument implements Configurable, IInstrument {
 		}
 	}
 
-	private void setupConfigKeys() {
+	protected void setupConfigKeys() {
 		/*
 		 * Set up config keys
 		 */
-		String classname = getClass().getName();
-		instrumentNameKey = classname + ".instrument-name";
-		instrumentSoundKey = classname + ".instrument-sound";
-		virtualLibraryKey = classname + ".virtual-library";
-		virtualNameKey = classname + ".virtual-name";
-		midiProgramKey = classname + ".midiProgram";
-		partNameKey = classname + ".part-name";
-		partNameDisplayKey = classname + ".part-name-display";
-		partAbbreviationKey = classname + ".part-abbreviation";
-		partAbbreviationDisplayKey = classname + ".part-abbreviation-display";
-		
+		String keyPrefix = "music.instrument." + getClass().getSimpleName();
+		instrumentNameKey = keyPrefix + ".instrument-name";
+		instrumentSoundKey = keyPrefix + ".instrument-sound";
+		virtualLibraryKey = keyPrefix + ".virtual-library";
+		virtualNameKey = keyPrefix + ".virtual-name";
+		midiProgramKey = keyPrefix + ".midiProgram";
+		partNameKey = keyPrefix + ".part-name";
+		partNameDisplayKey = keyPrefix + ".part-name-display";
+		partAbbreviationKey = keyPrefix + ".part-abbreviation";
+		partAbbreviationDisplayKey = keyPrefix + ".part-abbreviation-display";
+		instrumentTransposeChromaticStepsKey = keyPrefix + ".transpose.chromatic";
+		instrumentTransposeDiatonicStepsKey = keyPrefix + ".transpose.diatonic";
+		instrumentTransposeOctaveChangeKey = keyPrefix  + ".transpose.octaveChange";
 	}
 	
 	/**
@@ -483,13 +497,28 @@ public abstract class Instrument implements Configurable, IInstrument {
 		this.pitchClass = pitchClass;
 	}
 
-	public Interval getTransposeInterval() {
-		return transposeInterval;
+	public int getTransposeDiatonicSteps() {
+		return transposeDiatonicSteps;
 	}
 
-	public void setTransposeInterval(Interval transposeInterval) {
-		this.transposeInterval = transposeInterval;
-		transposes = transposeInterval.isZero() ? false : true;
+	public void setTransposeDiatonicSteps(int transposeDiatonicSteps) {
+		this.transposeDiatonicSteps = transposeDiatonicSteps;
+	}
+
+	public int getTransposeChromaticSteps() {
+		return transposeChromaticSteps;
+	}
+
+	public void setTransposeChromaticSteps(int transposeChromaticSteps) {
+		this.transposeChromaticSteps = transposeChromaticSteps;
+	}
+
+	public int getTransposeOctaveChange() {
+		return transposeOctaveChange;
+	}
+
+	public void setTransposeOctaveChange(int transposeOctaveChange) {
+		this.transposeOctaveChange = transposeOctaveChange;
 	}
 	
 }

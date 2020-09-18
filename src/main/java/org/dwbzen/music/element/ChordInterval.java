@@ -1,6 +1,4 @@
 package org.dwbzen.music.element;
-import org.dwbzen.music.element.Pitch;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;

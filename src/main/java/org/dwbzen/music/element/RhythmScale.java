@@ -78,11 +78,11 @@ public class RhythmScale  implements IRhythmScale {
 	
 	@JsonProperty("name")	private String name = null;
 	/**
-	 *  root = #divisions in a whole note. This defaults to 480 which allows easy divisions of n-lets for n=3,5
+	 *  root = #divisions in a whole note. This defaults to 480 which allows easy divisions of n-tupples for n=3,5
 	 *  rootUnits = root / time signature beats per measure. In 4/4 time with root=480, this would be 120
 	 *  meaning a quarter note has 120 units.
 	 *  
-	 *  TODO - refactor to support compound rhyhthms like 12/8 or 6/4.
+	 *  TODO - refactor to support compound rhythms like 12/8 or 6/4.
 	 */
 	@JsonProperty("root")			protected int root;			// number of units per measure
 	@JsonProperty("rootUnits")		protected int rootUnits;	// units per measure divided by time signature note value
@@ -96,8 +96,8 @@ public class RhythmScale  implements IRhythmScale {
 	
 	/**
 	 * Maps how the units are realized as a List<Duration> for example,
-	 * 13 units (assuming a root of 16) can be realized as 2 tied durations of 12 + 1 units.
-	 * 15 units can be realized as 14 + 1 (double-dotted half + 16th) or 12 + 3 (dotted half + dotted eighth)
+	 * 300 units (assuming a root of 480) can be realized as a tied duration of 240 + 60 units (half + eighth)<br>
+	 * or 210 + 90 (double dotted quarter + dotted eighth).
 	 * 
 	 */
 	@JsonIgnore protected Map<Integer, List<Duration>> factorMap = new HashMap<Integer, List<Duration>>();
@@ -237,12 +237,12 @@ public class RhythmScale  implements IRhythmScale {
 	}
 	
 	/**
-	 * Derives the note type ("half", "quarter" etc.) from the root
-	 * for the Note provided
-	 * Example, root = 16, units = 6 -> "quarter" (4 + 1 dot). log2 = 4 + 2 = 6
-	 *          root = 16, units = 1 -> "16th". log2 = 4 + 0 = 4
-	 * 		    root = 32, units = 6 -> "eighth" (4 + 1 dot).  log2 = 5 + 2 = 7
-	 * ASSUMES that 2 <= root <= 64 and the Note's baseUnits <= root
+	 * Derives the note type ("half", "quarter" etc.) from the rootUnits
+	 * for the Note provided<br>
+	 * Example, root = 480, units = 180 -> "quarter" (120 for the quarter + 60 for the dot).<br>
+	 *          root = 480, units = 30  -> "16th"<br>
+	 * The calculation uses log base 2, for example:  6 - Log[2, 480] + Log[2, 30] // N // IntegerPart<br>
+	 * returns 2 which maps to a 16th NoteType. The constant 6 is the length of NoteTypes.
 	 * @param Note
 	 * @param rootUnits
 	 * @return String note type
@@ -250,11 +250,8 @@ public class RhythmScale  implements IRhythmScale {
 	public static String determineNoteType(Note note, int rootUnits) {
 		int baseUnits = note.getDuration().getBaseUnits();
 		int log2root = MathUtil.log2(rootUnits);
-		int log2Units = MathUtil.log2(baseUnits);	// 1 -> 0, 2 -> 1, 4 -> 2, 8 -> 3, 16 -> 4, 32 -> 5, 64 -> 6
+		int log2Units = MathUtil.log2(baseUnits);
 		int ind = 6 - log2root + log2Units;
-		
-		// 2: 5,6		 	 4: 4,5,6			 8: 3,4,5,6 
-		// 16: 2,3,4,5,6	32: 1,2,3,4,5,6		64: 0,1,2,3,4,5,6
 		
 		return NoteTypes[ind];
 	}
@@ -277,6 +274,11 @@ public class RhythmScale  implements IRhythmScale {
 	@Override
 	public void setRootUnits(int rootUnits) {
 		this.rootUnits = rootUnits;
+	}
+
+	@Override
+	public int getUnitsPerMeasure() {
+		return root;
 	}
 	
 }

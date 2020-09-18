@@ -43,7 +43,6 @@ import org.dwbzen.music.element.Score;
 import org.dwbzen.music.element.ScorePartEntity;
 import org.dwbzen.music.element.Tempo;
 import org.dwbzen.music.element.TextureType;
-import org.dwbzen.music.element.rhythm.IRhythmTextureMap;
 import org.dwbzen.music.instrument.Instrument;
 import org.dwbzen.music.transform.ITransformer.Preference;
 import org.dwbzen.util.Configuration;

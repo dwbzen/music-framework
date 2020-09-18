@@ -1,7 +1,6 @@
 package org.dwbzen.music.instrument.percussion;
 
 import org.dwbzen.music.element.Cleff;
-import org.dwbzen.music.element.Interval;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.Step;
 import org.dwbzen.music.instrument.Instrument;
@@ -37,8 +36,6 @@ public class Xylophone extends Instrument {
 		midiInstrument.setMidiProgram(14);
 		cleffs.add(Cleff.G);
 		setMidiProgram(14);
-		transposes=true;
-		setTransposeInterval(new Interval(12));
 	}
 	
 	@Override

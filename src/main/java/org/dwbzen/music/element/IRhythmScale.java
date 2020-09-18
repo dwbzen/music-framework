@@ -23,6 +23,8 @@ public interface IRhythmScale extends IJson, INameable {
 	
 	SortedSet<Integer> getBaseUnits();
 	
+	int getUnitsPerMeasure();
+	
 	Map<Integer, IRhythmTextureMap> getExpressions();
 	IRhythmTextureMap getRhythmTextureMap(Integer units);
 	

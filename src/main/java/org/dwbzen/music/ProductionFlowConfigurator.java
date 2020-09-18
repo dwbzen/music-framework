@@ -51,7 +51,10 @@ public class ProductionFlowConfigurator implements Configurator {
 	    		instrument.setName(name);
 	    		instrument.setInstrumentName(configProperties.getProperty("score.instruments." + name + "instrument-name", name));
 	    		instrument.configure(configuration);
-	    		instrument.setKey(new Key(configProperties.getProperty("score.key", "C-Major")));
+	    		// if not set by the Instrument when initialized (transposing instruments should do this), default key is C-Major
+	    		if(instrument.getKey() == null) {
+	    			instrument.setKey(new Key(configProperties.getProperty("score.key", "C-Major")));
+	    		}
 	    		instruments.put(name, instrument);
     		} 
     		catch(Exception e) {

@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
-import org.dwbzen.music.element.Key.Mode;
-import org.dwbzen.music.element.Scales;
 import org.dwbzen.common.util.IJson;
 import org.dwbzen.common.util.INameable;
+import org.dwbzen.music.element.Key.Mode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

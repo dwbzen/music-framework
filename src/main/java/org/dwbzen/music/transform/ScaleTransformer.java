@@ -10,7 +10,6 @@ import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.dwbzen.common.math.Matrix;
 import org.dwbzen.music.element.Chord;
 import org.dwbzen.music.element.Duration;
@@ -18,7 +17,6 @@ import org.dwbzen.music.element.IMeasurableContainer;
 import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.Measurable;
 import org.dwbzen.music.element.Measurable.TieType;
-import org.dwbzen.music.element.Measurable.TupletType;
 import org.dwbzen.music.element.Measure;
 import org.dwbzen.music.element.Note;
 import org.dwbzen.music.element.Pitch;

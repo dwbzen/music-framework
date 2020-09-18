@@ -573,9 +573,11 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 			case A:	// A# -> Bb
 			case ASHARP:
 			case BFLAT:
+			case CFLAT:
 				step = Step.B;
 				break;
 			case B: // B# -> C
+			case BSHARP:
 				step = Step.C;
 				if(octave > 0) { octave--;}
 				alteration = 0;
@@ -588,9 +590,11 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 			case D: // D# -> Eb
 			case DSHARP:
 			case EFLAT:
+			case FFLAT:
 				step = Step.E;
 				break;
 			case E: // E# -> F
+			case ESHARP:
 				step = Step.F;
 				alteration = 0;
 				break;
@@ -624,12 +628,14 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 				step = Step.A;
 				break;
 			case C: // Cb -> B
+			case CFLAT:
 				step = Step.B;
 				if(octave > 0) { octave++;}
 				alteration = 0;
 				break;
 			case D: // Db -> C#
 			case CSHARP:
+			case BSHARP:
 			case DFLAT:
 				step = Step.C;
 				break;
@@ -639,10 +645,12 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 				step = Step.D;
 				break;
 			case F: // Fb -> E
+			case FFLAT:
 				step = Step.E;
 				break;
 			case G: // Gb -> F#
 			case FSHARP:
+			case ESHARP:
 			case GFLAT:
 				step = Step.F;
 				break;
