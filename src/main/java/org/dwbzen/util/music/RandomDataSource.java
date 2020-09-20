@@ -6,8 +6,11 @@ import java.util.stream.Stream;
 import org.dwbzen.common.math.CommandMessage;
 import org.dwbzen.common.math.Point2D;
 import org.dwbzen.common.math.PointSet;
+import org.dwbzen.common.math.PointSetStats;
 import org.dwbzen.common.math.ProbabilityDensityFunction;
+import org.dwbzen.common.math.ifs.IteratedFunctionSystem;
 import org.dwbzen.util.Configuration;
+import org.apache.commons.math3.util.Precision;
 
 /**
  * Streams random data (Point2D) with bounds set by configuration
@@ -15,7 +18,7 @@ import org.dwbzen.util.Configuration;
  * 
  * Can be configured to return probability density function (PDF)
  * values for a given distribution.
- * Normal distribution speficied with a configured std. deviation (sigma) and mean (mu);
+ * Normal distribution specified with a configured std. deviation (sigma) and mean (mu);
  * Standard normal distribution is sigma = 1, mu = 0.
  * Domain values should be chosen appropriately for a given mu and sigma. Some suggestions:
  * sigma=1, mu=0: [-2.0. 2.0]
@@ -28,7 +31,7 @@ import org.dwbzen.util.Configuration;
  * Otherwise, domainX, domainY are not used.
  * 
  * @see mathlib.ProbabilityDensityFunction
- * @author donbacon
+ * @author don_bacon
  *
  */
 public class RandomDataSource  extends DataSource {
@@ -49,6 +52,11 @@ public class RandomDataSource  extends DataSource {
 	public RandomDataSource(Configuration config, String instrumentName) {
 		super(config, instrumentName);
 	}
+	
+	public RandomDataSource(Configuration config, String instrumentName, int dataSetSize) {
+		super(config, instrumentName);
+		setSize(dataSetSize);		// overrides the configured value "dataSource.random.size"
+	} 
 
 	@Override
 	public void close() {
@@ -63,9 +71,8 @@ public class RandomDataSource  extends DataSource {
 		String[] mus = configProperties.getProperty("dataSource.random.mu", "0,0").split(",");
 		String[] sigmas = configProperties.getProperty("dataSource.random.sigma", "1,1").split(",");
 		ProbabilityDensityFunction[] pdfs = new ProbabilityDensityFunction[2];
-		StringBuffer dsname = new StringBuffer(configProperties.getProperty("dataSource.random.dataSetName",""));
+		dataSetName = configProperties.getProperty("dataSource.random.dataSetName","random");
 		for(int i=0; i<2; i++) {
-			dsname.append(distributions[i]);
 			pdfs[i] = null;
 			if(distributions[i].equalsIgnoreCase("normal")) {
 				double mu = Double.parseDouble(mus[i]);
@@ -74,7 +81,6 @@ public class RandomDataSource  extends DataSource {
 				pdfs[i] = new ProbabilityDensityFunction(mu, sigma);
 			}
 		}
-		dataSetName = dsname.toString();
 		PDFx = pdfs[0];
 		PDFy = pdfs[1];
 		if(PDFx != null) { PDFx.setRange(randomRangeX); }
@@ -93,15 +99,18 @@ public class RandomDataSource  extends DataSource {
 	}
 
 	/**
-	 * Creates 3 JSON record types as in the examples:
+	 * Creates JSON record types as in the examples:</p>
 	 * 
-	 * {"name": <dataSetName>,"type": "message","command": "START" }
-	 * {"name": <dataSetName>, "type": "point", "Point2D": [ 0.02034002, 0.4716790 ] }
-	 * {"name": <dataSetName>,"type": "message","command": "SHUTDOWN" }
+	 * {"name": <dataSetName>,"type": "message","command": "START" }<br>
+	 * {"name": <dataSetName>,"type": "random" }<br>
+	 * {"name": <dataSetName>,"type": "stats", ... }<br>
+	 * {"name": <dataSetName>, "type": "point", "Point2D": [ 0.02034002, 0.4716790 ] }<br>
+	 * {"name": <dataSetName>,"type": "message","command": "SHUTDOWN" }<br>
 	 *
 	 */
 	public void createDataSet() {
 		pointSet = new PointSet<Double>();
+		pointSet.setIteratedFunctionSystem(IteratedFunctionSystem.NONE);
 		CommandMessage cmStart = new CommandMessage(dataSetName, "START");
 		CommandMessage cmShutdown = new CommandMessage(dataSetName, "SHUTDOWN");
 		startCommand = cmStart.toJson();
@@ -111,14 +120,17 @@ public class RandomDataSource  extends DataSource {
 		generatePointSet();
 	}
 
-	private void generatePointSet() {
+	protected void generatePointSet() {
 		double x;
 		double y;
+		
 		Point2D<Double> point = null;
 		for(int i=0; i<size; i++) {
 			x = (PDFx != null) ? PDFx.randomPDF() : random.nextDouble(randomRangeX.getX().doubleValue(), randomRangeX.getY().doubleValue());
 			y = (PDFy != null) ? PDFy.randomPDF() :  random.nextDouble(randomRangeY.getX().doubleValue(), randomRangeY.getY().doubleValue());
-			point = new Point2D<Double>(x, y);
+			double xrounded = Precision.round(x, 4);
+			double yrounded = Precision.round(y,4);
+			point = new Point2D<Double>(xrounded, yrounded);
 			point.setName(dataSetName);
 			pointSet.add(point);
 		}
@@ -127,9 +139,11 @@ public class RandomDataSource  extends DataSource {
 	@Override
 	public Stream<String> stream() {
 		createDataSet();
+		PointSetStats<Double> psStats = pointSet.getStats();
 		Stream.Builder<String> builder =  Stream.builder();
 		builder.add(startCommand);
-		builder.add(pointSet.toJson());
+		String pointSetStatsString = psStats.toJson();
+		builder.add(pointSetStatsString);
 		for(Point2D<Double> point : pointSet.getPoints()) {
 			builder.add(point.toJson());
 		}
@@ -152,6 +166,18 @@ public class RandomDataSource  extends DataSource {
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+
+	public String[] getDistributions() {
+		return distributions;
+	}
+
+	public void setDistributions(String[] distributions) {
+		this.distributions = distributions;
+	}
+
+	public PointSet<Double> getPointSet() {
+		return pointSet;
 	}
 
 }

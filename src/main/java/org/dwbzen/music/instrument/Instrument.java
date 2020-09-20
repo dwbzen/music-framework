@@ -33,12 +33,12 @@ import org.dwbzen.util.Configuration;
  * Added RhythmScale association. Every instrument must have one!
  * This is set up in the configuration.
  * <p>
- * See <a href="https://en.wikipedia.org/wiki/General_MIDI">General MIDI</a> on Wikipedia for Midi programs
+ * See <a href="https://en.wikipedia.org/wiki/General_MIDI">General MIDI</a> on Wikipedia for Midi programs<br>
  * and <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a>
  * 
  * <p>MuseScore 3 instrument properties are in resources/data/music/instruments.xml</p>
  * 
- * @author dbacon
+ * @author don_bacon
  *
  */
 public abstract class Instrument implements Configurable, IInstrument {

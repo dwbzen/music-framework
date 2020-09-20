@@ -8,7 +8,7 @@ public class RandomDataSourceTest {
 	
 	public static void main(String... args) {
 	   	Configuration config = Configuration.getInstance("/config.properties");
-    	RandomDataSource ds = new RandomDataSource(config, "Koto");
+    	RandomDataSource ds = new RandomDataSource(config, "BassClarinet", 20);
     	ds.stream().forEach(s -> System.out.println(s));
 		ds.close();
 	}

@@ -40,7 +40,7 @@ public abstract class DataSource implements IDataSource {
 	protected Stream<String> stream;
 	protected Random randomPredicate = null;
 	protected String instrumentName;
-	protected int skipFactor = 20;		// How many records to initially skip for RANDOM selection
+	protected int skipFactor = 10;		// How many records to initially skip for RANDOM selection
 
 	static final String SEQUENTIAL = "sequential";
 	static final String RANDOM = "random";
@@ -59,8 +59,8 @@ public abstract class DataSource implements IDataSource {
 		instrumentNames = configProperties.getProperty("score.instruments").split(",");
 		randomSelection = configProperties.getProperty("selectionMode", SEQUENTIAL).equals(RANDOM);
 		measures = Integer.valueOf( configProperties.getProperty("measures", "20")).intValue();
-		divisionsPerMeasure = Integer.parseInt(configProperties.getProperty("score.measure.divisions", "16"));
-		maxSize = measures * divisionsPerMeasure * 2;
+		divisionsPerMeasure = Integer.parseInt(configProperties.getProperty("score.measure.divisions", "480"));
+		maxSize = measures * divisionsPerMeasure * 3;
 		randomPredicate = new Random(ThreadLocalRandom.current());
 		configure();
 	}
@@ -118,9 +118,9 @@ public abstract class DataSource implements IDataSource {
 	/**
      * Used to filter data points in a Stream for random selection.
      * Does not apply (obviously) to RandomDataSource as that data
-     * is generated on the fly.
+     * is generated on the fly and is already random.
      * 
-     * @author donbacon
+     * @author don_bacon
      *
      */
     class Random implements Predicate<String>, IntSupplier {

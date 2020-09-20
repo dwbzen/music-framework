@@ -99,7 +99,7 @@ public class ProductionFlow implements Runnable {
     private boolean randomSelection = false;
     private int measures = 0;
     private String analyzeFileName = null;
-    private boolean saveIntermediateXML = true;
+    private boolean saveIntermediateXML = false;		// to save, use -saveintermediate true
     
     /*
      * Transport attributes
@@ -157,6 +157,7 @@ public class ProductionFlow implements Runnable {
     	int port = defaultPort;
     	int measures = 0;
     	String dataSourceName = null;
+    	boolean saveintermediate = false;
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
     			if(args[i].equalsIgnoreCase("-load")) {
@@ -165,6 +166,9 @@ public class ProductionFlow implements Runnable {
     			else if(args[i].equalsIgnoreCase("-score")) {
     				createScore = args[++i].equalsIgnoreCase("true");
     			}
+    			else if(args[i].startsWith("-saveinter")) {
+    				saveintermediate = args[++i].equalsIgnoreCase("true");
+    			}    			
     			else  if(args[i].equalsIgnoreCase("-xml")) {
     				createXML = true;
     				xmlFileName = args[++i];
@@ -199,6 +203,7 @@ public class ProductionFlow implements Runnable {
     	pf.setHost(host);
     	pf.setPort(port);
     	pf.setSaveScore(saveScore);
+    	pf.setSaveIntermediateXML(saveintermediate);
     	if(xmlFileName != null && createXML) {
     		pf.setXmlFileName(xmlFileName);
     	}
@@ -772,6 +777,14 @@ public class ProductionFlow implements Runnable {
 
 	public Map<String, String[]> getFieldNames() {
 		return fieldNames;
+	}
+
+	public boolean isSaveIntermediateXML() {
+		return saveIntermediateXML;
+	}
+
+	public void setSaveIntermediateXML(boolean saveIntermediateXML) {
+		this.saveIntermediateXML = saveIntermediateXML;
 	}
     
 }
