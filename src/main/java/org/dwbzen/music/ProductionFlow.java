@@ -173,6 +173,10 @@ public class ProductionFlow implements Runnable {
     				createXML = true;
     				xmlFileName = args[++i];
     			}
+    			else if(args[i].equalsIgnoreCase("-createxml")) {
+    				// suppress musicXML file creation.
+    				createXML= args[++i].equalsIgnoreCase("true");
+    			}
     			else  if(args[i].startsWith("-rand")) {
     				randomSelection = args[++i].equalsIgnoreCase("true");
     			}
@@ -204,7 +208,7 @@ public class ProductionFlow implements Runnable {
     	pf.setPort(port);
     	pf.setSaveScore(saveScore);
     	pf.setSaveIntermediateXML(saveintermediate);
-    	if(xmlFileName != null && createXML) {
+    	if(xmlFileName != null) {
     		pf.setXmlFileName(xmlFileName);
     	}
      	pf.setRandomSelection(randomSelection);

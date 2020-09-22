@@ -112,7 +112,7 @@ public class ScorePart implements Serializable, Runnable {
 		/*
 		 * Turn score part data into music
 		 */
-		log.info("ScorePart " + partName);
+		log.info("Creating ScorePart " + partName);
 		createScorePart();
 		log.info("ScorePart " + partName + " complete");
 		state = State.COMPLETE;
@@ -142,7 +142,7 @@ public class ScorePart implements Serializable, Runnable {
     		Pitch pitch = instrument.scale(point.getX().doubleValue());
     		Duration duration = durationScaler.scaleToRhythmScale(point.getY().doubleValue());
     		double rawUnits = duration.getRawDuration();
-    		
+
     		// scale raw point value to RhythmScale units
     		// set dots after determining the expression to use for these units
     		int units = rhythmScale.findClosestUnits(rawUnits, Preference.Up);
@@ -153,11 +153,20 @@ public class ScorePart implements Serializable, Runnable {
     			System.err.println("Null factors for " + units + " units, rawUnits= " + rawUnits);
     			continue;
     		}
-    		for(Duration df : factors) {
+    		// more than 1 factor indicates tied notes.
+    		int nFactors = factors.size();
+    		Note previousNote = null;
+    		for(int i = 0; i<nFactors; i++) {
+    			Duration df = factors.get(i);
         		Note note = new Note(pitch, df);
         		note.setPoint(point);
         		log.trace(instrument.getAbreviation() + ": " + note);
+    			if(i > 0) {
+    				note.setTiedFrom(previousNote);
+    				previousNote.setTiedTo(note);
+    			}
         		notes.add(note);
+        		previousNote = note;
     		}
     	}
     	scoreInstrument();

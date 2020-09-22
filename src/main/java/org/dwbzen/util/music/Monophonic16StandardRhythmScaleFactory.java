@@ -1,5 +1,6 @@
 package org.dwbzen.util.music;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,11 @@ import org.dwbzen.music.element.rhythm.BaseRhythmTextureMap;
 import org.dwbzen.music.element.rhythm.IRhythmTextureMap;
 import org.dwbzen.util.Ratio;
 
+/**
+ * 
+ * @author don_bacon
+ *
+ */
 public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScaleFactory {
 	
 	protected final static int standardRoot = 480;
@@ -65,18 +71,25 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 		rs.addFactor(180, new Duration(120, 1));	// dotted QUARTER
 		rs.addFactor(360, new Duration(240, 1));	// dotted HALF
 		
-		rs.addFactor(210, new Duration(120, 2));		// double dotted QUARTER
-		rs.addFactor(420, new Duration(240, 2));		// double dotted HALF
+		// rs.addFactor(210, new Duration(120, 2));		// double dotted QUARTER
+		// rs.addFactor(420, new Duration(240, 2));		// double dotted HALF
 		
-		rs.addFactor(450, new Duration(240, 3));		// triple dotted HALF
+		// rs.addFactor(450, new Duration(240, 3));		// triple dotted HALF
 		/*
-		 * factors representing ties between 2 notes
+		 * factors representing ties between 2 or more notes
 		 */
-		rs.addFactor(150, new Duration(120)).add(new Duration(30));		// 150
-		rs.addFactor(270, new Duration(120,1)).add(new Duration(60,1));	// 270
-		rs.addFactor(300, new Duration(240)).add(new Duration(60));		// 300
-		rs.addFactor(330, new Duration(240)).add(new Duration(60,1));	// 330
-		rs.addFactor(390, new Duration(240,1)).add(new Duration(30)); 	// 390
+		rs.addFactor(150, new Duration(120)).add(new Duration(30));		// 150 = quarter + 16th
+		rs.addFactor(270, new Duration(240)).add(new Duration(30));		// 270 = half + 16th
+		rs.addFactor(300, new Duration(240)).add(new Duration(60));		// 300 = half + eighth
+		rs.addFactor(330, new Duration(240)).add(new Duration(60,1));	// 330 = half + dotted eighth
+		rs.addFactor(390, new Duration(240,1)).add(new Duration(30)); 	// 390 = dotted half + 16th
+		List<Duration> dlist = new ArrayList<Duration>();
+		dlist.add(new Duration(120));
+		dlist.add(new Duration(60));
+		dlist.add(new Duration(30));
+		rs.addFactor(450, new Duration(240)).addAll(dlist);	// 450 = half + quarter + eighth + 16th
+		rs.addFactor(210, new Duration(120), new Duration(60), new Duration(30));	// 210 = quarter + eighth + 16
+		rs.addFactor(420, new Duration(240), new Duration(120), new Duration(60));	// 420 = half + quarter + eighth
 	}
 
 	@Override
@@ -142,7 +155,7 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 	}
 
 	/**
-	 * Assigns probabilities to METRIC expressions, and EXTRAMETRIC for 4, 8, 16 units
+	 * Assigns probabilities to METRIC expressions, and EXTRAMETRIC for 60, 120, 240 and 480 units
 	 * @param selector
 	 * @param expressions
 	 * @param units
@@ -152,11 +165,11 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 		for(IRhythmExpression unitExpression : exps) {
 			if(units%60 == 0) {		// 8th, quarter, half, whole notes
 				if(unitExpression.getRhythmicUnitType().equals(RhythmicUnitType.METRIC)) {
-					selector.setRhythmicUnitTypeProbability(units, unitExpression, .8);
+					selector.setRhythmicUnitTypeProbability(units, unitExpression, .9);
 				}
 				else {	// EXTRAMETRIC
 					int nnotes = unitExpression.getRatio().getNumberOfNotes();
-					double prob = (nnotes==3) ? 0.2 : 0.1;
+					double prob = (nnotes==3) ? 0.1 : 0.05;
 					selector.setRhythmicUnitTypeProbability(units, unitExpression, prob);
 				}
 			}

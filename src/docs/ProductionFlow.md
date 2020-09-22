@@ -38,3 +38,12 @@ This describes all the available instruments which includes the following. This 
 
 MongoDB configuration. The existing parameters will work for a typical [MongoDB](https://www.mongodb.com/) installation.
 
+## Known Issues
+* Scale transformation (PitchScaler) may incorrectly scale a raw pitch an octave too high when the pitch
+is exactly equal to the instrument's upper range.
+
+  The Bb Clarinets for example will scale C6 to C7.
+
+* Have not tested for time signatures other than 4/4.
+* Chordal texture implementation is incomplete. This includes Standard16RhythmScaleFactory which needs to be factored to use same base units as Monophonic16StandardRhythmScaleFactory.
+

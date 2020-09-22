@@ -45,7 +45,10 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 		Properties configProperties = configuration.getProperties();
 		score = new Score(configuration, title);
 		score.setWorkNumber(opus);
-		
+		score.addCreator("composer", configProperties.getProperty("creator.composer", "No Composer"));
+		score.addCreator("arranger", configProperties.getProperty("creator.arranger", "No Arranger"));
+		score.addCreator("lyricist", configProperties.getProperty("creator.lyricist", "No Lyricist"));
+
 		for(String instrumentName : instruments.keySet()) {
 			Instrument instrument = instruments.get(instrumentName);
 			score.getInstrumentNames().add(instrumentName);

@@ -1,4 +1,5 @@
 {
+  "unitsPerMeasure" : 480,
   "name" : "Rhythm Scale - no chords",
   "root" : 480,
   "rootUnits" : 0,
@@ -11,23 +12,23 @@
           "units" : 30,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 30,
             "baseUnits" : 30,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -38,23 +39,23 @@
         "units" : 30,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 30,
           "baseUnits" : 30,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -67,23 +68,23 @@
           "units" : 60,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 60,
             "baseUnits" : 60,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -92,23 +93,23 @@
           "units" : 30,
           "ratio" : {
             "numberOfNotes" : 3,
-            "timeOf" : 2,
-            "beats" : 3
+            "beats" : 3,
+            "timeOf" : 2
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "TUPLET",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 20,
             "baseUnits" : 30,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -119,23 +120,23 @@
         "units" : 60,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 60,
           "baseUnits" : 60,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -144,23 +145,23 @@
         "units" : 30,
         "ratio" : {
           "numberOfNotes" : 3,
-          "timeOf" : 2,
-          "beats" : 3
+          "beats" : 3,
+          "timeOf" : 2
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "TUPLET",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 20,
           "baseUnits" : 30,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -173,23 +174,23 @@
           "units" : 90,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 90,
             "baseUnits" : 60,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 1
           } ]
@@ -200,23 +201,23 @@
         "units" : 90,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 90,
           "baseUnits" : 60,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 1
         } ]
@@ -229,23 +230,23 @@
           "units" : 120,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 120,
             "baseUnits" : 120,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -254,23 +255,23 @@
           "units" : 30,
           "ratio" : {
             "numberOfNotes" : 5,
-            "timeOf" : 4,
-            "beats" : 5
+            "beats" : 5,
+            "timeOf" : 4
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "TUPLET",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 24,
             "baseUnits" : 30,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -279,23 +280,23 @@
           "units" : 60,
           "ratio" : {
             "numberOfNotes" : 3,
-            "timeOf" : 2,
-            "beats" : 3
+            "beats" : 3,
+            "timeOf" : 2
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "TUPLET",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 40,
             "baseUnits" : 60,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -306,23 +307,23 @@
         "units" : 120,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 120,
           "baseUnits" : 120,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -331,23 +332,23 @@
         "units" : 30,
         "ratio" : {
           "numberOfNotes" : 5,
-          "timeOf" : 4,
-          "beats" : 5
+          "beats" : 5,
+          "timeOf" : 4
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "TUPLET",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 24,
           "baseUnits" : 30,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -356,23 +357,23 @@
         "units" : 60,
         "ratio" : {
           "numberOfNotes" : 3,
-          "timeOf" : 2,
-          "beats" : 3
+          "beats" : 3,
+          "timeOf" : 2
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "TUPLET",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 40,
           "baseUnits" : 60,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -385,36 +386,36 @@
           "units" : 150,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 120,
             "baseUnits" : 120,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           }, {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 30,
             "baseUnits" : 30,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -425,36 +426,36 @@
         "units" : 150,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 120,
           "baseUnits" : 120,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         }, {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 30,
           "baseUnits" : 30,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -467,23 +468,23 @@
           "units" : 180,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 180,
             "baseUnits" : 120,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 1
           } ]
@@ -494,23 +495,23 @@
         "units" : 180,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 180,
           "baseUnits" : 120,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 1
         } ]
@@ -523,23 +524,23 @@
           "units" : 210,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 210,
             "baseUnits" : 120,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 2
           } ]
@@ -550,23 +551,23 @@
         "units" : 210,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 210,
           "baseUnits" : 120,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 2
         } ]
@@ -579,23 +580,23 @@
           "units" : 240,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 240,
             "baseUnits" : 240,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -604,23 +605,23 @@
           "units" : 60,
           "ratio" : {
             "numberOfNotes" : 5,
-            "timeOf" : 4,
-            "beats" : 5
+            "beats" : 5,
+            "timeOf" : 4
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "TUPLET",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 48,
             "baseUnits" : 60,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -629,23 +630,23 @@
           "units" : 120,
           "ratio" : {
             "numberOfNotes" : 3,
-            "timeOf" : 2,
-            "beats" : 3
+            "beats" : 3,
+            "timeOf" : 2
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "TUPLET",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 80,
             "baseUnits" : 120,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -656,23 +657,23 @@
         "units" : 240,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 240,
           "baseUnits" : 240,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -681,23 +682,23 @@
         "units" : 60,
         "ratio" : {
           "numberOfNotes" : 5,
-          "timeOf" : 4,
-          "beats" : 5
+          "beats" : 5,
+          "timeOf" : 4
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "TUPLET",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 48,
           "baseUnits" : 60,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -706,23 +707,23 @@
         "units" : 120,
         "ratio" : {
           "numberOfNotes" : 3,
-          "timeOf" : 2,
-          "beats" : 3
+          "beats" : 3,
+          "timeOf" : 2
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "TUPLET",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 80,
           "baseUnits" : 120,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -735,38 +736,38 @@
           "units" : 270,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
-            "units" : 180,
-            "baseUnits" : 120,
+            "units" : 240,
+            "baseUnits" : 240,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
-            "dots" : 1
+            "dots" : 0
           }, {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
-            "units" : 90,
-            "baseUnits" : 60,
+            "units" : 30,
+            "baseUnits" : 30,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
-            "dots" : 1
+            "dots" : 0
           } ]
         } ]
       },
@@ -775,38 +776,38 @@
         "units" : 270,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
-          "units" : 180,
-          "baseUnits" : 120,
+          "units" : 240,
+          "baseUnits" : 240,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
-          "dots" : 1
+          "dots" : 0
         }, {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
-          "units" : 90,
-          "baseUnits" : 60,
+          "units" : 30,
+          "baseUnits" : 30,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
-          "dots" : 1
+          "dots" : 0
         } ]
       } ]
     },
@@ -817,36 +818,36 @@
           "units" : 300,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 240,
             "baseUnits" : 240,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           }, {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 60,
             "baseUnits" : 60,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -857,36 +858,36 @@
         "units" : 300,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 240,
           "baseUnits" : 240,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         }, {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 60,
           "baseUnits" : 60,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -899,36 +900,36 @@
           "units" : 330,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 240,
             "baseUnits" : 240,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           }, {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 90,
             "baseUnits" : 60,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 1
           } ]
@@ -939,36 +940,36 @@
         "units" : 330,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 240,
           "baseUnits" : 240,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         }, {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 90,
           "baseUnits" : 60,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 1
         } ]
@@ -981,23 +982,23 @@
           "units" : 360,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 360,
             "baseUnits" : 240,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 1
           } ]
@@ -1008,23 +1009,23 @@
         "units" : 360,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 360,
           "baseUnits" : 240,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 1
         } ]
@@ -1037,36 +1038,36 @@
           "units" : 390,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 360,
             "baseUnits" : 240,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 1
           }, {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 30,
             "baseUnits" : 30,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -1077,36 +1078,36 @@
         "units" : 390,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 360,
           "baseUnits" : 240,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 1
         }, {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 30,
           "baseUnits" : 30,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -1119,23 +1120,23 @@
           "units" : 420,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 420,
             "baseUnits" : 240,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 2
           } ]
@@ -1146,23 +1147,23 @@
         "units" : 420,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 420,
           "baseUnits" : 240,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 2
         } ]
@@ -1175,25 +1176,64 @@
           "units" : 450,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
-            "units" : 450,
+            "units" : 240,
             "baseUnits" : 240,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
-            "dots" : 3
+            "dots" : 0
+          }, {
+            "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
+            "tuplet" : false,
+            "ratioSame" : true,
+            "units" : 120,
+            "baseUnits" : 120,
+            "ratio" : {
+              "numberOfNotes" : 1,
+              "beats" : 1,
+              "timeOf" : 1
+            },
+            "dots" : 0
+          }, {
+            "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
+            "tuplet" : false,
+            "ratioSame" : true,
+            "units" : 60,
+            "baseUnits" : 60,
+            "ratio" : {
+              "numberOfNotes" : 1,
+              "beats" : 1,
+              "timeOf" : 1
+            },
+            "dots" : 0
+          }, {
+            "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
+            "tuplet" : false,
+            "ratioSame" : true,
+            "units" : 30,
+            "baseUnits" : 30,
+            "ratio" : {
+              "numberOfNotes" : 1,
+              "beats" : 1,
+              "timeOf" : 1
+            },
+            "dots" : 0
           } ]
         } ]
       },
@@ -1202,25 +1242,64 @@
         "units" : 450,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
-          "units" : 450,
+          "units" : 240,
           "baseUnits" : 240,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
-          "dots" : 3
+          "dots" : 0
+        }, {
+          "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
+          "tuplet" : false,
+          "ratioSame" : true,
+          "units" : 120,
+          "baseUnits" : 120,
+          "ratio" : {
+            "numberOfNotes" : 1,
+            "beats" : 1,
+            "timeOf" : 1
+          },
+          "dots" : 0
+        }, {
+          "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
+          "tuplet" : false,
+          "ratioSame" : true,
+          "units" : 60,
+          "baseUnits" : 60,
+          "ratio" : {
+            "numberOfNotes" : 1,
+            "beats" : 1,
+            "timeOf" : 1
+          },
+          "dots" : 0
+        }, {
+          "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
+          "tuplet" : false,
+          "ratioSame" : true,
+          "units" : 30,
+          "baseUnits" : 30,
+          "ratio" : {
+            "numberOfNotes" : 1,
+            "beats" : 1,
+            "timeOf" : 1
+          },
+          "dots" : 0
         } ]
       } ]
     },
@@ -1231,23 +1310,23 @@
           "units" : 480,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "METRIC",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 480,
             "baseUnits" : 480,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -1256,23 +1335,23 @@
           "units" : 120,
           "ratio" : {
             "numberOfNotes" : 5,
-            "timeOf" : 4,
-            "beats" : 5
+            "beats" : 5,
+            "timeOf" : 4
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "TUPLET",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 96,
             "baseUnits" : 120,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -1281,23 +1360,23 @@
           "units" : 240,
           "ratio" : {
             "numberOfNotes" : 3,
-            "timeOf" : 2,
-            "beats" : 3
+            "beats" : 3,
+            "timeOf" : 2
           },
           "texture" : "MONOPHONIC",
           "rhythmicUnit" : "TUPLET",
           "depth" : [ ],
           "factors" : [ {
             "numberOfNotes" : 1,
+            "inTheTimeOfNotes" : 1,
             "tuplet" : false,
             "ratioSame" : true,
-            "inTheTimeOfNotes" : 1,
             "units" : 160,
             "baseUnits" : 240,
             "ratio" : {
               "numberOfNotes" : 1,
-              "timeOf" : 1,
-              "beats" : 1
+              "beats" : 1,
+              "timeOf" : 1
             },
             "dots" : 0
           } ]
@@ -1308,23 +1387,23 @@
         "units" : 480,
         "ratio" : {
           "numberOfNotes" : 1,
-          "timeOf" : 1,
-          "beats" : 1
+          "beats" : 1,
+          "timeOf" : 1
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "METRIC",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 480,
           "baseUnits" : 480,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -1333,23 +1412,23 @@
         "units" : 120,
         "ratio" : {
           "numberOfNotes" : 5,
-          "timeOf" : 4,
-          "beats" : 5
+          "beats" : 5,
+          "timeOf" : 4
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "TUPLET",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 96,
           "baseUnits" : 120,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]
@@ -1358,23 +1437,23 @@
         "units" : 240,
         "ratio" : {
           "numberOfNotes" : 3,
-          "timeOf" : 2,
-          "beats" : 3
+          "beats" : 3,
+          "timeOf" : 2
         },
         "texture" : "MONOPHONIC",
         "rhythmicUnit" : "TUPLET",
         "depth" : [ ],
         "factors" : [ {
           "numberOfNotes" : 1,
+          "inTheTimeOfNotes" : 1,
           "tuplet" : false,
           "ratioSame" : true,
-          "inTheTimeOfNotes" : 1,
           "units" : 160,
           "baseUnits" : 240,
           "ratio" : {
             "numberOfNotes" : 1,
-            "timeOf" : 1,
-            "beats" : 1
+            "beats" : 1,
+            "timeOf" : 1
           },
           "dots" : 0
         } ]

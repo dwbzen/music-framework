@@ -22,15 +22,36 @@ public class RhythmScaleTest extends TestCase  {
 	static final org.apache.log4j.Logger log = Logger.getLogger(RhythmScaleTest.class);
 	static Monophonic16StandardRhythmScaleFactory factory = Monophonic16StandardRhythmScaleFactory.getInstance();
 	static RhythmScale rs = factory.createRhythmScale("Rhythm Scale - no chords");
+	// {30, 60, 90, 180, 120, 150, 210, 240, 270, 300, 330, 360, 390, 420, 450, 480};
 	
 	@Test
 	public void testFindClosestUnits() {
+		double rawUnits = 0;
+		int units = 0;
 		for(int bunit : rs.getBaseUnits()) {
-			double rawUnits = (double)bunit;
-			int units = rs.findClosestUnits(rawUnits, Preference.Up);
-			System.out.println("Closest units to " + rawUnits + " is " + units);
+			rawUnits = (double)bunit;
+			units = rs.findClosestUnits(rawUnits, Preference.Up);
+			log.info("Closest units to " + rawUnits + " is " + units);
 			assertEquals(units, bunit);
 		}
+		rawUnits = 140;
+		units = rs.findClosestUnits(rawUnits, Preference.Up);
+		log.info("Closest units to " + rawUnits + " is " + units);
+		assertEquals(150, units);
+		
+		rawUnits = 440;
+		units = rs.findClosestUnits(rawUnits, Preference.Up);
+		log.info("Closest units to " + rawUnits + " is " + units);
+		assertEquals(450, units);
+		
+		rawUnits = 315;
+		units = rs.findClosestUnits(rawUnits, Preference.Up);
+		log.info("Closest units to " + rawUnits + " is (Preferrence.Up) " + units);
+		assertEquals(330, units);
+		units = rs.findClosestUnits(rawUnits, Preference.Down);
+		log.info("Closest units to " + rawUnits + " is (Preference.Down) " + units);
+		assertEquals(300, units);
+		
 	}
 	
 	@Test

@@ -202,7 +202,7 @@ public class RhythmScale  implements IRhythmScale {
 			nunits = (pref == Preference.Down) ? low : high;
 		}
 		else {
-			nunits = (low < high && low > 0) ? low : high;
+			nunits = (Math.abs(diffLow) < Math.abs(diffLow)) ? low : high;
 		}
 		log.trace("closest units to " + rawUnits + " = " + nunits);
 		return nunits;
@@ -226,6 +226,40 @@ public class RhythmScale  implements IRhythmScale {
 		return dlist;
 	}
 
+	public List<Duration> addFactor(int units, Duration duration1, Duration duration2) {
+		List<Duration> dlist = null;
+		if(factorMap.containsKey(units)) {
+			dlist = factorMap.get(units);
+			dlist.add(duration1);
+			dlist.add(duration2);
+		}
+		else {
+			dlist = new ArrayList<Duration>();
+			dlist.add(duration1);
+			dlist.add(duration2);
+			factorMap.put(units, dlist);
+		}
+		return dlist;
+	}
+	
+	public List<Duration> addFactor(int units, Duration duration1, Duration duration2, Duration duration3) {
+		List<Duration> dlist = null;
+		if(factorMap.containsKey(units)) {
+			dlist = factorMap.get(units);
+			dlist.add(duration1);
+			dlist.add(duration2);
+			dlist.add(duration3);
+		}
+		else {
+			dlist = new ArrayList<Duration>();
+			dlist.add(duration1);
+			dlist.add(duration2);
+			dlist.add(duration3);
+			factorMap.put(units, dlist);
+		}
+		return dlist;
+	}
+	
 	@Override
 	public List<Duration> getFactors(Integer units) {
 		return factorMap.get(units);

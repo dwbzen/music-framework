@@ -32,9 +32,9 @@ public class Score implements Configurable, Serializable, IJson {
 	@JsonProperty("name")		private String name;			// for persistence
 	
 	/**
-	 * type, name. For example, "composer", "Don Bacon"
+	 * type, name. For example, "composer", "Pierre Boulez"
 	 */
-	@JsonIgnore		private Map<String, String> creators = new HashMap<String, String>();
+	@JsonProperty("creators")     private Map<String, String> creators = new HashMap<String, String>();
 	@JsonProperty("instruments")  private List<String> instrumentNames = new ArrayList<String>();
 
 	public Score(String title) {

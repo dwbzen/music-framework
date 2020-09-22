@@ -20,8 +20,8 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 	
 	@JsonProperty("pitch")	private Pitch pitch = null;		// will be null for a rest
 	@JsonProperty("rest")	private boolean rest = true;	// set automatically by constructor from Pitch
-	@JsonIgnore				private Note tiedTo = null;		// reference to the note this is tied to - occurs after this note
-	@JsonIgnore				private Note tiedFrom = null;	//  reference to the note the note this is tied from - occurs before this note
+	@JsonProperty			private Note tiedTo = null;		// reference to the note this is tied to - occurs after this note
+	@JsonProperty			private Note tiedFrom = null;	//  reference to the note the note this is tied from - occurs before this note
 	@JsonIgnore				private IMeasurableContainer<Note>	container = null;	// reference to container (like a Chord) or null
 
 	public Note(Pitch p, Duration dur) {
@@ -51,6 +51,9 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 		if(aNote.getContainer() != null) {
 			container = aNote.getContainer();
 		}
+		tiedTo = aNote.getTiedTo();
+		tiedFrom = aNote.getTiedFrom();
+		tieType = aNote.getTieType();
 		setPoint(aNote.getPoint());
 		setVoice(aNote.getVoice());
 	}
