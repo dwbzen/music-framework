@@ -45,5 +45,6 @@ is exactly equal to the instrument's upper range.
   The Bb Clarinets for example will scale C6 to C7.
 
 * Have not tested for time signatures other than 4/4.
-* Chordal texture implementation is incomplete. This includes Standard16RhythmScaleFactory which needs to be factored to use same base units as Monophonic16StandardRhythmScaleFactory.
+* Chordal texture implementation is incomplete.
+* The correct key is not selected for transposing instruments when the score.key is not C-Major.
 

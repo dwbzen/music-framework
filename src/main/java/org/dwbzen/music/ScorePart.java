@@ -403,6 +403,9 @@ public class ScorePart implements Serializable, Runnable {
      */
     private Note addFactorsNotes(int units, Note aNote, Measure measure, boolean tieToNote) {
 		List<Duration> factors =  rhythmScale.getFactors(units);
+		if(factors == null) {
+			throw new RuntimeException("No Factors for " + units + " units. Check your Rhythm scale!");
+		}
 		Pitch pitch = aNote.getPitch();
 		Note note = null;
 		for(Duration df : factors) {

@@ -3,6 +3,7 @@ package org.dwbzen.util.music;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.dwbzen.music.action.ExpressionSelector;
 import org.dwbzen.music.element.RhythmScale;
@@ -11,20 +12,28 @@ import org.dwbzen.util.Ratio;
 
 /**
  * Each RhythmScale is created by a factory class that extends this abstract class
- * and implements the abstract methods as needed.
+ * and implements the abstract methods as needed.<br>
+ * This must include setting the standardBaseUnits if different than defaultBaseUnits (480).<br>
+ * And creating the baseUnits SortedSet<Integer>.<br>
+ * NOTE - the factorMap, which expresses a given number of units as a List<Duration> must include <br>
+ * a factor for every multiple of the smallest element of the baseUnits list.<br>
+ * A full explanation can be found in the RhythmScales.md readme file.
  * 
- * @author bacond6
+ * @author don_bacon
  *
  */
 public abstract class AbstractRhythmScaleFactory  implements IRhythmScaleFactory {
 
-	protected SortedSet<Integer> baseUnits = null;
-	protected double metricProbability = 0.8;
+	public static final int defaultUnitsPerMeasure = 480;
+	
+	protected SortedSet<Integer> baseUnits = new TreeSet<Integer>();
+	private int unitsPerMeasure = defaultUnitsPerMeasure;
+	private double metricProbability = 1.0;
+	private boolean chordal = false;
+	
 	protected Map<Ratio, Double> extrametricProbabilityMap = new HashMap<Ratio, Double>();
-	protected boolean chordal = false;
 	
 	protected AbstractRhythmScaleFactory() {
-		
 	}
 
 	
@@ -33,7 +42,7 @@ public abstract class AbstractRhythmScaleFactory  implements IRhythmScaleFactory
 		RhythmScale rhythmScale = new RhythmScale();
 		rhythmScale.setName(name);
 		
-		SortedSet<Integer> baseUnits = createBaseUnits(rhythmScale);
+		baseUnits = createBaseUnits(rhythmScale);
 		rhythmScale.getBaseUnits().addAll(baseUnits);
 		rhythmScale.setRange(baseUnits.last() - baseUnits.first());
 		/*
@@ -62,7 +71,7 @@ public abstract class AbstractRhythmScaleFactory  implements IRhythmScaleFactory
 	 * @param rhythmScale
 	 * @return
 	 */
-	abstract SortedSet<Integer> createBaseUnits(RhythmScale rhythmScale);
+	public abstract SortedSet<Integer> createBaseUnits(RhythmScale rhythmScale);
 	
 	abstract void createFactorMap(RhythmScale rhythmScale);
 
@@ -86,12 +95,23 @@ public abstract class AbstractRhythmScaleFactory  implements IRhythmScaleFactory
 	 */
 	abstract void createMetricExpressions(SortedSet<Integer> baseUnits, RhythmScale rhythmScale);
 	
-	abstract void addExtrametricExpressions(RhythmScale rhythmScale);
+	public void addExtrametricExpressions(RhythmScale rhythmScale) {
+		// no extrametric expressions by default. Override in derived classes.
+	}
 	
-	abstract void addChordalExpressions(RhythmScale rhythmScale);
+	public void addChordalExpressions(RhythmScale rhythmScale) {
+		// no Chordal expressions by default. Override in derived classes.
+	}
 	
-	abstract ExpressionSelector createRhythmScaleSelector(RhythmScale rs);
+	public abstract ExpressionSelector createRhythmScaleSelector(RhythmScale rs);
 
+	public void setUnitsPerMeasure(int unitsPerMeasure) {
+		this.unitsPerMeasure = unitsPerMeasure;
+	}
+	
+	public int  getUnitsPerMeasure() {
+		return unitsPerMeasure;
+	}
 
 	public double getMetricProbability() {
 		return metricProbability;

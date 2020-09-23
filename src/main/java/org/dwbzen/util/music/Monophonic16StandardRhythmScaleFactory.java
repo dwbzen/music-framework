@@ -25,7 +25,6 @@ import org.dwbzen.util.Ratio;
  */
 public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScaleFactory {
 	
-	protected final static int standardRoot = 480;
 	public final static int[] standardBaseUnits = 
 		{30, 60, 90, 180, 120, 150, 210, 240, 270, 300, 330, 360, 390, 420, 450, 480};
 	
@@ -39,10 +38,10 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 	private boolean debugFlag = false;
 	
 	@Override
-	SortedSet<Integer> createBaseUnits(RhythmScale rhythmScale) {
-		SortedSet<Integer> baseUnits = new TreeSet<Integer>();
+	public SortedSet<Integer> createBaseUnits(RhythmScale rhythmScale) {
+		baseUnits = new TreeSet<Integer>();
 		Arrays.stream(standardBaseUnits).forEach(s -> baseUnits.add(s));
-		rhythmScale.setRoot(standardRoot);
+		rhythmScale.setRoot(defaultUnitsPerMeasure);
 		return baseUnits;
 	}
 
@@ -112,7 +111,7 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 	}
 	
 	@Override
-	void addExtrametricExpressions(RhythmScale rhythmScale) {
+	public void addExtrametricExpressions(RhythmScale rhythmScale) {
 		Map<Integer, IRhythmTextureMap> expressions = rhythmScale.getExpressions();
 		/*
 		 * EXTRAMETRIC expression
@@ -131,17 +130,12 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 	}
 	
 	@Override
-	void addChordalExpressions(RhythmScale rhythmScale) {
-		// Nothing to do - Override in derived classes
-	}
-	
-	@Override
 	/**
 	 * Creates an ExpressionSelector for standard MONOPHONIC rhythm scale (no chords)
 	 * TODO - need a better way to do this
 	 * @param RhythmScale rhythmScale
 	 */
-	ExpressionSelector createRhythmScaleSelector(RhythmScale rhythmScale) {
+	public ExpressionSelector createRhythmScaleSelector(RhythmScale rhythmScale) {
 		ExpressionSelector selector = new ExpressionSelector(rhythmScale);
 		Map<Integer, IRhythmTextureMap> expressions = rhythmScale.getExpressions();
 

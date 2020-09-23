@@ -1,23 +1,19 @@
 package org.dwbzen.util.music;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * All IRhythmScale factory instances should be created by the getRhythmScaleFactory instance returned.
  * 
- * @author bacond6
+ * @author don_bacon
  *
  */
 public class RhythmScaleFactory  {
 
-	public final static int[] standardBaseUnits = {1, 2, 3, 4, 6, 8, 10, 12, 14, 16};
-	
-	public static int standardRoot = 16;
-	public static final String DEFAULT_RHYTHM_SCALE_FACTORY = "org.dwbzen.util.music.Monophonic16StandardRhythmScaleFactory";
-	public static final String DEFAULT_RHYTHM_SCALE_NAME = "Monophonic16StandardRhythmScale";
+	public static final String DEFAULT_RHYTHM_SCALE_FACTORY = "org.dwbzen.util.music.StandardRhythmScaleFactory";
+	public static final String DEFAULT_RHYTHM_SCALE_NAME = "StandardRhythmScale";
 	
 	static Map<String,  IRhythmScaleFactory> factoryClassMap = new HashMap<String, IRhythmScaleFactory>();
 	
@@ -25,16 +21,18 @@ public class RhythmScaleFactory  {
 	 * RHYTHM_SCALE_TYPES used in config.properties to create a global RhythmScale
 	 * and instrument-specific RhythmScales if any.
 	 * For example 
-	 * 	   score.rhytyhmScale.all.factory=Standard16RhythmScaleFactory
+	 * 	   score.rhytyhmScale.all.factory=StandardRhythmScaleFactory
 	 *     score.rhythmScale.instrument.PianoLH.factory=Monophonic16StandardRhythmScaleFactory
 	 */
 	static String[] RHYTHM_SCALE_FACTORIES = { 
-			"org.dwbzen.util.music.Standard16RhythmScaleFactory",
-			"org.dwbzen.util.music.Monophonic16StandardRhythmScaleFactory"
+			"org.dwbzen.util.music.Monophonic16StandardRhythmScaleFactory",
+			"org.dwbzen.util.music.StandardRhythmScaleFactory",
+			"org.dwbzen.util.music.PolyphonicRhythmScaleFactory"
 	};
 	static String[] RHYTHM_SCALE_FACTORY_NAMES = { 
-			"Standard16RhythmScale",
-			"Monophonic16StandardRhythmScale"
+			"Monophonic16StandardRhythmScale",
+			"StandardRhythmScale",
+			"PolyphonicRhythmScale"
 	};
 	
 	static {
@@ -49,8 +47,8 @@ public class RhythmScaleFactory  {
 				Constructor<IRhythmScaleFactory> constructor = fclass.getConstructor();
 				IRhythmScaleFactory factory = constructor.newInstance((Object[])null);
 				factoryClassMap.put(rsName, factory);
-			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				System.err.println("Factory not found: " + factoryName);
+			} catch (Exception e) {
+				System.err.println("RhythmScaleFactory Could not create Factory: " + factoryName);
 				e.printStackTrace();
 			}
 		}

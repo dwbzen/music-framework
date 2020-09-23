@@ -164,6 +164,10 @@ public class ExpressionSelector implements Serializable, IJson, Comparable<Objec
 
 	public int getNumberOfNotesInChord(IRhythmExpression rhythmExpression) {
 		Object[] depthArray = rhythmExpression.getChordalDepth().toArray();
+		if(depthArray.length <= 0) {
+			log.info("No chordal depth for " + rhythmExpression.getUnits() + " units. Returning 1.");
+			return 1;
+		}
 		int index = random.nextInt(depthArray.length);
 		return (Integer)depthArray[index];
 	}
