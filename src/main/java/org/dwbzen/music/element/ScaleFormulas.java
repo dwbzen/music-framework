@@ -1,7 +1,7 @@
 package org.dwbzen.music.element;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.dwbzen.common.util.IJson;
@@ -18,29 +18,49 @@ public class ScaleFormulas implements IJson {
 	@JsonIgnore	private  ObjectMapper mapper = new ObjectMapper();
 	@JsonPropertyOrder({"collection","scaleFormulas"})
 	
-	@JsonProperty("collection")		private String collection = null;
-	@JsonProperty("scaleFormulas")	private Collection<ScaleFormula> scaleFormulas = new HashSet<>();
+	@JsonProperty("collection")		private String collectionName = "My Formulas";
+	@JsonProperty("scaleFormulas")	private Map<String, ScaleFormula> scaleFormulas = new TreeMap<String, ScaleFormula>();
 	
 	public ScaleFormulas(String collectionName) {
-		this.collection = collectionName;
+		this.collectionName = collectionName;
 	}
 
-	public boolean addScaleFormula(ScaleFormula sf) {
-		return scaleFormulas.add(sf);
+	public ScaleFormula addScaleFormula(ScaleFormula sf) {
+		return scaleFormulas.put(sf.getName(), sf);
+	}
+	
+	public ScaleFormulas searchBySize(int size) {
+		ScaleFormulas sf = new ScaleFormulas("Size " + size);
+		scaleFormulas.entrySet().stream().filter(sff -> sff.getValue().getSize() == size).forEach(formula -> sf.addScaleFormula(formula.getValue()));
+		return sf;
+	}
+	
+	public ScaleFormulas searchByGroup(String aGroup) {
+		ScaleFormulas sf = new ScaleFormulas("Group: " + aGroup);
+		scaleFormulas.entrySet().stream().filter(sff -> sff.getValue().getGroups().contains(aGroup)).forEach(formula -> sf.addScaleFormula(formula.getValue()));
+		return sf;
 	}
 
 	public static void main(String...strings) {
-		ScaleFormula sf1 = IScaleFormula.BLUES_DIMINISHED_SCALE_FORMULA;
-		ScaleFormula sf2 = IScaleFormula.PENTATONIC_MINOR_SCALE_FORMULA;
-		ScaleFormula sf3 = IScaleFormula.HIRAJOSHI_SCALE_FORMULA;
 		
-		ScaleFormulas formulas = new ScaleFormulas("sample");
-		formulas.addScaleFormula(sf1);
-		formulas.addScaleFormula(sf2);
-		formulas.addScaleFormula(sf3);
+		ScaleFormulas formulas = new ScaleFormulas("mySample");
+		formulas.addScaleFormula(IScaleFormula.BLUES_DIMINISHED_SCALE_FORMULA);
+		formulas.addScaleFormula(IScaleFormula.PENTATONIC_MINOR_SCALE_FORMULA);
+		formulas.addScaleFormula(IScaleFormula.HIRAJOSHI_SCALE_FORMULA);
+		formulas.addScaleFormula(IScaleFormula.BLUES_SCALE_FORMULA);
+		formulas.addScaleFormula(IScaleFormula.PENTATONIC_MAJOR_SCALE_FORMULA);
+		formulas.addScaleFormula(IScaleFormula.WHOLE_TONE_SCALE_FORMULA);
+		formulas.addScaleFormula(IScaleFormula.MAJOR_SCALE_FORMULA);
+		formulas.addScaleFormula(IScaleFormula.CHROMATIC_SCALE_FORMULA);
 		
 		System.out.println(formulas.toJson(true));
 		
+		ScaleFormulas sf = formulas.searchBySize(5);
+		System.out.println(sf.toJson(true));
+		
+		sf = formulas.searchByGroup("blues");
+		System.out.println(sf.toJson(true));
+
 	}
 	
 }

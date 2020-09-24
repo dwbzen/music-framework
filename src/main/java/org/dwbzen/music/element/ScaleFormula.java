@@ -69,6 +69,13 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 		setFormula(frmla);
 	}
 	
+	public ScaleFormula(String name, String[] group, int[] frmla) {
+		this.name = name;
+		if(group != null && group.length > 0) { groups = Arrays.asList(group); }
+		size = frmla.length;
+		setFormula(frmla);
+	}
+	
 	public ScaleFormula(String name, String group, int[] frmla) {
 		this.name = name;
 		groups.add(group);

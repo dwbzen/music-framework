@@ -14,7 +14,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.Scale;
 import org.dwbzen.music.element.ScaleFormula;
@@ -22,16 +23,38 @@ import org.dwbzen.music.element.ScaleType;
 import org.dwbzen.music.element.Scales;
 
 /**
- * Creates a JSON representation for scale formulas in all roots.
- * Results can be imported into MongoDB or Mathematica depending on specified format:</p>
- * JSON for importing into MongoDB (the default), 
- * RawJSON for importing into Mathematica
- * 
+ * Creates representation for scale formulas in the desired root(s).
+ * Output formats are specified using the -format command line option.
+ * <dl>
+ * <dt>json</dt> <dd>standard json format</dd>
+ * <dt>rawjson</dt> <dd>Mathematica json format</dd>
+ * <dt>musicxml</dt> <dd>a musicXML score that can be openned with notation software.</dd>
+ * </dl>
+ * Export line options are:
+ * <dl>
+ * <dt>-export true|false</dt> <dd>export scale formulas in the desired format. Default is false.</dd>
+ * <dt>-scales true|false</dt> <dd>export the scales in the desired format. Default is false</dd>
+ * <dt>-root note</dt> <dd>Use the specified note as the root note for scales. Valid values are A through G, pound sign for sharps, lower base 'b' for flats. </dd>
+ * <dt>-resource filename</dt>  <dd>Use the specified JSON file instead of the default "common_scaleFormulas.json"</dd>
+ * </dl>
+ * When using -resource, specify the filename only, as in "myResourceFile.json" Files are assumed to be in /data/music project folder.</p>
+ * JSON out put can be imported into MongoDB or Mathematica depending on specified format</p>
+ * The musicXML for each exported scale consists of a 2-octave range ascending and descending<br>
+ * starting with the specified root note(s).</p>
+ * Scales can be searched using command line options:
+ * <dl>
+ * <dt>-size n</dt>  <dd>exports scales/formulas having n-notes</dd>
+ * <dt>-group name</dt>  <dd>exports only scales/formulas from the specified group(s)</dd>
+ * </dl>
+ * NOTES<br>
+ * (1) the scale output includes only "name" and "notes", for example:  [ {"name":"Hirajoshi Japan","notes":[ "C", "D", "Eb", "G", "Ab", "C" ] } ]<br>
+ * (2)-musicxm implementation is incomplete.
+ * </p>
  * @author don_bacon
  *
  */
 public class ScaleExportManager  {
-	static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(ScaleExportManager.class);
+	static final Logger log = LogManager.getLogger(ScaleExportManager.class);
 
 	private StringBuilder stringBuilder = null;
 	ObjectMapper mapper = new ObjectMapper();
@@ -40,14 +63,14 @@ public class ScaleExportManager  {
 	private Map<String, ScaleFormula> scaleFormulas = new TreeMap<String, ScaleFormula>();
 	private String resourceFile = null;
 	private String group = null;
-	private String jsonFormat = null;
+	private String outputFormat = null;
 	private int size = 0;
 	
 	public ScaleExportManager(String resource, String format, String group, int size) {
 		mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 		resourceFile = resource;
-		jsonFormat = format;
+		outputFormat = format;
 		this.size = size;
 		this.group = group;
 		loadScaleFormulas();
@@ -56,13 +79,14 @@ public class ScaleExportManager  {
 	public static void main(String... args)  {
 		String root = null;
 		Pitch pitch = null;
-		String resourceFile = null;
-		String jsonFormat = "JSON";	// the default, for Mathematica use "RawJSON"
+		String resourceFile = "common_scaleFormulas.json";
+		String outputFormat = "JSON";	// the default, for Mathematica use "RawJSON"
 		String group = null;
 		int size = 0;
 		PrintStream ps = System.out;
 		boolean export = false;
 		boolean scales = false;
+		boolean musicXML = false;
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
     			if(args[i].equalsIgnoreCase("-root")) {
@@ -80,15 +104,16 @@ public class ScaleExportManager  {
     				resourceFile = args[++i];
     			}
     			else if(args[i].equalsIgnoreCase("-format")) {
-    				jsonFormat = args[++i];
+    				outputFormat = args[++i];
     			}
     			else if(args[i].equalsIgnoreCase("-export")) {
     				export = true;
-    			}		
+    			}
     		}
     	}
-		ScaleExportManager scaleExportManager = new ScaleExportManager(resourceFile, jsonFormat, group, size);
-
+		ScaleExportManager scaleExportManager = new ScaleExportManager(resourceFile, outputFormat, group, size);
+		musicXML = outputFormat.equalsIgnoreCase("musicxml");
+		
 		if(export) {
 			String exportString = scaleExportManager.exportScaleFormulas();
 			ps.println(exportString);
@@ -98,7 +123,9 @@ public class ScaleExportManager  {
 			String scalesString = scaleExportManager.exportScales();
 			ps.println(scalesString);
 		}
-		
+		if(musicXML) {
+			throw new RuntimeException("musicXML not yet implemented");
+		}
 	}
 
 	public void addRoot(Pitch p) {
@@ -120,10 +147,10 @@ public class ScaleExportManager  {
 	
 	/**
 	 * Exports all scale formulas in Mathematica RawJSON format.
-	 * For example: [ {"name":"Lydian Pentachord","groups":["lydian"],"formula":[2,2,2,1,5],"size":5},
-					  {"name":"Major Pentachord","groups":["major"],"formula":[2,2,1,2,5],"size":5}  ]
-	 * In Mathematica: [ {"Lydian Pentachord":{"groups":[ "lydian" ],"formula":[ 2, 2, 2, 1, 5 ],"size":5} },
-						 {"Major Pentachord":{"groups":[ "major" ],"formula":[ 2, 2, 1, 2, 5 ],"size":5} }  ]
+	 * For example:<br> [ {"name":"Lydian Pentachord","groups":["lydian"],"formula":[2,2,2,1,5],"size":5},<br>
+					  {"name":"Major Pentachord","groups":["major"],"formula":[2,2,1,2,5],"size":5}  ]<br><br>
+	 * In Mathematica:<br> [ {"Lydian Pentachord":{"groups":[ "lydian" ],"formula":[ 2, 2, 2, 1, 5 ],"size":5} },<br>
+						 {"Major Pentachord":{"groups":[ "major" ],"formula":[ 2, 2, 1, 2, 5 ],"size":5} }  ]<br>
 	 * The association key is the scale name.
 	 * Sends output to stdout.
 	 */
@@ -143,10 +170,10 @@ public class ScaleExportManager  {
 		String names = null;
 		String groups = null;
 		String formulaArrayString = null;
-		if(jsonFormat.equalsIgnoreCase("JSON")) {
+		if(outputFormat.equalsIgnoreCase("JSON")) {
 			stringBuilder.append(sf.toJson() + ",\n");
 		}
-		else if(jsonFormat.equalsIgnoreCase("RawJSON")) {
+		else if(outputFormat.equalsIgnoreCase("RawJSON")) {
 			// sample: {"Minor Melodic":{ "alternateNames" : [ "Jazz Minor"], "groups":["minor"], "formula":[2,1,2,2,2,2,1],"size":7} }
 			stringBuilder.append("{\"" + sf.getName() + "\":{");
 			
@@ -175,6 +202,7 @@ public class ScaleExportManager  {
 			stringBuilder.append("},\n");
 		}
 	}
+	
 	public String exportScales() {
 		stringBuilder = new StringBuilder("[\n");
 		scaleFormulas.keySet()
@@ -194,7 +222,7 @@ public class ScaleExportManager  {
 		for(Pitch pitch : rootPitches) {
 			String name = formula.getName();
 			Scale scale = new Scale(name, mode, st, pitch, formula);
-			if(jsonFormat.equalsIgnoreCase("RawJSON")) {
+			if(outputFormat.equalsIgnoreCase("RawJSON")) {
 				stringBuilder.append("\"" + name + "\":\"notes\":[ ");
 			}
 			else {
@@ -258,6 +286,14 @@ public class ScaleExportManager  {
 
 	public List<Pitch> getRootPitches() {
 		return rootPitches;
+	}
+
+	public String getOutputFormat() {
+		return outputFormat;
+	}
+
+	public void setOutputFormat(String outputFormat) {
+		this.outputFormat = outputFormat;
 	}
 
 	/**
