@@ -298,6 +298,7 @@ public class ScorePart implements Serializable, Runnable {
 	    				if(chordal) {
 	    					measure.addMeasureable(chord);
 	    					lastChord = chord;
+	    					lastNote = note;
 	    				}
 	    				else {
 	    					note.setNoteType(rhythmScale.getNoteType(note));

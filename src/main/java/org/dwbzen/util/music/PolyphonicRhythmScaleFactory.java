@@ -55,8 +55,8 @@ public class PolyphonicRhythmScaleFactory extends StandardRhythmScaleFactory {
 		expressions.get(180).addRhythmExpression(TextureType.CHORDAL, new RhythmExpression(180, Ratio.ONE_TO_ONE, pd2, rhythmScale));
 		expressions.get(240).addRhythmExpression(TextureType.CHORDAL, new RhythmExpression(240, Ratio.ONE_TO_ONE, pd4, rhythmScale));
 		
-		expressions.get(240).addRhythmExpression(TextureType.CHORDAL, new RhythmExpression(240, Ratio.ONE_TO_ONE, pd8, rhythmScale));
-		expressions.get(360).addRhythmExpression(TextureType.CHORDAL, new RhythmExpression(360, Ratio.ONE_TO_ONE,  pd4, rhythmScale));
+		expressions.get(240).addRhythmExpression(TextureType.CHORDAL, new RhythmExpression(240, Ratio.ONE_TO_ONE, pd12, rhythmScale));
+		expressions.get(360).addRhythmExpression(TextureType.CHORDAL, new RhythmExpression(360, Ratio.ONE_TO_ONE,  pd8, rhythmScale));
 		expressions.get(420).addRhythmExpression(TextureType.CHORDAL, new RhythmExpression(420, Ratio.ONE_TO_ONE,  pd4, rhythmScale));
 		
 		expressions.get(480).addRhythmExpression(TextureType.CHORDAL, new RhythmExpression(480, Ratio.ONE_TO_ONE,  pd12, rhythmScale));

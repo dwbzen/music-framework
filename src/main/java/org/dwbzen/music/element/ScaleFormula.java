@@ -36,6 +36,7 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 	static ObjectMapper mapper = new ObjectMapper();
 	
 	private String name;
+	private String description = null;
 	@JsonInclude(Include.NON_EMPTY)
 	private List<String> alternateNames = new ArrayList<String>();
 	private List<String> groups = new ArrayList<String>();
@@ -110,6 +111,14 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 
 	public int getSize() {
 		return size;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override

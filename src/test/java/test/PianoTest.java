@@ -8,7 +8,7 @@ import org.dwbzen.music.instrument.PianoRH;
 public class PianoTest {
 	
 	public static void main(String[] args) {
-		Piano piano = new PianoRH();
+		PianoRH piano = new PianoRH();
 		for(Pitch p : piano.getNotes()) {
 			System.out.print(p.toString() + " ");
 		}

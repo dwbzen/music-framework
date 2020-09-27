@@ -5,7 +5,7 @@ It also has links to other sites and is a great source of musical theory info on
 In particular [LucyTuning](http://www.lucytune.com/new_to_lt/pitch_05.html) is a great resource.
 Article copyright - Charles E. H. Lucy, visit [LucyTuning](http://www.lucytune.com), [Harmonics.com](http://www.harmonics.com/lucy/) and [lullabies](http://www.lullabies.co.uk) for more original content like this.
 
-The above sites reference 12edo which stands for 12 equal divisions of the octave a.k.a. equal temperament or 12et which is the predominant
+The above sites and many of the scale names reference 12edo which stands for 12 equal divisions of the octave a.k.a. equal temperament or 12et which is the predominant
 tuning system used today. For more information on this topic, see the [Equal temperament](https://en.wikipedia.org/wiki/Equal_temperament) Wikipedia article.
 
 The [smartChord](http://www.smartChord.de) app (Copyright 2020 Martin Schule) was the source of additional guitar chords.
