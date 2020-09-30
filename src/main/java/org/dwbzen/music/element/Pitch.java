@@ -269,14 +269,10 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	
 	/**
 	 * Adds n steps to this. Also adjusts the range step.
-	 * @throws IllegalArgumentException if increment amount < 0
-	 * @param n number of steps to increment, must be >= 0
+	 * @param n number of steps to increment. If < 0, decrements by that amount.
 	 */
-	private void increment(int n)  {
-		if(n < 0) {
-			throw new IllegalArgumentException("Pitch.increment amount must be >= 0");
-		}
-		if (n>0) {
+	public void increment(int n)  {
+		if (n != 0) {
 			int nstep = getStep().value() + getAlteration() + n - 1;
 			if(nstep >= 12) {
 				if(octave >= 0) {	// otherwise the pitch is octave-neutral
@@ -311,14 +307,10 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	/**
 	 * Lowers this by n steps and also adjusts the range step.
 	 * 
-	 * @param n  number of steps to decrement, must be >= 0
-	 * @throws IllegalArgumentException if decrement amount < 0
+	 * @param n  number of steps to decrement, if < 0 incremenets by that amount.
 	 */
-	private void decrement(int n) {
-		if(n < 0) {
-			throw new IllegalArgumentException("Pitch.decrement amount must be >= 0");
-		}
-		if (n>0) {
+	public void decrement(int n) {
+		if (n != 0) {
 			int nstep = getStep().value() + getAlteration() - n - 1;
 			if(nstep >= 12) {
 				if(octave >= 0) {	// otherwise the pitch is octave-neutral
@@ -352,7 +344,7 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 		}
 	}
 	
-	private void adjustPitch(int numberOfSteps) {
+	public void adjustPitch(int numberOfSteps) {
 		if(numberOfSteps >= 0 ) {
 			increment(numberOfSteps);
 		}

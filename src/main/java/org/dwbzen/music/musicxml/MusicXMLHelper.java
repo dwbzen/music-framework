@@ -235,10 +235,18 @@ public class MusicXMLHelper {
 					org.audiveris.proxymusic.Key _key = new org.audiveris.proxymusic.Key();
 					org.dwbzen.music.element.Key key = instrument.isTransposes() ? instrument.getKey() :  measure.getKey();
 					if(instrument.isTransposes()) {
-						// create <transpose> section
+						/*
+						 *  create <transpose> section. The transposing instrument configures transposing steps and diatonic steps
+						 *  as the number of steps to add (to the Pitch) so it will SOUND as the written pitch.
+						 *  The transposing steps for a Clarinet for example is 2.
+						 *  The Transpose section works kinda the opposite and so the steps will be negative whatever the
+						 *  instrument's transport steps are.
+						 */
 						Transpose _transpose = new Transpose();
-						_transpose.setChromatic(BigDecimal.valueOf(instrument.getTransposeChromaticSteps()));
-						_transpose.setDiatonic(BigInteger.valueOf(instrument.getTransposeDiatonicSteps()));
+						int transChromaticSteps = -instrument.getTransposeChromaticSteps();
+						int transDiatonicSteps = -instrument.getTransposeDiatonicSteps();
+						_transpose.setChromatic(BigDecimal.valueOf(transChromaticSteps));
+						_transpose.setDiatonic(BigInteger.valueOf(transDiatonicSteps));
 						if(instrument.getTransposeOctaveChange() != 0) {
 							_transpose.setOctaveChange(BigInteger.valueOf(instrument.getTransposeOctaveChange()));
 						}
@@ -330,7 +338,7 @@ public class MusicXMLHelper {
 	private void convertNote(Instrument instrument, Measure measure, Measurable m, boolean inChord, org.audiveris.proxymusic.ScorePartwise.Part.Measure _measure) {
 		Note note = (Note)m;
 		if(instrument.isTransposes()) {
-			// note.getPitch().increment(instrument.getTranspositionSteps());
+			note.getPitch().increment(instrument.getTranspositionSteps());
 		}
 		PitchClass pitchClass = instrument.getPitchClass();		// PITCHED, UNPITCHED, DISCRETE_2LINE or DISCRETE_5LINE
 		/*

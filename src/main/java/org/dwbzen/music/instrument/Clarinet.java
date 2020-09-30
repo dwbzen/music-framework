@@ -10,7 +10,21 @@ import org.dwbzen.music.element.Step;
  * For transposing instruments, Range is given as written pitch.<br>
  * Parts for Clarinet are written a major 2nd (2 steps) higher than it sounds.<br>
  * Parts for BassClarinet have the same written range but sound an octave + major 2nd lower than written.<br>
- * So a written C will sound a Bb.
+ * A written C will sound a Bb, to sound a C need to score a D.<br>
+ * To do this the Clarinet is configured as:<br>
+ * music.instrument.Clarinet.transpose.diatonic=1<br>
+ * music.instrument.Clarinet.transpose.chromatic=2</p>
+ * 
+ * The transpose key (when creating the musicXML) however works the opposite with regards to<br>
+ * the steps sign (positive or negative). This is handled by MusicXMLHelper and for a Clarinet<br>
+ * the transpose section looks like this:<br>
+ * <pre>{@code
+ <transpose>
+     <diatonic>-1</diatonic>
+     <chromatic>-2</chromatic>
+ </transpose>
+ * }</pre>
+ * 
  * 
  */
 public class Clarinet extends Instrument {
@@ -50,7 +64,7 @@ public class Clarinet extends Instrument {
 
 	@Override
 	/**
-	 * Bb Clarinet written a major second above desired pitch
+	 * Bb Clarinet written a major second (2 chromatic steps) above desired pitch
 	 */
 	public int getTranspositionSteps() {
 		return getTransposeChromaticSteps();

@@ -204,8 +204,9 @@ public class ScorePart implements Serializable, Runnable {
     	// assigned when creating tuplet group
     	// Each Measurable can be a single Note or a Chord
     	List<Measurable> tupletGroup = null;
-    	Note lastNote = null;
-		Chord lastChord = null;		// TODO finish chord implementation
+    	//Note lastNote = null;
+		//Chord lastChord = null;
+		Measurable lastMeasurable = null;
     	do {
 	    	if((note = getNextNote()) != null) {
 	    		int units = note.getDuration().getDurationUnits();
@@ -257,7 +258,7 @@ public class ScorePart implements Serializable, Runnable {
 	    			note.getDuration().setDurationUnits(durationUnits);
 	    			String tupletNoteType = rhythmScale.getNoteType(note);
 	    			note.setNoteType(tupletNoteType);
-	    			lastNote = note;
+	    			lastMeasurable = note;
 	    			note.setTupletType(TupletType.START);
 	    			Note groupNote = null;
 	    			Chord groupChord = null;
@@ -297,13 +298,12 @@ public class ScorePart implements Serializable, Runnable {
 	    			else {
 	    				if(chordal) {
 	    					measure.addMeasureable(chord);
-	    					lastChord = chord;
-	    					lastNote = note;
+	    					lastMeasurable = chord;
 	    				}
 	    				else {
 	    					note.setNoteType(rhythmScale.getNoteType(note));
 	    					measure.addMeasureable(new Note(note));
-	    					lastNote = note;
+	    					lastMeasurable = note;
 	    				}
 	    			}
 	    			unitsCount += units;
@@ -358,7 +358,7 @@ public class ScorePart implements Serializable, Runnable {
     		// fill out the last note to complete the measure - but don't tie to previous
     		int remaining = unitsPerMeasure - unitsCount;
     		log.debug(remaining + " units remaining in measure ");
-    		addFactorsNotes(remaining, lastNote, measure, false);
+    		addFactors(remaining, lastMeasurable, measure, false);
     	}
     }
     
