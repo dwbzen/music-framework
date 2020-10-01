@@ -12,15 +12,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * A Chord is a vertical arrangement of Notes
- * All the notes in the same voice will have the same duration.
- * A Note that would appear in the same time slice with a different duration
- * would have a different voice.
- * The notes are maintained in a SortedSet, ordered by Note.
- * Chords can be tied together like notes.
- * By definition, all the notes in each Chord are implicitly tied together.
- * A Chord must also have a non-null root note. If not specified, it is
- * assigned in the constructors/factory methods.
+ * A Chord is a vertical arrangement of Notes.
+ * All the notes in the same voice will have the same duration.<br>
+ * The notes are maintained in a SortedSet, ordered by Note (pitch + octave).<br>
+ * For more information regarding chords, chord formulas and representing
+ * chords in musicXML, see [Chords.md] for more information.
  * 
  * @author don_bacon
  *
@@ -69,9 +65,22 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		}
 	}
 	
+	/**
+	 * Create a new Chord having the notes in the Chord provided and the given Duration.<br>
+	 * The Chord input argument is not altered in any way.
+	 * 
+	 * @param aChord the Chord having the notes to copy into the new Chord
+	 * @param duration the Duration to assign each note in the new Chord
+	 * @return Chord
+	 */
 	public static Chord createChord(Chord aChord, Duration duration) {
 		Chord chord = new Chord();
-		aChord.notes.forEach(note -> chord.addNote(new Note(note)));
+		for(Note note : aChord.notes) {
+			Note chordNote = new Note(note);
+			chordNote.setDuration(duration);
+			chordNote.setNoteType(aChord.getNoteType());
+			chord.addNote(chordNote);
+		}
 		chord.setNoteType(aChord.getNoteType());
 		chord.setRoot(aChord.getRoot());
 		return chord;

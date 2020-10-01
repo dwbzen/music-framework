@@ -57,7 +57,7 @@ import org.dwbzen.util.messaging.SessionImpl;
 public class ScorePart implements Serializable, Runnable {
 
 	private static final long serialVersionUID = -8550433867242770122L;
-	protected static final Logger log = LogManager.getLogger(ProductionFlow.class);
+	static final Logger log = LogManager.getLogger(ProductionFlow.class);
 	
 	private ThreadLocalRandom random = ThreadLocalRandom.current();
 	private ScorePartEntity	scorePartEntity = null;
@@ -456,6 +456,7 @@ public class ScorePart implements Serializable, Runnable {
     private Chord createChord(Note firstNote, int notesInThisChord, String chordNoteType) {
 		// create a chord having notesInThisChord notes
     	Chord chord = new Chord();
+    	firstNote.setNoteType(chordNoteType);
 		chord.addNote(firstNote);
 		Duration duration = firstNote.getDuration();
 		Note chordNote = null;

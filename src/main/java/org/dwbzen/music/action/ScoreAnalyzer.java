@@ -35,7 +35,7 @@ public class ScoreAnalyzer {
 	private boolean showDurations = false;
 	private boolean showPitchFrequency = true;
 	private boolean showNoteFrequency = false;
-	private boolean showIntervals = false;
+	private boolean showIntervals = true;
 	private boolean showAbsoluteIntervals = false;
 	
 	public ScoreAnalyzer(Score score){

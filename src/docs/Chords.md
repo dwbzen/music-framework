@@ -36,4 +36,26 @@ To find the relative chord number, rotate left by the degree-1 of the desired ro
 So E9 would be rotateLeft(0100 1001 0101 , 4) == 1001 0101 0100 or HEX(954)
 In the chord formulas definitions the formulaNumber is given in Decimal (145 instead of 0X91 for example)
 
-  
+# MusicXML
+The resources Chord_Test.mscz and Chord_Test.musicxml provide examples of how chords and ties
+between chords are represented in musicXML. The first note of the chord has no
+special XML elements. Subsequent notes include a `</chord>` element between the `<note>` and `<pitch>` elements.
+
+**Ties between chords**
+Each note of the chord tied to the same note in the next chord includes notations and tie elements indicating the start of the tie:
+
+```
+<tie type="start"/>
+<notations>
+  <tied type="start"/>
+</notations>
+```
+Each note of the tied chord includes notations and tie elements indicating the end of the tie:
+
+```
+<tie type="stop"/>
+<notations>
+  <tied type="stop"/>
+</notations>
+```
+

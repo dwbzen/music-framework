@@ -2,6 +2,10 @@ package org.dwbzen.music.element;
 
 import java.io.Serializable;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.dwbzen.music.ProductionFlow;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -17,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Note extends Measurable implements Serializable, Comparable<Note>, Cloneable {
 
 	private static final long serialVersionUID = 1774493820041575241L;
+	static final Logger log = LogManager.getLogger(ProductionFlow.class);
 	
 	@JsonProperty("pitch")	private Pitch pitch = null;		// will be null for a rest
 	@JsonProperty("rest")	private boolean rest = true;	// set automatically by constructor from Pitch
@@ -50,6 +55,9 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 		noteType = aNote.noteType;
 		if(aNote.getContainer() != null) {
 			container = aNote.getContainer();
+		}
+		if(aNote.getTieType() != TieType.NONE) {
+			log.trace("Tie note " + aNote.getTieType());
 		}
 		tiedTo = aNote.getTiedTo();
 		tiedFrom = aNote.getTiedFrom();

@@ -12,6 +12,8 @@ import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
 import org.audiveris.proxymusic.AboveBelow;
+import org.audiveris.proxymusic.Accidental;
+import org.audiveris.proxymusic.AccidentalValue;
 import org.audiveris.proxymusic.Attributes;
 import org.audiveris.proxymusic.Clef;
 import org.audiveris.proxymusic.ClefSign;
@@ -315,10 +317,8 @@ public class MusicXMLHelper {
 						 */
 						Chord chord = (Chord)m;
 						log.info("chord: " + chord.toString());
-						java.util.Iterator<Note> it = chord.removeUnisonNotes().iterator();
 						boolean inChord = false;
-						while(it.hasNext()) {
-							Note note = it.next();
+						for(Note note : chord.removeUnisonNotes()) {
 							convertNote(instrument, measure, note, inChord, _measure);
 							inChord = true;
 						}
@@ -388,6 +388,11 @@ public class MusicXMLHelper {
 			_pitch.setStep(_step);
 			_pitch.setAlter(BigDecimal.valueOf(alt));
 			_note.setPitch(_pitch);
+			if(alt != 0) {
+				Accidental _accidentalValue = new Accidental();
+				_accidentalValue.setValue(alt<0 ? AccidentalValue.FLAT : AccidentalValue.SHARP);
+				_note.setAccidental(_accidentalValue);
+			}
 		}
 
 		if(inChord) {
@@ -411,7 +416,7 @@ public class MusicXMLHelper {
 		}
 		if(note.getTieType().equals(TieType.START)) {
 			/*
-			 * tied to the next note
+			 * tied to the next note or next note in a chord
 			 */
 			Tie _tie = new Tie();
 			_tie.setType(StartStop.START);
