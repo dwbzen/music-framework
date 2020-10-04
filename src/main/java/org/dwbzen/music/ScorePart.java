@@ -34,6 +34,7 @@ import org.dwbzen.music.element.IRhythmScale;
 import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.Label;
 import org.dwbzen.music.element.Measurable;
+import org.dwbzen.music.element.Measurable.TieType;
 import org.dwbzen.music.element.Measurable.TupletType;
 import org.dwbzen.music.element.Measure;
 import org.dwbzen.music.element.Note;
@@ -153,7 +154,12 @@ public class ScorePart implements Serializable, Runnable {
     			System.err.println("Null factors for " + units + " units, rawUnits= " + rawUnits);
     			continue;
     		}
-    		// more than 1 factor indicates tied notes.
+    		/*
+    		 *  more than 1 factor indicates tied notes.
+    		 *  TODO this needs to be refactored to NOT tie notes in situ
+    		 *  as this complicates chord processing. Add the factors to the note
+    		 *  instead and let note processing deal with creating ties.
+    		 */
     		int nFactors = factors.size();
     		Note previousNote = null;
     		for(int i = 0; i<nFactors; i++) {
@@ -204,8 +210,7 @@ public class ScorePart implements Serializable, Runnable {
     	// assigned when creating tuplet group
     	// Each Measurable can be a single Note or a Chord
     	List<Measurable> tupletGroup = null;
-    	//Note lastNote = null;
-		//Chord lastChord = null;
+
 		Measurable lastMeasurable = null;
     	do {
 	    	if((note = getNextNote()) != null) {
@@ -219,6 +224,10 @@ public class ScorePart implements Serializable, Runnable {
 	    		 * If a single note (METRIC), we are done.
 	    		 * If EXTRAMETRIC, read additional notes to fulfill tuplet
 	    		 * If CHORDAL, read additional notes to add to the chord
+	    		 * NOTE that the Note may already be tied to the next note(s) if the 
+	    		 * overall duration units has > 1 factors. For example 300 units = 240 + 60
+	    		 * which is a half note tied to an 8th note.
+	    		 * This has to be handled delicately when adding notes to a chord.
 	    		 */
 	    		boolean chordal = false;
 	    		IRhythmExpression rhythmExpression = selector.selectRhythmExpression(units, tt);
@@ -229,8 +238,7 @@ public class ScorePart implements Serializable, Runnable {
 	    			notesInThisChord = selector.getNumberOfNotesInChord(rhythmExpression);
 	    			chordal = notesInThisChord > 1;
 	    			log.debug("measure: " + measureCounter + " units: " + units + " units count: " + unitsCount + " textureType: " + tt);
-	    			log.debug("   " + rhythmExpression.toString());
-	    			log.debug("   chord notes " + notesInThisChord);
+	    			log.debug("   " + rhythmExpression.toString() + "   chord notes " + notesInThisChord);
 	    		}
 
     			String noteType = rhythmScale.getNoteType(note);
@@ -247,7 +255,7 @@ public class ScorePart implements Serializable, Runnable {
 	    				chord = createChord(note, notesInThisChord, noteType);
 	    			}
 	    		}
-	    		else if(rut.equals(RhythmicUnitType.EXTRAMETRIC)) {
+	    		else if(rut.equals(RhythmicUnitType.EXTRAMETRIC)) {		// handle tuplets
 
 	    			log.trace("   add " + rut + " note: " + note.toString() );
 	    			tupletGroup = new ArrayList<Measurable>();
@@ -457,11 +465,20 @@ public class ScorePart implements Serializable, Runnable {
 		// create a chord having notesInThisChord notes
     	Chord chord = new Chord();
     	firstNote.setNoteType(chordNoteType);
+    	if(!firstNote.getTieType().equals(TieType.NONE)) {
+    		log.info("Chord first note " + firstNote.toString() + " is tied " + firstNote.getTieType());
+    		firstNote.breakAllTies();
+    	}
 		chord.addNote(firstNote);
 		Duration duration = firstNote.getDuration();
 		Note chordNote = null;
 		for(int i=1; i<notesInThisChord; i++) {
 			chordNote = new Note(getNextNote());
+			if(!chordNote.getTieType().equals(TieType.NONE)) {
+				// break ties to other notes
+	    		log.info("Chord note " + chordNote.toString() + " is tied " + firstNote.getTieType());
+	    		chordNote.breakAllTies();
+			}
 			chordNote.setDuration(duration);
 			chordNote.setNoteType(chordNoteType);
 			chord.addNote(chordNote);

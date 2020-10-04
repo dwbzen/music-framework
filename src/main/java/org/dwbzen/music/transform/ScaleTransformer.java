@@ -311,7 +311,7 @@ public class ScaleTransformer extends Transformer {
 		 * TODO finish this for chords
 		 */
 		if(chord != null && chord.size() > 1) {
-			log.info("--- process: " + chord.toString());
+			log.debug("--- process: " + chord.toString());
 			if(chord.countPitches(newNotePitch) > 1) {
 				log.debug("    remove " + note);
 				/*

@@ -316,7 +316,7 @@ public class MusicXMLHelper {
 						 * notes in a chord indicated by <chord/> in all the notes following the first one
 						 */
 						Chord chord = (Chord)m;
-						log.info("chord: " + chord.toString());
+						log.debug("chord: " + chord.toString());
 						boolean inChord = false;
 						for(Note note : chord.removeUnisonNotes()) {
 							convertNote(instrument, measure, note, inChord, _measure);

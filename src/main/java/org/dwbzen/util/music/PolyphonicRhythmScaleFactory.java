@@ -45,8 +45,8 @@ public class PolyphonicRhythmScaleFactory extends StandardRhythmScaleFactory {
 		/*
 		 * chordal expression includes chordal depth which gives the possible #notes in a chord
 		 */
-		int[] pd1 = {2};
-		int[] pd2 = {2, 3};
+		int[] pd1 = {2, 3};
+		int[] pd2 = {3, 4, 5};
 		int[] pd4 = {2, 3, 4};
 		int[] pd8 = {2, 3, 4, 5};
 		int[] pd12 = {3, 4, 5};

@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeasurableContainer<Note> {
 
-	/*
+	/**
 	 * Notes in the Chord sorted in increasing Pitch order
 	 */
 	@JsonProperty	private SortedSet<Note> notes = new TreeSet<Note>();
