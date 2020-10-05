@@ -32,11 +32,15 @@ GitHub project: [music-framework](https://github.com/dwbzen/music-framework)
 
 # Additional Documentation
 The src/docs folder contains documentation on the musical structures used and music generation.
-* [ReferenceData](ReferenceData.md) - describes chords, scales, songs and other JSON reference data
+* [Known Issues and Future Enhancements](KnownIssues_Enhancements.md)
 
-* [Resources](Resources.md) - links to additional resources, and external resources and web sites that provided much of the raw data.
+* [Chords](src/docs/Chords.md) - Chord design and handling chords in musicXML
 
-* [ProductionFlow](ProductionFlow.md) - running ```ProductionFlow``` to produce musicXML from fractal and random data.
+* [ReferenceData](src/docs/ReferenceData.md) - describes chords, scales, songs and other JSON reference data
 
-* [Utilities](Utilities.md) - utilities for chord/scale maintenance, music analysis, and chord/melody production from Markov Chains.
+* [Resources](src/docs/Resources.md) - links to additional resources, and external resources and web sites that provided much of the raw data.
+
+* [ProductionFlow](src/docs/ProductionFlow.md) - running ```ProductionFlow``` to produce musicXML from fractal and random data.
+
+* [Utilities](src/docs/Utilities.md) - utilities for chord/scale maintenance, music analysis, and chord/melody production from Markov Chains.
 
