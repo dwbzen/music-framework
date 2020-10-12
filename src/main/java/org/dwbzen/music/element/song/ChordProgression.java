@@ -1,7 +1,6 @@
 package org.dwbzen.music.element.song;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.dwbzen.common.cp.ICollectable;
@@ -163,17 +162,11 @@ public class ChordProgression extends ArrayList<HarmonyChord> implements Compara
 	
 	public String toString(String delim) {
 		StringBuffer sb = new StringBuffer();
-		int len = this.size() - 1;	// number of delimiters needed
-		int i=0;
-		Iterator<HarmonyChord> hcit = iterator();
-		while(hcit.hasNext()) {
-			HarmonyChord hc = hcit.next();
+		for(HarmonyChord hc : this) {
 			sb.append(hc.getName());
-			if((++i) <= len) {
-				sb.append(delim);
-			}
+			sb.append(delim);
 		}
-		return sb.toString();
+		return sb.substring(0, sb.length()-2).toString();
 	}
 	@Override
 	public int compareTo(ChordProgression cp) {

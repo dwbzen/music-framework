@@ -1,7 +1,7 @@
 
 ## Known Issues
 
-* Have not tested for time signatures other than 4/4.
+* Time signatures other than 4/4 have not been tested.
 
 ### Chordal texture implementation
 * The way ScalePart handles chords need to be factored. Currently, the raw data points are<br>
@@ -15,8 +15,10 @@ Chord processing needs to work off it's own List<Note> separate from the List us
 Instead of tieing notes, add `List<Duration> factors ` attribute to the Note.<br>
 To further simplify processing, create separate scoreInstrument() methods for Monophonic and Polyphonic instruments.
 Namely, scoreInstument -> scoreMonophonicTextureInstrument() or scorePolyphonicTextureInstrument().
+
 * ScoreAnalysis doesn't work on polyphonic instruments (viz. it doesn't parse the chord notes correctly).<br>
 For these instruments (such as PianoLFChords) set -analysis false on the command line.<p>
+
 * Test that MusicXMLHelper is handling chord ties correctly - both within and across bar lines.
 
 ## Planned Enhancements
@@ -24,11 +26,26 @@ For these instruments (such as PianoLFChords) set -analysis false on the command
 starting with the specified root note(s) for each exported scale. The resulting musicxml file could then be<br>
 imported into MuseScore to hear how the scale(s) sound.<p>
 A further enhancement could add chords to scales of 8 notes or less.<p>
+
 * Add MelodyCollector and MelodyProducer to cp package. These will be the melody equivalents of HarmonyChordCollector and ChordProgressionProducer.<p>
+
 * Add an option for including rhythmic elements in MarkovChain creation for chords & melodies.<br>
 Essentially build Markov Chains on melody/chords alone, rhythm alone (i.e. durations), and melody/rhythm, chord/rhythm.<br>
 The result could be fed into a Producer.<p>
+
 * Add a musicXML to/from songJSON conversion. Recall that songJSON is an alternative to musicXML that consists of musical<br>
 elements only. That is, formatting is not included. This really simplifies creating song.json files which can be<br>
 the input to Collector/Producer processing. This could be done explicitly or implicitly when providing a musicXML<br>
 file for Collector/Producer processing.
+
+* Allow for occasional rests. There is a configuration parameter score.restProbability, given as %, but it's not currently used.<br>
+Instruments should have the ability to override this global value as in `<instrument_name>.restProbability`<br>
+For example `Flute.restProbability=15`
+
+## Refactor This
+* Simplify the instrument properties in orchestration.properties. The `music.instrument.` and `score.instrument` prefixes can be dropped.<br>
+For example, `music.instrument.Flute.instrument-sound` becomes `Flute.instrument-sound`<br>
+and `score.instruments.BassClarinet.class` is simply `BassClarinet.class`. Also the "vocal"  for SATB parts can also be dropped<br>
+so `music.instrument.vocal.Bass.midiProgram` becomes `Bass.midiProgram`. 
+
+

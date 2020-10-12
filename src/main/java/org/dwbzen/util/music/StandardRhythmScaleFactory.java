@@ -43,7 +43,7 @@ public class StandardRhythmScaleFactory extends AbstractRhythmScaleFactory {
 	public SortedSet<Integer> createBaseUnits(RhythmScale rhythmScale) {
 		baseUnits = new TreeSet<Integer>();
 		Arrays.stream(standardBaseUnits).forEach(s -> baseUnits.add(s));
-		rhythmScale.setRoot(defaultUnitsPerMeasure);		// 480
+		rhythmScale.setRoot(RhythmScale.defaultUnitsPerMeasure);		// 480
 		return baseUnits;
 	}
 

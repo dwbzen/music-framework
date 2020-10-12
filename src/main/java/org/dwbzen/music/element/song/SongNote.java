@@ -4,48 +4,67 @@ import org.dwbzen.common.util.IJson;
 import org.dwbzen.music.element.Duration;
 import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.element.RhythmScale;
 import org.dwbzen.music.element.TimeSignature;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * A pitch + Duration. Can also be a rest (no pitch).
- * A lite version of music.element.Note
- * Some examples, 
- * 	{ "pitch" : "C5",  "notations" : { "type" : "eighth" }
- *  { "pitch" : "0",   "notations" : { "type" : "eighth", "tuplet" : "3/2" }
- *  { "pitch" : "Eb4", "notations" : { "type" : "eighth", "dots" : 1, "tie" : "start" } }
- *  { "pitch" : "Eb4", "notations" : { "type" : "16th", "tie" : "stop" } }
+ * A pitch + Duration. Can also be a rest (no pitch).  A lite version of music.element.Note<br>
+ * Some examples,<br>
+ * 	{ "pitch" : "C5",  "notations" : { "type" : "eighth" }<br>
+ *  { "pitch" : "0",   "notations" : { "type" : "eighth", "tuplet" : "3/2" }<br>
+ *  { "pitch" : "Eb4", "notations" : { "type" : "eighth", "dots" : 1, "tie" : "start" } }<br>
+ *  { "pitch" : "Eb4", "notations" : { "type" : "16th", "tie" : "stop" } }</p>
  * 
- * A "0" Pitch indicates a rest.
+ * A "0" Pitch indicates a rest. Duration is not set directly, but calculated from the type of note<br>
+ * given by notations.type, the TimeSignature, and the number of units per measure (default is 480).<br>
+ * 
  * 
  * @author don_bacon
  *
  */
 public class SongNote implements IJson, Comparable<SongNote> {
+	
+	/** Used to represent a Terminal state in a Markov Chain */
+	public final static SongNote TERMINAL_SONG_NOTE = new SongNote("¶", new Notation());
+	
+	/** Used to represent a NULL key in a Map - since it can't really be a null */
+	public final static SongNote NULL_VALUE_SONG_NOTE = new SongNote("§", new Notation());
 
-	@JsonProperty("pitch")		private String pitch = null;
-	@JsonProperty("notations")	private Notation notation;
-	@JsonIgnore				private boolean rest = true;		// set automatically
-	@JsonIgnore				protected Duration duration;		// calculated from Notation + TimeSignature
-	@JsonIgnore				private Pitch notePitch = null;		// will be null for a rest
-	@JsonIgnore				private Key	originalKey = null;				// optional - will be non-null if transposedKey is set
-	@JsonIgnore				private Key transposedKey = null;			// optional - used by SongAnalyzer
-	@JsonIgnore				private TimeSignature timeSignature = null;
+	@JsonProperty("pitch")				private String pitch = null;
+	@JsonProperty("notations")			private Notation notation;
+	
+	@JsonIgnore	private int unitsPerMeasure = RhythmScale.defaultUnitsPerMeasure;	// typically 480
+	@JsonIgnore	private boolean rest = true;		// set automatically
+	@JsonIgnore	protected Duration duration;		// calculated from Notation, TimeSignature and units/measure
+	@JsonIgnore	private Pitch notePitch = null;		// will be null for a rest
+	@JsonIgnore	private TimeSignature timeSignature = TimeSignature.FourFourTimeSignature;		// 4/4 with default units/measure
+	
+	@JsonIgnore	private Key	originalKey = null;				// optional - will be non-null if transposedKey is set
+	@JsonIgnore	private Key transposedKey = null;			// optional - used by SongAnalyzer
 	
 	public SongNote() {
+		this("0", new Notation());
 	}
 	
 	public SongNote(String pitch, Notation notation) {
 		this.pitch = pitch;
-		this.notation = notation;
+		setNotation(notation);
 	}
 
 	@Override
-	public int compareTo(SongNote arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	/**
+	 * SongNotes are equal if they have the same note type, pitch, and Duration.
+	 * Comparison is first by note type, then pitch then by duration.
+	 */
+	public int compareTo(SongNote otherSongNote) {
+		int result = 1;
+		if(otherSongNote != null) {
+			
+		}
+		return result;
 	}
 
 	public String getPitch() {
@@ -81,11 +100,12 @@ public class SongNote implements IJson, Comparable<SongNote> {
 	}
 	
 	/**
-	 * Sets Duration from TimeSignature + Notation
-	 * if both are non null
+	 * Sets Duration from TimeSignature, Notation, and units per measure
+	 * @return number of units
 	 */
-	public void setDuration() {
-		
+	public int setDuration() {
+		// TODO
+		return 0;
 	}
 
 	public Pitch getNotePitch() {
@@ -118,6 +138,14 @@ public class SongNote implements IJson, Comparable<SongNote> {
 
 	public void setTimeSignature(TimeSignature timeSignature) {
 		this.timeSignature = timeSignature;
+	}
+
+	public int getUnitsPerMeasure() {
+		return unitsPerMeasure;
+	}
+
+	public void setUnitsPerMeasure(int unitsPerMeasure) {
+		this.unitsPerMeasure = unitsPerMeasure;
 	}
 
 }

@@ -1,6 +1,8 @@
 package org.dwbzen.music.element;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +30,7 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 	@JsonProperty			private Note tiedTo = null;		// reference to the note this is tied to - occurs after this note
 	@JsonProperty			private Note tiedFrom = null;	//  reference to the note the note this is tied from - occurs before this note
 	@JsonIgnore				private IMeasurableContainer<Note>	container = null;	// reference to container (like a Chord) or null
+	@JsonIgnore				private List<Duration> factors = null;	// Duration factors associated with this Note. Will be null if unassigned.
 
 	public Note(Pitch p, Duration dur) {
 		setPitch(new Pitch(p));	// also sets rest
@@ -243,6 +246,21 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 
 	public void setContainer(IMeasurableContainer<Note> container) {
 		this.container = container;
+	}
+
+	/**
+	 * Gets the duration factors for this Note
+	 * @return List<Duration>, returns an empty List if no factors have been assigned.
+	 */
+	public List<Duration> getFactors() {
+		return factors == null ? new ArrayList<>() : factors;
+	}
+	
+	public void addFactors(Duration afactor) {
+		if(factors == null) {
+			factors = new ArrayList<>();
+		}
+		factors.add(afactor);
 	}
 	
 }

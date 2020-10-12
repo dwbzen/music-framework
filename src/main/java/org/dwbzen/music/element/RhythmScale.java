@@ -59,15 +59,15 @@ import org.dwbzen.music.transform.ITransformer.Preference;
  * is used when converting raw Pitch to a particular Scale pitch.
  * Selection rules are not encoded in the RhythmScale itself, but as a Selector class.
  * 
- * @author bacond6
- * @see music.element.TextureType
- * @see music.element.RhythmicUnitType
+ * @author don_bacon
  * 
  */
 public class RhythmScale  implements IRhythmScale {
 	protected static final org.apache.log4j.Logger log = Logger.getLogger(RhythmScale.class);
 	private static final long serialVersionUID = -1208212903638963243L;
 	
+	public static final int defaultUnitsPerMeasure = 480;
+
 	/**
 	 * Need NoteType in order to create music XML
 	 * In ascending duration order

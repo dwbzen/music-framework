@@ -33,8 +33,8 @@ public class MelodyTest extends TestCase {
 		melody.getSongNotes().add(songNote);
 		melody.getSongNotes().add(songNote2);
 		melody.getSongNotes().add(songNote3);
-		String jsonString = melody.toJson();
-		log.debug(jsonString);
+		String s = melody.toString();
+		log.info(s);
 		
 	}
 }

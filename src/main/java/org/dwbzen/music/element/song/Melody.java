@@ -3,6 +3,7 @@ package org.dwbzen.music.element.song;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dwbzen.common.cp.ICollectable;
 import org.dwbzen.common.util.IJson;
 import org.dwbzen.music.element.Key;
 
@@ -11,18 +12,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The melody part of a SongMeasure. For example, given 192 divisions in 4/4 time:
- * "melody" : [  
- * 		{ "pitch" : "D4", "duration" : 32, "notations" : { "type" : "quarter", "tuplet" : "3/2" } },
- * 		{ "pitch" : "Bb4", "duration" : 32, "notations" : { "type" : "quarter", "tuplet" : "3/2" } },
-	    { "pitch" : "C5", "duration" : 32, "notations" : { "type" : "quarter", "tuplet" : "3/2"} },
+ * "melody" : [  <br>
+ * 		{ "pitch" : "0", "notations" :   { "type" : "quarter", "tuplet" : "3/2" } },<br>
+ * 		{ "pitch" : "Bb4", "notations" : { "type" : "quarter", "tuplet" : "3/2" } },<br>
+	    { "pitch" : "C5",  "notations" : { "type" : "quarter", "tuplet" : "3/2"} },<br>
  * 	    { "pitch" : "E5",  "notations" : { "type" : "half" } } ]
+ * 
  * @author don_bacon
  *
  */
-public class Melody implements IJson {
+public class Melody implements IJson, ICollectable<SongNote> {
 
 	public static String NO_MELODY_KEY = "NONE";	// Pitch is "0"
-
+	public static final SongNote TERMINAL = SongNote.TERMINAL_SONG_NOTE;
+	public static final SongNote NULL_VALUE = SongNote.NULL_VALUE_SONG_NOTE;
+	
 	@JsonProperty("notes")  private List<SongNote> songNotes = new ArrayList<SongNote>();
 	@JsonIgnore			 	private Key	originalKey = null;			// optional - will be non-null if transposedKey is set
 	@JsonIgnore			 	private Key transposedKey = null;			// optional - used by SongAnalyzer
@@ -61,5 +65,15 @@ public class Melody implements IJson {
 
 	public static void main(String... args) {
 		
+	}
+
+	@Override
+	public SongNote getTerminal() {
+		return TERMINAL;
+	}
+
+	@Override
+	public SongNote getNullValue() {
+		return NULL_VALUE;
 	}
 }

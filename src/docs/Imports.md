@@ -3,7 +3,8 @@
 
 Use the following command to import chords and chord formulas into MongoDB
 
-See [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/) for details.
+See [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/) for details.<br>
+Use MongoDB Compas Community edition to view database(s). Default connection URI is connectionURI=mongodb://localhost:27017
 
 `mongoimport --type json --collection chord_formulas --db music --file "chord_formulas.json"`
 

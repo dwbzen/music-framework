@@ -23,11 +23,9 @@ import org.dwbzen.util.Ratio;
  *
  */
 public abstract class AbstractRhythmScaleFactory  implements IRhythmScaleFactory {
-
-	public static final int defaultUnitsPerMeasure = 480;
 	
 	protected SortedSet<Integer> baseUnits = new TreeSet<Integer>();
-	private int unitsPerMeasure = defaultUnitsPerMeasure;
+	private int unitsPerMeasure = RhythmScale.defaultUnitsPerMeasure;
 	private double metricProbability = 1.0;
 	private boolean chordal = false;
 	

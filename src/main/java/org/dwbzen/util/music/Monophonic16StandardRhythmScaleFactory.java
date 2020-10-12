@@ -41,7 +41,7 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 	public SortedSet<Integer> createBaseUnits(RhythmScale rhythmScale) {
 		baseUnits = new TreeSet<Integer>();
 		Arrays.stream(standardBaseUnits).forEach(s -> baseUnits.add(s));
-		rhythmScale.setRoot(defaultUnitsPerMeasure);
+		rhythmScale.setRoot(RhythmScale.defaultUnitsPerMeasure);
 		return baseUnits;
 	}
 

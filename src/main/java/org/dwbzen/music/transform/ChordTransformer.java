@@ -13,11 +13,12 @@ import org.dwbzen.music.instrument.Instrument;
 
 import org.apache.log4j.Logger;
 /**
- * Gathers up Notes in a measure into a Chord having the same overall duration.
- * Sort of a reverse arpeggiator (which creates a melodic line
- * or arpeggio from a Chord).
+ * Gathers up Notes in a measure for a given number of beats into a Chord having the same overall duration.<br>
+ * If number of beats is unspecified, the entire measure is transformed.<br>
+ * Sort of a reverse arpeggiator which creates a melodic line or arpeggio from a Chord.</p>
  * 
  * TODO complete this class
+ * 
  * @author don_bacon
  *
  */

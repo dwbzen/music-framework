@@ -39,8 +39,8 @@
 					"notes" : [
 						{ "pitch" : "G4", "notations" : { "type" : "eighth" } },
 	  			    	{ "pitch" : "F4",  "notations" : { "type" : "eighth" } },
-	  			    	{ "pitch" : "Eb4", "notations" : { "type" : "eighth", "tie" : "start" } },
-	  			   		{ "pitch" : "Eb4", "notations" : { "type" : "eighth", "tie" : "stop" } },
+	  			    	{ "pitch" : "Eb4", "notations" : { "type" : "eighth", "tieType": "start" } },
+	  			   		{ "pitch" : "Eb4", "notations" : { "type" : "eighth", "tieType": "stop" } },
 	  			    	{ "pitch" : "F4",  "notations" : { "type" : "eighth" } },
 	  			    	{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
 	  			    	{ "pitch" : "C5",  "notations" : { "type" : "eighth" } } 
@@ -59,7 +59,7 @@
 							{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
 							{ "pitch" : "F4",  "notations" : { "type" : "eighth" } },
 							{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
-							{ "pitch" : "Ab4", "notations" : { "type" : "eighth", "tie" : "start" } } 
+							{ "pitch" : "Ab4", "notations" : { "type" : "eighth", "tieType": "start" } } 
 						]
 	  			    } 
 	  		},
@@ -67,8 +67,8 @@
 					"harmony" : [ { "chord" : "Bbm7", "beat" : 1 } ],
 					"melody" : { 
 						"notes" : [
-							{ "pitch" : "Ab4","notations" : { "type" : "half", "tie" : "continue" } },
-							{ "pitch" : "Ab4", "notations" : { "type" : "eighth", "tie" : "stop" } },
+							{ "pitch" : "Ab4","notations" : { "type" : "half", "tieType": "both" } },
+							{ "pitch" : "Ab4", "notations" : { "type" : "eighth", "tieType": "stop" } },
 							{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
 							{ "pitch" : "C5",  "notations" : { "type" : "eighth" } } 
 						]
@@ -83,7 +83,7 @@
 							{ "pitch" : "Bb4", "notations" : { "type" : "quarter" } },
 							{ "pitch" : "Bb4", "notations" : { "type" : "quarter" } },
 							{ "pitch" : "C5",  "notations" : { "type" : "eighth" } },
-							{ "pitch" : "Db5", "notations" : { "type" : "eighth", "tie" : "start" } } 
+							{ "pitch" : "Db5", "notations" : { "type" : "eighth", "tieType": "start" } } 
 						]
 	   			    }
 	   		},
@@ -91,11 +91,11 @@
 					"harmony" : [ { "chord" : "Gb", "beat" : 1 } ],
 					"melody" : {
 						"notes" : [
-							{ "pitch" : "Db5", "notations" : { "type" : "half", "tie" : "stop" } },
+							{ "pitch" : "Db5", "notations" : { "type" : "half", "tieType": "stop" } },
 							{ "pitch" : "0",    "notations" : { "type" : "eighth" } },
 							{ "pitch" : "Bb4",  "notations" : { "type" : "eighth" } },
 							{ "pitch" : "C5",   "notations" : { "type" : "eighth" } },
-							{ "pitch" : "Db5",  "notations" : { "type" : "eighth", "tie" : "start" } } 
+							{ "pitch" : "Db5",  "notations" : { "type" : "eighth", "tieType": "start" } } 
 						]
 	   			    }
 	   		},
@@ -103,7 +103,7 @@
 					"harmony" : [ { "chord" : "F7", "beat" : 1 } ],
 	   				"melody" : { 
 						"notes" : [
-							{ "pitch" : "Db5","notations" : { "type" : "eighth", "tie" : "stop" } },
+							{ "pitch" : "Db5","notations" : { "type" : "eighth", "tieType": "stop" } },
 							{ "pitch" : "Bb4", "notations" : { "type" : "eighth" } },
 							{ "pitch" : "C5",  "notations" : { "type" : "quarter" } },
 							{ "pitch" : "0",   "notations" : { "type" : "half" } } 

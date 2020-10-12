@@ -8,7 +8,6 @@ import java.util.TreeSet;
 
 import org.dwbzen.common.util.IJson;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -31,7 +30,6 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	@JsonProperty	private Chord tiedTo = null;		// the Chord this is tied to - occurs after this Chord
 	@JsonProperty	private Chord tiedFrom = null;		// the Chord this is tied from - occurs before this Chord
 	@JsonProperty	private int size = 0;
-	@JsonIgnore		private Iterator<Note> iterator = null;
 	
 	public Chord() {
 		
