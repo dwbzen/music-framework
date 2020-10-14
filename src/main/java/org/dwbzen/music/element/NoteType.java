@@ -37,22 +37,32 @@ public enum NoteType {
     public int getDots() {
     	return dots;
     }
-	
-    public String toString() {
-    	if(dots == 0) {
+    
+    /**
+     * Shows the dots as period appended to the note type.
+     * 
+     * @param showDots
+     * @return
+     */
+    public String toString(boolean showDots) {
+    	if(dots <= 0) {
     		return value;
     	}
     	else {
     		switch(dots) {
     		case 1:
-    			return "dotted " + value;
+    			return showDots ? value + "." : "dotted " + value;
 			case 2:
-				return "double-dotted " + value;
+				return showDots ? value + ".." : "double-dotted " + value;
 			case 3:
-				return "tripple-dotted " + value;
+				return showDots ? value + "..." : "tripple-dotted " + value;
     		default:
-    			return dots + "-dotted" + value;
+    			return showDots ? value + "-" + dots +  "." : dots + "-dotted" + value;
     		}
     	}
+    }
+	
+    public String toString() {
+    	return toString(false);
     }
 }
