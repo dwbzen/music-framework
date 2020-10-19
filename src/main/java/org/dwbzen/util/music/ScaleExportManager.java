@@ -1,26 +1,35 @@
 package org.dwbzen.util.music;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.Scale;
 import org.dwbzen.music.element.ScaleFormula;
 import org.dwbzen.music.element.ScaleType;
 import org.dwbzen.music.element.Scales;
+import org.dwbzen.music.element.Score;
+import org.dwbzen.music.musicxml.MusicXMLHelper;
+import org.dwbzen.util.Configuration;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
  * Creates representation for scale formulas in the desired root(s).
@@ -41,11 +50,13 @@ import org.dwbzen.music.element.Scales;
  * Export line options are:
  * <dl>
  * <dt>-export true|false</dt> <dd>export scale formulas in the desired format. Default is false.</dd>
- * <dt>-scales true|false</dt> <dd>export the scales in the desired format. Default is false</dd>
+ * <dt>-scales true|false</dt> <dd>export the scales in the desired format. Default is false, set to true if a root note is specified</dd>
  * <dt>-root note</dt> <dd>Use the specified note as the root note for scales. Valid values are A through G, pound sign for sharps, lower base 'b' for flats. </dd>
  * <dt>-resource filename</dt>  <dd>Use the specified JSON file instead of the default "common_scaleFormulas.json"</dd>
  * <dt>-collectionName name</dt> <dd>Use 'name' as the collection name. Applies to RawJSON output format only.</dd>
  * <dt>-inputFormat format</dt>  <dd>JSON input format can be json, rawjson, or musicxml</dd>
+ * <dt>-file file_name</dt> <dd>Output to file: &lt;file_name>+yyyy-MM-dd.&lt;extension> where extension is ".json" or ".musicxml" </dd>
+ * <dt>-name scale_name</dt>  <dd>export only the named scale (case insensitive)</dd>
  * </dl>
  * When using -resource, specify the filename only, as in "myResourceFile.json" Files are assumed to be in /data/music project folder.</p>
  * JSON out put can be imported into MongoDB or Mathematica depending on specified format</p>
@@ -67,6 +78,14 @@ import org.dwbzen.music.element.Scales;
  */
 public class ScaleExportManager  {
 	static final Logger log = LogManager.getLogger(ScaleExportManager.class);
+	
+	static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	public static final String CONFIG_FILENAME = "/config.properties";
+	public static final String ORCHESTRA_CONFIG_FILENAME="/orchestra.properties";
+	
+	private Configuration configuration = null;
+	
+	private BiFunction<List<ScaleFormula>, List<Pitch>, Score> scaleCreator = null;
 
 	private StringBuilder stringBuilder = null;
 	ObjectMapper mapper = new ObjectMapper();
@@ -80,15 +99,22 @@ public class ScaleExportManager  {
 	private String collectionName = null;
 	private String scaleName = null;	// regex scale name matching
 	private int size = 0;
+	private String outputFileName = null;
 	
 	public ScaleExportManager(String resource, String format, String group, int size) {
-		mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+		configure();
 		resourceFile = resource;
 		outputFormat = format;
 		this.size = size;
 		this.group = group;
 		loadScaleFormulas();
+	}
+	
+	private void configure() {
+		mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+		configuration = Configuration.getInstance(CONFIG_FILENAME);
+		configuration.addConfiguration(Configuration.getInstance(ORCHESTRA_CONFIG_FILENAME));
 	}
 	
 	public static void main(String... args)  {
@@ -102,9 +128,11 @@ public class ScaleExportManager  {
 		String scaleName = null;
 		int size = 0;
 		PrintStream ps = System.out;
-		boolean export = false;
+		boolean exportFormulas = false;
 		boolean scales = false;
-		boolean musicXML = false;
+		String fileName = null;
+		boolean createXml = false;
+		
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
     			if(args[i].equalsIgnoreCase("-root")) {
@@ -127,8 +155,8 @@ public class ScaleExportManager  {
     			else if(args[i].equalsIgnoreCase("-importformat")) {
     				importFormat = args[++i];
     			}
-    			else if(args[i].equalsIgnoreCase("-export")) {
-    				export = true;
+    			else if(args[i].equalsIgnoreCase("-formulas")) {
+    				exportFormulas = true;
     			}
     			else if(args[i].equalsIgnoreCase("-collection")) {
     				collectionName = args[++i];
@@ -136,9 +164,15 @@ public class ScaleExportManager  {
     			else if(args[i].equalsIgnoreCase("-name")) {
     				scaleName = args[++i].toLowerCase();
     			}
+    			else if(args[i].equalsIgnoreCase("-file")) {
+    				// base filename - extension added later depending on output format
+    				String date = dateFormat.format(new Date());
+    				fileName = args[++i] + date;
+    			}
     		}
     	}
 		ScaleExportManager scaleExportManager = new ScaleExportManager(resourceFile, outputFormat, group, size);
+		boolean isMusicXML = outputFormat.equals("musicxml");
 		if(importFormat != null) {
 			scaleExportManager.setImportFormat(importFormat);
 		}
@@ -148,19 +182,38 @@ public class ScaleExportManager  {
 		if(collectionName != null) {
 			scaleExportManager.setCollectionName(collectionName);
 		}
-		musicXML = outputFormat.equalsIgnoreCase("musicxml");
+		if(fileName != null) {
+			String extension = isMusicXML ? ".musicxml" : ".json";
+			scaleExportManager.setOutputFileName(fileName + extension);
+		}
 		
-		if(export) {
-			String exportString = scaleExportManager.exportScaleFormulas();
-			ps.println(exportString);
+		if(isMusicXML) {
+			Score score = scaleExportManager.exportScalesScore();
+			String outputFile = scaleExportManager.getOutputFileName();
+			if(createXml) {
+				createXML(outputFile, score, scaleExportManager.getConfiguration());
+			}
 		}
-		if(scales) {
-			scaleExportManager.addRoot(pitch);
-			String scalesString = scaleExportManager.exportScales();
-			ps.println(scalesString);
-		}
-		if(musicXML) {
-			throw new RuntimeException("musicXML not yet implemented");
+		else {
+			String exportFormulasString = null;
+			String exportScalesString = null;
+			if(exportFormulas) {
+				exportFormulasString = scaleExportManager.exportScaleFormulas();
+			}
+			if(scales) {
+				scaleExportManager.addRoot(pitch);
+				exportScalesString = scaleExportManager.exportScales();
+			}
+			if(exportFormulasString != null) {
+				ps.println(exportFormulasString);
+			}
+			if(exportScalesString != null) {
+				ps.println(exportScalesString);
+			}
+			if(fileName != null) {
+				// write the export string(s) to designated file
+				// TODO
+			}
 		}
 	}
 
@@ -199,13 +252,14 @@ public class ScaleExportManager  {
 			kset.stream()
 			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
 			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
-			.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().contains(scaleName))
+			.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().equals(scaleName))
 			.forEach(s ->  exportScaleFormula(scaleFormulas.get(s)));
 		stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
 		stringBuilder.append("]");
 		return(stringBuilder.toString());
 	}
 	
+
 	private void exportScaleFormula(ScaleFormula sf) {
 		String names = null;
 		String groups = null;
@@ -245,12 +299,24 @@ public class ScaleExportManager  {
 			} catch (JsonProcessingException e) {
 				log.error("JsonProcessingException");
 			}
-
 			stringBuilder.append("},\n");
 		}
-		else if(outputFormat.equalsIgnoreCase("musicxml")) {
-			// TODO - use ScoreFactory to create a Score instance, pass that to MusicXMLHelper to create musicxml file
-		}
+	}
+	
+	/**
+	 * Finds ScaleFormulas matching criteria for size, group and/or name.
+	 * @return a List<ScaleFormula> sorted by formula name.
+	 */
+	public List<ScaleFormula> findScaleFormulas() {
+		List<ScaleFormula> formulas = new ArrayList<ScaleFormula>();
+		scaleFormulas.keySet()
+		.stream()
+		.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
+		.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
+		.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().equals(scaleName))
+		.sorted()
+		.forEach(s ->  formulas.add(scaleFormulas.get(s)));
+		return formulas;
 	}
 	
 	public String exportScales() {
@@ -259,7 +325,7 @@ public class ScaleExportManager  {
 			.stream()
 			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
 			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
-			.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().contains(scaleName))
+			.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().equals(scaleName))
 			.forEach(s ->  exportScales(scaleFormulas.get(s)));
 		stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
 		stringBuilder.append("]");
@@ -283,6 +349,25 @@ public class ScaleExportManager  {
 			stringBuilder.append(" ] },\n");
 		}
 		return stringBuilder.toString();
+	}
+
+	/**
+	 * Creates a Score consisting of the Scales specified in the search criteria.<br>
+	 * Converts that to musicXML format which can be saved and imported into a notation package such as MuseScore.<br>
+	 * If no roots have been specified, let's assume 'C'.<br>
+	 * Creates a title for the score: "Scales yyyyMMdd".
+	 * 
+	 * @return musicXML String.
+	 */
+	public Score exportScalesScore() {
+		List<ScaleFormula> scaleFormulas =  findScaleFormulas();
+		if(rootPitches.isEmpty()) {
+			rootPitches.add(Pitch.C);
+		}
+		String scoreTitle = "Scales_"  + dateFormat.format(new Date());
+		scaleCreator = new ScoreScaleCreator(scoreTitle);
+		Score theScore = scaleCreator.apply(scaleFormulas, rootPitches);
+		return theScore;
 	}
 	
 	public static String getMode(ScaleFormula formula) {
@@ -379,6 +464,18 @@ public class ScaleExportManager  {
 		return size;
 	}
 
+	public String getOutputFileName() {
+		return outputFileName;
+	}
+
+	public void setOutputFileName(String outputFileName) {
+		this.outputFileName = outputFileName;
+	}
+
+	public Configuration getConfiguration() {
+		return configuration;
+	}
+
 	/**
 	 * Deserializes a JSON ScaleFormula and adds to scaleFormulas Map
 	 */
@@ -392,5 +489,23 @@ public class ScaleExportManager  {
 		}
 		if(scaleFormula != null) {	scaleFormulas.put(scaleFormula.getName(), scaleFormula); }
 		
+	}
+	
+	public static void createXML(String filename, Score score,  Configuration config) {
+		MusicXMLHelper helper = new MusicXMLHelper(score, config.getProperties());
+		helper.convert();	// creates and returns a com.audiveris.proxymusic.ScorePartwise
+		PrintStream ps = System.out;
+		if(filename != null) {
+			try {
+				ps = new PrintStream(new FileOutputStream(filename));
+			}
+			catch(FileNotFoundException e) {
+				log.warn(filename + " not available. Writing to System.out");
+			}
+		}
+		helper.marshall(ps);	// marshals the ScorePartwise instance to an XML file
+		if(filename != null) {
+			ps.close();
+		}
 	}
 }

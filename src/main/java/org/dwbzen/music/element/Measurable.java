@@ -28,6 +28,7 @@ public abstract class Measurable {
 	 */
 	@JsonProperty 				protected Duration duration;
 	@JsonProperty("voice")		private int voice = 1;
+	@JsonProperty("staff")		private int staff = 1;
 	@JsonProperty("tieType")	protected TieType tieType = TieType.NONE;	// Chords and Notes can be tied together
 	@JsonProperty("tupletType")	protected TupletType tupletType = TupletType.NONE;
 	@JsonProperty				private Dynamics dynamics = null;			// optional Dynamics applies to object only
@@ -89,6 +90,14 @@ public abstract class Measurable {
 
 	public void setVoice(int voice) {
 		this.voice = voice;
+	}
+
+	public int getStaff() {
+		return staff;
+	}
+
+	public void setStaff(int staff) {
+		this.staff = staff;
 	}
 
 	public TieType getTieType() {

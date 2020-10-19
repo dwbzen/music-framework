@@ -80,6 +80,7 @@ public abstract class Instrument implements Configurable, IInstrument {
 	protected String abbreviationDisplay;
 	protected String partName;				// <part-name>Piano</part-name>
 	protected String partNameDisplay;
+	protected int numberOfStaves = 1;		// how many staves for this instrument - a Piano requires 2, a PipeOrgan needs 3
 	/**
 	 * MusicXML specific especially for Sibelius
 	 * <instrument-name> configured and may be different than name
@@ -519,6 +520,14 @@ public abstract class Instrument implements Configurable, IInstrument {
 
 	public void setTransposeOctaveChange(int transposeOctaveChange) {
 		this.transposeOctaveChange = transposeOctaveChange;
+	}
+
+	public int getNumberOfStaves() {
+		return numberOfStaves;
+	}
+
+	public void setNumberOfStaves(int numberOfStaves) {
+		this.numberOfStaves = numberOfStaves;
 	}
 	
 }

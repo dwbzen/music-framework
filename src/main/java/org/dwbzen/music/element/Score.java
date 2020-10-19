@@ -21,10 +21,11 @@ public class Score implements Configurable, Serializable, IJson {
 	/**
 	 * Part name + ScorePart
 	 */
-	@JsonProperty	private Map<String, ScorePartEntity> parts = new HashMap<String, ScorePartEntity>();
+	@JsonProperty	private Map<String, ScorePartEntity> parts = new HashMap<>();	// key is part name
 	private static final long serialVersionUID = 7957510486314451238L;
 	@JsonIgnore private Properties configProperties = null;
 	@JsonIgnore private Configuration configuration = null;
+	@JsonIgnore private Map<String, ScorePart> scoreParts = new HashMap<>();		// key is part name
 	
 	@JsonProperty("workNumber")	private String workNumber;		// as in "BVW1023" or K. 524
 	@JsonProperty("title")		private String title;
@@ -49,10 +50,12 @@ public class Score implements Configurable, Serializable, IJson {
 	
 	public int addPart(String name, ScorePart scorePart) {
 		parts.put(name, scorePart.getScorePartEntity());
+		scoreParts.put(name,  scorePart);
 		return parts.size();
 	}
 	public int addPart(ScorePart scorePart) {
 		parts.put(scorePart.getPartName(), scorePart.getScorePartEntity());
+		scoreParts.put(scorePart.getPartName(), scorePart);
 		return parts.size();
 	}
 	
@@ -131,6 +134,10 @@ public class Score implements Configurable, Serializable, IJson {
 		configuration = config;
 	}
 	
+	public Map<String, ScorePart> getScoreParts() {
+		return scoreParts;
+	}
+
 	@Override
 	public void configure() {
 		// nothing to do for Score

@@ -217,5 +217,17 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 		this.name = name;
 	}
 
+	@Override
+	public int compareTo(ScaleFormula other) {
+		return this.getName().compareTo(other.getName());
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer("[");
+		for(Integer i : formula) {
+			sb.append(" " + i + ",");
+		}
+		return sb.substring(0, sb.length()-1) + " ]";
+	}
 
 }

@@ -1,14 +1,16 @@
 package org.dwbzen.music.instrument;
 
+import org.dwbzen.music.element.Cleff;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.Step;
 
 /**
- * Range is A0 to C8
+ * Range is A0 to C8 notated on a Grand Staff.
+ * 
  * @author don_bacon
  *
  */
-public abstract class Piano extends Instrument {
+public class Piano extends Instrument {
 
 	private static final long serialVersionUID = -5031830056618215582L;
 	public final static String NAME = "Piano";
@@ -28,6 +30,9 @@ public abstract class Piano extends Instrument {
 		setMidiProgram(1);
 		setInstrumentName(NAME);
 		setInstrumentSound("keyboard.piano.grand");
+		numberOfStaves = 2;
+		cleffs.add(Cleff.G);		// staff 1
+		cleffs.add(Cleff.F);		// staff 2
 	}
 
 }

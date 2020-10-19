@@ -172,6 +172,12 @@ public class PitchTest extends TestCase {
 		p2 = new Pitch(Step.B, 2, Alteration.UP_ONE);	// B#2 (NOT same as C2, it's ~C3)
 		assertTrue(!p1.equals(p2));
 		assertEquals(p1.compareTo(p2),-1);
+		assertEquals(p2.compareTo(p1), 1);
+		
+		p1 = new Pitch(Step.C, 4, Alteration.NONE);
+		p2 = new Pitch(Step.D, 4, Alteration.NONE);
+		assertEquals(p1.compareTo(p2),-1);
+		assertEquals(p2.compareTo(p1), 1);
 		
 		// show ordering with a TreeMap
 		Map<Pitch, String> pitchMap = new TreeMap<>();

@@ -39,6 +39,7 @@ import org.dwbzen.music.element.Measurable.TupletType;
 import org.dwbzen.music.element.Measure;
 import org.dwbzen.music.element.Note;
 import org.dwbzen.music.element.Pitch;
+import org.dwbzen.music.element.RhythmScale;
 import org.dwbzen.music.element.RhythmicUnitType;
 import org.dwbzen.music.element.Score;
 import org.dwbzen.music.element.ScorePartEntity;
@@ -94,8 +95,13 @@ public class ScorePart implements Serializable, Runnable {
 		configuration = score.getConfiguration();
 		partName = pname;
 		instrument = instr;
-		rhythmScale = instrument.getRhythmScale();
-		divsPerMeasure = rhythmScale.getRoot();
+		if(instrument.getRhythmScale() != null) {
+			rhythmScale = instrument.getRhythmScale();
+			divsPerMeasure = rhythmScale.getRoot();
+		}
+		else {
+			divsPerMeasure = RhythmScale.defaultUnitsPerMeasure;
+		}
 	}
 	
 	@Override
@@ -536,7 +542,7 @@ public class ScorePart implements Serializable, Runnable {
 		/*
 		 * Set tempo and score Key
 		 */
-		int tempoBPM = Integer.parseInt(configProperties.getProperty("score.tempo", "90"));
+		int tempoBPM = Integer.parseInt(configProperties.getProperty("score.tempo", "80"));
 		tempo = new Tempo(tempoBPM);
         scoreKey = new Key(configProperties.getProperty("score.key", "C-Major"));
         scorePartEntity.setScoreKey(scoreKey);
@@ -626,6 +632,10 @@ public class ScorePart implements Serializable, Runnable {
 
 	public void setScoreKey(Key scoreKey) {
 		this.scoreKey = scoreKey;
+	}
+
+	public int getDivsPerMeasure() {
+		return divsPerMeasure;
 	}
 
 }

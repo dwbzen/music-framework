@@ -12,21 +12,21 @@ import org.dwbzen.common.util.IJson;
 
 
 /**
- * A Pitch has 3 elements: 
- * 	Step (A, B, .... G)
- * 	Alteration (0, 1, -1, 2, -2) corresponding to no alteration, sharp, flat, double sharp, double flat
- * 	octave (0, 1, ... 9)
- * Middle-C is C4, C0 is in the range of about 16 Hz.
- * Note that this uses the Scientific octave naming system which starts on C0 and extends to C9.
+ * A Pitch has 3 elements: <br>
+ * 	Step (A, B, .... G)<br>
+ * 	Alteration (0, 1, -1, 2, -2) corresponding to no alteration, sharp, flat, double sharp, double flat<br>
+ * 	octave (0, 1, ... 9)<br>
+ * Middle-C is C4, C0 is in the range of about 16 Hz.<br>
+ * Note that this uses the Scientific octave naming system which starts on C0 and extends to C9.<br>
  * With this designation, middle-C is C4 and a piano range is A0 to C7
- * So C4 follows B3 in this notation.
+ * So C4 follows B3 in this notation.</p>
  * 
- * The range is C0 to C9 (although the full range chromatic Scale starts at A0).
- * Starting at C instead of A is somewhat problematic for the boundary condition:
- * Cb and B# The convention is that the letter name is first combined 
- * with the Arabic numeral to determine a specific pitch, which is then altered by applying accidentals.
+ * The range is C0 to C9 (although the full range chromatic Scale starts at A0).<br>
+ * Starting at C instead of A is somewhat problematic for the boundary condition:<br>
+ * Cb and B# The convention is that the letter name is first combined <br>
+ * with the Arabic numeral to determine a specific pitch, which is then altered by applying accidentals.<br>
  * So Cb4 is one semitone down from C4 which is B3.
- * Similarly, B#4 is the same pitch as C5.
+ * Similarly, B#4 is the same pitch as C5.</p>
  * 
  * Pitch is immutable
  * Use copy constructors or clone() to create new pitches from existing.
@@ -383,6 +383,22 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 
 	public int getOctave() {
 		return octave;
+	}
+
+	public void setStep(Step step) {
+		this.step = step;
+	}
+
+	public void setOctave(int octave) {
+		this.octave = octave;
+	}
+
+	public void setAlteration(int alteration) {
+		this.alteration = alteration;
+	}
+
+	public void setRangeStep(int rangeStep) {
+		this.rangeStep = rangeStep;
 	}
 
 	public int getAlteration() {

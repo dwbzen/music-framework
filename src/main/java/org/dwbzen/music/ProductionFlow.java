@@ -351,7 +351,7 @@ public class ProductionFlow implements Runnable {
 	public Score createScore() {
 		log.debug("createScore()");
 		IScoreFactory scoreFactory = new ScoreFactory(configuration, instruments, measures, title, workNumber);				
-		score = scoreFactory.createScore();
+		score = scoreFactory.createScore(true);
 
 		return score;
 	}

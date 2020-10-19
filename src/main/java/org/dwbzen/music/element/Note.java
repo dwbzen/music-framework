@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A pitch + Duration. Can also be a rest (no pitch).
- * Not to be confused with  com.audiveris.proxymusic.Note
+ * Not to be confused with  com.audiveris.proxymusic.Note<br>
  * 
  * A Note is a RhythmElement with the addition of a Pitch.
  * 
@@ -173,6 +173,10 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 			pc = pitch.compareTo(other.getPitch());
 		}
 		return pc;
+	}
+	
+	public int compareTo(Note other, boolean pitchOnly) {
+		return pitchOnly ? pitch.compareTo(other.getPitch()) : compareTo(other);
 	}
 	
 	/**

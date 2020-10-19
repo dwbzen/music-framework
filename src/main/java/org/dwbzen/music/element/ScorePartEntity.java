@@ -21,7 +21,8 @@ public class ScorePartEntity implements Serializable {
 	@JsonProperty("partName")	private String partName;
 	@JsonProperty("partNumber")	private int partNumber;
 	@JsonProperty("partId")		private String partId;
-	@JsonProperty("scoreKey")   private Key scoreKey = null;	// set from configuration by ScorePart
+	@JsonProperty("scoreKey")   private Key scoreKey = null;		// set from configuration by ScorePart
+	@JsonProperty("staves")		private int numberOfStaves = 1;		// set to 2 for Grand Staff or as required by the instrument.
 
 	
 	/**
@@ -40,6 +41,7 @@ public class ScorePartEntity implements Serializable {
 		this.partName = partName;
 		this.instrument = instrument;
 		this.score = score;
+		numberOfStaves = instrument.getNumberOfStaves();
 	}
 	
     public String toString() {
@@ -113,6 +115,14 @@ public class ScorePartEntity implements Serializable {
 
 	public void setScoreKey(Key scoreKey) {
 		this.scoreKey = scoreKey;
+	}
+
+	public int getNumberOfStaves() {
+		return numberOfStaves;
+	}
+
+	public void setNumberOfStaves(int numberOfStaves) {
+		this.numberOfStaves = numberOfStaves;
 	}
 	
 }

@@ -32,7 +32,7 @@ import org.dwbzen.util.IMapped;
  * @author DBacon
  *
  */
-public interface IScaleFormula extends IFormula, IMapped<String> {
+public interface IScaleFormula extends IFormula, IMapped<String>, Comparable<ScaleFormula> {
 	
 	public List<String> getGroups();
 	public List<Pitch> createPitches(Pitch root);

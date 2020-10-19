@@ -41,7 +41,7 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 	}
 
 	@Override
-	public Score createScore() {
+	public Score createScore(boolean runFlag) {
 		Properties configProperties = configuration.getProperties();
 		score = new Score(configuration, title);
 		score.setWorkNumber(opus);
@@ -54,9 +54,14 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 			score.getInstrumentNames().add(instrumentName);
 			String partName = configProperties.getProperty("score.parts."+ instrumentName + ".partName", instrumentName);
 			ScorePart scorePart = new ScorePart(score, partName, instrument);
-			// set the max# measures to generate
-			scorePart.setMaxMeasures(measures);
-			scorePart.run();
+			/*
+			 * if runFlag is true, set the number of measures and run the ScorePart to create the score from data sources
+			 * Otherwise just create an empty ScorePart for the instrument.
+			 */
+			if(runFlag) {
+				scorePart.setMaxMeasures(measures);
+				scorePart.run();
+			}
 			score.addPart(scorePart);
 		}
 		return score;
@@ -64,7 +69,7 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 
 	@Override
 	public void run() {
-		score = createScore();
+		score = createScore(true);
 	}
 
 	public Map<String, Instrument> getInstruments() {
