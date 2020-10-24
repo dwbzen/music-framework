@@ -15,6 +15,11 @@ import org.audiveris.proxymusic.AboveBelow;
 import org.audiveris.proxymusic.Accidental;
 import org.audiveris.proxymusic.AccidentalValue;
 import org.audiveris.proxymusic.Attributes;
+import org.audiveris.proxymusic.Backup;
+import org.audiveris.proxymusic.BackwardForward;
+import org.audiveris.proxymusic.BarStyle;
+import org.audiveris.proxymusic.BarStyleColor;
+import org.audiveris.proxymusic.Barline;
 import org.audiveris.proxymusic.Clef;
 import org.audiveris.proxymusic.ClefSign;
 import org.audiveris.proxymusic.Direction;
@@ -27,6 +32,9 @@ import org.audiveris.proxymusic.Notations;
 import org.audiveris.proxymusic.NoteType;
 import org.audiveris.proxymusic.PartList;
 import org.audiveris.proxymusic.PartName;
+import org.audiveris.proxymusic.PerMinute;
+import org.audiveris.proxymusic.Rest;
+import org.audiveris.proxymusic.RightLeftMiddle;
 import org.audiveris.proxymusic.ScoreInstrument;
 import org.audiveris.proxymusic.ScorePartwise;
 import org.audiveris.proxymusic.ScorePartwise.Part;
@@ -59,6 +67,10 @@ import org.dwbzen.music.element.Score;
 import org.dwbzen.music.element.ScorePartEntity;
 import org.dwbzen.music.element.Step;
 import org.dwbzen.music.element.Tempo;
+import org.dwbzen.music.element.direction.Metronome;
+import org.dwbzen.music.element.direction.ScoreDirection;
+import org.dwbzen.music.element.direction.ScoreDirection.ScoreDirectionType;
+import org.dwbzen.music.element.direction.Words;
 import org.dwbzen.music.instrument.Instrument;
 import org.dwbzen.music.instrument.MidiInstrument;
 import org.dwbzen.util.Ratio;
@@ -187,6 +199,7 @@ public class MusicXMLHelper {
 			String partname = instrument.getPartName();
 			MidiInstrument midiInstrument = instrument.getMidiInstrument();
 			midiInstrument.setMidiChannel(partnum);
+			int numberOfStaves = instrument.getNumberOfStaves();
 
 			org.audiveris.proxymusic.ScorePart _scorePart = new org.audiveris.proxymusic.ScorePart();
 			PartName _partName = new PartName();
@@ -225,15 +238,16 @@ public class MusicXMLHelper {
 			_parts.add(_part);
 			_measure = new org.audiveris.proxymusic.ScorePartwise.Part.Measure();
 			_measure.setImplicit(YesNo.YES);
-			_measure.setNumber("0");
+			_measure.setNumber("1");
 			Attributes _attributes = new Attributes();
-			int measNum = 0;
+			int measNum = 1;
 			for(Measure measure : scorePartEntity.getMeasures()) {
 				/*
 				 * Measure 0 sets Attributes, Staff & Cleff info
 				 */
-				if(measNum == 0) {
-					_attributes.setDivisions(BigDecimal.valueOf(measure.getDivisions()).divide(BigDecimal.valueOf(4)));
+				if(measNum == 1) {
+					int divsisions = measure.getDivisions() / measure.getBeatNote();
+					_attributes.setDivisions(BigDecimal.valueOf(divsisions));
 					org.audiveris.proxymusic.Key _key = new org.audiveris.proxymusic.Key();
 					org.dwbzen.music.element.Key key = instrument.isTransposes() ? instrument.getKey() :  measure.getKey();
 					if(instrument.isTransposes()) {
@@ -262,7 +276,7 @@ public class MusicXMLHelper {
 					_key.setFifths(BigInteger.valueOf(fifths));
 					_key.setMode(modename);
 					_attributes.getKey().add(_key);
-					_attributes.setStaves(BigInteger.valueOf(1));	// NOTE - will be 2 for piano, 3 for Organ
+					_attributes.setStaves(BigInteger.valueOf(numberOfStaves));	// NOTE - will be 2 for piano, 3 for Organ
 					Time _time = new Time();
 					/*
 					 * use score.timeSignature config parameters
@@ -276,7 +290,7 @@ public class MusicXMLHelper {
 					// set the Cleff(s) for this instrument
 					setClefsInAttributes(_attributes, instrument);
 					_measure.getNoteOrBackupOrForward().add(_attributes);
-					_part.getMeasure().add(_measure);
+					// _part.getMeasure().add(_measure);
 					
 					// add StaffDetails
 					StaffDetails _staffDetails = new StaffDetails();
@@ -305,35 +319,98 @@ public class MusicXMLHelper {
 						_sound.setTempo(new BigDecimal(tempo.getBeatsPerMinute()));
 						_direction.setSound(_sound);
 						_measure.getNoteOrBackupOrForward().add(_direction);
-					}
-				}
-				_measure = new org.audiveris.proxymusic.ScorePartwise.Part.Measure();
-				_measure.setNumber(String.valueOf(++measNum));
-				for(Measurable m : measure.getMeasureables()) {
-					log.trace("xml measure: " + measure.getNumber() + " note: " + m);
-					if(m.getType().equals(Measurable.CHORD)) {
-						/*
-						 * notes in a chord indicated by <chord/> in all the notes following the first one
-						 */
-						Chord chord = (Chord)m;
-						log.debug("chord: " + chord.toString());
-						boolean inChord = false;
-						for(Note note : chord.removeUnisonNotes()) {
-							convertNote(instrument, measure, note, inChord, _measure);
-							inChord = true;
+						if(measure.getScoreDirections() != null && measure.getScoreDirections().size() > 0) {
+							for(ScoreDirection  scoreDirection : measure.getScoreDirections()) {
+								if(scoreDirection.getDirectionType().getScoreDirectionType().equals(ScoreDirectionType.WORDS)) {
+									Words wdt = (Words)scoreDirection.getDirectionType();
+									_direction = new Direction();
+									_direction.setPlacement(AboveBelow.ABOVE);
+									_direction.setStaff(BigInteger.ONE);
+									_directionType = new DirectionType();
+									_formattedText = new FormattedText();
+									_formattedText.setValue(wdt.getText());
+									_directionType.getWords().add(_formattedText);
+									_direction.getDirectionType().add(_directionType);
+									_measure.getNoteOrBackupOrForward().add(_direction);
+								}
+								else if(scoreDirection.getDirectionType().getScoreDirectionType().equals(ScoreDirectionType.METRONOME)) {
+									Metronome mdt = (Metronome)scoreDirection.getDirectionType();
+									_direction = new Direction();
+									_direction.setPlacement(AboveBelow.ABOVE);
+									_direction.setStaff(BigInteger.ONE);
+									_directionType = new DirectionType();
+									org.audiveris.proxymusic.Metronome _metronome = new org.audiveris.proxymusic.Metronome();
+									PerMinute _perMinute = new PerMinute();
+									_perMinute.setValue("" + mdt.getBeatsPerMinute());
+									_metronome.setPerMinute(_perMinute);
+									String beat_unit = Duration.BeatUnitNames[ tempo.getBeatUnit().ordinal()];
+									_metronome.getBeatUnit().add(beat_unit);
+									_directionType.setMetronome(_metronome);
+									_direction.getDirectionType().add(_directionType);
+									_measure.getNoteOrBackupOrForward().add(_direction);
+								}
+							}
 						}
 					}
-					else {
-						convertNote(instrument, measure, m, false, _measure);
+				}
+				//_measure = new org.audiveris.proxymusic.ScorePartwise.Part.Measure();
+				//_measure.setNumber(String.valueOf(measNum++));
+				for(int staffnum = 1; staffnum <= numberOfStaves; staffnum++) {
+					for(Measurable m : measure.getMeasureables(staffnum)) {
+						log.debug("musicXML measure: " + measure.getNumber() + "  staff: " + staffnum + " note: " + m);
+						if(m.getType().equals(Measurable.CHORD)) {
+							/*
+							 * notes in a chord indicated by <chord/> in all the notes following the first one
+							 */
+							Chord chord = (Chord)m;
+							log.debug("chord: " + chord.toString());
+							boolean inChord = false;
+							for(Note note : chord.removeUnisonNotes()) {
+								convertNote(instrument, measure, note, inChord, _measure);
+								inChord = true;
+							}
+						}
+						else {
+							convertNote(instrument, measure, m, false, _measure);
+						}
+					}
+					if(staffnum == 1 && numberOfStaves >= 2) {
+						// back up a full measure of units to the beginning of the measure
+						Backup _bu = new Backup();
+						_bu.setDuration(BigDecimal.valueOf(measure.getDivisions()));
+						_measure.getNoteOrBackupOrForward().add(_bu);
 					}
 				}
+
+				Barline _barline = convertBareline(measure.getBarline());
+				if(_barline != null) {
+					_measure.getNoteOrBackupOrForward().add(_barline);
+				}
 				_part.getMeasure().add(_measure);
+				_measure = new org.audiveris.proxymusic.ScorePartwise.Part.Measure();
+				_measure.setNumber(String.valueOf(++measNum));
 			}
 			partnum++;
 		}
 		_scorePartwise.setPartList(_partList);
 		return _scorePartwise;
 	}
+
+	private Barline convertBareline(org.dwbzen.music.element.Barline barline) {
+		Barline _barline = null;
+		if(barline != null) {
+			String barlineloc = barline.getLocation();
+			_barline = new Barline();
+			RightLeftMiddle _loc = RightLeftMiddle.fromValue(barlineloc);
+			_barline.setLocation(_loc);
+			BarStyleColor _barStyleColor = new BarStyleColor();
+			BarStyle _barStyle = BarStyle.fromValue(barline.getStyle());
+			_barStyleColor.setValue(_barStyle);
+			_barline.setBarStyle(_barStyleColor);
+		}
+		return _barline;
+	}
+
 
 	private void convertNote(Instrument instrument, Measure measure, Measurable m, boolean inChord, org.audiveris.proxymusic.ScorePartwise.Part.Measure _measure) {
 		Note note = (Note)m;
@@ -345,9 +422,11 @@ public class MusicXMLHelper {
 		 * Assume that Duration units have already been factored and set
 		 * according to Measure attributes
 		 */
-		Cleff currentClef = instrument.getCleffs().get(0);
+		int staffNumber = note.getStaff();
+		Cleff currentClef = instrument.getCleffs().get(staffNumber-1);
 		Duration duration = note.getDuration();
 		int units = duration.getDurationUnits();
+		int unitsThisMeasure = measure.getDivisions();
 		int ndots = duration.getDots();
 		Ratio ratio = duration.getRatio();	// tuplets
 		boolean isTuplet = !duration.isRatioSame();
@@ -366,33 +445,42 @@ public class MusicXMLHelper {
 		int alt = 0;
 		org.audiveris.proxymusic.Step _step = null;
 		switch(pitchClass) {
-		case UNPITCHED:
-		case DISCRETE_1LINE:
-		case DISCRETE_2LINE:
-			octave = note.getPitch().getOctave();
-			_step = getStep(note);
-			org.audiveris.proxymusic.Unpitched _unpitched = new org.audiveris.proxymusic.Unpitched();
-			_unpitched.setDisplayOctave(octave);
-			_unpitched.setDisplayStep(_step);
-			_note.setUnpitched(_unpitched);
-			break;
-		case DISCRETE_5LINE:
-		case PITCHED:
-			org.audiveris.proxymusic.Pitch _pitch = new org.audiveris.proxymusic.Pitch();
-			octave = note.getPitch().getOctave();
-			octaveShift = currentClef.getOctaveShift();
-			_step = getStep(note);
-			alt = note.getPitch().getAlteration();
-			octave += octaveShift;	// adjust the pitch Octave if 8va, 15va, 8ma, or 15ma
-			_pitch.setOctave(octave);
-			_pitch.setStep(_step);
-			_pitch.setAlter(BigDecimal.valueOf(alt));
-			_note.setPitch(_pitch);
-			if(alt != 0) {
-				Accidental _accidentalValue = new Accidental();
-				_accidentalValue.setValue(alt<0 ? AccidentalValue.FLAT : AccidentalValue.SHARP);
-				_note.setAccidental(_accidentalValue);
-			}
+			case UNPITCHED:
+			case DISCRETE_1LINE:
+			case DISCRETE_2LINE:
+				octave = note.getPitch().getOctave();
+				_step = getStep(note);
+				org.audiveris.proxymusic.Unpitched _unpitched = new org.audiveris.proxymusic.Unpitched();
+				_unpitched.setDisplayOctave(octave);
+				_unpitched.setDisplayStep(_step);
+				_note.setUnpitched(_unpitched);
+				break;
+			case DISCRETE_5LINE:
+			case PITCHED:
+				org.audiveris.proxymusic.Pitch _pitch = new org.audiveris.proxymusic.Pitch();
+				Step step = note.getPitch().getStep();
+				if(step.equals(Step.SILENT)) {
+					// add a rest
+					Rest _rest = new Rest();
+					_rest.setMeasure( units==unitsThisMeasure ?  YesNo.YES : YesNo.NO);
+					_note.setRest(_rest);
+				}
+				else {
+					octave = note.getPitch().getOctave();
+					octaveShift = currentClef.getOctaveShift();
+					_step = getStep(note);
+					alt = note.getPitch().getAlteration();
+					octave += octaveShift;	// adjust the pitch Octave if 8va, 15va, 8ma, or 15ma
+					_pitch.setOctave(octave);
+					_pitch.setStep(_step);
+					_pitch.setAlter(BigDecimal.valueOf(alt));
+					_note.setPitch(_pitch);
+					if(alt != 0) {
+						Accidental _accidentalValue = new Accidental();
+						_accidentalValue.setValue(alt<0 ? AccidentalValue.FLAT : AccidentalValue.SHARP);
+						_note.setAccidental(_accidentalValue);
+					}
+				}
 		}
 
 		if(inChord) {
@@ -405,6 +493,7 @@ public class MusicXMLHelper {
 		}
 		_note.setVoice(String.valueOf(note.getVoice()));
 		_note.setDuration(BigDecimal.valueOf(units));
+		_note.setStaff(BigInteger.valueOf(m.getStaff()));
 		String nt = note.getNoteType();
 		if(isTuplet) {
 			createTupletNote(note, _note, ratio, nt);

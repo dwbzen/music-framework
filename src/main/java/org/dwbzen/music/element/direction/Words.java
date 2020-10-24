@@ -1,5 +1,7 @@
 package org.dwbzen.music.element.direction;
 
+import org.dwbzen.music.element.direction.ScoreDirection.ScoreDirectionType;
+
 /**
  * Used to attach text to a measure and staff.
  * @author don_bacon
@@ -12,6 +14,7 @@ public class Words extends DirectionType {
 	
 	public Words() {
 		super("words");
+		scoreDirectionType = ScoreDirectionType.WORDS;
 	}
 	
 	public Words(String name) {

@@ -1,6 +1,7 @@
 package org.dwbzen.music.instrument;
 
 import org.dwbzen.music.element.Cleff;
+import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.Step;
 
@@ -33,6 +34,7 @@ public class Piano extends Instrument {
 		numberOfStaves = 2;
 		cleffs.add(Cleff.G);		// staff 1
 		cleffs.add(Cleff.F);		// staff 2
+		setKey(Key.C_MAJOR);
 	}
 
 }

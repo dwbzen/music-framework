@@ -165,14 +165,15 @@ public class ScaleExportManager  {
     				scaleName = args[++i].toLowerCase();
     			}
     			else if(args[i].equalsIgnoreCase("-file")) {
-    				// base filename - extension added later depending on output format
+    				// base filename including the full path - extension added later depending on output format
+    				// for example, "/Users/DWBZe/Documents/Music/Scores/musicXML/Scales"
     				String date = dateFormat.format(new Date());
     				fileName = args[++i] + date;
     			}
     		}
     	}
 		ScaleExportManager scaleExportManager = new ScaleExportManager(resourceFile, outputFormat, group, size);
-		boolean isMusicXML = outputFormat.equals("musicxml");
+		boolean isMusicXML = outputFormat.equalsIgnoreCase("musicxml");
 		if(importFormat != null) {
 			scaleExportManager.setImportFormat(importFormat);
 		}
@@ -186,13 +187,16 @@ public class ScaleExportManager  {
 			String extension = isMusicXML ? ".musicxml" : ".json";
 			scaleExportManager.setOutputFileName(fileName + extension);
 		}
+		if(scales) {
+			scaleExportManager.addRoot(pitch);
+		}
 		
 		if(isMusicXML) {
 			Score score = scaleExportManager.exportScalesScore();
 			String outputFile = scaleExportManager.getOutputFileName();
-			if(createXml) {
-				createXML(outputFile, score, scaleExportManager.getConfiguration());
-			}
+			log.info("*** Score created ***");
+			createXML(outputFile, score, scaleExportManager.getConfiguration());
+			log.info("*** musicXML written to " + outputFile + " ***");
 		}
 		else {
 			String exportFormulasString = null;
@@ -201,7 +205,6 @@ public class ScaleExportManager  {
 				exportFormulasString = scaleExportManager.exportScaleFormulas();
 			}
 			if(scales) {
-				scaleExportManager.addRoot(pitch);
 				exportScalesString = scaleExportManager.exportScales();
 			}
 			if(exportFormulasString != null) {

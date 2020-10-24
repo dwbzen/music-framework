@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *  A Scale is a specific realization of a ScaleFormula that has a root (starting note)
- *  and optionally may be associated with a Key.
+ *  and optionally may be associated with a Key.<br>
  *  Scale is immutable.
  *  
  * @author don_bacon
@@ -29,7 +29,8 @@ public final class Scale implements IJson, INameable, Cloneable  {
 	@JsonProperty("root")		private final Pitch root;
 	@JsonProperty("rootPitch")	private String rootPitch; 	// C, C#, Bb etc.
 	@JsonProperty("key")		private Key key;				// if there is an associated Key, could be null
-	@JsonProperty("pitches")	private List<Pitch> pitches = new ArrayList<Pitch>();
+	@JsonProperty("pitches")	private List<Pitch> pitches = new ArrayList<Pitch>();				// pitches of the scale in ascending order
+	@JsonIgnore					private List<Pitch> descendingPitches = new ArrayList<Pitch>();		// pitches of the scale in descending order
 	@JsonProperty("notes")		private String notes = null;		// the toString(this) for readability
 	@JsonIgnore					private ScaleFormula scaleFormula = null;
 	@JsonProperty("formulaName")	private String formulaName;
@@ -181,8 +182,7 @@ public final class Scale implements IJson, INameable, Cloneable  {
 	}
 	
 	private void removeLastPitch() {
-		int index = pitches.size() - 1;
-		pitches.remove(index);
+		pitches.remove(pitches.size() - 1);
 	}
 
 	/**
@@ -237,6 +237,21 @@ public final class Scale implements IJson, INameable, Cloneable  {
 	 */
 	public List<Pitch> getPitches() {
 		return pitches;
+	}
+	
+	public List<Pitch> getPitches(boolean descending) {
+		if(descending) {
+			if(descendingPitches.size() == 0) {
+				// add Pitches in reverse order
+				for(int i = pitches.size()-1; i>=0; i--) {
+					descendingPitches.add(pitches.get(i));
+				}
+			}
+			return descendingPitches;
+		}
+		else {
+			return pitches;
+		}
 	}
 	
 	public String getRootPitch() {

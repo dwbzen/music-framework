@@ -1,6 +1,7 @@
 package org.dwbzen.music.element.direction;
 
 import org.dwbzen.music.element.NoteType;
+import org.dwbzen.music.element.direction.ScoreDirection.ScoreDirectionType;
 
 /**
  * A score metronome marking. Default is quaterNote = 80.
@@ -16,6 +17,12 @@ public class Metronome extends DirectionType {
 	
 	public Metronome() {
 		super("metronome");
+		scoreDirectionType = ScoreDirectionType.METRONOME;
+	}
+	
+	public Metronome(int bpm) {
+		this();
+		beatsPerMinute = bpm;
 	}
 	
 	public Metronome(String name) {

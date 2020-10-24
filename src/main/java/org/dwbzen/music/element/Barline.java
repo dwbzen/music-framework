@@ -24,7 +24,7 @@ package org.dwbzen.music.element;
  */
 public class Barline {
 	
-	private String location = null;		// "right" or "left"
+	private String location = null;		// "right", "left" or "middle"
 	private String style = null;
 	
 	/**

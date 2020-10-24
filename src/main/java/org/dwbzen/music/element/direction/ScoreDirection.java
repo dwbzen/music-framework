@@ -12,6 +12,8 @@ public class ScoreDirection {
 	private DirectionType directionType = null;
 	private String placement = null;		// "above", "below" or not specified
 	
+	public enum ScoreDirectionType {WORDS, METRONOME, NONE};
+	
 	public ScoreDirection(int staff, DirectionType directionType) {
 		this.staff = staff;
 		this.directionType = directionType;

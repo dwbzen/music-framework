@@ -1,10 +1,10 @@
 package org.dwbzen.util.music;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -18,18 +18,16 @@ import org.dwbzen.music.element.Barline;
 import org.dwbzen.music.element.Duration;
 import org.dwbzen.music.element.IRhythmScale;
 import org.dwbzen.music.element.Key;
+import org.dwbzen.music.element.Measurable;
 import org.dwbzen.music.element.Measure;
 import org.dwbzen.music.element.Note;
-import org.dwbzen.music.element.NoteType;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.Scale;
 import org.dwbzen.music.element.ScaleFormula;
 import org.dwbzen.music.element.ScaleType;
-import org.dwbzen.music.element.Scales;
 import org.dwbzen.music.element.Score;
 import org.dwbzen.music.element.ScorePartEntity;
 import org.dwbzen.music.element.Tempo;
-import org.dwbzen.music.element.direction.DirectionType;
 import org.dwbzen.music.element.direction.Metronome;
 import org.dwbzen.music.element.direction.ScoreDirection;
 import org.dwbzen.music.element.direction.Words;
@@ -41,7 +39,7 @@ import org.dwbzen.util.Configuration;
 /**
  * Creates a Score consisting of scales for the scale formulas and roots specified.<br>
  * The Score can then be Marshalled to MusicXML file using MusicXMLHelper.</p>
- * When scoring on the so-called Grand Staff for piano, each Measure has the<br>
+ * When scoring on the so-called Grand Staff, each Measure has the<br>
  * notes for the top staff (staff=1) first, followed by the staff 2 notes.
  * 
  * @author don_bacon
@@ -64,6 +62,8 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
     private Tempo tempo = null;
     private int unitsPerMeasure;
     private int unitsPerNote;
+	private Key scoreKey;
+	private IRhythmScale rhythmScale;
 	
 	private List<ScaleFormula> scaleFormulas = new ArrayList<>();
 	private List<Pitch> rootPitches = new ArrayList<>();
@@ -125,9 +125,9 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 		scorePartEntity = score.getScorePartEntityForInstrument(instrumentName);
 		scorePart = score.getScoreParts().get(instrumentName);
 
-		int tempoBPM = Integer.parseInt(configProperties.getProperty("score.tempo", "80"));
+		int tempoBPM = 80; //	Integer.parseInt(configProperties.getProperty("score.tempo", "80"));
 		tempo = new Tempo(tempoBPM);
-        Key scoreKey = new Key(configProperties.getProperty("score.key", "C-Major"));
+        scoreKey = new Key(configProperties.getProperty("score.key", "C-Major"));
         scorePartEntity.setScoreKey(scoreKey);
         /*
          * Create DisplayInfo. This is associated with Measure 1, staff 2
@@ -140,106 +140,198 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 		 */
         ScoreDirection wordsScoreDirection = null;				// created for the start of each scale on staff 1
         Words wordsDirectionType = null;
-        Metronome metronomeDirectionType = new Metronome();		// defaults to Tempo setting - add this only once to the first measure
+        Metronome metronomeDirectionType = new Metronome(tempoBPM);		// defaults to Tempo setting - add this only once to the first measure
         ScoreDirection metronomeScoreDirection = new ScoreDirection(1, metronomeDirectionType);
         metronomeScoreDirection.setPlacement("above");
         
         Barline lightLight = new Barline("right", "light-light");		// add after each scale
         Barline lightHeavy = new Barline("right", "light-heavy");		// add at last measure of score
         
-		int[] staff = {1,2};	// 1=top staff, 2=bottom staff
-		unitsPerMeasure = scorePart.getDivsPerMeasure();		// default is 480
-		unitsPerNote = unitsPerMeasure/8;						// units in eighth note (60)
+		unitsPerMeasure = scorePart.getDivsPerMeasure();	// default is 480
+		int notesPerMeasure = 8;
+		unitsPerNote = unitsPerMeasure/notesPerMeasure; 	// units in eighth note (60)
 		Duration duration = new Duration(unitsPerNote);
 		/*
 		 * Add the desired Scales to the Score - 2 octaves starting at C2, C4 (or root provided)
+		 * For each measure the notes on staff 1 come first, followed by the same notes 
+		 * 2 octaves lower on staff 2.
 		 */
 
 		int measureNumber = 1;
 		int scaleCounter = 0;	// the number of scales added counter
+		int measureCounter = 0;	// number of measures added
 		for(Pitch pitch : rootPitches) {
 			for(ScaleFormula formula : scaleFormulas) {
-				Measure measure = null;
 				String name = formula.getName();
+				// some scales are descending, like the natural Minor, full name Melodic minor descending
+				boolean descending = name.contains("Descending");
+				for(String aname : formula.getAlternateNames()) {
+					descending |= aname.contains("escending");
+				}
+
 				ScaleType scaleType = ScaleExportManager.getScaleType(formula);
 				Scale scale = new Scale(name, null, scaleType, pitch, formula, Key.C_MAJOR);
 				/*
 				 * scalePitches are octave neutral (i.e. octave = -1) and includes a repeat of the root note.
 				 * For example: C, D, Eb, F, Gb, A, C  formula=[2, 1, 2, 1, 3, 3] ("Pyramid Hexatonic")
 				 */
-				List<Pitch> scalePitches = scale.getPitches();
-				int scaleLength = scalePitches.size();
+				int scaleLength = formula.getSize();	// size is #notes in the scale (no repeats)
+				List<Pitch> scalePitches = scale.getPitches(descending).subList(0, scaleLength);
+				Pitch scaleRootPitch = scalePitches.get(0);
+				int notesPerStaff = (scaleLength * 2) + 1;
+				/*
+				 * Create the 2-octave-length range of pitches to use in the Score
+				 * Octave # is set for staff 1 and adjusted later for staff 2 
+				 * to be 2 octaves lower.
+				 */
+				List<Pitch> scorePitches = new ArrayList<Pitch>();
+				int octaveNumber = descending ? 6 : 4;
+				for(int octnum = 0; octnum <=1; octnum++) {
+					int pc = 0;
+					for(Pitch p : scalePitches) {
+						Pitch scorePitch = new Pitch(p);
+						if(descending) {
+							scorePitch.setOctave(octaveNumber);
+							if(pc == 0) {
+								octaveNumber--;
+							}
+							pc++;
+						}
+						else {
+							if(pc < scaleLength) {
+								scorePitch.setOctave(octaveNumber);
+								pc++;
+							}
+							else {
+								pc = 0;
+								octaveNumber = octaveNumber + 1;
+								scorePitch.setOctave(octaveNumber);
+							}
+						}
+						scorePitches.add(scorePitch);
+					}
+					if(!descending) {
+						octaveNumber++;
+					}
+				}
+				scorePitches.add(new Pitch(scaleRootPitch.getStep(), octaveNumber));
+				
+				/*
+				 * compute how many measures are needed, and any units left over
+				 */
+				int numberOfMeasuresNeeded = (int) Math.ceil(notesPerStaff / (double)notesPerMeasure);
+				int unitsNeeded = notesPerStaff * unitsPerNote;
+				int unitsAvailable = numberOfMeasuresNeeded * unitsPerMeasure;
+				int remainingUnits = unitsAvailable - unitsNeeded;	// needed to pad the last measure of the scale
+				
+				String directionTypeText = scale.getName() + ": " + formula.toString();
+				log.info("Working on " + directionTypeText);
 				/*
 				 * Staff 1 is the top staff (G-clef), staff 2 is the bottom staff (F-clef)
 				 */
-				for(int staffNumber: staff) {
-					int unitsThisMeasure = 0;
-					measure = createNewMeasure(measureNumber);
-					if(staffNumber == 1) {
+				List<Measure> scaleMeasures = new ArrayList<>();
+				for(int i=0; i<numberOfMeasuresNeeded; i++) {
+					Measure measure = createNewMeasure(measureNumber++);
+					if(i == 0) {	// add the scale name & formula
 						wordsDirectionType = new Words();
-						wordsDirectionType.setText(scale.getName() + ": " + formula.toString());
+						wordsDirectionType.setText(directionTypeText );
 						wordsScoreDirection = new ScoreDirection(1, wordsDirectionType);
-						if(scaleCounter == 0) {
-							// Add metronome and words to first measure on staff 1
-							measure.addScoreDirection(metronomeScoreDirection);
-							measure.getDisplayInfo().add(displayInfo);
-							measure.addScoreDirection(wordsScoreDirection);
-							displayInfo.setNewSystem(true);
-						}
-						else {
-							measure.getDisplayInfo().add(displayInfo);	// adds the system break
-						}
+						measure.addScoreDirection(wordsScoreDirection);
 					}
+					if(measureCounter == 0) {	// global first measure
+						measure.addScoreDirection(metronomeScoreDirection);
+						measure.getDisplayInfo().add(displayInfo);
+					}
+					scaleMeasures.add(measure);
+				}
 
-					/*
-					 * Add 2 octaves of scale notes on this staff 
-					 */
-					Note note = null;
-					for(int noctave = 0; noctave <=1; noctave++) {
-						int nnotes = 1;
-						for(Pitch p : scalePitches) {
-							// skip the last note in the first octave
-							if(nnotes >= scaleLength && noctave == 0) {
-								break;
-							}
-							// need to add the octave
-							Pitch notePitch = new Pitch(p);
-							notePitch.setOctave(staffNumber == 1 ? 4 + noctave : 2 + noctave);
-							note = new Note(notePitch, duration);
-							note.setStaff(staffNumber);
-							if(unitsThisMeasure < unitsPerMeasure) {
-								measure.accept(staffNumber, note);
-								unitsThisMeasure = unitsThisMeasure + unitsPerNote;
-							}
-							else {
-								scorePartEntity.getMeasures().add(measure);
-								measure = createNewMeasure(++measureNumber);
-								measure.accept(staffNumber, note);
-								unitsThisMeasure = unitsPerNote;
-							}
-							nnotes++;
-						}
-					}
-					/*
-					 * if there are units remaining for this staff measure need to
-					 * pad the duration of the last note
-					 */
-					if(unitsThisMeasure < unitsPerMeasure) {
-						int unitsRemaining = unitsPerMeasure - unitsThisMeasure;
-						Duration d = new Duration(unitsRemaining + unitsPerNote);
-						note.setDuration(d);
+				Note note = null;
+				Measure lastMeasure = null;
+				int staffNumber = 1;
+				int nnotes;
+				Iterator<Pitch> pitchIt = scorePitches.iterator();
+				for(Measure measure : scaleMeasures) {
+					nnotes = 1;
+					lastMeasure = measure;
+					while(nnotes <= notesPerMeasure && pitchIt.hasNext()) {
+						Pitch p = pitchIt.next();
+						Pitch notePitch = new Pitch(p);
+						note = new Note(notePitch, duration);
+						note.setStaff(staffNumber);
+						note.setNoteType("eighth");
 						measure.accept(staffNumber, note);
-						scorePartEntity.getMeasures().add(measure);
-					}
-					else {
-						scorePartEntity.getMeasures().add(measure);
+						nnotes++;
 					}
 				}
-				// add a barline to indicate end of this scale
+				/*
+				 * if there are units remaining for this staff measure need to
+				 * pad the duration of the last note
+				 */
+				if(remainingUnits > 0) {
+					int units = remainingUnits + unitsPerNote;
+					List<Duration> factors =  rhythmScale.getFactors(units);
+					int nFactors = factors.size();
+					Note previousNote = note;
+					Pitch p = note.getPitch();
+					IRhythmScale rhythmScale = instruments.get(instrumentName).getRhythmScale();	// use to determine noteType
+					String noteType = null;
+					if(nFactors > 1) {
+						for(int i = 0; i<nFactors; i++) {
+			    			Duration df = factors.get(i);
+			    			if(i == 0) {
+			    				note.setDuration(df);
+			    				noteType = rhythmScale.getNoteType(note);
+			    				note.setNoteType(noteType);
+			    				previousNote = note;
+			    			}
+			    			else {
+			    				Note newNote = new Note(p, df);
+			    				noteType = rhythmScale.getNoteType(note);
+			    				note.setNoteType(noteType);
+			    				newNote.setTiedFrom(previousNote);
+			    				previousNote.setTiedTo(note);
+			    				lastMeasure.accept(staffNumber, newNote);
+			    			}
+						}
+					}
+					else {
+						Duration d = new Duration(units);
+						note.setDuration(d);
+	    				noteType = rhythmScale.getNoteType(note);
+	    				note.setNoteType(noteType);
+					}
+				}
+				
+				staffNumber++;
+				for(Measure measure : scaleMeasures) {
+					for(Measurable measurable : measure.getMeasureables(1)) {
+						Note s1note = (Note)measurable;
+						Note s2note = new Note(s1note);
+						Pitch p = s1note.getPitch();
+						Pitch notePitch = new Pitch(p.getStep(), p.getOctave() - 2, p.getAlteration());
+						s2note.setPitch(notePitch);
+						s2note.setStaff(staffNumber);
+						measure.accept(staffNumber, s2note);
+					}
+				}
+
+				// add an empty measure and a barline to indicate end of this scale
 				scaleCounter++;
-				measure.setBarline(scaleCounter == scaleFormulas.size() ? lightLight : lightHeavy);
-			}
-		}
+				scorePartEntity.getMeasures().addAll(scaleMeasures);
+				lastMeasure = createNewMeasure(measureNumber++);
+				Note s1note = new Note(Pitch.SILENT, new Duration(unitsPerMeasure));		// essentially a rest
+				s1note.setNoteType("whole");
+				Note s2note = new Note(s1note);
+				s2note.setStaff(2);
+				s2note.setNoteType("whole");
+				lastMeasure.accept(1, s1note);
+				lastMeasure.accept(2, s2note);
+				lastMeasure.setBarline(scaleCounter == scaleFormulas.size() ? lightLight : lightHeavy);
+				scorePartEntity.getMeasures().add(lastMeasure);
+				
+			}	// scaleFormulas
+				
+		} // rootPitches
 
 		return score;
 	}
@@ -251,9 +343,9 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
     private void configureInstrument() {
     	String rhythmScaleName = RhythmScaleFactory.DEFAULT_RHYTHM_SCALE_NAME;
 		IRhythmScaleFactory factory = RhythmScaleFactory.getRhythmScaleFactory(rhythmScaleName);
-		IRhythmScale allRhythmScale = factory.createRhythmScale(rhythmScaleName);
+		rhythmScale = factory.createRhythmScale(rhythmScaleName);
 		Instrument piano = new Piano();
-		piano.setRhythmScale(allRhythmScale);
+		piano.setRhythmScale(rhythmScale);
 		instruments.put(instrumentName, piano);
 		
 	}
@@ -264,6 +356,7 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 		newMeasure.setDivisions(unitsPerMeasure);
 		newMeasure.setNumber(measureNumber);
 		newMeasure.setNumberOfStaves(2);
+		newMeasure.setKey(scoreKey);
     	return newMeasure;
     }
 
@@ -290,5 +383,5 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 	public Map<String, Instrument> getInstruments() {
 		return instruments;
 	}
-	
+
 }

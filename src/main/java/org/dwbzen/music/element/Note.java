@@ -46,7 +46,7 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 	 * Deep Copy constructor.
 	 * Creates a new Note from an existing one.
 	 * They will have the same Pitch, Duration, TupletType, voice# and noteType.
-	 * It does NOT copy tiedTo, tiedFrom Note references!
+	 * It does copy tiedTo, tiedFrom Note references!
 	 * @param prevNote a Note instance
 	 */
 	public Note(Note aNote) {
@@ -67,6 +67,7 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 		tieType = aNote.getTieType();
 		setPoint(aNote.getPoint());
 		setVoice(aNote.getVoice());
+		setStaff(aNote.getStaff());
 	}
 	
 	/**
@@ -155,7 +156,7 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer("Note: " + pitch.toString() + " duration: " + duration.toString());
+		StringBuffer sb = new StringBuffer("Note: " + pitch.toString() + " duration: " + duration.toString() + " staff: " + getStaff());
 		sb.append(" type: " + noteType + " tie: " + tieType);
 		if(tiedFrom != null) {
 			sb.append(" tiedFrom: " + tiedFrom.getPitch().toString() + " " + tiedFrom.getDuration());
