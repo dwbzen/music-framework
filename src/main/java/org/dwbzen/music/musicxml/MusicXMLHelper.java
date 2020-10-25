@@ -33,6 +33,7 @@ import org.audiveris.proxymusic.NoteType;
 import org.audiveris.proxymusic.PartList;
 import org.audiveris.proxymusic.PartName;
 import org.audiveris.proxymusic.PerMinute;
+import org.audiveris.proxymusic.Print;
 import org.audiveris.proxymusic.Rest;
 import org.audiveris.proxymusic.RightLeftMiddle;
 import org.audiveris.proxymusic.ScoreInstrument;
@@ -40,8 +41,11 @@ import org.audiveris.proxymusic.ScorePartwise;
 import org.audiveris.proxymusic.ScorePartwise.Part;
 import org.audiveris.proxymusic.Sound;
 import org.audiveris.proxymusic.StaffDetails;
+import org.audiveris.proxymusic.StaffLayout;
 import org.audiveris.proxymusic.StartStop;
 import org.audiveris.proxymusic.StartStopContinue;
+import org.audiveris.proxymusic.SystemLayout;
+import org.audiveris.proxymusic.SystemMargins;
 import org.audiveris.proxymusic.Tie;
 import org.audiveris.proxymusic.Tied;
 import org.audiveris.proxymusic.Time;
@@ -245,6 +249,7 @@ public class MusicXMLHelper {
 				/*
 				 * Measure 0 sets Attributes, Staff & Cleff info
 				 */
+				Tempo tempo = measure.getTempo();
 				if(measNum == 1) {
 					int divsisions = measure.getDivisions() / measure.getBeatNote();
 					_attributes.setDivisions(BigDecimal.valueOf(divsisions));
@@ -310,7 +315,6 @@ public class MusicXMLHelper {
 						_direction.setPlacement(AboveBelow.ABOVE);
 						DirectionType _directionType = new DirectionType();
 						FormattedText _formattedText = new FormattedText();
-						Tempo tempo = measure.getTempo();
 						_formattedText.setValue(Tempo.getTempoMarking(tempo.getBeatsPerMinute()));
 						_directionType.getWords().add(_formattedText);
 						_direction.getDirectionType().add(_directionType);
@@ -319,38 +323,57 @@ public class MusicXMLHelper {
 						_sound.setTempo(new BigDecimal(tempo.getBeatsPerMinute()));
 						_direction.setSound(_sound);
 						_measure.getNoteOrBackupOrForward().add(_direction);
-						if(measure.getScoreDirections() != null && measure.getScoreDirections().size() > 0) {
-							for(ScoreDirection  scoreDirection : measure.getScoreDirections()) {
-								if(scoreDirection.getDirectionType().getScoreDirectionType().equals(ScoreDirectionType.WORDS)) {
-									Words wdt = (Words)scoreDirection.getDirectionType();
-									_direction = new Direction();
-									_direction.setPlacement(AboveBelow.ABOVE);
-									_direction.setStaff(BigInteger.ONE);
-									_directionType = new DirectionType();
-									_formattedText = new FormattedText();
-									_formattedText.setValue(wdt.getText());
-									_directionType.getWords().add(_formattedText);
-									_direction.getDirectionType().add(_directionType);
-									_measure.getNoteOrBackupOrForward().add(_direction);
-								}
-								else if(scoreDirection.getDirectionType().getScoreDirectionType().equals(ScoreDirectionType.METRONOME)) {
-									Metronome mdt = (Metronome)scoreDirection.getDirectionType();
-									_direction = new Direction();
-									_direction.setPlacement(AboveBelow.ABOVE);
-									_direction.setStaff(BigInteger.ONE);
-									_directionType = new DirectionType();
-									org.audiveris.proxymusic.Metronome _metronome = new org.audiveris.proxymusic.Metronome();
-									PerMinute _perMinute = new PerMinute();
-									_perMinute.setValue("" + mdt.getBeatsPerMinute());
-									_metronome.setPerMinute(_perMinute);
-									String beat_unit = Duration.BeatUnitNames[ tempo.getBeatUnit().ordinal()];
-									_metronome.getBeatUnit().add(beat_unit);
-									_directionType.setMetronome(_metronome);
-									_direction.getDirectionType().add(_directionType);
-									_measure.getNoteOrBackupOrForward().add(_direction);
-								}
-							}
+					}
+				}	// measNum == 1
+				
+				if(measure.getScoreDirections() != null && measure.getScoreDirections().size() > 0) {
+					for(ScoreDirection  scoreDirection : measure.getScoreDirections()) {
+						if(scoreDirection.getDirectionType().getScoreDirectionType().equals(ScoreDirectionType.WORDS)) {
+							Words wdt = (Words)scoreDirection.getDirectionType();
+							Direction _direction = new Direction();
+							_direction.setPlacement(AboveBelow.ABOVE);
+							_direction.setStaff(BigInteger.ONE);
+							DirectionType _directionType = new DirectionType();
+							FormattedText _formattedText = new FormattedText();
+							_formattedText.setValue(wdt.getText());
+							_directionType.getWords().add(_formattedText);
+							_direction.getDirectionType().add(_directionType);
+							_measure.getNoteOrBackupOrForward().add(_direction);
 						}
+						else if(scoreDirection.getDirectionType().getScoreDirectionType().equals(ScoreDirectionType.METRONOME)) {
+							Metronome mdt = (Metronome)scoreDirection.getDirectionType();
+							Direction _direction = new Direction();
+							_direction.setPlacement(AboveBelow.ABOVE);
+							_direction.setStaff(BigInteger.ONE);
+							DirectionType _directionType = new DirectionType();
+							org.audiveris.proxymusic.Metronome _metronome = new org.audiveris.proxymusic.Metronome();
+							PerMinute _perMinute = new PerMinute();
+							_perMinute.setValue("" + mdt.getBeatsPerMinute());
+							_metronome.setPerMinute(_perMinute);
+							String beat_unit = Duration.BeatUnitNames[ tempo.getBeatUnit().ordinal()];
+							_metronome.getBeatUnit().add(beat_unit);
+							_directionType.setMetronome(_metronome);
+							_direction.getDirectionType().add(_directionType);
+							_measure.getNoteOrBackupOrForward().add(_direction);
+						}
+					}
+				}
+				if(measure.getDisplayInfo() != null) {
+					for(DisplayInfo displayInfo : measure.getDisplayInfo()) {
+						Print _print = new Print();
+						_print.setNewSystem(displayInfo.isNewSystem() ? YesNo.YES : YesNo.NO);
+						_print.setNewPage(displayInfo.isNewPage() ? YesNo.YES : YesNo.NO);
+						SystemLayout _systemLayout = new SystemLayout();
+						StaffLayout _staffLayout = new StaffLayout();
+						_systemLayout.setSystemDistance(BigDecimal.valueOf(displayInfo.getSystem_distance()));
+						SystemMargins _margins = new SystemMargins();
+						_margins.setLeftMargin(BigDecimal.valueOf(displayInfo.getSystem_left_margin()));
+						_margins.setRightMargin(BigDecimal.valueOf(displayInfo.getSystem_right_margin()));
+						_systemLayout.setSystemMargins(_margins);
+						_staffLayout.setStaffDistance(BigDecimal.valueOf(displayInfo.getStaff_distance()));
+						_print.setSystemLayout(_systemLayout);
+						_print.getStaffLayout().add(_staffLayout);
+						_measure.getNoteOrBackupOrForward().add(_print);
 					}
 				}
 				//_measure = new org.audiveris.proxymusic.ScorePartwise.Part.Measure();

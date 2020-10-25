@@ -27,6 +27,7 @@ package org.dwbzen.music.musicxml;
 public class DisplayInfo {
 
 	private boolean newSystem = false;
+	private boolean newPage = false;
 	private double system_left_margin = 21.0;
 	private double system_right_margin = 0.0;
 	private double system_distance = 170.0;
@@ -84,6 +85,14 @@ public class DisplayInfo {
 
 	public void setStaff_number(int staff_number) {
 		this.staff_number = staff_number;
+	}
+
+	public boolean isNewPage() {
+		return newPage;
+	}
+
+	public void setNewPage(boolean newPage) {
+		this.newPage = newPage;
 	}
 		
 }

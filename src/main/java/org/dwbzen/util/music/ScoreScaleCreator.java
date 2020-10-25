@@ -125,7 +125,7 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 		scorePartEntity = score.getScorePartEntityForInstrument(instrumentName);
 		scorePart = score.getScoreParts().get(instrumentName);
 
-		int tempoBPM = 80; //	Integer.parseInt(configProperties.getProperty("score.tempo", "80"));
+		int tempoBPM = Integer.parseInt(configProperties.getProperty("score.scales.tempo", "80"));
 		tempo = new Tempo(tempoBPM);
         scoreKey = new Key(configProperties.getProperty("score.key", "C-Major"));
         scorePartEntity.setScoreKey(scoreKey);
@@ -159,7 +159,7 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 
 		int measureNumber = 1;
 		int scaleCounter = 0;	// the number of scales added counter
-		int measureCounter = 0;	// number of measures added
+		int measureCounter = 0;	// global counter of measures added
 		for(Pitch pitch : rootPitches) {
 			for(ScaleFormula formula : scaleFormulas) {
 				String name = formula.getName();
@@ -237,12 +237,14 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 						wordsDirectionType.setText(directionTypeText );
 						wordsScoreDirection = new ScoreDirection(1, wordsDirectionType);
 						measure.addScoreDirection(wordsScoreDirection);
-					}
-					if(measureCounter == 0) {	// global first measure
-						measure.addScoreDirection(metronomeScoreDirection);
 						measure.getDisplayInfo().add(displayInfo);
+						if(measureCounter == 0) {
+							measure.addScoreDirection(metronomeScoreDirection);
+						}
+						displayInfo.setNewSystem(true);
 					}
 					scaleMeasures.add(measure);
+					measureCounter++;
 				}
 
 				Note note = null;
@@ -275,31 +277,25 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 					Pitch p = note.getPitch();
 					IRhythmScale rhythmScale = instruments.get(instrumentName).getRhythmScale();	// use to determine noteType
 					String noteType = null;
-					if(nFactors > 1) {
-						for(int i = 0; i<nFactors; i++) {
-			    			Duration df = factors.get(i);
-			    			if(i == 0) {
-			    				note.setDuration(df);
-			    				noteType = rhythmScale.getNoteType(note);
-			    				note.setNoteType(noteType);
-			    				previousNote = note;
-			    			}
-			    			else {
-			    				Note newNote = new Note(p, df);
-			    				noteType = rhythmScale.getNoteType(note);
-			    				note.setNoteType(noteType);
-			    				newNote.setTiedFrom(previousNote);
-			    				previousNote.setTiedTo(note);
-			    				lastMeasure.accept(staffNumber, newNote);
-			    			}
-						}
+
+					for(int i = 0; i<nFactors; i++) {
+		    			Duration df = factors.get(i);
+		    			if(i == 0) {
+		    				note.setDuration(df);
+		    				noteType = rhythmScale.getNoteType(note);
+		    				note.setNoteType(noteType);
+		    				previousNote = note;
+		    			}
+		    			else {
+		    				Note newNote = new Note(p, df);
+		    				noteType = rhythmScale.getNoteType(note);
+		    				note.setNoteType(noteType);
+		    				newNote.setTiedFrom(previousNote);
+		    				previousNote.setTiedTo(note);
+		    				lastMeasure.accept(staffNumber, newNote);
+		    			}
 					}
-					else {
-						Duration d = new Duration(units);
-						note.setDuration(d);
-	    				noteType = rhythmScale.getNoteType(note);
-	    				note.setNoteType(noteType);
-					}
+
 				}
 				
 				staffNumber++;
@@ -326,8 +322,9 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 				s2note.setNoteType("whole");
 				lastMeasure.accept(1, s1note);
 				lastMeasure.accept(2, s2note);
-				lastMeasure.setBarline(scaleCounter == scaleFormulas.size() ? lightLight : lightHeavy);
+				lastMeasure.setBarline(scaleCounter == scaleFormulas.size() ? lightHeavy : lightLight);
 				scorePartEntity.getMeasures().add(lastMeasure);
+				measureCounter++;
 				
 			}	// scaleFormulas
 				
