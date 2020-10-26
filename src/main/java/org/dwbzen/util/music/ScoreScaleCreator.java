@@ -316,10 +316,8 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 				scorePartEntity.getMeasures().addAll(scaleMeasures);
 				lastMeasure = createNewMeasure(measureNumber++);
 				Note s1note = new Note(Pitch.SILENT, new Duration(unitsPerMeasure));		// essentially a rest
-				s1note.setNoteType("whole");
 				Note s2note = new Note(s1note);
 				s2note.setStaff(2);
-				s2note.setNoteType("whole");
 				lastMeasure.accept(1, s1note);
 				lastMeasure.accept(2, s2note);
 				lastMeasure.setBarline(scaleCounter == scaleFormulas.size() ? lightHeavy : lightLight);

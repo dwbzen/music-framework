@@ -111,7 +111,8 @@ public class MusicXMLHelper {
 
 	private ScorePartwise _scorePartwise;
 	private Work _work = null;
-	private boolean scoreMidi = false;	// TODO make this configurable
+	private boolean scoreMidi = false;
+	private boolean suppressTempoMarking = false;	// suppress the words - Allegro, Presto etc.
 	
 	public static void main(String[] args) {
 		boolean marshall = false;		// TODO
@@ -246,6 +247,25 @@ public class MusicXMLHelper {
 			Attributes _attributes = new Attributes();
 			int measNum = 1;
 			for(Measure measure : scorePartEntity.getMeasures()) {
+				if(measure.getDisplayInfo() != null) {
+					for(DisplayInfo displayInfo : measure.getDisplayInfo()) {
+						Print _print = new Print();
+						_print.setNewSystem(displayInfo.isNewSystem() ? YesNo.YES : YesNo.NO);
+						_print.setNewPage(displayInfo.isNewPage() ? YesNo.YES : YesNo.NO);
+						SystemLayout _systemLayout = new SystemLayout();
+						StaffLayout _staffLayout = new StaffLayout();
+						_systemLayout.setSystemDistance(BigDecimal.valueOf(displayInfo.getSystem_distance()));
+						SystemMargins _margins = new SystemMargins();
+						_margins.setLeftMargin(BigDecimal.valueOf(displayInfo.getSystem_left_margin()));
+						_margins.setRightMargin(BigDecimal.valueOf(displayInfo.getSystem_right_margin()));
+						_systemLayout.setSystemMargins(_margins);
+						_staffLayout.setStaffDistance(BigDecimal.valueOf(displayInfo.getStaff_distance()));
+						_print.setSystemLayout(_systemLayout);
+						_print.getStaffLayout().add(_staffLayout);
+						_measure.getNoteOrBackupOrForward().add(_print);
+					}
+				}
+
 				/*
 				 * Measure 0 sets Attributes, Staff & Cleff info
 				 */
@@ -310,7 +330,8 @@ public class MusicXMLHelper {
 					_attributes.getStaffDetails().add(_staffDetails);
 					
 					// set measure direction - includes direction-type words and sound tempo=nnn
-					if(partnum == 1) {
+					// May want to suppress this if adding a Metronome direction.
+					if(!isSuppressTempoMarking() && partnum == 1) {
 						Direction _direction = new Direction();
 						_direction.setPlacement(AboveBelow.ABOVE);
 						DirectionType _directionType = new DirectionType();
@@ -358,24 +379,7 @@ public class MusicXMLHelper {
 						}
 					}
 				}
-				if(measure.getDisplayInfo() != null) {
-					for(DisplayInfo displayInfo : measure.getDisplayInfo()) {
-						Print _print = new Print();
-						_print.setNewSystem(displayInfo.isNewSystem() ? YesNo.YES : YesNo.NO);
-						_print.setNewPage(displayInfo.isNewPage() ? YesNo.YES : YesNo.NO);
-						SystemLayout _systemLayout = new SystemLayout();
-						StaffLayout _staffLayout = new StaffLayout();
-						_systemLayout.setSystemDistance(BigDecimal.valueOf(displayInfo.getSystem_distance()));
-						SystemMargins _margins = new SystemMargins();
-						_margins.setLeftMargin(BigDecimal.valueOf(displayInfo.getSystem_left_margin()));
-						_margins.setRightMargin(BigDecimal.valueOf(displayInfo.getSystem_right_margin()));
-						_systemLayout.setSystemMargins(_margins);
-						_staffLayout.setStaffDistance(BigDecimal.valueOf(displayInfo.getStaff_distance()));
-						_print.setSystemLayout(_systemLayout);
-						_print.getStaffLayout().add(_staffLayout);
-						_measure.getNoteOrBackupOrForward().add(_print);
-					}
-				}
+				
 				//_measure = new org.audiveris.proxymusic.ScorePartwise.Part.Measure();
 				//_measure.setNumber(String.valueOf(measNum++));
 				for(int staffnum = 1; staffnum <= numberOfStaves; staffnum++) {
@@ -688,6 +692,26 @@ public class MusicXMLHelper {
 	
 	public static org.audiveris.proxymusic.Step getStep(Step step) {
 		return Step.StepMap.get(step);
+	}
+
+
+	public boolean isScoreMidi() {
+		return scoreMidi;
+	}
+
+
+	public void setScoreMidi(boolean scoreMidi) {
+		this.scoreMidi = scoreMidi;
+	}
+
+
+	public boolean isSuppressTempoMarking() {
+		return suppressTempoMarking;
+	}
+
+
+	public void setSuppressTempoMarking(boolean suppressTempoMarking) {
+		this.suppressTempoMarking = suppressTempoMarking;
 	}
 	
 }

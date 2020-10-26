@@ -91,7 +91,8 @@ public class ScaleExportManager  {
 	ObjectMapper mapper = new ObjectMapper();
 	
 	private List<Pitch> rootPitches = new ArrayList<Pitch>();
-	private Map<String, ScaleFormula> scaleFormulas = new TreeMap<String, ScaleFormula>();
+	private Map<String, ScaleFormula> scaleFormulas = new TreeMap<>();
+	private Map<String,  List<ScaleFormula>> scaleFormulasGroupMap = new TreeMap<>();
 	private String resourceFile = null;
 	private String group = null;
 	private String outputFormat = null;
@@ -132,6 +133,8 @@ public class ScaleExportManager  {
 		boolean scales = false;
 		String fileName = null;
 		boolean createXml = false;
+		boolean showStats = false;
+		boolean listFormulas = false;
 		
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
@@ -164,6 +167,12 @@ public class ScaleExportManager  {
     			else if(args[i].equalsIgnoreCase("-name")) {
     				scaleName = args[++i].toLowerCase();
     			}
+    			else if(args[i].equalsIgnoreCase("-stats")) {
+    				showStats = Boolean.valueOf(args[++i]);
+    			}
+    			else if(args[i].equalsIgnoreCase("-list")) {
+    				listFormulas = Boolean.valueOf(args[++i]);
+    			}    			
     			else if(args[i].equalsIgnoreCase("-file")) {
     				// base filename including the full path - extension added later depending on output format
     				// for example, "/Users/DWBZe/Documents/Music/Scores/musicXML/Scales"
@@ -172,7 +181,13 @@ public class ScaleExportManager  {
     			}
     		}
     	}
+    	
 		ScaleExportManager scaleExportManager = new ScaleExportManager(resourceFile, outputFormat, group, size);
+		if(showStats) {
+			String s = scaleExportManager.getStats(listFormulas);
+			System.out.println(s);
+		}
+		
 		boolean isMusicXML = outputFormat.equalsIgnoreCase("musicxml");
 		if(importFormat != null) {
 			scaleExportManager.setImportFormat(importFormat);
@@ -479,6 +494,37 @@ public class ScaleExportManager  {
 		return configuration;
 	}
 
+
+	public Map<String, List<ScaleFormula>> getScaleFormulasGroupMap() {
+		return scaleFormulasGroupMap;
+	}
+
+	/**
+	 * Gets group stats - number of scales in each group.<br>
+	 * If listFormulas is true, also lists the scale names in the group.
+	 * 
+	 * @param listFormulas
+	 * @return
+	 */
+	public String getStats(boolean listFormulas) {
+		StringBuilder sb = new StringBuilder();
+		for(String groupName : scaleFormulasGroupMap.keySet()) {
+			sb.append(groupName);
+			List<ScaleFormula> flist = scaleFormulasGroupMap.get(groupName);
+			sb.append("\t" + flist.size() + "\n");
+			if(listFormulas) {
+				for(ScaleFormula sf : flist) {
+					sb.append("\t\t" + sf.getName());
+					String pitches = sf.createPitches(Pitch.C).toString();
+					sb.append("\t" +sf.getFormula().toString() );
+					sb.append("\t" + pitches);
+					sb.append("\n");
+				}
+			}
+		}
+		return sb.toString();
+	}
+	
 	/**
 	 * Deserializes a JSON ScaleFormula and adds to scaleFormulas Map
 	 */
@@ -490,12 +536,24 @@ public class ScaleExportManager  {
 		} catch (Exception e) {
 			log.error("Cannot deserialize " + formulaString + "\nbecause " + e.toString());
 		}
-		if(scaleFormula != null) {	scaleFormulas.put(scaleFormula.getName(), scaleFormula); }
-		
+		if(scaleFormula != null) {	
+			scaleFormulas.put(scaleFormula.getName(), scaleFormula);
+			for(String group : scaleFormula.getGroups()) {
+				if(scaleFormulasGroupMap.containsKey(group)) {
+					scaleFormulasGroupMap.get(group).add(scaleFormula);
+				}
+				else {
+					List<ScaleFormula> glist = new ArrayList<>();
+					glist.add(scaleFormula);
+					scaleFormulasGroupMap.put(group, glist);
+				}
+			}
+		}
 	}
 	
 	public static void createXML(String filename, Score score,  Configuration config) {
 		MusicXMLHelper helper = new MusicXMLHelper(score, config.getProperties());
+		helper.setSuppressTempoMarking(true);
 		helper.convert();	// creates and returns a com.audiveris.proxymusic.ScorePartwise
 		PrintStream ps = System.out;
 		if(filename != null) {

@@ -146,7 +146,7 @@
 {"Genus Chromaticum (6b's)":{"groups":[ "genus" ],"formula":[ 1, 2, 1, 1, 2, 1, 1, 2, 1 ],"size":9} },
 {"Genus Primum Inverse":{"groups":[ "genus" ],"formula":[ 5, 2, 3, 2 ],"size":4} },
 {"Genus Secundum":{"alternateNames":[ "Chord CMaj6sus4" ],"groups":[ "genus" ],"formula":[ 4, 1, 2, 2, 2, 1 ],"size":6} },
-{"Gipsy Hexatonic, Raga Kalakanti":{"groups":[ "gipsy" ],"formula":[ 1, 4, 1, 2, 1, 1, 2 ],"size":7} },
+{"Gipsy Hexatonic, Raga Kalakanti":{"groups":[ "gypsy" ],"formula":[ 1, 4, 1, 2, 1, 1, 2 ],"size":7} },
 {"Gypsy Hexatonic":{"groups":[ "gypsy" ],"formula":[ 1, 3, 1, 2, 1, 1, 3 ],"size":7} },
 {"Half Diminished plus b8":{"groups":[ "half" ],"formula":[ 3, 3, 4, 1, 1 ],"size":5} },
 {"Half-Dimiished Bebop":{"groups":[ "half" ],"formula":[ 1, 2, 2, 1, 1, 1, 3, 1 ],"size":8} },
