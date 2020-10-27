@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +95,7 @@ public class ScaleExportManager  {
 	private Map<String, ScaleFormula> scaleFormulas = new TreeMap<>();
 	private Map<String,  List<ScaleFormula>> scaleFormulasGroupMap = new TreeMap<>();
 	private String resourceFile = null;
-	private String group = null;
+	private List<String> groups = new ArrayList<>();
 	private String outputFormat = null;
 	private String importFormat = "JSON";	// resource file JSON format
 	private String collectionName = null;
@@ -102,12 +103,12 @@ public class ScaleExportManager  {
 	private int size = 0;
 	private String outputFileName = null;
 	
-	public ScaleExportManager(String resource, String format, String group, int size) {
+	public ScaleExportManager(String resource, String format, List<String> groups, int size) {
 		configure();
 		resourceFile = resource;
 		outputFormat = format;
 		this.size = size;
-		this.group = group;
+		this.groups.addAll(groups);
 		loadScaleFormulas();
 	}
 	
@@ -124,7 +125,7 @@ public class ScaleExportManager  {
 		String resourceFile = "common_scaleFormulas.json";
 		String outputFormat = "JSON";
 		String importFormat = null;
-		String group = null;
+		String[] groups = null;
 		String collectionName = null;
 		String scaleName = null;
 		int size = 0;
@@ -147,7 +148,7 @@ public class ScaleExportManager  {
     				size = Integer.parseInt(args[++i]);
     			}
     			else if(args[i].startsWith("-group")) {
-    				group = args[++i];
+    				groups = args[++i].split(",");
     			}
     			else if(args[i].equalsIgnoreCase("-resource")) {
     				resourceFile = args[++i];
@@ -159,7 +160,7 @@ public class ScaleExportManager  {
     				importFormat = args[++i];
     			}
     			else if(args[i].equalsIgnoreCase("-formulas")) {
-    				exportFormulas = true;
+    				exportFormulas = Boolean.valueOf(args[++i]);
     			}
     			else if(args[i].equalsIgnoreCase("-collection")) {
     				collectionName = args[++i];
@@ -181,8 +182,8 @@ public class ScaleExportManager  {
     			}
     		}
     	}
-    	
-		ScaleExportManager scaleExportManager = new ScaleExportManager(resourceFile, outputFormat, group, size);
+    	List<String> grouplist = groups != null ? Arrays.asList(groups) : new ArrayList<String>();
+		ScaleExportManager scaleExportManager = new ScaleExportManager(resourceFile, outputFormat, grouplist, size);
 		if(showStats) {
 			String s = scaleExportManager.getStats(listFormulas);
 			System.out.println(s);
@@ -266,12 +267,14 @@ public class ScaleExportManager  {
 	 */
 	public String exportScaleFormulas() {
 		stringBuilder = new StringBuilder("[\n");
-		Set<String> kset = scaleFormulas.keySet();
-			kset.stream()
+		for(String group : groups) {
+			scaleFormulas.keySet()
+			.stream()
 			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
 			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
 			.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().equals(scaleName))
 			.forEach(s ->  exportScaleFormula(scaleFormulas.get(s)));
+		}
 		stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
 		stringBuilder.append("]");
 		return(stringBuilder.toString());
@@ -327,24 +330,28 @@ public class ScaleExportManager  {
 	 */
 	public List<ScaleFormula> findScaleFormulas() {
 		List<ScaleFormula> formulas = new ArrayList<ScaleFormula>();
-		scaleFormulas.keySet()
-		.stream()
-		.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
-		.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
-		.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().equals(scaleName))
-		.sorted()
-		.forEach(s ->  formulas.add(scaleFormulas.get(s)));
+		for(String group : groups) {
+			scaleFormulas.keySet()
+			.stream()
+			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
+			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
+			.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().equals(scaleName))
+			.sorted()
+			.forEach(s ->  formulas.add(scaleFormulas.get(s)));
+		}
 		return formulas;
 	}
 	
 	public String exportScales() {
 		stringBuilder = new StringBuilder("[\n");
-		scaleFormulas.keySet()
+		for(String group : groups) {
+			scaleFormulas.keySet()
 			.stream()
 			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
 			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
 			.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().equals(scaleName))
 			.forEach(s ->  exportScales(scaleFormulas.get(s)));
+		}
 		stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
 		stringBuilder.append("]");
 		return(stringBuilder.toString());
