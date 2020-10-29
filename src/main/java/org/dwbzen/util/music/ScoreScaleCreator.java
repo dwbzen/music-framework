@@ -3,7 +3,6 @@ package org.dwbzen.util.music;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,6 @@ import org.dwbzen.music.element.direction.Metronome;
 import org.dwbzen.music.element.direction.ScoreDirection;
 import org.dwbzen.music.element.direction.Words;
 import org.dwbzen.music.instrument.Instrument;
-import org.dwbzen.music.instrument.Piano;
 import org.dwbzen.music.musicxml.DisplayInfo;
 import org.dwbzen.util.Configuration;
 
@@ -40,7 +38,10 @@ import org.dwbzen.util.Configuration;
  * Creates a Score consisting of scales for the scale formulas and roots specified.<br>
  * The Score can then be Marshalled to MusicXML file using MusicXMLHelper.</p>
  * When scoring on the so-called Grand Staff, each Measure has the<br>
- * notes for the top staff (staff=1) first, followed by the staff 2 notes.
+ * notes for the top staff (staff=1) first, followed by the staff 2 notes.</p>
+ * Currently this supports scoring for a single Grand Scale instrument such as<br>
+ * Piano or Harpsichord. A future enhancement will permit multiple valid, pitched instruments.<br>
+ * 
  * 
  * @author don_bacon
  *
@@ -52,7 +53,7 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 
 	public static final String CONFIG_FILENAME = "/config.properties";
 	public static final String ORCHESTRA_CONFIG_FILENAME="/orchestra.properties";
-	public static final String instrumentName = "Piano";
+	public static final String defaultInstrumentName = "Piano";
 	
 	private Properties configProperties = null;
 	private Configuration configuration = null;
@@ -68,15 +69,23 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 	private List<ScaleFormula> scaleFormulas = new ArrayList<>();
 	private List<Pitch> rootPitches = new ArrayList<>();
 	private String scoreTitle = null;
-	private Map<String, Instrument> instruments = new HashMap<>();
+	private Map<String, Instrument> instruments = null;
+	private String instrumentName = null;
 	
 	public ScoreScaleCreator(String title) {
 		scoreTitle = title;
+		instrumentName = defaultInstrumentName;
 		configure();
 	}
 	
-	public ScoreScaleCreator(String title, List<ScaleFormula> scaleFormulas, List<Pitch> rootPitches) {
-		this(title);
+	public ScoreScaleCreator(String title, String name) {
+		scoreTitle = title;
+		instrumentName = name==null ? defaultInstrumentName : name;
+		configure();
+	}
+	
+	public ScoreScaleCreator(String title,  String name, List<ScaleFormula> scaleFormulas, List<Pitch> rootPitches) {
+		this(title, name);
 		this.scaleFormulas = scaleFormulas;
 		this.rootPitches = rootPitches;
 	}
@@ -125,7 +134,7 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 		scorePartEntity = score.getScorePartEntityForInstrument(instrumentName);
 		scorePart = score.getScoreParts().get(instrumentName);
 
-		int tempoBPM = Integer.parseInt(configProperties.getProperty("score.scales.tempo", "80"));
+		int tempoBPM = Integer.parseInt(configProperties.getProperty("score.scales.tempo", "90"));
 		tempo = new Tempo(tempoBPM);
         scoreKey = new Key(configProperties.getProperty("score.key", "C-Major"));
         scorePartEntity.setScoreKey(scoreKey);
@@ -331,18 +340,22 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 		return score;
 	}
 	
-	/*
-	 * Set score instrument to Piano on Grand Scale using the default rhythm scale.<br>
+	/**
+	 * Set score instrument to Piano (default) or specified instrument on Grand Scale using the default rhythm scale.<br>
 	 * This also sets the number of units per measure to 480.
 	 */
-    private void configureInstrument() {
+    public void configureInstrument() {
     	String rhythmScaleName = RhythmScaleFactory.DEFAULT_RHYTHM_SCALE_NAME;
 		IRhythmScaleFactory factory = RhythmScaleFactory.getRhythmScaleFactory(rhythmScaleName);
 		rhythmScale = factory.createRhythmScale(rhythmScaleName);
-		Instrument piano = new Piano();
-		piano.setRhythmScale(rhythmScale);
-		instruments.put(instrumentName, piano);
+		InstrumentMaker instrumentMaker = new InstrumentMaker(instrumentName, configuration);
 		
+		instruments = instrumentMaker.get();
+		if(instruments != null && instruments.containsKey(instrumentName)) {
+			Instrument instrument = instruments.get(instrumentName);
+			instrument.setRhythmScale(rhythmScale);
+			instruments.put(instrumentName, instrument);
+		}
 	}
 
 	private Measure createNewMeasure(int measureNumber) {
@@ -373,6 +386,14 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 
 	public Score getScore() {
 		return score;
+	}
+
+	public String getInstrumentName() {
+		return instrumentName;
+	}
+
+	public void setInstrumentName(String instrumentName) {
+		this.instrumentName = instrumentName;
 	}
 
 	public Map<String, Instrument> getInstruments() {

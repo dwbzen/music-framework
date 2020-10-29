@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
@@ -102,6 +101,7 @@ public class ScaleExportManager  {
 	private String scaleName = null;	// regex scale name matching
 	private int size = 0;
 	private String outputFileName = null;
+	private String scalesInstrumentName = null;
 	
 	public ScaleExportManager(String resource, String format, List<String> groups, int size) {
 		configure();
@@ -133,9 +133,9 @@ public class ScaleExportManager  {
 		boolean exportFormulas = false;
 		boolean scales = false;
 		String fileName = null;
-		boolean createXml = false;
 		boolean showStats = false;
 		boolean listFormulas = false;
+		String instrumentName = null;
 		
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
@@ -173,7 +173,10 @@ public class ScaleExportManager  {
     			}
     			else if(args[i].equalsIgnoreCase("-list")) {
     				listFormulas = Boolean.valueOf(args[++i]);
-    			}    			
+    			}
+    			else if(args[i].equalsIgnoreCase("-instrument")) {	// for musicXML output
+    				instrumentName =  args[++i];
+    			}  
     			else if(args[i].equalsIgnoreCase("-file")) {
     				// base filename including the full path - extension added later depending on output format
     				// for example, "/Users/DWBZe/Documents/Music/Scores/musicXML/Scales"
@@ -208,6 +211,7 @@ public class ScaleExportManager  {
 		}
 		
 		if(isMusicXML) {
+			scaleExportManager.setScalesInstrumentName(instrumentName);
 			Score score = scaleExportManager.exportScalesScore();
 			String outputFile = scaleExportManager.getOutputFileName();
 			log.info("*** Score created ***");
@@ -390,7 +394,8 @@ public class ScaleExportManager  {
 			rootPitches.add(Pitch.C);
 		}
 		String scoreTitle = "Scales_"  + dateFormat.format(new Date());
-		scaleCreator = new ScoreScaleCreator(scoreTitle);
+		// if scalesInstrumentName is null, ScoreScaleCreator uses Piano as the default
+		scaleCreator = new ScoreScaleCreator(scoreTitle, scalesInstrumentName);
 		Score theScore = scaleCreator.apply(scaleFormulas, rootPitches);
 		return theScore;
 	}
@@ -504,6 +509,14 @@ public class ScaleExportManager  {
 
 	public Map<String, List<ScaleFormula>> getScaleFormulasGroupMap() {
 		return scaleFormulasGroupMap;
+	}
+
+	public String getScalesInstrumentName() {
+		return scalesInstrumentName;
+	}
+
+	public void setScalesInstrumentName(String scalesInstrumentName) {
+		this.scalesInstrumentName = scalesInstrumentName;
 	}
 
 	/**
