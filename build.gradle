@@ -14,8 +14,8 @@ apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 
-sourceCompatibility = 14
-targetCompatibility = 14
+sourceCompatibility = 15
+targetCompatibility = 15
 group = 'org.dwbzen.music-framework'
 version = '3.1'
 description = 'Music Framework'

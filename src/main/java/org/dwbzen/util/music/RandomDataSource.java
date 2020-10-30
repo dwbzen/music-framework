@@ -13,24 +13,22 @@ import org.dwbzen.util.Configuration;
 import org.apache.commons.math3.util.Precision;
 
 /**
- * Streams random data (Point2D) with bounds set by configuration
- * or defaults to X, Y >=0 and <1
+ * Streams random data (Point2D) with bounds set by configuration or defaults to X, Y >=0 and 1<br>
  * 
- * Can be configured to return probability density function (PDF)
- * values for a given distribution.
- * Normal distribution specified with a configured std. deviation (sigma) and mean (mu);
- * Standard normal distribution is sigma = 1, mu = 0.
- * Domain values should be chosen appropriately for a given mu and sigma. Some suggestions:
- * sigma=1, mu=0: [-2.0. 2.0]
- * sigma=1, mu=-2: [-4.0, 0.0]
- * sigma=1.5, mu=-2: [-6.0, 2.0]
- * Sigma, mu and domain values can be chosen to skew values in the upper or lower range.
- * Note that there are different PDFs for x and y point values.
+ * Can be configured to return probability density function (PDF) values for a given distribution.<br>
+ * Normal distribution specified with a configured std. deviation (sigma) and mean (mu)<br>
+ * Standard normal distribution is sigma = 1, mu = 0.<br>
+ * Domain values should be chosen appropriately for a given mu and sigma. Some suggestions:<br>
+ * sigma=1, mu=0: [-2.0. 2.0]<br>
+ * sigma=1, mu=-2: [-4.0, 0.0]<br>
+ * sigma=1.5, mu=-2: [-6.0, 2.0]<br>
+ * Sigma, mu and domain values can be chosen to skew values in the upper or lower range.<br>
+ * Note that there are different PDFs for x and y point values.</p>
  * 
  * For Normal distribution, the rangeX, rangeY values are set to the domainX and domainY values
  * Otherwise, domainX, domainY are not used.
  * 
- * @see mathlib.ProbabilityDensityFunction
+ * @see org.dwbzen.common.math.ProbabilityDensityFunction
  * @author don_bacon
  *
  */
