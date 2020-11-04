@@ -41,6 +41,7 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 	private List<String> alternateNames = new ArrayList<String>();
 	private List<String> groups = new ArrayList<String>();
 	private List<Integer> formula = new ArrayList<Integer>();
+	private String formulaString = null;	// just the toString() of the formula
 	private int size;
 
 	static {
@@ -119,6 +120,13 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getFormulaString() {
+		if(formulaString == null) {
+			formulaString = toString();
+		}
+		return formulaString;
 	}
 
 	@Override

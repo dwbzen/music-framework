@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dwbzen.music.element.IRhythmScale;
 import org.dwbzen.music.element.Key;
 import org.dwbzen.music.instrument.IInstrument;
 import org.dwbzen.music.instrument.Instrument;
@@ -91,6 +92,16 @@ public class InstrumentMaker  implements Supplier<Map<String, Instrument>> {
 	    		if(instrument.getKey() == null) {
 	    			instrument.setKey(new Key(configProperties.getProperty("score.key", "C-Major")));
 	    		}
+	    		/*
+	    		 * Create the RhythmScale for this instrument
+	    		 */
+	    		String key = "score.rhythmScale.instrument." + name;
+	    		String rhythmScaleName = configProperties.contains(key) ?
+	    				configProperties.getProperty(key) :
+	    				configProperties.getProperty("score.rhythmScale.all");
+	    		IRhythmScaleFactory factory = RhythmScaleFactory.getRhythmScaleFactory(rhythmScaleName);
+	    		IRhythmScale rhythmScale = factory.createRhythmScale(rhythmScaleName);
+	    		instrument.setRhythmScale(rhythmScale);
 	    		instruments.put(name, instrument);
     		} 
     		catch(Exception e) {

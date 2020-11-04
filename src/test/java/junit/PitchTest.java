@@ -56,6 +56,39 @@ public class PitchTest extends TestCase {
 	}
 	
 	@Test
+	public void testDecrement() {
+		Pitch c4 = new Pitch("C4");
+		Pitch f3 = new Pitch("F3");
+		Pitch f2 = new Pitch("F2");
+		Pitch res = c4.decrement(7, 0);
+		assertEquals(res.compareTo(f3), 0);
+		c4.decrement(19);
+		assertEquals(c4.compareTo(f2), 0);
+		
+		Pitch csharp4 = new Pitch("C#4");
+		Pitch fsharp3 = new Pitch("F#3");
+		res = csharp4.decrement(7, -1);
+		assertEquals(res.compareTo(fsharp3), 0);	// F#3 == Gb3
+		assertEquals(res.getAlteration(), -1);
+		
+		// boundry conditions
+		Pitch D0 = new Pitch("D0");
+		res = D0.decrement(3, 0);
+		assertEquals(res.compareTo(Pitch.C0), 0);
+	}
+	
+	@Test
+	public void testIncrement() {
+		Pitch c4 = new Pitch("C4");
+		Pitch gsharp4 = new Pitch("G#4");
+		Pitch gsharp5 = new Pitch("G#5");
+		Pitch res = c4.increment(8, -1);
+		assertEquals(res.compareTo(gsharp4), 0);
+		c4.adjustPitch(20);
+		assertEquals(c4.compareTo(gsharp5), 0);
+	}
+	
+	@Test
 	public void testChromaticHash() {
 		Scale cscale = Scales.FULL_RANGE_CHROMATIC_SCALE;
 		Map<Pitch, Integer> pitchHash = new TreeMap<Pitch, Integer>();
@@ -178,6 +211,10 @@ public class PitchTest extends TestCase {
 		p2 = new Pitch(Step.D, 4, Alteration.NONE);
 		assertEquals(p1.compareTo(p2),-1);
 		assertEquals(p2.compareTo(p1), 1);
+		
+		assertEquals(Pitch.C.compareTo(Pitch.BSharp), 0);		// octave neutral
+		assertEquals(Pitch.D.compareTo(Pitch.E), -1);
+		assertEquals(Pitch.F.compareTo(Pitch.E), 1);
 		
 		// show ordering with a TreeMap
 		Map<Pitch, String> pitchMap = new TreeMap<>();

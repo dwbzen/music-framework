@@ -3,12 +3,14 @@ package org.dwbzen.music.element;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.dwbzen.common.util.IJson;
+import org.dwbzen.util.music.PitchCollection;
 
 
 /**
@@ -56,11 +58,13 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	public static final String[] SHARP = {"", "#", "##"};		// {"", "\u266F", "\u1D12A"};
 	public static final String[] FLAT = {"", "b", "bb"};		// {"", "\u266D", "\u1D12B"};
 	
+	
 	static List<String> notes = new ArrayList<String>();
 	static {
 		for(String n : PITCH_NOTES) {notes.add(n); }
 	};
-	
+	static Map<Alteration, PitchCollection> allPitchesMap = PitchCollection.allPitches;
+
 	/**
 	 * Octave-neutral pitch definitions with rangeStep 
 	 */
@@ -91,9 +95,13 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	 */
 	public static final Pitch C0 = new Pitch("C0");
 	/**
-	 * highest possible pitch, range step = 108
+	 * highest possible pitch, range step = 120
 	 */
 	public static final Pitch C9 = new Pitch("C9");
+	
+	public static final Pitch maxPitch = C9;
+	public static final Pitch minPitch = C0;
+
 
 	@JsonProperty("step")	private Step step;
 	/**
@@ -118,7 +126,7 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	 */
 	public static Pitch NULL_VALUE = new Pitch(Step.SILENT, -1, Alteration.NONE);
 	
-	public static int pitchRange = 88;	// Piano range: A0 to C7
+	public static int pitchRange = 120;	// C0 to C9
 	
 	public Pitch(Step s, int oct, Alteration alt) {
 		step = s;
@@ -197,6 +205,13 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 		log.trace(toString() + " rangeStep: " + rangeStep);
 	}
 	
+	public void copy(Pitch other) {
+		setAlteration(other.alteration);
+		setOctave(other.octave);
+		setRangeStep(other.rangeStep);
+		setStep(other.step);
+	}
+	
 	/**
 	 * Makes a clone of this
 	 */
@@ -206,20 +221,19 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	}
 	
 	/**
-	 * Computes the number of chromatic steps to get to other Pitch starting from this Pitch.
-	 * For example, B4.difference(E4) is 5
-	 * B4.difference(E3) is -7 (B4 down to E3)
-	 * E3.difference(B4) is 7 (E3 up to B4)
-	 * If == 0, the step is the same
-	 * If < 0, other is below this
-	 * else other is above this
+	 * Computes the number of chromatic steps to get to other Pitch starting from this Pitch, essentially other-this.
+	 * For example, B4.difference(E4) is 5<br>
+	 * B4.difference(E3) is -7 (B4 down to E3)<br>
+	 * E3.difference(B4) is 7 (E3 up to B4)<br>
+	 * If == 0, the step is the same<br>
+	 * If < 0, other is below this<br>
+	 * else other is above this<br>
 	 * If this and other have octave settings
 	 * @param other
-	 * @return
+	 * @return int difference of rangeSteps
 	 */
 	public int difference(Pitch other) {
-		int diff = other.getRangeStep() - getRangeStep();
-		return diff;
+		return other.getRangeStep() - getRangeStep();
 	}
 	
 	/**
@@ -268,22 +282,20 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	}
 	
 	/**
-	 * Adds n steps to this. Also adjusts the range step.
+	 * Adds n steps to this.
 	 * @param n number of steps to increment. If < 0, decrements by that amount.
 	 */
 	public void increment(int n)  {
 		if (n != 0) {
-			int nstep = getStep().value() + getAlteration() + n - 1;
-			if(nstep >= 12) {
-				if(octave >= 0) {	// otherwise the pitch is octave-neutral
-					octave+=(int)nstep /12;
-				}
-				nstep = nstep % 12;
+			int rs = this.rangeStep + n;
+			Pitch temp = null;
+			if(rs >= 0 && rs <= 120) {		// otherwise out of bounds
+				temp = allPitchesMap.get(alteration <= 0 ? Alteration.FLAT : Alteration.SHARP).getPitch(rs);
 			}
-			step = PITCH_STEPS_CHROMATIC_SHARP[nstep];
-			alteration = ALTERATION_CHROMATIC_SHARP[nstep].value();
-			rangeStep += n;
-			if(octave < 0) { rangeStep %= 12; }
+			else {
+				temp = (rs < 0) ? minPitch : maxPitch;
+			}
+			copy(temp);
 		}
 	}
 	
@@ -305,36 +317,28 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	}
 	
 	/**
-	 * Lowers this by n steps and also adjusts the range step.
+	 * Lowers this by n steps.
 	 * 
-	 * @param n  number of steps to decrement, if < 0 incremenets by that amount.
+	 * @param n  number of steps to decrement, if < 0 increments by that amount.
 	 */
 	public void decrement(int n) {
 		if (n != 0) {
-			int nstep = getStep().value() + getAlteration() - n - 1;
-			if(nstep >= 12) {
-				if(octave >= 0) {	// otherwise the pitch is octave-neutral
-					octave-=(int)nstep /12;
-				}
-				nstep = nstep % 12;
+			int rs = this.rangeStep - n;
+			Pitch temp = null;
+			if(rs >= 0 && rs <= 120) {		// otherwise out of bounds
+				temp = allPitchesMap.get(alteration <= 0 ? Alteration.FLAT : Alteration.SHARP).getPitch(rs);
 			}
-			else if(nstep < 0) {
-				nstep+=12;
-				if(octave >= 0) {	// otherwise the pitch is octave-neutral
-					octave+=-1;
-				}
+			else {
+				temp = (rs < 0) ? minPitch : maxPitch;
 			}
-			step = PITCH_STEPS_CHROMATIC_FLAT[nstep];
-			alteration = ALTERATION_CHROMATIC_FLAT[nstep].value();
-			rangeStep -=  n;
-			if(octave < 0) { rangeStep %= 12; }
+			copy(temp);
 		}
 	}
 
 	/**
 	 * Adjusts this Pitch by the number of steps indicated
 	 * @param numberOfSteps
-	 * @param alteration alteration preference - sharps (UP_ONE) or flats (DOWN_ONE) or NONE. If null, no preference indicated.
+	 * @param alteration alteration preference - sharps (UP_ONE or SHARP) or flats (DOWN_ONE or FLAT) or NONE. If null, no preference indicated.
 	 */
 	public void adjustPitch(int numberOfSteps, Alteration alteration) {
 		int altPreference = (alteration != null) ? alteration.value() : 0;
@@ -344,6 +348,10 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 		}
 	}
 	
+	/**
+	 * Adjusts this Pitch by the number of steps indicated
+	 * @param numberOfSteps
+	 */
 	public void adjustPitch(int numberOfSteps) {
 		if(numberOfSteps >= 0 ) {
 			increment(numberOfSteps);
@@ -485,6 +493,8 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	@Override
 	/**
 	 * The ordering of Pitches is {C=C, D=D, E=E, F=F, G=G, A=A, B=B}
+	 * Comparison basis is rangeStep which is the no. steps from C0.
+	 * @return -1, 0 or 1 for this<other, this==other, this>other respectively.
 	 */
 	public int compareTo(Pitch other) {
 		int sd = getRangeStep();
@@ -712,6 +722,7 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 		
 		Pitch E4 = new Pitch("E4");
 		System.out.println(E4 + " " + E4.toJson());
+		System.out.println("  " + E4.toString(true));
 
 		Pitch F5 = new Pitch("F5");
 		System.out.println(F5 + " " + F5.toJson());

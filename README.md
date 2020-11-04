@@ -26,7 +26,7 @@ GitHub project: [music-framework](https://github.com/dwbzen/music-framework)
 
 * Download and install the version of the JDK referenced in build.gradle
 * Download and install latest eclipse Java IDE (2020-06)
-* Start eclipse add the JDK for Java 14 under Installed JREs, and make it the default
+* Start eclipse add the JDK for Java 15 under Installed JREs, and make it the default
 * Import the commonlib gradle project and build, then
 * Import the music-framework gradle project and build
 

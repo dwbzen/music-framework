@@ -40,8 +40,15 @@ import org.dwbzen.util.Configuration;
  * When scoring on the so-called Grand Staff, each Measure has the<br>
  * notes for the top staff (staff=1) first, followed by the staff 2 notes.</p>
  * Currently this supports scoring for a single Grand Scale instrument such as<br>
- * Piano or Harpsichord. A future enhancement will permit multiple valid, pitched instruments.<br>
- * 
+ * Piano or Harpsichord. A future enhancement will permit multiple valid, pitched instruments.</p>
+ * A scale formula may appear multiple times under different names. For example [1, 1, 1, 2, 2, 1, 2, 2]
+ * appears twice as "Phrygian Aeolian 2b 4b 6b" and "Phrygian Aeolian 3b1#"<br>
+ * This is because of different spellings for the same formula. "Phrygian Aeolian 2b 4b 6b" is [C, Db, D, Eb, F, G, Ab, Bb, C]<br>
+ * "Phrygian Aeolian 3b1#" is [C, C#, D, Eb, F, G, Ab, Bb, C]<br>
+ * For more examples, see ScaleGroups.xlsx in the doc folder.<br>
+ * By default duplicates do not appear in the created score. If this is not the desired behavior<br>
+ * set unique = true when invoking the constructor.
+
  * 
  * @author don_bacon
  *
@@ -71,6 +78,8 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 	private String scoreTitle = null;
 	private Map<String, Instrument> instruments = null;
 	private String instrumentName = null;
+	private Instrument scoreInstrument = null;
+	private boolean uniqueFormulas = true;		//  eliminates duplicate formulas by default
 	
 	public ScoreScaleCreator(String title) {
 		scoreTitle = title;
@@ -78,14 +87,15 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 		configure();
 	}
 	
-	public ScoreScaleCreator(String title, String name) {
+	public ScoreScaleCreator(String title, String name, boolean unique) {
 		scoreTitle = title;
 		instrumentName = name==null ? defaultInstrumentName : name;
+		this.uniqueFormulas = unique;
 		configure();
 	}
 	
-	public ScoreScaleCreator(String title,  String name, List<ScaleFormula> scaleFormulas, List<Pitch> rootPitches) {
-		this(title, name);
+	public ScoreScaleCreator(String title,  String name, List<ScaleFormula> scaleFormulas, List<Pitch> rootPitches, boolean unique) {
+		this(title, name, unique);
 		this.scaleFormulas = scaleFormulas;
 		this.rootPitches = rootPitches;
 	}
@@ -115,17 +125,46 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 
 	@Override
 	public Score apply(List<ScaleFormula> t, List<Pitch> u) {
-		scaleFormulas.addAll(t);
+		addScaleFormulas(t);
 		rootPitches.addAll(u);
 		createScore();
 		return score;
 	}
 	
+	private void addScaleFormulas(List<ScaleFormula> formulas) {
+		if(uniqueFormulas) {
+			scaleFormulas.addAll(getUniqueFormulas(formulas));
+		}
+		else {
+			scaleFormulas.addAll(formulas);
+		}
+	}
+
+	private List<ScaleFormula> getUniqueFormulas(List<ScaleFormula> formulas) {
+		List<ScaleFormula> sflist = new ArrayList<>();
+		List<String> formulaStrings = new ArrayList<>();
+		for(ScaleFormula sf : formulas) {
+			String sfstring = sf.getFormulaString();
+			if(!formulaStrings.contains(sfstring)) {
+				sflist.add(sf);
+				formulaStrings.add(sfstring);
+			}
+		}
+		return sflist;
+	}
+	
 	public Score createScore() {
+		
 		log.debug("createScore()");
 		int nmeasures = -1;	// don't limit the number of measures
 		String workNumber = dateFormat.format(new Date());
+		/*
+		 *  configure the instrument specified, including creating the associated RhythmScale
+		 */
 		configureInstrument();
+		/*
+		 * Create the Score, ScorePart and ScorePartEntity
+		 */
 		IScoreFactory scoreFactory = new ScoreFactory(configuration, instruments, nmeasures, scoreTitle, workNumber);
 		score = scoreFactory.createScore(false);
 		/*
@@ -233,7 +272,7 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 				int unitsAvailable = numberOfMeasuresNeeded * unitsPerMeasure;
 				int remainingUnits = unitsAvailable - unitsNeeded;	// needed to pad the last measure of the scale
 				
-				String directionTypeText = scale.getName() + ": " + formula.toString();
+				String directionTypeText = scale.getName() + ": " + formula.getFormulaString();
 				log.info("Working on " + directionTypeText);
 				/*
 				 * Staff 1 is the top staff (G-clef), staff 2 is the bottom staff (F-clef)
@@ -341,21 +380,23 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 	}
 	
 	/**
-	 * Set score instrument to Piano (default) or specified instrument on Grand Scale using the default rhythm scale.<br>
-	 * This also sets the number of units per measure to 480.
+	 * Set score instrument to Piano (default) or specified instrument on Grand Scale using the<br>
+	 * RhythmScale configured for this instrument otherwise the default rhythm scale.<br>
+	 * This also sets the number of units per measure to 480 (or the root of RhythmScale).
+	 * @throws RuntimeException if the specified instrument is invalid or doesn't exist.
 	 */
     public void configureInstrument() {
-    	String rhythmScaleName = RhythmScaleFactory.DEFAULT_RHYTHM_SCALE_NAME;
-		IRhythmScaleFactory factory = RhythmScaleFactory.getRhythmScaleFactory(rhythmScaleName);
-		rhythmScale = factory.createRhythmScale(rhythmScaleName);
 		InstrumentMaker instrumentMaker = new InstrumentMaker(instrumentName, configuration);
-		
 		instruments = instrumentMaker.get();
-		if(instruments != null && instruments.containsKey(instrumentName)) {
-			Instrument instrument = instruments.get(instrumentName);
-			instrument.setRhythmScale(rhythmScale);
-			instruments.put(instrumentName, instrument);
+		if(instruments == null || instruments.isEmpty()) { 
+			// invalid instrument was specified
+			throw new RuntimeException("No such instrument exists: " + instrumentName);
 		}
+		scoreInstrument = instruments.get(instrumentName);
+		if(scoreInstrument == null || scoreInstrument.getCleffs().size() != 2) {
+			throw new RuntimeException(instrumentName + " is invalid - must be Grand Staff");
+		}
+		rhythmScale = scoreInstrument.getRhythmScale();
 	}
 
 	private Measure createNewMeasure(int measureNumber) {
@@ -398,6 +439,22 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 
 	public Map<String, Instrument> getInstruments() {
 		return instruments;
+	}
+
+	public boolean isUniqueFormulas() {
+		return uniqueFormulas;
+	}
+
+	public void setUniqueFormulas(boolean uniqueFormulas) {
+		this.uniqueFormulas = uniqueFormulas;
+	}
+
+	public ScorePart getScorePart() {
+		return scorePart;
+	}
+
+	public Instrument getScoreInstrument() {
+		return scoreInstrument;
 	}
 
 }

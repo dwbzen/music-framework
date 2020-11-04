@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dwbzen.music.ProductionFlow;
+import org.dwbzen.music.instrument.Instrument;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,6 +32,7 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 	@JsonProperty			private Note tiedFrom = null;	//  reference to the note the note this is tied from - occurs before this note
 	@JsonIgnore				private IMeasurableContainer<Note>	container = null;	// reference to container (like a Chord) or null
 	@JsonIgnore				private List<Duration> factors = null;	// Duration factors associated with this Note. Will be null if unassigned.
+	@JsonIgnore				private Instrument instrument = null;	// reference to the Instrument playing this Note
 
 	public Note(Pitch p, Duration dur) {
 		setPitch(new Pitch(p));	// also sets rest

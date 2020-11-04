@@ -135,6 +135,7 @@ public class ScaleExportManager  {
 		String fileName = null;
 		boolean showStats = false;
 		boolean listFormulas = false;
+		boolean uniqueFormulas = true;
 		String instrumentName = null;
 		
     	if(args.length > 0) {
@@ -155,6 +156,10 @@ public class ScaleExportManager  {
     			}
     			else if(args[i].equalsIgnoreCase("-format")) {
     				outputFormat = args[++i];
+    			}			
+    			else if(args[i].equalsIgnoreCase("-unique")) {
+    				// applies only to musicxml format
+    				uniqueFormulas = Boolean.valueOf(args[++i]);
     			}
     			else if(args[i].equalsIgnoreCase("-importformat")) {
     				importFormat = args[++i];
@@ -212,7 +217,8 @@ public class ScaleExportManager  {
 		
 		if(isMusicXML) {
 			scaleExportManager.setScalesInstrumentName(instrumentName);
-			Score score = scaleExportManager.exportScalesScore();
+			
+			Score score = scaleExportManager.exportScalesScore(uniqueFormulas);
 			String outputFile = scaleExportManager.getOutputFileName();
 			log.info("*** Score created ***");
 			createXML(outputFile, score, scaleExportManager.getConfiguration());
@@ -388,14 +394,14 @@ public class ScaleExportManager  {
 	 * 
 	 * @return musicXML String.
 	 */
-	public Score exportScalesScore() {
+	public Score exportScalesScore(boolean unique) {
 		List<ScaleFormula> scaleFormulas =  findScaleFormulas();
 		if(rootPitches.isEmpty()) {
 			rootPitches.add(Pitch.C);
 		}
 		String scoreTitle = "Scales_"  + dateFormat.format(new Date());
 		// if scalesInstrumentName is null, ScoreScaleCreator uses Piano as the default
-		scaleCreator = new ScoreScaleCreator(scoreTitle, scalesInstrumentName);
+		scaleCreator = new ScoreScaleCreator(scoreTitle, scalesInstrumentName, unique);
 		Score theScore = scaleCreator.apply(scaleFormulas, rootPitches);
 		return theScore;
 	}

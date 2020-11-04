@@ -40,7 +40,7 @@ public enum Step {
     	return Integer.valueOf(value);
     }
     private static final int[] ordinals = {0,0,0,0, 1,1,1, 2,2, 3,3,3,3, 4,4,4, 5,5,5, 6,6, 7};
-    private static final Step[] steps = {C, CSHARP, D, DSHARP, E, F, FSHARP, G, GSHARP, A, ASHARP, B};
+    public static final Step[] steps = {C, CSHARP, D, DSHARP, E, F, FSHARP, G, GSHARP, A, ASHARP, B};
     /**
      * Map Step to proxymusic Step for musicXML creation. Accidentals applied in musicXML are not attached to the Step.
      */
