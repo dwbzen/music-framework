@@ -282,7 +282,7 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	}
 	
 	/**
-	 * Adds n steps to this.
+	 * Adds n steps to this. If this is octave neutral, the resulting Pitch will also have octave == -1.
 	 * @param n number of steps to increment. If < 0, decrements by that amount.
 	 */
 	public void increment(int n)  {
@@ -294,6 +294,9 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 			}
 			else {
 				temp = (rs < 0) ? minPitch : maxPitch;
+			}
+			if(this.octave == -1) {
+				temp.setOctave(-1);
 			}
 			copy(temp);
 		}
@@ -330,6 +333,9 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 			}
 			else {
 				temp = (rs < 0) ? minPitch : maxPitch;
+			}
+			if(this.octave == -1) {
+				temp.setOctave(-1);
 			}
 			copy(temp);
 		}

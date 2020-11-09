@@ -41,14 +41,14 @@ public class Measure implements IJson, Consumer<Measurable>, BiConsumer<Integer,
 	private static int divisionsPerMeasure = DEFAULT_DIVISIONS_PER_MEASURE;		// default value
 
 	/**
-	 * Number of basic units in the measure. Must be >0
+	 * Number of basic units in the measure. Must be >0, default is 480
 	 */
 	@JsonProperty("divisions")	private int divisions;
 	@JsonProperty				private Key key = Key.C_MAJOR;	// sensible default
 	/**
 	 * Time signature beats per measure
 	 */
-	@JsonProperty("beats")		private int beats = 4;	// beats per measure. divisions per beat = divisions/beats, 24/3 = 8 for example
+	@JsonProperty("beats")		private int beats = 4;	// beats per measure. divisions per beat = divisions/beats, 480/4 = 120 for example
 	/**
 	 * Time signature beat note (1=whole, 2=half, 4 = quaver, 8 = semiquaver etc.)
 	 * SO time signature is beats/beatNote: 3/4, 6/8, whatever
@@ -134,6 +134,40 @@ public class Measure implements IJson, Consumer<Measurable>, BiConsumer<Integer,
 			prev.setNextMeasure(this);
 			this.key = prev.key;
 		}
+	}
+	
+	/**
+	 * Creates a field-by-field deep copy of this with these exceptions:<br>
+	 * References to ScorePart, Dynamics and Tempo, and the measureNumber are all retained.<br>
+	 * lastMeasure, nextMeasure, scoreDirections and Barline are not copied.<br>
+	 * @param measure - the Measure to copy from
+	 * @param copyNotes - if true, copy (as in clone) the Measurables List for all staves
+	 * @return Measure
+	 */
+	public static Measure copy(Measure measure, boolean copyNotes) {
+		Measure newMeasure = createInstance(measure.scorePart);
+    	newMeasure.setTempo(measure.tempo);
+		newMeasure.setDivisions(measure.divisions);
+		newMeasure.setNumber(measure.number);
+		newMeasure.setNumberOfStaves(measure.numberOfStaves);
+		newMeasure.setKey(measure.key);
+		newMeasure.setBeatNote(measure.beatNote);
+		newMeasure.setBeats(measure.beats);
+		
+		newMeasure.label = measure.label != null ? new Label(measure.label) : null;
+		for(Label l : measure.getClefs()) {
+			newMeasure.clefs.add(new Label(l));
+		}
+		if(copyNotes) {	// copy notes/chords from all the staves
+			for(int staffnum = 1; staffnum <= measure.numberOfStaves; staffnum++) {
+				List<Measurable> notes = new ArrayList<>();
+				for(Measurable m : measure.getMeasureables(staffnum)) {
+					notes.add(m.clone());
+				}
+				newMeasure.measureables.put(staffnum, notes);
+			}
+		}
+		return newMeasure;
 	}
 	
 	public static Measure createInstance(ScorePart scorePart) {

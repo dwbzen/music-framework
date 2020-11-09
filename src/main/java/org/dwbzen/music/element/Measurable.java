@@ -1,7 +1,6 @@
 package org.dwbzen.music.element;
 import org.dwbzen.common.math.IPoint;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -11,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author don_bacon
  *
  */
-public abstract class Measurable {
+public abstract class Measurable implements Cloneable {
 	
 	/**
 	 * note or chord
@@ -33,18 +32,7 @@ public abstract class Measurable {
 	@JsonProperty("tupletType")	protected TupletType tupletType = TupletType.NONE;
 	@JsonProperty				private Dynamics dynamics = null;			// optional Dynamics applies to object only
 	@JsonProperty("point")		private IPoint point = null;				// optional generating point
-	@JsonIgnore					protected Integer seq_id = 0;		// a global sequence id starting at 1 (0 = unassigned)
 	@JsonProperty				private String name = null;		// optional name
-	/**
-	 * starting at 1 indicates the order this Measurable added to some container
-	 */
-	@JsonProperty("ordinal")	protected int ordinal = 0;
-	/**
-	 * Reference to container if any - a Chord for example
-	 */
-	
-
-	private static Integer nextSeqId = 1;
 
 	public static enum TieType {
 		NONE(0), START(1), STOP(2), BOTH(3), start(1), stop(2), both(3);
@@ -64,17 +52,12 @@ public abstract class Measurable {
 	public static final String RHYTHM = "rhythm";
 	
 	protected Measurable() {
-		this.seq_id = getNextSeqId();
 		setMeasurableType();
 	}
 
 	protected abstract void setMeasurableType();
 	
-	protected static Integer getNextSeqId() {
-		synchronized(Measurable.class) {
-			return nextSeqId++;
-		}
-	}
+	public abstract Measurable clone();
 	
 	public Duration getDuration() {
 		return duration;
@@ -146,18 +129,6 @@ public abstract class Measurable {
 
 	public void setPoint(IPoint point) {
 		this.point = point;
-	}
-
-	public Integer getSeq_id() {
-		return seq_id;
-	}
-
-	public int getOrdinal() {
-		return ordinal;
-	}
-
-	public void setOrdinal(int ordinal) {
-		this.ordinal = ordinal;
 	}
 
 	protected String getName() {

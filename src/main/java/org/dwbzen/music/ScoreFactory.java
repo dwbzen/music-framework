@@ -10,7 +10,6 @@ import org.dwbzen.util.Configuration;
 
 /**
  * Creates a Score.
- * TODO make this multi-threaded
  * 
  * @author don_bacon
  *
@@ -20,7 +19,7 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 	private Map<String, Instrument> instruments;
 	private Configuration configuration;
 	private Score score = null;
-	private int measures;
+	private int numberOfMeasures;
 	private String title = null;
 	private String opus = null;
 	
@@ -35,9 +34,13 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 	public ScoreFactory(Configuration configuration, Map<String, Instrument> instruments, int nMeasures, String title, String opus) {
 		this.configuration = configuration;
 		this.instruments = instruments;
-		measures = nMeasures;
+		numberOfMeasures = nMeasures;
 		this.title = title;
 		this.opus = opus;
+	}
+	
+	public ScoreFactory(Configuration configuration, Map<String, Instrument> instruments, int nMeasures) {
+		this(configuration, instruments, nMeasures, "", "");
 	}
 
 	@Override
@@ -52,14 +55,14 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 		for(String instrumentName : instruments.keySet()) {
 			Instrument instrument = instruments.get(instrumentName);
 			score.getInstrumentNames().add(instrumentName);
-			String partName = configProperties.getProperty("score.parts."+ instrumentName + ".partName", instrumentName);
+			String partName = configProperties.getProperty(instrumentName + ".partName", instrumentName);
 			ScorePart scorePart = new ScorePart(score, partName, instrument);
 			/*
 			 * if runFlag is true, set the number of measures and run the ScorePart to create the score from data sources
 			 * Otherwise just create an empty ScorePart for the instrument.
 			 */
 			if(runFlag) {
-				scorePart.setMaxMeasures(measures);
+				scorePart.setMaxMeasures(numberOfMeasures);
 				scorePart.run();
 			}
 			score.addPart(scorePart);
@@ -88,12 +91,8 @@ public class ScoreFactory implements IScoreFactory, Runnable, Supplier<Score> {
 		this.configuration = configuration;
 	}
 
-	public int getMeasures() {
-		return measures;
-	}
-
-	public void setMeasures(int measures) {
-		this.measures = measures;
+	public int getNumberOfMeasures() {
+		return numberOfMeasures;
 	}
 
 	public String getTitle() {

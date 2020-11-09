@@ -74,7 +74,8 @@ public class PitchTest extends TestCase {
 		// boundry conditions
 		Pitch D0 = new Pitch("D0");
 		res = D0.decrement(3, 0);
-		assertEquals(res.compareTo(Pitch.C0), 0);
+		Pitch C0 = Pitch.C0;
+		assertEquals(res.compareTo(C0), 0);
 	}
 	
 	@Test

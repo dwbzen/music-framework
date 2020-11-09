@@ -137,6 +137,10 @@ public class PitchCollection implements IJson, Cloneable, Comparable<PitchCollec
 		pitches.add(p);
 	}
 	
+	public void setOctaveNeutral(boolean octaveNeutral) {
+		this.octaveNeutral = octaveNeutral;
+	}
+
 	public boolean isOctaveNeutral() {
 		return octaveNeutral;
 	}
@@ -262,9 +266,11 @@ public class PitchCollection implements IJson, Cloneable, Comparable<PitchCollec
 		
 		Pitch low = Pitch.C0;
 		Pitch high = Pitch.C9;
+		Pitch root = new Pitch("C4");
 		int n = 10;
-		String operation = null;
+		String operation = "";
 		String outputFormat = "none";		// string, json or both
+		boolean toneRow = false;
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
     			if(args[i].equalsIgnoreCase("-format")) {
@@ -282,45 +288,58 @@ public class PitchCollection implements IJson, Cloneable, Comparable<PitchCollec
     			else if(args[i].equalsIgnoreCase("-n")) {
     				n = Integer.parseInt(args[++i]);
     			}
+    			else if(args[i].equalsIgnoreCase("-row")) {
+    				// generates a 12-note tone row instead of n-random pitches
+    				n = 12;
+    				toneRow = true;
+    			}
+    			else if(args[i].equalsIgnoreCase("-root")) {
+    				root = new Pitch(args[++i]);
+    			}
     		}
     	}
     	
-		PitchCollection pc = PitchCollection.getRandomPitches(low, high, n);
+		PitchCollection pc = toneRow ? 
+				PitchCollection.generateToneRow(root) :
+				PitchCollection.getRandomPitches(low, high, n);
 		displayPitchCollection(pc, outputFormat);
 		
 		if(operation != null) {
 			PitchCollection pc2 = null;
 			if(operation.equalsIgnoreCase("inv")) {
 				pc2 = pc.getInversion();
-				displayPitchCollection(pc2, outputFormat);
+				displayPitchCollection(pc2, outputFormat, operation);
 			}
 			else if(operation.equalsIgnoreCase("retro")) {
 				pc2 = pc.getRetrograde();
-				displayPitchCollection(pc2, outputFormat);
+				displayPitchCollection(pc2, outputFormat, operation);
 			}
 			else if(operation.equalsIgnoreCase("retroinv")) {
 				pc2 = pc.getRetrogradeInversion();
-				displayPitchCollection(pc2, outputFormat);
+				displayPitchCollection(pc2, outputFormat, operation);
 			}
 		}
 		
-		pc = PitchCollection.generateToneRow(new Pitch("G4"));
-		System.out.println("Tone Row");
-		displayPitchCollection(pc, "string");
 	}
 	
-	public static void displayPitchCollection(PitchCollection pc, String outputFormat) {
+	public static void displayPitchCollection(PitchCollection pc, String outputFormat, String op) {
+		String opstr = (op == null || op.length()== 0) ? "" : op + " :" ;
 		if(outputFormat.equals("string")) {
-			System.out.println(pc.toString());
+			System.out.println(opstr + pc.toString());
 		}
 		else if(outputFormat.equals("json")) {
 			System.out.println(pc.toJson());
 		}
 		else if(outputFormat.equals("both")) {
-			System.out.println(pc.toString());
+			System.out.println(opstr + pc.toString());
 			System.out.println(pc.toJson());
 		}
 	}
+	
+	public static void displayPitchCollection(PitchCollection pc, String outputFormat) {
+		displayPitchCollection(pc, outputFormat, "");
+	}
+
 
 	@Override
 	public int compareTo(PitchCollection other) {

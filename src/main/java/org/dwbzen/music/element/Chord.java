@@ -81,6 +81,8 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		}
 		chord.setNoteType(aChord.getNoteType());
 		chord.setRoot(aChord.getRoot());
+		chord.setStaff(aChord.getStaff());
+		chord.size = aChord.size();
 		return chord;
 	}
 	
@@ -136,7 +138,6 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		boolean added = notes.add(note);
 		if(added) {
 			size++;
-			note.setOrdinal(size);
 			note.setContainer(this);
 		}
 		return added;
@@ -195,7 +196,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 
 	/**
 	 * Returns a deep copy of the Chord Notes in a new SortedSet<Note>
-	 * @return
+	 * @return SortedSet<Note> 
 	 */
 	public SortedSet<Note> deepCopyChordNotes() {
 		SortedSet<Note> notesCopy = new TreeSet<Note>();
@@ -209,11 +210,13 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	public String toString() {
 		Iterator<Note> noteit = notes.iterator();
 		StringBuffer sb = new StringBuffer("Chord(" + notes.size() + "): {");
+		int n = 1;
 		while(noteit.hasNext()) {
 			Note note = noteit.next();
 			Pitch pitch = note.getPitch();
 			Duration duration = note.getDuration();
-			sb.append(" Note[" + note.getOrdinal() + "]: " + pitch.toString() + " duration: " + duration.toString());
+			sb.append(" Note[" + n + "]: " + pitch.toString() + " duration: " + duration.toString());
+			n++;
 		}
 		sb.append(" } " );
 		if(!tieType.equals(TieType.NONE)) {
@@ -344,6 +347,17 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		for(Note note : notes) {
 			note.setTupletType(tupletType);
 		}
+	}
+
+	@Override
+	/**
+	 * Makes a deep copy of this Chord. tie references are maintained but not deep copied.
+	 */
+	public Chord clone() {
+		Chord chord = Chord.createChord(this, getDuration());
+		chord.setTiedFrom(tiedFrom);
+		chord.setTiedTo(tiedTo);
+		return chord;
 	}
 
 }

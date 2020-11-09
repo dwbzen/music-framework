@@ -27,6 +27,7 @@ public class RhythmElement extends Measurable implements Serializable, Comparabl
 
 	public RhythmElement(Duration dur) {
 		setDuration(dur);
+		setMeasurableType();
 	}
 
 	@Override
@@ -95,6 +96,22 @@ public class RhythmElement extends Measurable implements Serializable, Comparabl
 
 	public void setContainer(IMeasurableContainer<RhythmElement> container) {
 		this.container = container;
+	}
+
+	@Override
+	/**
+	 * Creates a clone of this including tie attribute references. It does not deep copy those references.<br>
+	 * This is consistent with Note and Chord clone().
+	 */
+	public RhythmElement clone() {
+		RhythmElement re = new RhythmElement(this.duration);
+		re.rest = rest;
+		re.noteType = noteType;
+		re.tupletType = tupletType;
+		re.container = container;
+		re.tiedFrom = tiedFrom;
+		re.tiedTo = tiedTo;
+		return re;
 	}
 
 }

@@ -52,7 +52,7 @@ import org.dwbzen.music.element.Pitch;
  * can be obtained easily by importing into a spreadsheet.
  * 
  * partName is "Score" if the analysis is for the Score as a whole,
- * or the name of the part from the configuration, as in score.parts.Clarinet.partName=Clarinet for example
+ * or the name of the part from the configuration, as in Clarinet.partName=Clarinet for example
  * 
  */
 public class ScoreAnalysis {

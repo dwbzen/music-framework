@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author don_bacon
  *
  */
-public class Note extends Measurable implements Serializable, Comparable<Note>, Cloneable {
+public class Note extends Measurable implements Serializable, Comparable<Note> {
 
 	private static final long serialVersionUID = 1774493820041575241L;
 	static final Logger log = LogManager.getLogger(ProductionFlow.class);
@@ -35,11 +35,13 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 	@JsonIgnore				private Instrument instrument = null;	// reference to the Instrument playing this Note
 
 	public Note(Pitch p, Duration dur) {
+		super();
 		setPitch(new Pitch(p));	// also sets rest
 		setDuration(new Duration(dur));
 	}
 	
 	public Note(Pitch p, int dur) {
+		super();
 		setPitch(new Pitch(p));	// also sets rest
 		setDuration(new Duration(dur));
 	}
@@ -183,9 +185,8 @@ public class Note extends Measurable implements Serializable, Comparable<Note>, 
 	}
 	
 	/**
-	 * Notes are equal if they have the same duration,
-	 * and if neither is a rest, the pitches are equal
-	 * and same grace value.
+	 * Notes are equal if they have the same duration,<br>
+	 * and if neither is a rest, the pitches are equal and have the same grace value.
 	 * @param o
 	 * @return
 	 */

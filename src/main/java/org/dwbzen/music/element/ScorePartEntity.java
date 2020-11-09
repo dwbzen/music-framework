@@ -52,7 +52,10 @@ public class ScorePartEntity implements Serializable {
     	return sb.toString();
     }
 
-
+    public void addPhrase(Phrase phrase) {
+    	measures.addAll(phrase.getMeasures());
+    }
+    
 	public String getPartName() {
 		return partName;
 	}

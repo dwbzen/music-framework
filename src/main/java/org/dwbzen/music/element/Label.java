@@ -19,6 +19,11 @@ public class Label implements Serializable, Comparable<Label> {
 		this.label = l;
 		number = n.intValue();
 	}
+	
+	public Label(Label other) {
+		number = other.getNumber();
+		this.label = new String(other.getLabel());
+	}
 
 	public int getNumber() {
 		return number;

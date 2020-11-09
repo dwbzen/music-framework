@@ -178,7 +178,7 @@ public class RhythmScale  implements IRhythmScale {
 		double diff = 0;
 		int low = 0;
 		int high = 0;
-		for(Integer bunits : baseUnits) {	//  {30, 60, 90, 180, 120, 150, 210, 240, 270, 300, 330, 360, 390, 420, 450, 480}
+		for(Integer bunits : baseUnits) {	//  {60, 120, 180, 240, 300, 360, 420, 480}
 			diff = bunits.doubleValue() - rawUnits;
 			if(diff == 0) {
 				nunits = bunits;
@@ -268,6 +268,15 @@ public class RhythmScale  implements IRhythmScale {
 	@Override
 	public String getNoteType(Note note) {
 		return determineNoteType(note, root);
+	}
+	
+	public String getNoteType(Duration duration) {
+		int baseUnits = duration.getBaseUnits();
+		int log2root = MathUtil.log2(root);
+		int log2Units = MathUtil.log2(baseUnits);
+		int ind = 6 - log2root + log2Units;
+		
+		return NoteTypes[ind];
 	}
 	
 	/**
