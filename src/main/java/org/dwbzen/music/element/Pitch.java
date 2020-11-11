@@ -1,6 +1,5 @@
 package org.dwbzen.music.element;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,19 +8,15 @@ import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.dwbzen.common.util.IJson;
-import org.dwbzen.util.music.PitchCollection;
-
 
 /**
- * A Pitch has 3 elements: <br>
+ * A Pitch has 3 attributes: <br>
  * 	Step (A, B, .... G)<br>
  * 	Alteration (0, 1, -1, 2, -2) corresponding to no alteration, sharp, flat, double sharp, double flat<br>
- * 	octave (0, 1, ... 9)<br>
+ * 	octave (0, 1, ... 9)</p>
  * Middle-C is C4, C0 is in the range of about 16 Hz.<br>
  * Note that this uses the Scientific octave naming system which starts on C0 and extends to C9.<br>
- * With this designation, middle-C is C4 and a piano range is A0 to C7
- * So C4 follows B3 in this notation.</p>
+ * With this designation, middle-C is C4 and a piano range is A0 to C7 so C4 follows B3 in this notation.</p>
  * 
  * The range is C0 to C9 (although the full range chromatic Scale starts at A0).<br>
  * Starting at C instead of A is somewhat problematic for the boundary condition:<br>
@@ -30,15 +25,13 @@ import org.dwbzen.util.music.PitchCollection;
  * So Cb4 is one semitone down from C4 which is B3.
  * Similarly, B#4 is the same pitch as C5.</p>
  * 
- * Pitch is immutable
  * Use copy constructors or clone() to create new pitches from existing.
  * 
  * <p>See <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a> on Wikipedia.</p>
  */
-public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Cloneable {
+public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdjustable {
 
 	static final org.apache.log4j.Logger log = Logger.getLogger(Pitch.class);
-	private static final long serialVersionUID = 4360957591772707668L;
 
 	/**
 	 * Note for all 12 Steps
@@ -63,7 +56,7 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 	static {
 		for(String n : PITCH_NOTES) {notes.add(n); }
 	};
-	static Map<Alteration, PitchCollection> allPitchesMap = PitchCollection.allPitches;
+	static Map<Alteration, PitchSet> allPitchesMap = PitchSet.allPitches;
 
 	/**
 	 * Octave-neutral pitch definitions with rangeStep 
@@ -281,6 +274,7 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 		return p;
 	}
 	
+	@Override
 	/**
 	 * Adds n steps to this. If this is octave neutral, the resulting Pitch will also have octave == -1.
 	 * @param n number of steps to increment. If < 0, decrements by that amount.
@@ -319,6 +313,7 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 		return p;
 	}
 	
+	@Override
 	/**
 	 * Lowers this by n steps.
 	 * 
@@ -354,6 +349,7 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 		}
 	}
 	
+	@Override
 	/**
 	 * Adjusts this Pitch by the number of steps indicated
 	 * @param numberOfSteps
@@ -723,21 +719,15 @@ public final class Pitch implements Serializable, IJson, Comparable<Pitch>, Clon
 		}
 		return new Pitch(step, oct, alt);
 	}
+	
+	@Override
+	protected void setPitchElementType() {
+		this.pitchElementType = PitchElementType.PITCH;		
+	}
 
-	public static void main(String... args) {
-		
-		Pitch E4 = new Pitch("E4");
-		System.out.println(E4 + " " + E4.toJson());
-		System.out.println("  " + E4.toString(true));
-
-		Pitch F5 = new Pitch("F5");
-		System.out.println(F5 + " " + F5.toJson());
-		
-		Pitch C0 = new Pitch("C0");
-		System.out.println(C0 + " " + C0.toJson());
-		Pitch C9 = new Pitch("C9");
-		System.out.println(C9 + " " + C9.toJson());
-
+	@Override
+	public boolean isOctaveNeutral() {
+		return octave < 0;
 	}
 
 }

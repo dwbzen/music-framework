@@ -144,7 +144,7 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 	 * pitch set is: {0, 2, 4, 5, 7, 9, 11}
 	 */
 	public List<Integer> formulaToPitchSet() {
-		return IFormula.formulaToPitchSet(formula);
+		return IFormula.formulaToPitchIndexes(formula);
 	}
 	
 	@JsonIgnore 

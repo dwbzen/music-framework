@@ -18,7 +18,16 @@ public interface IFormula extends INameable, Serializable {
 	public List<Integer> getFormula();
 	public List<String> getAlternateNames();
 	
-	public static List<Integer> formulaToPitchSet(int[] forml) {
+	/**
+	 * Creates a List of relative pitch indexes from a given IFormula.<br>
+	 * Each element is the number of steps from the root.<br>
+	 * For example given the chord formula [4, 3, 3, 4, 7] (a 13th chord)<br>
+	 * the resulting pitch set is [0, 4, 7, 10, 14, 21]<br>
+	 * If the root Pitch is C, the corresponding Pitches are { C, E, G, Bb, D, A }
+	 * @param forml
+	 * @return
+	 */
+	public static List<Integer> formulaToPitchIndexes(Integer[] forml) {
 		List<Integer> pitchSet = new ArrayList<Integer>();
 		pitchSet.add(0);
 		for(int i = 0; i<forml.length; i++) {
@@ -27,16 +36,20 @@ public interface IFormula extends INameable, Serializable {
 		return pitchSet;
 	}
 	
-	public static List<Integer> formulaToPitchSet(List<Integer> forml) {
-		int[] farray = new int[forml.size()];
-		int i = 0;
-		for(Integer n : forml) {
-			farray[i++] = n;
+	public static List<Integer> formulaToPitchIndexes(int[] forml) {
+		List<Integer> pitchSet = new ArrayList<Integer>();
+		pitchSet.add(0);
+		for(int i = 0; i<forml.length; i++) {
+			pitchSet.add(forml[i] + pitchSet.get(i) );
 		}
-		return formulaToPitchSet(farray);
+		return pitchSet;
+	}
+
+	public static List<Integer> formulaToPitchIndexes(List<Integer> forml) {
+		return formulaToPitchIndexes(forml.toArray(new Integer[0]));
 	}
 	
-	public static  List<Integer> pitchSetToFormula(int[] pitchSet) {
+	public static  List<Integer> pitchIndexesToFormula(int[] pitchSet) {
 		List<Integer> psFormula = new ArrayList<Integer>();
 		for(int i = 1; i<pitchSet.length; i++) {
 			psFormula.add(pitchSet[i] - pitchSet[i-1]);

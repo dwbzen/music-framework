@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import org.dwbzen.common.util.IJson;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -30,9 +31,10 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	@JsonProperty	private Chord tiedTo = null;		// the Chord this is tied to - occurs after this Chord
 	@JsonProperty	private Chord tiedFrom = null;		// the Chord this is tied from - occurs before this Chord
 	@JsonProperty	private int size = 0;
+	@JsonIgnore		private PitchSet pitchSet = null;		// the unique Pitches in the Chord
 	
 	public Chord() {
-		
+		pitchSet = new PitchSet();
 	}
 	
 	/**
@@ -61,6 +63,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		for(Pitch p:pitches) {
 			addNote(new Note(p,0));
 		}
+		pitchSet = new PitchSet(pitches);
 	}
 	
 	/**
@@ -139,6 +142,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		if(added) {
 			size++;
 			note.setContainer(this);
+			getPitchSet().addPitch(note.getPitch());
 		}
 		return added;
 	}
@@ -154,6 +158,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		boolean removed = notes.remove(note);
 		if(removed) {
 			note.breakAllTies();
+			pitchSet.remove(note.getPitch());
 		}
 		size--;
 		return removed;
@@ -186,12 +191,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	
 	@Override
 	public boolean containsPitch(Pitch pitch) {
-		for(Note note : notes) {
-			if(note.getPitch().equals(pitch)) {
-				return true;
-			}
-		}
-		return false;
+		return pitchSet.contains(pitch);
 	}
 
 	/**
@@ -358,6 +358,13 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		chord.setTiedFrom(tiedFrom);
 		chord.setTiedTo(tiedTo);
 		return chord;
+	}
+
+	public PitchSet getPitchSet() {
+		if(pitchSet == null) {
+			pitchSet = new PitchSet();
+		}
+		return pitchSet;
 	}
 
 }

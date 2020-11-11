@@ -261,7 +261,10 @@ public class Note extends Measurable implements Serializable, Comparable<Note> {
 	 * @return List<Duration>, returns an empty List if no factors have been assigned.
 	 */
 	public List<Duration> getFactors() {
-		return factors == null ? new ArrayList<>() : factors;
+		if(factors == null) {
+			factors = new ArrayList<>();
+		}
+		return factors;
 	}
 	
 	public void addFactors(Duration afactor) {

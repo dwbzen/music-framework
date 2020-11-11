@@ -161,7 +161,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 
 	public int computeFormulaNumber() {
 		int fnum = 0;
-		List<Integer> ps = IFormula.formulaToPitchSet(getFormula());
+		List<Integer> ps = IFormula.formulaToPitchIndexes(getFormula());
 		for(Integer i:ps) {
 			int shiftamt = (i>=12) ? i-12 : i;
 			fnum += (1<<shiftamt);
@@ -171,7 +171,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	
 	public int computeSpellingNumber() {
 		int fnum = 0;
-		List<Integer> ps = IFormula.formulaToPitchSet(getFormula());
+		List<Integer> ps = IFormula.formulaToPitchIndexes(getFormula());
 		for(Integer i:ps) {
 			fnum += (1<<i);
 		}
@@ -180,7 +180,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 
 	public static int computeFormulaNumber(int[] formula) {
 		int fnum = 0;
-		List<Integer> ps = IFormula.formulaToPitchSet(formula);
+		List<Integer> ps = IFormula.formulaToPitchIndexes(formula);
 		for(Integer i:ps) {
 			int shiftamt = (i>=12) ? i-12 : i;
 			fnum += (1<<shiftamt);

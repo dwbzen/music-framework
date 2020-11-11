@@ -114,7 +114,7 @@ public class ChordManager {
 	
 	public static int computeFormulaNumber(List<Integer> formula) {
 		int fnum = 0;
-		List<Integer> ps = IFormula.formulaToPitchSet(formula);
+		List<Integer> ps = IFormula.formulaToPitchIndexes(formula);
 		for(Integer i:ps) {
 			int shiftamt = (i>=12) ? i-12 : i;
 			fnum += (1<<shiftamt);

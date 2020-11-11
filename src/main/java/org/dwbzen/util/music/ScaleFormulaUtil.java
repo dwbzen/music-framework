@@ -49,7 +49,7 @@ public class ScaleFormulaUtil {
 				pitchSet[ind++] = Integer.parseInt(pitches[i]);
 			}
 		}
-		formula = IFormula.pitchSetToFormula(pitchSet);
+		formula = IFormula.pitchIndexesToFormula(pitchSet);
 		return formula;
 	}
 }
