@@ -77,42 +77,52 @@ public class InstrumentMaker  implements Supplier<Map<String, Instrument>> {
 		return instruments;
 	}
 	
+	public Instrument getInstrument(String name) {
+		if(!instruments.containsKey(name)) {
+			createInstruments();
+		}
+		return instruments.get(name);
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void createInstruments() throws ConfigurationException {
 		for(String name : getInstrumentNames() ) {
-    		try {
-	    		String classname = configProperties.getProperty("score.instruments." + name + ".class");
-	    		Class<Instrument> instrumentClass = (Class<Instrument>) Class.forName(classname);
-	    		Instrument instrument = (org.dwbzen.music.instrument.Instrument)instrumentClass.getDeclaredConstructor().newInstance();
-	    		instrument.setPitchRange(IInstrument.getConfiguredPitchRange(configProperties, classname));
-	    		instrument.setName(name);
-	    		instrument.setInstrumentName(configProperties.getProperty("score.instruments." + name + "instrument-name", name));
-	    		instrument.configure(configuration);
-	    		// if not set by the Instrument when initialized (transposing instruments should do this), default key is C-Major
-	    		if(instrument.getKey() == null) {
-	    			instrument.setKey(new Key(configProperties.getProperty("score.key", "C-Major")));
+			if(!instruments.containsKey(name)) {
+	    		try {
+		    		String classname = configProperties.getProperty("score.instruments." + name + ".class");
+		    		Class<Instrument> instrumentClass = (Class<Instrument>) Class.forName(classname);
+		    		Instrument instrument = (org.dwbzen.music.instrument.Instrument)instrumentClass.getDeclaredConstructor().newInstance();
+		    		instrument.setPitchRange(IInstrument.getConfiguredPitchRange(configProperties, classname));
+		    		instrument.setName(name);
+		    		instrument.setInstrumentName(configProperties.getProperty("score.instruments." + name + "instrument-name", name));
+		    		instrument.configure(configuration);
+		    		// if not set by the Instrument when initialized (transposing instruments should do this), default key is C-Major
+		    		if(instrument.getKey() == null) {
+		    			instrument.setKey(new Key(configProperties.getProperty("score.key", "C-Major")));
+		    		}
+		    		/*
+		    		 * Create the RhythmScale for this instrument
+		    		 */
+		    		String key = "score.rhythmScale.instrument." + name;
+		    		String rhythmScaleName = configProperties.contains(key) ?
+		    				configProperties.getProperty(key) :
+		    				configProperties.getProperty("score.rhythmScale.all");
+		    		IRhythmScaleFactory factory = RhythmScaleFactory.getRhythmScaleFactory(rhythmScaleName);
+		    		IRhythmScale rhythmScale = factory.createRhythmScale(rhythmScaleName);
+		    		instrument.setRhythmScale(rhythmScale);
+		    		instruments.put(name, instrument);
+	    		} 
+	    		catch(Exception e) {
+	    			String errorMessage = "Could not create Instrument " + name;
+	    			log.error(errorMessage);
+	    			log.error(e.toString() );
+	    			e.printStackTrace();
+	    			System.err.println(errorMessage);
+	    			throw new ConfigurationException(errorMessage);
 	    		}
-	    		/*
-	    		 * Create the RhythmScale for this instrument
-	    		 */
-	    		String key = "score.rhythmScale.instrument." + name;
-	    		String rhythmScaleName = configProperties.contains(key) ?
-	    				configProperties.getProperty(key) :
-	    				configProperties.getProperty("score.rhythmScale.all");
-	    		IRhythmScaleFactory factory = RhythmScaleFactory.getRhythmScaleFactory(rhythmScaleName);
-	    		IRhythmScale rhythmScale = factory.createRhythmScale(rhythmScaleName);
-	    		instrument.setRhythmScale(rhythmScale);
-	    		instruments.put(name, instrument);
-    		} 
-    		catch(Exception e) {
-    			String errorMessage = "Could not create Instrument " + name;
-    			log.error(errorMessage);
-    			log.error(e.toString() );
-    			e.printStackTrace();
-    			System.err.println(errorMessage);
-    			throw new ConfigurationException(errorMessage);
-    		}
+			}
 		}
+
 	}
 
 }

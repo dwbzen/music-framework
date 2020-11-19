@@ -58,6 +58,8 @@ public abstract class Measurable implements Cloneable {
 	protected abstract void setMeasurableType();
 	
 	public abstract Measurable clone();
+	public abstract void invertTies();
+
 	
 	public Duration getDuration() {
 		return duration;

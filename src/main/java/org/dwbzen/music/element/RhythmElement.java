@@ -114,4 +114,16 @@ public class RhythmElement extends Measurable implements Serializable, Comparabl
 		return re;
 	}
 
+	@Override
+	public void invertTies() {
+		RhythmElement nTo = getTiedTo();
+		RhythmElement nFrom = getTiedFrom();
+		if(nFrom != null) {
+			setTiedTo(nFrom);
+		}
+		if(nTo != null) {
+			setTiedFrom(nTo);
+		}
+	}
+
 }

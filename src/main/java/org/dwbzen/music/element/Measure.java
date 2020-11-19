@@ -65,21 +65,12 @@ public class Measure implements IJson, Consumer<Measurable>, BiConsumer<Integer,
 	@JsonProperty("tempoChange")	private boolean tempoChange = false;
 	@JsonProperty("keyChange")		private boolean keyChange = false;
 	
-	/**
-	 * Refers the the previous measure if there is one or null if not
-	 */
-	@JsonIgnore	private Measure lastMeasure = null;
-	
-	/**
-	 * Refers to the next measure if there is one, or null if not
-	 */
-	@JsonIgnore	private Measure nextMeasure = null;
 	@JsonIgnore	private ScorePart scorePart = null;
 
 	/**
 	 * Measure number, starts at 1
 	 */
-	@JsonProperty("number")		private int number = 1;
+	@JsonProperty("number")		public int number = 1;
 	@JsonProperty	private Label label;
 	
 	@JsonProperty	private List<Label> clefs = new ArrayList<Label>();
@@ -116,7 +107,6 @@ public class Measure implements IJson, Consumer<Measurable>, BiConsumer<Integer,
 		tempo = prev.getTempo();
 		number = prev.getNumber() + 1;
 		tempoChange = false;
-		prev.setNextMeasure(this);
 		key = prev.key;
 		scorePart =  prev.getScorePart();
 	}
@@ -125,13 +115,11 @@ public class Measure implements IJson, Consumer<Measurable>, BiConsumer<Integer,
 		this(divisions);
 		this.tempo = tp;
 		if(prev != null) {
-			this.lastMeasure = prev;
 			Tempo pt = (tp==null) ? prev.getTempo() : tp;
 			if(!pt.equals(this.tempo)) {
 				tempoChange = true;
 			}
 			this.number = prev.getNumber() + 1;
-			prev.setNextMeasure(this);
 			this.key = prev.key;
 		}
 	}
@@ -139,22 +127,14 @@ public class Measure implements IJson, Consumer<Measurable>, BiConsumer<Integer,
 	/**
 	 * Creates a field-by-field deep copy of this with these exceptions:<br>
 	 * References to ScorePart, Dynamics and Tempo, and the measureNumber are all retained.<br>
-	 * lastMeasure, nextMeasure, scoreDirections and Barline are not copied.<br>
+	 * scoreDirections and Barline are not copied.<br>
 	 * @param measure - the Measure to copy from
 	 * @param copyNotes - if true, copy (as in clone) the Measurables List for all staves
 	 * @return Measure
 	 */
 	public static Measure copy(Measure measure, boolean copyNotes) {
-		Measure newMeasure = createInstance(measure.scorePart);
-    	newMeasure.setTempo(measure.tempo);
-		newMeasure.setDivisions(measure.divisions);
-		newMeasure.setNumber(measure.number);
-		newMeasure.setNumberOfStaves(measure.numberOfStaves);
-		newMeasure.setKey(measure.key);
-		newMeasure.setBeatNote(measure.beatNote);
-		newMeasure.setBeats(measure.beats);
+		Measure newMeasure = Measure.copy(measure);
 		
-		newMeasure.label = measure.label != null ? new Label(measure.label) : null;
 		for(Label l : measure.getClefs()) {
 			newMeasure.clefs.add(new Label(l));
 		}
@@ -167,6 +147,25 @@ public class Measure implements IJson, Consumer<Measurable>, BiConsumer<Integer,
 				newMeasure.measureables.put(staffnum, notes);
 			}
 		}
+		return newMeasure;
+	}
+	
+	/**
+	 * Copies a given Measure to a new one but does not copy the Notes.
+	 * @param measure
+	 * @return Measure
+	 */
+	public static Measure copy(Measure measure) {
+		Measure newMeasure = createInstance(measure.scorePart);
+    	newMeasure.setTempo(measure.tempo);
+		newMeasure.setDivisions(measure.divisions);
+		newMeasure.setNumber(measure.number);
+		newMeasure.setNumberOfStaves(measure.numberOfStaves);
+		newMeasure.setKey(measure.key);
+		newMeasure.setBeatNote(measure.beatNote);
+		newMeasure.setBeats(measure.beats);
+		
+		newMeasure.label = measure.label != null ? new Label(measure.label) : null;
 		return newMeasure;
 	}
 	
@@ -374,22 +373,6 @@ public class Measure implements IJson, Consumer<Measurable>, BiConsumer<Integer,
 
 	public void setTempoChange(boolean tempoChange) {
 		this.tempoChange = tempoChange;
-	}
-
-	public Measure getLastMeasure() {
-		return lastMeasure;
-	}
-
-	public void setLastMeasure(Measure lastMeasure) {
-		this.lastMeasure = lastMeasure;
-	}
-
-	public Measure getNextMeasure() {
-		return nextMeasure;
-	}
-
-	public void setNextMeasure(Measure nextMeasure) {
-		this.nextMeasure = nextMeasure;
 	}
 
 	public int getNumber() {

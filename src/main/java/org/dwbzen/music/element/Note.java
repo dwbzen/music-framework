@@ -92,7 +92,7 @@ public class Note extends Measurable implements Serializable, Comparable<Note> {
 	 */
 	@Override
 	public Note clone() {
-		return new Note(this, true);
+		return new Note(this);
 	}
 	
 	public Pitch getPitch() {
@@ -151,6 +151,20 @@ public class Note extends Measurable implements Serializable, Comparable<Note> {
 		}
 		else {	// newTiedFrom != null
 			tieType = (tiedTo == null) ? TieType.STOP : TieType.BOTH;
+		}
+	}
+	
+	/**
+	 *  Adjust the ties if any: the tiedTo becomes a tiedFrom and vice-versa
+	 */
+	public void invertTies() {
+		Note nTo = getTiedTo();
+		Note nFrom = getTiedFrom();
+		if(nFrom != null) {
+			setTiedTo(nFrom);
+		}
+		if(nTo != null) {
+			setTiedFrom(nTo);
 		}
 	}
 	

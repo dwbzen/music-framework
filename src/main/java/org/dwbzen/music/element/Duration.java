@@ -23,6 +23,8 @@ public class Duration implements IJson, Comparable<Duration> {
 	 * raw duration value
 	 */
 	@JsonIgnore	private double rawDuration = 0.0;
+	
+	@JsonIgnore private String noteType = null;		// optional, value determined by rhythm scale
 
 	/** 
 	 * Beat units are any of the following:
@@ -165,5 +167,12 @@ public class Duration implements IJson, Comparable<Duration> {
 		this.dots = dots;
 	}
 
+	public String getNoteType() {
+		return noteType;
+	}
+
+	public void setNoteType(String noteType) {
+		this.noteType = noteType;
+	}
 
 }

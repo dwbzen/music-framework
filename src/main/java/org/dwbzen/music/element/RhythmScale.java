@@ -72,7 +72,7 @@ public class RhythmScale  implements IRhythmScale {
 	 * Need NoteType in order to create music XML
 	 * In ascending duration order
 	 */
-	public static String[] NoteTypes = {
+	public static final String[] NoteTypes = {
 			"64th", "32nd", "16th", "eighth", "quarter", "half", "whole"
 		};
 	

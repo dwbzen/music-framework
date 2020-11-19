@@ -115,7 +115,7 @@ public final class Scale implements IJson, INameable, Cloneable  {
 	 * @param key associated Key
 	 * @param pref Alteration preference in creating scale: UP_ONE or DOWN_ONE
 	 */
-	private Scale(String name, String mode, ScaleType type, Pitch root, ScaleFormula formula, Key key, Alteration pref) {
+	public Scale(String name, String mode, ScaleType type, Pitch root, ScaleFormula formula, Key key, Alteration pref) {
 		this(name, mode, type, root, key);
 		pitches = IFormula.createPitches(formula.getFormula(), root, key, pref);
 		scaleFormula = formula;

@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.dwbzen.music.IScoreFactory;
 import org.dwbzen.music.ScoreFactory;
 import org.dwbzen.music.ScorePart;
+import org.dwbzen.music.element.Alteration;
 import org.dwbzen.music.element.Barline;
 import org.dwbzen.music.element.Duration;
 import org.dwbzen.music.element.IRhythmScale;
@@ -20,6 +21,7 @@ import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.Measurable;
 import org.dwbzen.music.element.Measure;
 import org.dwbzen.music.element.Note;
+import org.dwbzen.music.element.Phrase;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.Scale;
 import org.dwbzen.music.element.ScaleFormula;
@@ -218,7 +220,7 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 				}
 
 				ScaleType scaleType = ScaleExportManager.getScaleType(formula);
-				Scale scale = new Scale(name, null, scaleType, pitch, formula, Key.C_MAJOR);
+				Scale scale = new Scale(name, null, scaleType, pitch, formula, Key.C_MAJOR, Alteration.FLAT);
 				/*
 				 * scalePitches are octave neutral (i.e. octave = -1) and includes a repeat of the root note.
 				 * For example: C, D, Eb, F, Gb, A, C  formula=[2, 1, 2, 1, 3, 3] ("Pyramid Hexatonic")
@@ -347,6 +349,9 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 				}
 				
 				staffNumber++;
+				/*
+				 * Each note on the Bass staff is 2 octaves below the treble staff notes
+				 */
 				for(Measure measure : scaleMeasures) {
 					for(Measurable measurable : measure.getMeasureables(1)) {
 						Note s1note = (Note)measurable;
@@ -361,7 +366,14 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 
 				// add an empty measure and a barline to indicate end of this scale
 				scaleCounter++;
-				scorePartEntity.getMeasures().addAll(scaleMeasures);
+				scorePartEntity.addMeasures(scaleMeasures);
+				/*
+				 * Create a Phrase and add the Retrograde
+				 */
+				Phrase phrase = new Phrase(scoreInstrument, scaleMeasures);
+				Phrase retroPhrase = phrase.getRetrograde(false);
+				scorePartEntity.addPhrase(retroPhrase);
+
 				lastMeasure = createNewMeasure(measureNumber++);
 				Note s1note = new Note(Pitch.SILENT, new Duration(unitsPerMeasure));		// essentially a rest
 				Note s2note = new Note(s1note);
@@ -369,7 +381,7 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 				lastMeasure.accept(1, s1note);
 				lastMeasure.accept(2, s2note);
 				lastMeasure.setBarline(scaleCounter == scaleFormulas.size() ? lightHeavy : lightLight);
-				scorePartEntity.getMeasures().add(lastMeasure);
+				scorePartEntity.addMeasure(lastMeasure);
 				measureCounter++;
 				
 			}	// scaleFormulas

@@ -367,4 +367,12 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		return pitchSet;
 	}
 
+	@Override
+	/**
+	 * Invert the ties in all the chord notes
+	 */
+	public void invertTies() {
+		notes.stream().forEach(note -> note.invertTies());
+	}
+
 }

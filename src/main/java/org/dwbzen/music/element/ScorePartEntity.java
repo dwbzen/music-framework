@@ -52,8 +52,16 @@ public class ScorePartEntity implements Serializable {
     	return sb.toString();
     }
 
-    public void addPhrase(Phrase phrase) {
-    	measures.addAll(phrase.getMeasures());
+    public boolean addPhrase(Phrase phrase) {
+    	return measures.addAll(phrase.getMeasures());
+    }
+    
+    public boolean addMeasures(List<Measure> m) {
+    	return measures.addAll(m);
+    }
+    
+    public boolean addMeasure(Measure measure) {
+    	return measures.add(measure);
     }
     
 	public String getPartName() {
