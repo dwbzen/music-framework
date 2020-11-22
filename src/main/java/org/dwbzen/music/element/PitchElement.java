@@ -11,6 +11,12 @@ public abstract class PitchElement implements IJson, Cloneable, IAdjustable  {
 	
 	public abstract boolean isOctaveNeutral();
 	
+	public abstract PitchElement getRetrograde();
+	public abstract PitchElement getInversion();
+	public abstract PitchElement getTransposition(int numberOfSteps);
+	public abstract PitchElement getInversion(Pitch startingPitch);
+	
+	
 	public static PitchElement clone(PitchElement pe) {
 		PitchElement clonedElement = pe.getPitchElementType() == PitchElementType.PITCH ?
 				((Pitch)pe).clone() :

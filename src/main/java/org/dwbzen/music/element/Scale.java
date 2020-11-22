@@ -7,6 +7,7 @@ import java.util.Map;
 import org.dwbzen.common.util.IJson;
 import org.dwbzen.common.util.INameable;
 import org.dwbzen.music.element.Key.Mode;
+import org.dwbzen.util.music.PitchCollection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -128,7 +129,6 @@ public final class Scale implements IJson, INameable, Cloneable  {
 		scaleType = type;
 		this.root = root;
 		this.key = (key == null) ? Key.C_MAJOR : key;
-;
 		rootPitch = root.toString();
 	}
 
@@ -201,6 +201,30 @@ public final class Scale implements IJson, INameable, Cloneable  {
 		Alteration alt = (altPref == 0) ? Alteration.NONE : (altPref<0) ? Alteration.DOWN_ONE : Alteration.UP_ONE;
 		Scale scale = new Scale(sname, sm, st, nroot, formula, nkey, alt);
 		return scale;
+	}
+	
+	/**
+	 * Creates triads from this scale. Each pitch in the scale is a root in the triad.<br>
+	 * Triads are created by selecting the root, 3rd degree and 5th degree of the scale relative to the root Pitch.<br>
+	 * For example, given the C-Major scale, the triads are C, Dm, Em, F, G, Am, Bdim
+	 * @return PitchCollection
+	 */
+	public PitchCollection createScaleTriads() {
+		PitchCollection pc = null;
+		// TODO
+		return pc;
+	}
+	
+	/**
+	 * Creates 7th cords from this scale. Each pitch in the scale is a root of the chord.<br>
+	 * 7ths are created by selecting the root, 3rd, 5th and 7th degrees of the scale relative to the root Pitch.<br>
+	 * For example, given the C-Major scale, the 7th chords are CM7, Dm7, Em7, FM7, G7, Am7, Bhalf-dim (B-D-F-A)
+	 * @return PitchCollection
+	 */
+	public PitchCollection createScaleSevenths() {
+		PitchCollection pc = null;
+		// TODO
+		return pc;
 	}
 
 	public String getName() {

@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.dwbzen.common.util.IJson;
-import org.dwbzen.music.element.Measurable.TieType;
+import org.dwbzen.music.element.PitchElement.PitchElementType;
 import org.dwbzen.music.instrument.Instrument;
 import org.dwbzen.util.music.PitchCollection;
+import org.dwbzen.util.music.StaffPitchCollection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,7 +30,7 @@ public class Phrase implements IJson, Cloneable {
 	@JsonProperty	private List<Measure> measures = new ArrayList<>();
 	@JsonProperty	private Instrument instrument;
 	@JsonIgnore		private IRhythmScale rhythmScale;
-	@JsonIgnore		private	Map<Integer, PitchCollection> staffPitches = null;		// keyed by staff number, created dynamically
+	@JsonIgnore		private	StaffPitchCollection staffPitches = null;		// keyed by staff number, created dynamically
 	@JsonIgnore		private Map<Integer, List<Duration>> durationsMap = null;		// Duration by staff number, created dynamically
 	
 	/**
@@ -75,7 +76,6 @@ public class Phrase implements IJson, Cloneable {
 	
 	/**
 	 * 
-	 * @param staffNumber - the staff number to create the retrograde from. If <= 0, forms the retrograde on all staves.
 	 * @param notesOnly - if true, only the pitches are reversed, the durations, ties remain the same.
 	 * @return  Phrase with the designated staff/staves in retrograde.
 	 */
@@ -83,11 +83,7 @@ public class Phrase implements IJson, Cloneable {
 		Phrase phrase = null;
 		List<Measure> retroMeasures = new ArrayList<>();
 		if(notesOnly) {
-			/*
-			 * keep the same note durations/types; update pitches to retrograde
-			 * TODO
-			 */
-			phrase = clone();
+			phrase = getRetrogradeNotesOnly();
 		}
 		else {
 			phrase = new Phrase(this.instrument);
@@ -116,6 +112,33 @@ public class Phrase implements IJson, Cloneable {
 		}
 
 		phrase.measures.addAll(retroMeasures);
+		return phrase;
+	}
+	
+	private Phrase getRetrogradeNotesOnly() {
+		/*
+		 * keep the same note durations/types; update pitches to retrograde
+		 * TODO
+		 */
+		StaffPitchCollection spc = getStaffPitches().getRetrograde();	// all the pitches on all staves
+		Phrase phrase = clone();
+		List<Measure> measures = phrase.getMeasures();
+		for(int staffnum=1; staffnum<= spc.getNumberOfStaves(); staffnum++) {
+			PitchCollection pc = spc.getPitchCollection(staffnum);
+			int index = 0;
+			for(Measure measure : measures) {
+				for(Measurable m : measure.getMeasureables(staffnum)) {
+					PitchElement pe = pc.getPitch(index++);
+					if(pe.getPitchElementType() == PitchElementType.PITCH) {
+						Note note = (Note)m;
+						note.setPitch((Pitch)pe);
+					}
+					else {
+						// PitchSet (Chord) - nothing more to do
+					}
+				}
+			}
+		}
 		return phrase;
 	}
 	
@@ -150,14 +173,26 @@ public class Phrase implements IJson, Cloneable {
 	 * @return PitchCollection of the PitchElements in the designated staff.
 	 */
 	public PitchCollection getPitches(int staffNumber) {
+		if(staffPitches == null || !staffPitches.hasStaff(staffNumber)) {
+			createPitchCollections();
+		}
+		return staffPitches.getPitchCollection(staffNumber);
+	}
+	
+	/**
+	 * Gets Pitches on all staves in this Phrase
+	 * 
+	 * @return StaffPitchCollection
+	 */
+	public StaffPitchCollection getStaffPitches() {	
 		if(staffPitches == null) {
 			createPitchCollections();
 		}
-		return staffPitches.get(staffNumber);
+		return staffPitches;
 	}
 	
 	private void createPitchCollections() {
-		staffPitches = new HashMap<>();
+		staffPitches = new StaffPitchCollection();
 		for(int snum = 1; snum <= numberOfStaves; snum++) {
 			for(int staffNumber = 1; staffNumber <= numberOfStaves; staffNumber++) {
 				createPitchCollection(staffNumber);
@@ -182,14 +217,7 @@ public class Phrase implements IJson, Cloneable {
 				}
 			}
 		}
-		staffPitches.put(staffNumber, pc);		
-	}
-
-	public Map<Integer, PitchCollection> getPitches() {
-		if(staffPitches == null) {
-			createPitchCollections();
-		}
-		return staffPitches;
+		staffPitches.addPitchCollection(pc, staffNumber);		
 	}
 	
 	/**
@@ -202,13 +230,6 @@ public class Phrase implements IJson, Cloneable {
 
 	public List<Measure> getMeasures() {
 		return measures;
-	}
-
-	public Map<Integer, PitchCollection> getStaffPitches() {
-		if(staffPitches == null) {
-			createPitchCollections();
-		}
-		return staffPitches;
 	}
 
 	public Instrument getInstrument() {

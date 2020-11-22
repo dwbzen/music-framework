@@ -364,16 +364,18 @@ public class ScoreScaleCreator implements BiFunction<List<ScaleFormula>, List<Pi
 					}
 				}
 
-				// add an empty measure and a barline to indicate end of this scale
 				scaleCounter++;
 				scorePartEntity.addMeasures(scaleMeasures);
 				/*
 				 * Create a Phrase and add the Retrograde
 				 */
 				Phrase phrase = new Phrase(scoreInstrument, scaleMeasures);
-				Phrase retroPhrase = phrase.getRetrograde(false);
+				Phrase retroPhrase = phrase.getRetrograde(true);
 				scorePartEntity.addPhrase(retroPhrase);
-
+				
+				/* 
+				 * add an empty measure and a barline to indicate end of this scale
+				 */
 				lastMeasure = createNewMeasure(measureNumber++);
 				Note s1note = new Note(Pitch.SILENT, new Duration(unitsPerMeasure));		// essentially a rest
 				Note s2note = new Note(s1note);

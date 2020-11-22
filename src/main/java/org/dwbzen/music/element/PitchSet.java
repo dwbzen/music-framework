@@ -17,15 +17,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * A Set of Pitches maintained as a unit.<br>
  * Member pitches can be octave-neutral, meaning there is no octave assigned.<br>
  * For example "C" versus "C4". All the Pitches in the collection are either octave-neutral or octave-assigned.<br>
- * Certain operations make sense only for octave-assigned pitches, but they are not restricted:<br>
- * retrograde - collection in reverse order<br>
- * inversion - inverting the step direction (up, down)<br>
- * retrograde-inversion - an inversion of the retrograde<br>
- * transposition - by interval</p>
+ * Certain operations make sense only for octave-assigned pitches, but they are not restricted:
+ * <dl>
+ * <dt>retrograde</dt><dd>collection in reverse order</dd>
+ * <dt>inversion</dt><dd>inverting the step direction (up, down)</dd>
+ * <dt>retrograde-inversion</dt><dd>an inversion of the retrograde</dd>
+ * <dt>transposition</dt><dd>adjust the pitch by interval up or down</dd>
+ *</dl>
  * Transposition can be done in-place or on a clone of the PitchSet. Inversion and Retrograde always operate on a clone.</p>
+ * 
  * PitchSet contains a List<Pitch> in the order added. It is backed with a Set<Pitch> which has only the unique pitches in the list.<br>
+ * Retrograde and Inversion operations are applied to the List<Picth> leaving the Set<Pitch> unchanged.</p>
+ * 
  * A PitchSet is also the structure underlying Chord.<br>
- * PitchSet and Pitch both extend the abstract PitchElement.
+ * PitchSet and Pitch both extend the abstract PitchElement. PitchElements are aggregated by PitchCollection.
  * 
  * @author don_bacon
  *
@@ -207,12 +212,14 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 		return addedPitch;
 	}
 	
+	@Override
 	public PitchSet getTransposition(int numberOfSteps) {
 		PitchSet pc = clone();
 		pc.transpose(numberOfSteps);
 		return pc;
 	}
 	
+	@Override
 	public PitchSet getRetrograde() {
 		PitchSet pc = new PitchSet();
 		for(int i = size()-1; i>=0; i--) {
@@ -221,6 +228,7 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 		return pc;
 	}
 	
+	@Override
 	public PitchSet getInversion(Pitch startingPitch) {
 		PitchSet inverted = new PitchSet();
 		inverted.addNewPitch(startingPitch);
@@ -233,6 +241,7 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 		return inverted;
 	}
 	
+	@Override
 	public PitchSet getInversion() {
 		return size()>0 ?  getInversion(pitches.get(0)) : new PitchSet();
 	}

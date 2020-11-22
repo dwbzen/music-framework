@@ -730,4 +730,35 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 		return octave < 0;
 	}
 
+	@Override
+	/**
+	 * The retrograde of a single Pitch is just the Pitch
+	 * return new Pitch
+	 */
+	public PitchElement getRetrograde() {
+		return new Pitch(this);
+	}
+
+	@Override
+	/**
+	 * The inversion of a single Pitch is just the Pitch
+	 * return new Pitch
+	 */
+	public PitchElement getInversion() {
+		return new Pitch(this);
+	}
+
+	@Override
+	public PitchElement getTransposition(int numberOfSteps) {
+		return new Pitch(this, numberOfSteps);
+	}
+
+	@Override
+	public PitchElement getInversion(Pitch startingPitch) {
+		Pitch invertedPitch = new Pitch(startingPitch);
+		int difference = getRangeStep() - startingPitch.getRangeStep();
+		invertedPitch.increment(-difference);
+		return null;
+	}
+
 }
