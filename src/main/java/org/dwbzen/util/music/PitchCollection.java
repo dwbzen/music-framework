@@ -87,5 +87,14 @@ public class PitchCollection implements IJson, Cloneable {
 		return pitchElements;
 	}
 	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for(PitchElement pe: pitchElements) {
+			sb.append(pe.toString());
+			sb.append(", ");
+		}
+		sb.deleteCharAt(sb.length()-2);
+		return sb.toString();
+	}
 	
 }

@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 import junit.framework.TestCase;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.Scale;
+import org.dwbzen.music.element.Scales;
+import org.dwbzen.util.music.PitchCollection;
 import org.dwbzen.util.music.ScaleManager;
 
 public class ScaleManagerTest   extends TestCase {
@@ -20,7 +22,8 @@ public class ScaleManagerTest   extends TestCase {
 		for(String scaleName : commonScales) {
 			Scale scale = scaleManager.getScale(scaleName, rootPitch);
 			assertNotNull(scale);
-			log.debug(scale.toJson());
+			String s = scale.toString();
+			log.debug(s);
 		}
 	}
 	
@@ -29,7 +32,7 @@ public class ScaleManagerTest   extends TestCase {
 		for(String scaleName : theoreticalScales) {
 			Scale scale = scaleManager.getScale(scaleName, rootPitch);
 			assertNotNull(scale);
-			log.debug(scale.toJson());
+			log.debug(scale.toString());
 		}
 	}
 	
@@ -37,12 +40,24 @@ public class ScaleManagerTest   extends TestCase {
 		for(String scaleName : mappedScales) {
 			Scale scale = scaleManager.getScale(scaleName);
 			assertNotNull(scale);
-			log.debug(scale.toJson());
+			log.debug(scale.toString());
 		}
 	}
 	
 	public void testGetUnknownScale() {
 		Scale scale = scaleManager.getScale("Unknown Scale");
 		assertNull(scale);
+	}
+	
+	public void testGetScaleTriads() {
+		Scale scale = Scales.EFlat_MINOR_PENTATONIC;
+		PitchCollection pc = scale.createScaleTriads(4);
+		System.out.println(pc.toString());
+	}
+	
+	public void testGetScaleSevenths() {
+		Scale scale = Scales.C_MAJOR;
+		PitchCollection pc = scale.createScaleSevenths(3);
+		System.out.println(pc.toString());
 	}
 }

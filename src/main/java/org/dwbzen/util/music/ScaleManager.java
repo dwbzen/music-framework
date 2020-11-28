@@ -109,7 +109,7 @@ public class ScaleManager {
 				mode = scaleFormula.getMode();
 				st = scaleFormula.getScaleType();
 				scale = new Scale(scaleName, mode, st, root, scaleFormula);
-				log.debug("Found Scale: " + scale.toJson());
+				log.debug("Found Scale: " + scaleName);
 			}
 			else {
 				System.out.println("No such scale found: " + scaleName);
