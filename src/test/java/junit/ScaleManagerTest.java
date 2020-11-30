@@ -44,6 +44,21 @@ public class ScaleManagerTest   extends TestCase {
 		}
 	}
 	
+	public void testToJson() {
+		Pitch pitch = new Pitch("Ab4");
+		String ps = pitch.toJson();
+		assertNotNull(ps);
+		System.out.println(ps);
+
+		Scale scale = Scales.G_HARMONIC_MINOR;
+		String json = scale.toJson();
+		assertNotNull(json);
+		System.out.println(json);
+		String sstring = scale.toString();
+		assertNotNull(sstring);
+		System.out.println("scale: " + sstring);
+	}
+	
 	public void testGetUnknownScale() {
 		Scale scale = scaleManager.getScale("Unknown Scale");
 		assertNull(scale);

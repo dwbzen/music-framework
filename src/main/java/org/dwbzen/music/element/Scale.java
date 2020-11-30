@@ -11,6 +11,8 @@ import org.dwbzen.util.music.PitchCollection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  *  A Scale is a specific realization of a ScaleFormula that has a root (starting note)
@@ -23,13 +25,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class Scale implements IJson, INameable, Cloneable  {
 
 	private static final long serialVersionUID = -6449893042332225583L;
+	
+	@JsonIgnore	private  ObjectMapper mapper = new ObjectMapper();
 
-	@JsonProperty("name")		private final String name;
-	@JsonProperty("mode")		private final String mode;			// valid values: MAJOR, MINOR, MODE, can be null if N/A
-	@JsonProperty("type")		private final ScaleType scaleType;
-	@JsonProperty("root")		private final Pitch root;
+	@JsonPropertyOrder({"name","notes","formulaName" })
+	@JsonProperty("name")		private String name;
+	@JsonProperty("mode")		private String mode;			// valid values: MAJOR, MINOR, MODE, can be null if N/A
+	@JsonProperty("scaleType")	private ScaleType scaleType;
+	@JsonProperty("root")		private Pitch root;
 	@JsonProperty("rootPitch")	private String rootPitch; 	// C, C#, Bb etc.
-	@JsonProperty("key")		private Key key;				// if there is an associated Key, could be null
+	@JsonIgnore					private Key key;				// if there is an associated Key, could be null
 	@JsonProperty("pitches")	private List<Pitch> pitches = new ArrayList<Pitch>();				// pitches of the scale in ascending order
 	@JsonIgnore					private List<Pitch> descendingPitches = new ArrayList<Pitch>();		// pitches of the scale in descending order
 	@JsonProperty("notes")		private String notes = null;		// the toString(this) for readability
@@ -37,6 +42,9 @@ public final class Scale implements IJson, INameable, Cloneable  {
 	@JsonProperty("formulaName")	private String formulaName;
 	@JsonProperty("description")	private String description;		// optional descriptive text
 	
+	public Scale() {
+		
+	}
 	
 	/**
 	 * Construct a Scale from a scale formula. Also adds to SCALE_MAP by name

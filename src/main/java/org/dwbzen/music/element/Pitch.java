@@ -6,7 +6,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
@@ -29,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 
  * <p>See <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a> on Wikipedia.</p>
  */
-public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdjustable {
+public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 
 	static final org.apache.log4j.Logger log = Logger.getLogger(Pitch.class);
 
@@ -95,19 +97,19 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 	public static final Pitch maxPitch = C9;
 	public static final Pitch minPitch = C0;
 
-
-	@JsonProperty("step")	private Step step;
+	@JsonPropertyOrder({"step","octave","alteration","rangeStep"})
+	@JsonProperty("step")			private Step step;
 	/**
 	 * octave number in standard scientific notation starting at 0
 	 * if octave < 0, pitch is octave-neutral
 	 */
-	@JsonProperty("octave")	private int octave = 0;
-	@JsonProperty("alteration") private int alteration = 0;
+	@JsonProperty("octave")			private int octave = 0;
+	@JsonProperty("alteration") 	private int alteration = 0;
 	
 	/**
 	 * Number of steps away from C0, a number >=0 and <pitchRange
 	 */
-	@JsonProperty("rangeStep")	private int rangeStep = 0;
+	@JsonProperty("rangeStep")		private int rangeStep = 0;
 	/**
 	 * Need something to represent a "silent" Pitch, a.k.a. a rest
 	 * This is set arbitrarily to octave 0, alteration 0, Step.SILENT
@@ -121,7 +123,12 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 	
 	public static int pitchRange = 120;	// C0 to C9
 	
+	public Pitch() {
+		pitchElementType = PitchElementType.PITCH;
+	}
+	
 	public Pitch(Step s, int oct, Alteration alt) {
+		this();
 		step = s;
 		octave = oct;
 		alteration = alt.value();
@@ -129,6 +136,7 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 	}
 	
 	public Pitch(Step s, int oct, int alt) {
+		this();
 		step = s;
 		octave = oct;
 		alteration = alt;
@@ -147,11 +155,11 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 	 * @param alt Alteration
 	 */
 	public Pitch(Step s, Alteration alt) {
+		this();
 		step = s;
 		octave = -1;
 		alteration = alt.value();
 		setRangeStep();
-		log.trace(toString() + " rangeStep: " + rangeStep);
 	}
 	
 	/**
@@ -159,6 +167,7 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 	 * @param other Pitch to copy (alteration, step, octave)
 	 */
 	public Pitch(Pitch other) {
+		this();
 		step =  other.getStep();
 		octave = other.getOctave();
 		alteration = other.getAlteration();
@@ -171,6 +180,7 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 	 * @param octave octave for new Pitch
 	 */
 	public Pitch(Pitch other, int transposeSteps, Alteration alterationPreference) {
+		this();
 		step =  other.getStep();
 		octave = other.getOctave();
 		alteration = other.getAlteration();
@@ -195,7 +205,6 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 	public Pitch(String s) {
 		this(Pitch.fromString(s));
 		setRangeStep();
-		log.trace(toString() + " rangeStep: " + rangeStep);
 	}
 	
 	public void copy(Pitch other) {
@@ -451,7 +460,7 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 	 * Cb is 12 (really a B)
 	 * @return scale degree (1 -12) from C
 	 */
-	public int getChromaticScaleDegree() {
+	@JsonIgnore public int getChromaticScaleDegree() {
 		int d = step.value() + getAlteration();
 		if(d < 0) { d=1-d;}
 		else if(d>12 || d==0) { d=12-d;}
@@ -479,7 +488,7 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 	 * C0 is the lowest note and has an absolute chromatic scale degree of 1
 	 * B0 would be 12. C1 would be 13 etc.
 	 */
-	public int getAbsoluteChromaticScaleDegree() {
+	@JsonIgnore public int getAbsoluteChromaticScaleDegree() {
 		int d = step.value() + getAlteration();
 		int noctave = getOctave();
 		if(d < 0) { d=1-d;}
@@ -573,7 +582,24 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 		if(octAve >= 0) { sb.append(String.valueOf(octAve)); }
 		return sb.toString();
 	}
-
+	
+	@Override
+	/**
+	 * Sample output (Ab):<br>
+	 * {"step":"A","octave":-1,"alteration":-1,"rangeStep":8,"stepValue":10,"octaveNeutral":true}
+	 */
+	 public String toJson() { 
+		StringBuilder sb = new StringBuilder("{\"step\":"); 
+		sb.append("\"" + toString() + "\",");
+		sb.append("\"octave\":" + octave + ",");
+		sb.append("\"alteration\":" + alteration + ",");
+		sb.append("\"rangeStep\":" + rangeStep + ",");
+		sb.append("\"stepValue\":" + step.value() + ",");
+		sb.append("\"octaveNeutral\":" + isOctaveNeutral() + "}");
+				
+	 	return sb.toString();
+	 }
+	
 	/**
 	 * Creates a new Pitch that is the enharmonic equivalent of this
 	 * @param alt if>0, make a sharp a flat or natural; if <0 make a flat a sharp
@@ -722,7 +748,7 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 	
 	@Override
 	protected void setPitchElementType() {
-		this.pitchElementType = PitchElementType.PITCH;		
+		//this.pitchElementType = PitchElementType.PITCH;		
 	}
 
 	@Override
@@ -753,12 +779,14 @@ public final class Pitch extends PitchElement implements Comparable<Pitch>, IAdj
 		return new Pitch(this, numberOfSteps);
 	}
 
-	@Override
-	public PitchElement getInversion(Pitch startingPitch) {
-		Pitch invertedPitch = new Pitch(startingPitch);
-		int difference = getRangeStep() - startingPitch.getRangeStep();
-		invertedPitch.increment(-difference);
-		return null;
+	
+	@Override 
+	public PitchElement getInversion(Pitch startingPitch) { 
+		Pitch invertedPitch = new Pitch(startingPitch); 
+		int difference = getRangeStep() - startingPitch.getRangeStep(); 
+		invertedPitch.increment(-difference); 
+		return  invertedPitch; 
 	}
+	 
 
 }
