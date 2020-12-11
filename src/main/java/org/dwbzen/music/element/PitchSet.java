@@ -38,8 +38,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 
 	@JsonProperty	private List<Pitch> pitches = new ArrayList<>();
-	@JsonIgnore		private Set<Pitch> pitchSet = new TreeSet<>();
-	@JsonProperty	private boolean octaveNeutral = true;
+	@JsonIgnore		private Set<Pitch> pitchSet = null;		// created dynamically when needed
+	@JsonIgnore		private boolean octaveNeutral = true;
 	
 	static ThreadLocalRandom random = ThreadLocalRandom.current();
 	
@@ -92,12 +92,26 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 		return pitches;
 	}
 	
+	/**
+	 * Unique Pitches in this PitchSet, regenerating if necessary.
+	 * @return Set<Pitch>
+	 */
 	public Set<Pitch> getPitchSet() {
+		if(pitchSet == null || pitchSet.size() == 0) {
+			setPitchSet();
+		}
 		return pitchSet;
 	}
 	
+	private void setPitchSet() {
+		pitchSet = new TreeSet<>();
+		for(Pitch p : pitches) {
+			pitchSet.add(p);
+		}
+	}
+	
 	public boolean remove(Pitch p) {
-		return pitches.remove(p) && pitchSet.remove(p);
+		return pitches.remove(p) && getPitchSet().remove(p);
 	}
 	
 	public boolean contains(Pitch p) {
@@ -109,7 +123,7 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 	 * @param Pitch to add
 	 */
 	public void addPitch(Pitch p) {
-		pitchSet.add(p);
+		getPitchSet().add(p);
 		pitches.add(p);
 		octaveNeutral = octaveNeutral && p.isOctaveNeutral();
 	}
@@ -119,8 +133,8 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 	 * @param Pitch to add
 	 */
 	public void addUniquePitch(Pitch p) {
-		if(!pitchSet.contains(p)) {
-			pitches.add(p);
+		if(!getPitchSet().contains(p)) {
+			addPitch(p);
 			octaveNeutral = octaveNeutral && p.isOctaveNeutral();
 		}
 		return;
@@ -196,6 +210,7 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 		return octaveNeutral;
 	}
 	
+	@Override
 	public int size() {
 		return pitches.size();
 	}
@@ -208,7 +223,7 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 	
 	public Pitch addNewPitch(Pitch p) {
 		Pitch addedPitch = new Pitch(p);
-		pitches.add(addedPitch);
+		addPitch(addedPitch);
 		return addedPitch;
 	}
 	
@@ -223,7 +238,7 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 	public PitchSet getRetrograde() {
 		PitchSet pc = new PitchSet();
 		for(int i = size()-1; i>=0; i--) {
-			pc.pitches.add(new Pitch(pitches.get(i)));
+			pc.addPitch(new Pitch(pitches.get(i)));
 		}
 		return pc;
 	}
@@ -423,6 +438,7 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 		for(Pitch p : pitches) {
 			p.adjustPitch(numberOfSteps);
 		}
+		pitchSet = null;		// force regeneration of unique pitches
 	}
 
 	@Override
@@ -430,6 +446,7 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 		for(Pitch p : pitches) {
 			p.decrement(numberOfSteps);
 		}		
+		pitchSet = null;		// force regeneration of unique pitches
 	}
 
 	@Override
@@ -437,6 +454,16 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 		for(Pitch p : pitches) {
 			p.increment(numberOfSteps);
 		}	
+		pitchSet = null;		// force regeneration of unique pitches
+	}
+
+	@Override
+	public void setOctave(int octave) {
+		// set the octave on each Pitch in the PitchSet
+		for(Pitch p : pitches) {
+			p.setOctave(octave);
+		}
+		pitchSet = null;		// force regeneration of unique pitches
 	}
 
 }

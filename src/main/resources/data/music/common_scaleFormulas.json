@@ -1,13 +1,11 @@
-{ "name" : "Major" , "groups" : [ "major", "diatonic"] , "formula" : [ 2 , 2 , 1 , 2 , 2 , 2 , 1] , "size" : 7}
+{ "name" : "Major" , "groups" : [ "major", "diatonic", "common"] , "formula" : [ 2 , 2 , 1 , 2 , 2 , 2 , 1] , "size" : 7}
 { "name" : "Minor" , "alternateNames" : [ "Natural minor" , "Melodic minor descending"] , "groups" : [ "minor"] , "formula" : [ 2 , 1 , 2 , 2 , 1 , 2 , 2] , "size" : 7}
-{ "name" : "Melodic minor ascending" , "groups" : [ "minor"] , "formula" : [ 2 , 1 , 2 , 2 , 2 , 2 , 1] , "size" : 7}
-{ "name" : "Harmonic minor" , "groups" : [ "minor"] , "formula" : [ 2 , 1 , 2 , 2 , 1 , 3 , 1] , "size" : 7}
+{ "name" : "Melodic minor ascending" , "groups" : [ "minor", "common"] , "formula" : [ 2 , 1 , 2 , 2 , 2 , 2 , 1] , "size" : 7}
+{ "name" : "Harmonic minor" , "groups" : [ "minor", "common"] , "formula" : [ 2 , 1 , 2 , 2 , 1 , 3 , 1] , "size" : 7}
 { "name" : "Chromatic" , "groups" : [ "chromatic"] , "formula" : [ 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1] , "size" : 12}
 { "name" : "Whole tone" , "groups" : [ "chromatic"] , "formula" : [ 2 , 2 , 2 , 2 , 2 , 2] , "size" : 6}
-{ "name" : "Petatonic major" , "groups" : [ "pentatonic"] , "formula" : [ 2 , 2 , 3 , 2 , 3] , "size" : 5}
-{ "name" : "Petatonic minor" , "groups" : [ "pentatonic"] , "formula" : [ 3 , 2 , 3 , 2 , 2] , "size" : 5}
-{ "name" : "Pentatonic major" , "groups" : [ "pentatonic"] , "formula" : [ 2 , 2 , 3 , 2 , 3] , "size" : 5}
-{ "name" : "Pentatonic minor" , "groups" : [ "pentatonic"] , "formula" : [ 3 , 2 , 3 , 2 , 2] , "size" : 5}
+{ "name" : "Pentatonic major" , "groups" : [ "pentatonic", "common"] , "formula" : [ 2 , 2 , 3 , 2 , 3] , "size" : 5}
+{ "name" : "Pentatonic minor" , "groups" : [ "pentatonic", "common"] , "formula" : [ 3 , 2 , 3 , 2 , 2] , "size" : 5}
 { "name" : "Blues" , "groups" : [ "blues"] , "formula" : [ 3 , 2 , 1 , 1 , 3 , 2] , "size" : 6}
 { "name" : "(as 7/367/1 in 12edo)" , "groups" : [ "untitled"] , "formula" : [ 1 , 3 , 3 , 2 , 3] , "size" : 5}
 { "name" : "Spanish 8 tones (all b's) in 12edo)" , "groups" : [ "spanish"] , "formula" : [ 1 , 2 , 1 , 1 , 1 , 2 , 2 , 2] , "size" : 8}
@@ -180,11 +178,11 @@
 { "name" : "Hungarian Gypsy" , "alternateNames" : [ "Mela Sanmukhapriya (India)"] , "groups" : [ "hungarian"] , "formula" : [ 2 , 1 , 3 , 1 , 1 , 2 , 2] , "size" : 7}
 { "name" : "Hungarian Gypsy, Damian Emmanuel" , "alternateNames" : [ "Mela Sanmukhapriya (India)"] , "groups" : [ "hungarian"] , "formula" : [ 2 , 1 , 3 , 1 , 1 , 2 , 2] , "size" : 7}
 { "name" : "Hungarian Major Raga Nasamani (India)" , "groups" : [ "hungarian"] , "formula" : [ 3 , 1 , 2 , 1 , 2 , 1 , 2] , "size" : 7}
-{ "name" : "Hungarian Minor" , "alternateNames" : [ "\"Maqam Nawa Athar (Arabia)" , " Double Harmonic Minor" , " Niavent (Greece)\""] , "groups" : [ "hungarian"] , "formula" : [ 2 , 1 , 3 , 1 , 1 , 3 , 1] , "size" : 7}
+{ "name" : "Hungarian Minor" , "alternateNames" : [ "Maqam Nawa Athar (Arabia)" , "Double Harmonic Minor" , "Niavent (Greece)"] , "groups" : [ "hungarian"] , "formula" : [ 2 , 1 , 3 , 1 , 1 , 3 , 1] , "size" : 7}
 { "name" : "Hungarian Minor b2" , "groups" : [ "hungarian"] , "formula" : [ 1 , 1 , 1 , 3 , 1 , 1 , 3 , 1] , "size" : 8}
 { "name" : "Indian, Phrygian dim 4th" , "groups" : [ "indian"] , "formula" : [ 1 , 2 , 1 , 3 , 1 , 2 , 2] , "size" : 7}
 { "name" : "Ionian Pentatonic Raga Gambhiranata (India)" , "alternateNames" : [ "Chord CMaj7sus4"] , "groups" : [ "ionian"] , "formula" : [ 4 , 1 , 2 , 4 , 1] , "size" : 5}
-{ "name" : "Ionian, Major, Bilaval  C to B asc.  nats." , "alternateNames" : [ "\"Chord CMaj69sus4 - Thaat" , "  Nid Murub (Sumerian)\""] , "groups" : [ "ionian"] , "formula" : [ 2 , 2 , 1 , 2 , 2 , 2 , 1] , "size" : 7}
+{ "name" : "Ionian, Major, Bilaval  C to B asc.  nats." , "alternateNames" : [ "Chord CMaj69sus4 - Thaat" , " Nid Murub (Sumerian)"] , "groups" : [ "ionian"] , "formula" : [ 2 , 2 , 1 , 2 , 2 , 2 , 1] , "size" : 7}
 { "name" : "Iwato Japan" , "groups" : [ "iwato"] , "formula" : [ 1 , 4 , 1 , 4 , 2] , "size" : 5}
 { "name" : "Japanese Pentachord (as 7/356/7 in 12edo)" , "groups" : [ "japanese"] , "formula" : [ 1 , 2 , 3 , 1 , 5] , "size" : 5}
 { "name" : "Japanese, Sakura Pentatonic Soft Descend" , "groups" : [ "japanese"] , "formula" : [ 1 , 4 , 2 , 1 , 4] , "size" : 5}

@@ -7,6 +7,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.dwbzen.common.util.IJson;
+import org.dwbzen.music.element.PitchElement.PitchElementType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,7 +32,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	@JsonProperty	private Chord tiedTo = null;		// the Chord this is tied to - occurs after this Chord
 	@JsonProperty	private Chord tiedFrom = null;		// the Chord this is tied from - occurs before this Chord
 	@JsonProperty	private int size = 0;
-	@JsonIgnore		private PitchSet pitchSet = null;		// the unique Pitches in the Chord
+	@JsonIgnore		private PitchSet pitchSet = null;		// the unique Pitches of the Notes in the Chord
 	
 	public Chord() {
 		pitchSet = new PitchSet();
@@ -63,7 +64,6 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		for(Pitch p:pitches) {
 			addNote(new Note(p,0));
 		}
-		pitchSet = new PitchSet(pitches);
 	}
 	
 	/**
@@ -115,9 +115,57 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		}
 		return chord;
 	}
+	
+	/**
+	 * Create a Chord from a PitchElement
+	 * @param pitchElement - a PitchElement, can be a single Pitch or a PitchSet
+	 * @param duration
+	 * @return new Chord having the pitches and duration passed
+	 * @throws IllegalArgumentException
+	 */
+	public static Chord createChord(PitchElement pitchElement, int duration) {
+		if(pitchElement == null ) {
+			throw new IllegalArgumentException("PitchElement is null or empty");
+		}
+		Duration dur = new Duration(duration);
+		Chord chord = new Chord();
+		Note note = null;
+		Note root = null;
+		if(pitchElement.getPitchElementType() == PitchElementType.PITCH) {
+			note = new Note( ((Pitch)pitchElement), dur);
+			chord.addNote(note);
+			chord.setRoot(note);
+		}
+		else {
+			PitchSet ps = (PitchSet)pitchElement;
+			for(Pitch p : ps.getPitches()) {
+				note = new Note(p, dur);
+				chord.addNote(note);
+				if(root == null) {
+					root = note;
+					chord.setRoot(root);
+				}
+			}
+		}
+		return chord;
+	}
 
 	public SortedSet<Note> getNotes() {
 		return notes;
+	}
+	
+	/**
+	 * Transposes the notes in this Chord up or down number of octaves specified<br>
+	 * NOTE: Does not update tiedTo or tiedFrom chords.  TODO
+	 * 
+	 * @param numberOfOctaves
+	 */
+	public void octaveTranspose(int numberOfOctaves) {
+		for(Note note : notes) {
+			int octave = note.getPitch().getOctave();
+			note.getPitch().setOctave(octave + numberOfOctaves);
+		}
+		setPitchSet();		// regenerate the PitchSet
 	}
 	
 	/**
@@ -142,7 +190,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		if(added) {
 			size++;
 			note.setContainer(this);
-			getPitchSet().addPitch(note.getPitch());
+			getPitchSet().addUniquePitch(note.getPitch());
 		}
 		return added;
 	}
@@ -158,7 +206,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		boolean removed = notes.remove(note);
 		if(removed) {
 			note.breakAllTies();
-			pitchSet.remove(note.getPitch());
+			getPitchSet().remove(note.getPitch());
 		}
 		size--;
 		return removed;
@@ -178,6 +226,21 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		}
 		return nlist;
 	}
+	@Override
+	public void setStaff(int staff) {
+		super.setStaff(staff);
+		for(Note note : notes) {
+			note.setStaff(staff);
+		}
+	}
+	
+	@Override
+	public void setNoteType(String noteType) {
+		super.setNoteType(noteType);
+		for(Note note : notes) {
+			note.setNoteType(noteType);
+		}
+	}
 	
 	@Override
 	public int size() {
@@ -191,7 +254,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	
 	@Override
 	public boolean containsPitch(Pitch pitch) {
-		return pitchSet.contains(pitch);
+		return getPitchSet().contains(pitch);
 	}
 
 	/**
@@ -361,10 +424,17 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	}
 
 	public PitchSet getPitchSet() {
-		if(pitchSet == null) {
-			pitchSet = new PitchSet();
+		if(pitchSet == null || pitchSet.size()==0) {
+			setPitchSet();
 		}
 		return pitchSet;
+	}
+	
+	private void setPitchSet() {
+		pitchSet = new PitchSet();
+		for(Note note : notes) {
+			pitchSet.addNewPitch(note.getPitch());
+		}
 	}
 
 	@Override

@@ -408,6 +408,7 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 		this.step = step;
 	}
 
+	@Override
 	public void setOctave(int octave) {
 		this.octave = octave;
 	}
@@ -786,6 +787,11 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 		int difference = getRangeStep() - startingPitch.getRangeStep(); 
 		invertedPitch.increment(-difference); 
 		return  invertedPitch; 
+	}
+
+	@Override
+	public int size() {
+		return 1;
 	}
 	 
 

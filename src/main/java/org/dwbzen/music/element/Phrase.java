@@ -48,6 +48,16 @@ public class Phrase implements IJson, Cloneable {
 		this(instrument);
 		measures.addAll(listOfMeasure);
 	}
+	
+	/**
+	 * Appends a given Phrase to the end of this Phrase<br>
+	 * <b>Note</b> this assumes that the Measures in each Phrase are complete with respect to the units per measure.
+	 * @param phrase
+	 */
+	public void add(Phrase phrase) {
+		// TODO
+		
+	}
 
 	@Override
 	public Phrase clone() {
@@ -254,4 +264,7 @@ public class Phrase implements IJson, Cloneable {
 		return numberOfStaves;
 	}
 	
+	public int size() {
+		return measures.size();
+	}
 }

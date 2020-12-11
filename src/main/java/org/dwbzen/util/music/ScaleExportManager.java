@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
@@ -85,7 +84,7 @@ public class ScaleExportManager  {
 	
 	private Configuration configuration = null;
 	
-	private BiFunction<List<ScaleFormula>, List<Pitch>, Score> scaleCreator = null;
+	private ScoreScaleCreator scaleCreator = null;
 
 	private StringBuilder stringBuilder = null;
 	ObjectMapper mapper = new ObjectMapper();
@@ -137,6 +136,7 @@ public class ScaleExportManager  {
 		boolean listFormulas = false;
 		boolean uniqueFormulas = true;
 		String instrumentName = null;
+		String chords = null;
 		
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
@@ -181,7 +181,12 @@ public class ScaleExportManager  {
     			}
     			else if(args[i].equalsIgnoreCase("-instrument")) {	// for musicXML output
     				instrumentName =  args[++i];
-    			}  
+    			}
+    			else if(args[i].equalsIgnoreCase("-chords")) {
+    				// include triads and/or 7th chords created from the scale
+    				// applies to musicXML output
+    				chords = args[++i];
+    			}
     			else if(args[i].equalsIgnoreCase("-file")) {
     				// base filename including the full path - extension added later depending on output format
     				// for example, "/Users/DWBZe/Documents/Music/Scores/musicXML/Scales"
@@ -218,7 +223,7 @@ public class ScaleExportManager  {
 		if(isMusicXML) {
 			scaleExportManager.setScalesInstrumentName(instrumentName);
 			
-			Score score = scaleExportManager.exportScalesScore(uniqueFormulas);
+			Score score = scaleExportManager.exportScalesScore(uniqueFormulas, chords);
 			String outputFile = scaleExportManager.getOutputFileName();
 			log.info("*** Score created ***");
 			createXML(outputFile, score, scaleExportManager.getConfiguration());
@@ -394,7 +399,7 @@ public class ScaleExportManager  {
 	 * 
 	 * @return musicXML String.
 	 */
-	public Score exportScalesScore(boolean unique) {
+	public Score exportScalesScore(boolean unique, String chords) {
 		List<ScaleFormula> scaleFormulas =  findScaleFormulas();
 		if(rootPitches.isEmpty()) {
 			rootPitches.add(Pitch.C);
@@ -402,7 +407,13 @@ public class ScaleExportManager  {
 		String scoreTitle = "Scales_"  + dateFormat.format(new Date());
 		// if scalesInstrumentName is null, ScoreScaleCreator uses Piano as the default
 		scaleCreator = new ScoreScaleCreator(scoreTitle, scalesInstrumentName, unique);
-		Score theScore = scaleCreator.apply(scaleFormulas, rootPitches);
+		if(chords != null) {
+			boolean createTriadChords = chords.contains("triad");
+			boolean create7thChords = chords.contains("7");
+			scaleCreator.setCreate7thChords(create7thChords);
+			scaleCreator.setCreateTriadChords(createTriadChords);
+		}
+		Score theScore = scaleCreator.createScore(scaleFormulas, rootPitches);
 		return theScore;
 	}
 	

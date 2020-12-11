@@ -211,6 +211,23 @@ public final class Scale implements IJson, INameable, Cloneable  {
 		return scale;
 	}
 	
+	public static PitchCollection createScaleTriads(List<Pitch> scalePitches, int octave, int len) {
+		PitchCollection pc = new PitchCollection();
+		int firstOctave = scalePitches.get(0).getOctave();
+		int lastOctave = scalePitches.get(scalePitches.size() - 1).getOctave();
+		boolean descending = (firstOctave - lastOctave) > 0;
+		int adjust = descending ? octave - lastOctave - 1 : octave - firstOctave;
+		int startIndex = (len -1 ) * adjust;   // firstOctave=6, lastOctave=3, octave=4,5
+		for(int i=0; i<len-1; i++) {	// each scale Pitch will be a triad root
+			PitchSet ps = new PitchSet();
+			ps.addPitch(scalePitches.get(startIndex + i));
+			ps.addPitch(scalePitches.get(startIndex + i+2));
+			ps.addPitch(scalePitches.get(startIndex + i+4));
+			pc.addPitchElement(ps);
+		}
+		return pc;
+	}
+	
 	/**
 	 * Creates triads from this scale. Each pitch in the scale is a root in the triad.<br>
 	 * Triads are created by selecting the root, 3rd degree and 5th degree of the scale relative to the root Pitch.<br>
@@ -225,13 +242,66 @@ public final class Scale implements IJson, INameable, Cloneable  {
 		/*
 		 * create a 2-octave range
 		 */
-		List<Pitch> scalePitches = getPitchesForOctave(octave, 2);
+		List<Pitch> scalePitches = getPitchesForOctave(octave, 3);
+		int firstOctave = scalePitches.get(0).getOctave();
+		int lastOctave = scalePitches.get(scalePitches.size() - 1).getOctave();
+		boolean descending = (firstOctave - lastOctave) > 0;
+		int adjust = descending ? octave - lastOctave - 1 : octave - firstOctave;
+		int startIndex = (len -1 ) * adjust;   // firstOctave=6, lastOctave=3, octave=4,5
 
 		for(int i=0; i<len-1; i++) {	// each scale Pitch will be a triad root
 			PitchSet ps = new PitchSet();
-			ps.addPitch(scalePitches.get(i));
-			ps.addPitch(scalePitches.get(i+2));
-			ps.addPitch(scalePitches.get(i+4));
+			ps.addPitch(scalePitches.get(startIndex + i));
+			ps.addPitch(scalePitches.get(startIndex + i+2));
+			ps.addPitch(scalePitches.get(startIndex + i+4));
+			pc.addPitchElement(ps);
+		}
+		return pc;
+	}
+	
+	public static PitchCollection createScaleSevenths(List<Pitch> scalePitches, int octave, int len) {
+		PitchCollection pc = new PitchCollection();
+		int firstOctave = scalePitches.get(0).getOctave();
+		int lastOctave = scalePitches.get(scalePitches.size() - 1).getOctave();
+		boolean descending = (firstOctave - lastOctave) > 0;
+		int adjust = descending ? octave - lastOctave - 1 : octave - firstOctave;
+		int startIndex = (len -1 ) * adjust;
+		for(int i=0; i<len-1; i++) {	// each scale Pitch will be a 7th chord root
+			PitchSet ps = new PitchSet();
+			ps.addPitch(scalePitches.get(startIndex + i));
+			ps.addPitch(scalePitches.get(startIndex + i+2));
+			ps.addPitch(scalePitches.get(startIndex + i+4));
+			ps.addPitch(scalePitches.get(startIndex + i+6));
+			pc.addPitchElement(ps);
+		}
+		return pc;
+	}
+	
+	/**
+	 * Creates 7th cords from this scale. Each pitch in the scale is a root of the chord.<br>
+	 * 7ths are created by selecting the root, 3rd, 5th and 7th degrees of the scale relative to the root Pitch.<br>
+	 * For example, given the C-Major scale, the 7th chords are CM7, Dm7, Em7, FM7, G7, Am7, B half-dim (B-D-F-A)
+	 * @return PitchCollection
+	 */
+	public PitchCollection createScaleSevenths(int octave) {
+		PitchCollection pc = new PitchCollection();
+		int len = size();
+		/*
+		 * create a 2-octave range
+		 */
+		List<Pitch> scalePitches = getPitchesForOctave(octave, 3);
+		int firstOctave = scalePitches.get(0).getOctave();
+		int lastOctave = scalePitches.get(scalePitches.size() - 1).getOctave();
+		boolean descending = (firstOctave - lastOctave) > 0;
+		int adjust = descending ? octave - lastOctave - 1 : octave - firstOctave;
+		int startIndex = (len -1 ) * adjust;
+
+		for(int i=0; i<len-1; i++) {	// each scale Pitch will be a 7th chord root
+			PitchSet ps = new PitchSet();
+			ps.addPitch(scalePitches.get(startIndex + i));
+			ps.addPitch(scalePitches.get(startIndex + i+2));
+			ps.addPitch(scalePitches.get(startIndex + i+4));
+			ps.addPitch(scalePitches.get(startIndex + i+6));
 			pc.addPitchElement(ps);
 		}
 		return pc;
@@ -259,30 +329,6 @@ public final class Scale implements IJson, INameable, Cloneable  {
 		p = pitches.get(0);
 		scalePitches.add(new Pitch(p.getStep(), octave+2, p.getAlteration()));
 		return scalePitches;
-	}
-	
-	/**
-	 * Creates 7th cords from this scale. Each pitch in the scale is a root of the chord.<br>
-	 * 7ths are created by selecting the root, 3rd, 5th and 7th degrees of the scale relative to the root Pitch.<br>
-	 * For example, given the C-Major scale, the 7th chords are CM7, Dm7, Em7, FM7, G7, Am7, B half-dim (B-D-F-A)
-	 * @return PitchCollection
-	 */
-	public PitchCollection createScaleSevenths(int octave) {
-		PitchCollection pc = new PitchCollection();
-		int len = size();
-		/*
-		 * create a 2-octave range
-		 */
-		List<Pitch> scalePitches = getPitchesForOctave(octave, 2);
-		for(int i=0; i<len-1; i++) {	// each scale Pitch will be a 7th chord root
-			PitchSet ps = new PitchSet();
-			ps.addPitch(scalePitches.get(i));
-			ps.addPitch(scalePitches.get(i+2));
-			ps.addPitch(scalePitches.get(i+4));
-			ps.addPitch(scalePitches.get(i+6));
-			pc.addPitchElement(ps);
-		}
-		return pc;
 	}
 
 	public String getName() {

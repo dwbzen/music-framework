@@ -18,6 +18,7 @@ public abstract class PitchElement implements IJson, Cloneable, IAdjustable  {
 	@JsonIgnore 	public abstract PitchElement getInversion();
 	@JsonIgnore 	public abstract PitchElement getTransposition(int numberOfSteps);
 	@JsonIgnore 	public abstract PitchElement getInversion(Pitch startingPitch);
+	@JsonIgnore		public abstract void setOctave(int octave);
 	
 	public static PitchElement clone(PitchElement pe) { 
 		PitchElement  clonedElement = pe.getPitchElementType() == PitchElementType.PITCH ?
@@ -33,4 +34,6 @@ public abstract class PitchElement implements IJson, Cloneable, IAdjustable  {
 	public PitchElementType getPitchElementType() {
 		return pitchElementType;
 	}
+	
+	public abstract int size();
 }
