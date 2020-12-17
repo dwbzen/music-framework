@@ -75,6 +75,7 @@ import org.dwbzen.music.element.direction.Metronome;
 import org.dwbzen.music.element.direction.ScoreDirection;
 import org.dwbzen.music.element.direction.ScoreDirection.ScoreDirectionType;
 import org.dwbzen.music.element.direction.Words;
+import org.dwbzen.music.element.song.ChordFormula;
 import org.dwbzen.music.instrument.Instrument;
 import org.dwbzen.music.instrument.MidiInstrument;
 import org.dwbzen.util.Ratio;
@@ -391,6 +392,13 @@ public class MusicXMLHelper {
 							 */
 							Chord chord = (Chord)m;
 							log.debug("chord: " + chord.toString());
+							/*
+							 * If there is an associated chord symbol, for example m7b5, this is converted
+							 * to a <harmony> element. This element appears before the first note of the chord
+							 */
+							if(chord.getChordFormula() != null) {
+								convertChordSymbol(chord, _measure);
+							}
 							boolean inChord = false;
 							for(Note note : chord.removeUnisonNotes()) {
 								convertNote(instrument, measure, note, inChord, _measure);
@@ -422,6 +430,20 @@ public class MusicXMLHelper {
 		_scorePartwise.setPartList(_partList);
 		return _scorePartwise;
 	}
+
+	/*
+	 * Convert the chord symbol to a <harmony> element. This consists of 
+	 * a <root> element to specify the chord root,
+	 * a <kind> element to specify the kind of chord. See org.audiveris.proxymusic.Kind and org.audiveris.proxymusic.KindValue
+	 * a <degree> element if needed to specify an altered scale degree (such as #5) that is not implied by the chord Kind
+	 * 
+	 */
+	private void convertChordSymbol(Chord chord, org.audiveris.proxymusic.ScorePartwise.Part.Measure _measure) {
+		// create a <harmony> from the chord symbol and name (from the ChordFormula)
+		ChordFormula chordFormula = chord.getChordFormula();
+		// TODO finish me
+	}
+
 
 	private Barline convertBareline(org.dwbzen.music.element.Barline barline) {
 		Barline _barline = null;

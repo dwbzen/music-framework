@@ -33,6 +33,7 @@ import org.dwbzen.music.element.Tempo;
 import org.dwbzen.music.element.direction.Metronome;
 import org.dwbzen.music.element.direction.ScoreDirection;
 import org.dwbzen.music.element.direction.Words;
+import org.dwbzen.music.element.song.ChordFormula;
 import org.dwbzen.music.instrument.Instrument;
 import org.dwbzen.music.musicxml.DisplayInfo;
 import org.dwbzen.util.Configuration;
@@ -67,6 +68,7 @@ public class ScoreScaleCreator  {
 	public static final String CONFIG_FILENAME = "/config.properties";
 	public static final String ORCHESTRA_CONFIG_FILENAME="/orchestra.properties";
 	public static final String defaultInstrumentName = "Piano";
+	static ChordManager chordManager = new ChordManager();	// used to determine chord formula and symbol
 	
 	private Properties configProperties = null;
 	private Configuration configuration = null;
@@ -427,6 +429,11 @@ public class ScoreScaleCreator  {
 				chord = Chord.createChord(pe, unitsPerNote);
 				chord.setNoteType("eighth");
 				chord.setStaff(staffNumber);
+				chordManager.addChordFormulaToChord(chord);		// finds and adds the ChordFormula if there is one
+				if(chord.getChordFormula() != null) {
+					ChordFormula cf = chord.getChordFormula();
+					System.out.println( cf.getName() + ": " + chord.getRoot().getPitch().toString(-1) + cf.getSymbol());
+				}
 				measure.accept(staffNumber, chord);
 				index++;
 			}

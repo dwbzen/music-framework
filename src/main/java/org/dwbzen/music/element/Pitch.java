@@ -411,6 +411,7 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 	@Override
 	public void setOctave(int octave) {
 		this.octave = octave;
+		setRangeStep();
 	}
 
 	public void setAlteration(int alteration) {

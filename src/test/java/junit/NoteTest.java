@@ -13,6 +13,8 @@ public class NoteTest  extends TestCase  {
 
 	Pitch c4 = new Pitch("C4");
 	Pitch c5 = new Pitch("C5");
+	Pitch d5 = new Pitch("D5");
+	Pitch d4 = new Pitch("D4");
 	Pitch a5 = new Pitch("A5");
 	Duration dur60 = new Duration(60);
 	Duration dur30 = new Duration(30);
@@ -33,7 +35,24 @@ public class NoteTest  extends TestCase  {
 		
 		Note c4cloned = c4_60.clone();
 		assertTrue(c4cloned.equals(c4_60));
-		
 	}
 	
+	@Test
+	public void testCompare() {
+		Note n1 = new Note(c4, 60);
+		Note n2 = new Note(d5, 60);
+		int compare = n1.compareTo(n2);
+		assertTrue(compare==-1);		// C4 < D5
+		
+		n1 = new Note(c5, 60);
+		n2 = new Note(d4, 60);
+		compare = n2.compareTo(n1);		// D4 < C5
+		assertTrue(compare==-1);
+	}
+	
+	public void testRemove() {
+		String s = "[\"m7-5\",\"m7b5\",\"-7b5\"]";
+		String s2 = s.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\"", "").replaceAll(",", ", ");
+		System.out.println(s2);
+	}
 }

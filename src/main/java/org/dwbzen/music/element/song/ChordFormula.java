@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dwbzen.common.util.IJson;
+import org.dwbzen.music.element.Alteration;
 import org.dwbzen.music.element.IFormula;
 import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.Pitch;
@@ -24,35 +25,55 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Encapsulates meta-information about a chord:
- * name - "Major", "Minor seventh" etc.
- * symbols - array of common symbols with the most common appearing first. "M", "M7#5", "9" etc.
- * groups - array of groups this chord belongs to. "triad", "seventh", "added" etc.
- * formula - integer array of #steps each note is from the previous.
- * 			 For example, formula for a major chord is [4,3] or, from the root, 4 steps to the next note
- * 			 then 3 steps.
- * intervals - the formula expressed as intervals using the standard notation.
- * 			   P - perfect (4th, 5th). d - diminished (4th, 5th),
- * 			   M - major (2nd, 3rd, 6th, 7th, 9th, 11th, 13th).  m - minor (2nd, 3rd, 6th, 7th, 9th, 11th, 13th)
- * 			  So a major chord has intervals [M3, m3]
- * size - #elements in the formula/interval array
- * chordSize - #notes in the chord
- * chordNumber - is a 3-byte binary (12 bits) where each bit corresponds to the scale degree-1 
- *		of the notes in the chord, with the root note at "C". This is the absolute chordNumber expressed as 3-byte Hex.
- *	note:		B	Bb	A	Ab	| G	 F#	 F	E |	Eb	D	Db	C
- *  degree-1:	11	10	9	8	| 7	 6	 5	4 |	3	2	1	0
- *              23  22  21  20  | 19 18  17 16| 15  14  13  12
- *                              | 31 30  29 28| 27  26  25  24
- * 	For example, "Dominant ninth" (formula "9") spelling is C,E,G,Bb,D 
- *	scale degree-1 == 10,7,4,2,0 as binary:  0100 1001 0101 or HEX(495)
- *	To find the relative chord number, rotate left by the degree-1 of the desired root.
- *  So E9 would be rotateLeft(0100 1001 0101 , 4) == 1001 0101 0100 or HEX(954)
- *  The chordNumber can be set directly or computed from the formula.
- *  The chordSpellingNumber is double word binary, 32 bits, accommodates 2 octave + 8 step span (a fifth)
- *  represents a realization of the chord, i.e. the actual notes.
- *  For example, a C7#9 could be played as C, E, Bb, C, G, C, D# (a span of 2 octaves + min 3rd)
- *  which would have a spelling number: 0x05081411
- * Chord formulas are persisted in the "chord_formula" MongoDB collection.
- * A Chord is a specific realization of a ChordFormula that has a root and other features.
+ * <dl>
+ * <dt>name</dt>  <dd>The root plus the type or how the chord is commonly known. For example, "CMajor", "BbMinor seventh" etc.</dd>
+ * <dt>symbols</dt>  <dd>a List<String> of common symbols with the most common appearing first. "M", "M7#5", "9" etc.</dd>
+ * <dt>groups</dt>  <dd>a List<String> of groups this chord belongs to, for example "triad", "seventh", "added tone" etc.</dd>
+ * <dt>formula</dt>  <dd>a List<Integer> of #steps each note is from the previous.<br>
+ * 			 For example, formula for a major chord is [4,3] or, from the root, 4 steps to the next note then 3 steps.</dd>
+ * 
+ * <dt>intervals</dt>  <dd>the formula expressed as intervals using the standard notation.<br>
+ * 	<ul>
+ * 	<li>P - perfect (4th, 5th)</li>
+ *  <li>d - diminished (4th, 5th)</li>
+ * 	<li>M - major (2nd, 3rd, 6th, 7th, 9th, 11th, 13th)</li>
+ * 	<li>m - minor (2nd, 3rd, 6th, 7th, 9th, 11th, 13th)</li>
+ *  </ul>
+ * 	So a major chord for example has intervals ["M3", "m3"]
+ *  </dd>
+ * 
+ * <dt>size</dt>  <dd> the length of the formula and interval lists</dd>
+ * <dt>chordSize</dt>  <dd> the length (number of notes) of the chord></dd>
+ * <dt>formulaNumber</dt>  <dd>is a 3-byte binary (12 bits) where each bit corresponds to the scale degree-1
+ *		of the notes in the chord, with the root note at "C".<br>
+ *     This is the absolute formulaNumber expressed as 3-byte Hex.</dd>
+ * </dl>
+ *  <h3>Formula Number</h3>
+ *  The formula number is a unique codified form of the chord formula.<br>
+ * 	For example a "Dominant thirteenth" with root C (formula [4,3,3,4,7]) has the notes: C, E, G, Bb, D, F, A<br>
+ *	scale degree-1 of the notes without regard to order (C,D,E,F,G,A,Bb)<br>
+ *  in reverse order is 10,9,7,4,2,0 as binary  0110 1001 0101,  0x695 or 1685 <br>
+ *
+ *	To find the relative formula number, rotate left by the degree-1 of the desired root.<br>
+ *  So E9 would be rotateLeft(0100 1001 0101 , 4) == 1001 0101 0100 or HEX(954)<br>
+ *  The formulaNumber can be set directly or computed from the formula.
+ *  
+ *  <h3>Spelling Number</h3>
+ *  The chord spelling number is also unique for a given spelling (the notes in the order played).<br>
+ *  The chord spellingNumber is double word binary, 32 bits, accommodates 2 octave + 8 step span (a fifth)<br>
+ *  represents a realization of the chord, i.e. the actual notes.<br>
+ *  For example, a C7#9 played as C4, E4, G4, Bb4, D#5 <br>
+ *  which would have a spelling number: 0x05081411</p>
+ *  
+ * Chord formulas are persisted in the "chord_formula" MongoDB collection<br>
+ * and loaded from the resource file, "allChordFormulas.json"</p>
+ * Wikipedia References:
+ * <ul>
+ * <li><a href="https://en.wikipedia.org/wiki/Chord_(music)">Chord (Music)</a></li>
+ * <li><a href="https://en.wikipedia.org/wiki/Interval_(music)">Interval (Music)</a></li>
+ * </ul>
+ * 
+ * 
  * @author don_bacon
  *
  */
@@ -193,9 +214,28 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	}
 	
 	public  List<Pitch> createPitches(Pitch root, Key akey) {
-		List<Pitch> pitches = IFormula.createPitches(formula, root, akey);
-		pitches.forEach(p -> spellingNotes.add(p.toString(-1)));
+		Alteration altpref = determinAlterationPreference(akey);
+		List<Pitch> pitches = IFormula.createPitches(formula, root, akey, altpref);
+		pitches.forEach(p -> spellingNotes.add(p.toString()));
 		return pitches;
+	}
+	
+	public Alteration determinAlterationPreference(Key akey) {
+		Alteration altpref = Alteration.FLAT;	// the default
+		Pitch p = akey.getDesignation();
+		String keystep = p.getStep().name().toUpperCase();
+		if(p.getAlteration() < 0) {
+			altpref = Alteration.FLAT;
+		}
+		else if(p.getAlteration() > 0) {
+			altpref = Alteration.FLAT;
+		}
+		else {
+			if("ABDEG".contains(keystep)) {		// the sharp keys that don't include an alteration
+				altpref = Alteration.SHARP;
+			}
+		}
+		return altpref;
 	}
 	
 	public String toJSON() {

@@ -62,6 +62,7 @@ public interface IFormula extends INameable, Serializable {
 		return createPitches(formula, root, key, null);
 	}
 	
+	
 	/**
 	 * Creates a List of Pitch for a Scale/Chord with a given formula and root
 	 * A Scale may consist of a single note. In that case the formula is [0].

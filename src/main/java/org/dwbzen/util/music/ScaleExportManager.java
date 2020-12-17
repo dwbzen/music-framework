@@ -49,6 +49,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * Export line options are:
  * <dl>
  * <dt>-export true|false</dt> <dd>export scale formulas in the desired format. Default is false.</dd>
+ * <dt>-format [musicxml | json] </dt>  <dd>output format</dd>
  * <dt>-scales true|false</dt> <dd>export the scales in the desired format. Default is false, set to true if a root note is specified</dd>
  * <dt>-root note</dt> <dd>Use the specified note as the root note for scales. Valid values are A through G, pound sign for sharps, lower base 'b' for flats. </dd>
  * <dt>-resource filename</dt>  <dd>Use the specified JSON file instead of the default "common_scaleFormulas.json"</dd>
@@ -56,6 +57,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * <dt>-inputFormat format</dt>  <dd>JSON input format can be json, rawjson, or musicxml</dd>
  * <dt>-file file_name</dt> <dd>Output to file: &lt;file_name>+yyyy-MM-dd.&lt;extension> where extension is ".json" or ".musicxml" </dd>
  * <dt>-name scale_name</dt>  <dd>export only the named scale (case insensitive)</dd>
+ * <dt>-chords chords</dt>  <dd>create 7th and/or triad chords along with the scale. Applies only to -format "musicxml"</dd>
  * </dl>
  * When using -resource, specify the filename only, as in "myResourceFile.json" Files are assumed to be in /data/music project folder.</p>
  * JSON out put can be imported into MongoDB or Mathematica depending on specified format</p>

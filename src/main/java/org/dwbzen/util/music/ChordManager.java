@@ -20,8 +20,10 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.dwbzen.music.element.Chord;
 import org.dwbzen.music.element.IFormula;
 import org.dwbzen.music.element.Key;
+import org.dwbzen.music.element.Note;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.song.ChordFormula;
 import org.dwbzen.music.element.song.ChordFormulas;
@@ -31,7 +33,7 @@ import org.dwbzen.music.element.song.HarmonyChord;
 /**
  * Creates a JSON representation for chord formulas in all roots.</p>
  * 
- * Also has static utility methods to create HarmonyChords, compute chord and spelling numbers,<br>
+ * Also has static utility methods to create HarmonyChords, compute chord number and spelling number,<br>
  * parse chords from the String representation (for example, "D7-5/C").<br>
  * chordFormulasMap maps chordFormula by both name and all the symbols.<br>
  * 
@@ -49,13 +51,14 @@ import org.dwbzen.music.element.song.HarmonyChord;
  * chord number (decimal and hex) and spelling number (hex). Suitable for import into Excel.</p>
  * Use mathJSON format for Mathematica import.<br>
  * If unspecified, resource file defaults to "allChordFormulas.json"<br>
- * Specify -roots all for all 24 root notes.<br>
+ * Specify "-roots all" to generate chords for all 24 root notes.<br>
  * All roots: { "Ab", "A", "A#", "Bb", "B", "B#", "Cb", "C", "C#", "Db", "D", "D#", "Eb", "E", "E#", "Fb", "F", "F#", "Gb", "G", "G#" }<br>
  * If unspecified, roots defaults to { "C" }
- * <p>Valid -format values are "JSON", "mathJSON" and "rawJSON" (not case sensitive)<br>
+ * <p>Valid -format values are "JSON", "mathJSON",  "rawJSON" and "csv" (not case sensitive)<br>
  * JSON is the default for export. Results can be imported into MongoDB.<br>
  * Use mathJSON for importing the result into Mathematica.<br>
- * rawJSON deserializes ChordFormulas directly using the "pretty" option which indents the output for readability.
+ * rawJSON deserializes ChordFormulas directly using the "pretty" option which indents the output for readability.<br>
+ * Use csv to open with Excel.
  * </p>
  * 
  * @author don_bacon
@@ -71,10 +74,11 @@ public class ChordManager {
 	private List<Pitch> rootPitches = new ArrayList<Pitch>();
 	private Map<String, HarmonyChord> harmonyChords = null;
 	private Map<Pitch, Map<String, HarmonyChord>> harmonyChordsRootMap = new TreeMap<Pitch, Map<String, HarmonyChord>>(new PitchComparator());
-	private Map<String,ChordFormula> chordFormulasMap = new TreeMap<String, ChordFormula>();
+	private Map<String,ChordFormula> chordFormulasMap = new TreeMap<>();
+	private Map<Integer, ChordFormula> chordFormulaNumberMap = new TreeMap<>();		// chord formulas indexed by formulaNumber
 	private String resourceFile = null;
-	private String jsonFormat = null;
-	private StringBuffer stringBuffer = null;
+	private String outputFormat = null;
+	private StringBuilder stringBuilder = null;
 	private List<String> groupsFilter = new ArrayList<String>();
 	/**
 	 * Used for exporting chords. If true, exports unique chords by Name.
@@ -145,7 +149,7 @@ public class ChordManager {
 	 * @param chordFormulas Map<String,ChordFormula>
 	 * @return Map<Pitch, Map<String, HarmonyChord>> keyed by rootPitches
 	 */
-	protected void createHarmonyChords(List<Pitch> rootPitches, Map<String,ChordFormula> chordFormulas) {
+	public void createHarmonyChords(List<Pitch> rootPitches, Map<String,ChordFormula> chordFormulas) {
 		for(Pitch root : rootPitches) {
 			harmonyChords = new TreeMap<String, HarmonyChord>();
 			for(ChordFormula formula: chordFormulas.values()) {
@@ -267,12 +271,12 @@ public class ChordManager {
 	}
 	
 	public String exportChordFormulas() {
-		stringBuffer = new StringBuffer();
-		if(jsonFormat.equalsIgnoreCase("rawjson")) {
-			stringBuffer.append(this.chordFormulas.toJson(true));
+		stringBuilder = new StringBuilder();
+		if(outputFormat.equalsIgnoreCase("rawjson")) {
+			stringBuilder.append(this.chordFormulas.toJson(true));
 		}
-		else {
-			stringBuffer = stringBuffer.append("[\n");
+		else if(outputFormat.equalsIgnoreCase("csv")) {
+			stringBuilder.append("name,symbols,groups,formula,intervals,size,chord size,formula number,spelling\n");	// heading row
 			if(groupsFilter.size() > 0) {
 				chordFormulasMap.keySet().stream().filter(s -> groupsFilter.contains(s)).forEach(s ->  exportChordFormula(chordFormulasMap.get(s)));
 			}
@@ -281,10 +285,22 @@ public class ChordManager {
 					exportChordFormula(chordFormula);
 				}
 			}
-			stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
-			stringBuffer.append("]");
 		}
-		return stringBuffer.toString();
+		else {
+			stringBuilder = stringBuilder.append("[\n");
+			if(groupsFilter.size() > 0) {
+				chordFormulasMap.keySet().stream().filter(s -> groupsFilter.contains(s)).forEach(s ->  exportChordFormula(chordFormulasMap.get(s)));
+			}
+			else {
+				for(ChordFormula chordFormula : chordFormulas.getChordFormulas()) {
+					exportChordFormula(chordFormula);
+				}
+			}
+			stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
+			stringBuilder.append("]");
+		}
+
+		return stringBuilder.toString();
 	}
 	
 	/**
@@ -296,71 +312,98 @@ public class ChordManager {
 		 * write the formula as a JSON string according to the specified format
 		 */
 
-		if(jsonFormat.equalsIgnoreCase("mathJSON")) {
-			stringBuffer.append(chordFormula.toJson() + ",\n");
+		if(outputFormat.equalsIgnoreCase("mathJSON")) {
+			stringBuilder.append(chordFormula.toJson(true) + ",\n");
 		}
-		else if(jsonFormat.equalsIgnoreCase("JSON")) {
-			String symbols = null;
-			String groups = null;
-			String formulaArrayString = null;
-			String intervalsArrayString = null;
-			stringBuffer.append("{\"name\":" + chordFormula.getName() + "\"");
-			
+		else {
 			try {
-				if(!chordFormula.getSymbols().isEmpty()) {
-					symbols = mapper.writeValueAsString(chordFormula.getSymbols());
-					stringBuffer.append("\"symbols\":");
-					stringBuffer.append(symbols + ",");
+				String symbols = mapper.writeValueAsString(chordFormula.getSymbols());
+				String groups = mapper.writeValueAsString(chordFormula.getGroups());
+				String formulaArrayString = mapper.writeValueAsString(chordFormula.getFormula());
+				String intervalsArrayString = mapper.writeValueAsString(chordFormula.getIntervals());
+
+				if(outputFormat.equalsIgnoreCase("json")) {
+					stringBuilder.append("{\"name\":" + chordFormula.getName() + "\"");			
+					if(!chordFormula.getSymbols().isEmpty()) {				
+						stringBuilder.append("\"symbols\":");
+						stringBuilder.append(symbols + ",");
+					}
+					if(!chordFormula.getGroups().isEmpty()) {
+						stringBuilder.append("\"groups\":");
+						stringBuilder.append(groups + ",");
+					}
+					stringBuilder.append("\"formula\":");
+					stringBuilder.append(formulaArrayString + ",");
+					
+					stringBuilder.append("\"intervals\":");
+					stringBuilder.append(intervalsArrayString + ",");
+					
+					stringBuilder.append("\"size\":");
+					stringBuilder.append(chordFormula.getSize() + ",");
+					stringBuilder.append("\"chordSize\":");
+					stringBuilder.append(chordFormula.getChordSize());
+					
+					stringBuilder.append("\"formulaNumber\":");
+					stringBuilder.append(chordFormula.getFormulaNumber() + ",");
+					
+					stringBuilder.deleteCharAt(stringBuilder.length()-1);
+					stringBuilder.append("\"");
+					
+					stringBuilder.append("},\n");
 				}
-				if(!chordFormula.getGroups().isEmpty()) {
-					groups = mapper.writeValueAsString(chordFormula.getGroups());
-					stringBuffer.append("\"groups\":");
-					stringBuffer.append(groups + ",");
+				else if(outputFormat.equalsIgnoreCase("csv")) {
+					/*
+					 * For csv format each single quote needs to be a double quote
+					 * and if there are embedded commas, the whole string needs to be quoted
+					 * For example, [4,3,10] ==> "[4,3,10]"
+					 * ["M3", "m3", "M9"]  ==> "[""M3"", ""m3"", ""M9""]"
+					 * ["maj9","M9"]  ==> "[""maj9"",""M9""]"
+					 * To simplify, this strips all the quotes and brackets and enclose in quotes
+					 * so ["+9","aug9"]  ==>  "+9, aug9"
+					 * TODO finish me
+					 */
+					stringBuilder.append(chordFormula.getName() + ",");
+					stringBuilder.append(stripChars(symbols) + ",");
+					stringBuilder.append(stripChars(groups) + ",");
+					stringBuilder.append(stripChars(formulaArrayString) + ",");
+					stringBuilder.append(stripChars(intervalsArrayString) + ",");
+					stringBuilder.append(chordFormula.getSize() + ",");
+					stringBuilder.append(chordFormula.getChordSize() + ",");
+					stringBuilder.append(chordFormula.getFormulaNumber() + ",");
+					stringBuilder.append(chordFormula.getSpelling()); 
+					stringBuilder.append("\n");
 				}
-				formulaArrayString = mapper.writeValueAsString(chordFormula.getFormula());
-				stringBuffer.append("\"formula\":");
-				stringBuffer.append(formulaArrayString + ",");
-				
-				intervalsArrayString = mapper.writeValueAsString(chordFormula.getIntervals());
-				stringBuffer.append("\"intervals\":");
-				stringBuffer.append(intervalsArrayString + ",");
-				
-				stringBuffer.append("\"size\":");
-				stringBuffer.append(chordFormula.getSize() + ",");
-				stringBuffer.append("\"chordSize\":");
-				stringBuffer.append(chordFormula.getChordSize());
-				
-				stringBuffer.append("\"formulaNumber\":");
-				stringBuffer.append(chordFormula.getFormulaNumber() + ",");
-				
-				stringBuffer.deleteCharAt(stringBuffer.length()-1);
-				stringBuffer.append("\"");
-			} catch(JsonProcessingException e) {
-				log.error("JsonProcessingException");
 			}
-			stringBuffer.append("},\n");
+			catch(JsonProcessingException e) {
+				System.err.println("JsonProcessingException: " + e.toString());
+			}
 		}
 		return;
 	}
-
+	
+	private String stripChars(String s) {
+		String s2 = s.replaceAll("\"", "").replaceAll(",", ", ");	// replaceAll("\\[", "").replaceAll("\\]", "")
+		return "\"" + s2 + "\"";
+	}
+	
 	public String exportChords() {
-		stringBuffer = new StringBuffer("{\"chordLibrary\":[");
+		stringBuilder = new StringBuilder("{\"chordLibrary\":[");
 		for(Pitch root : harmonyChordsRootMap.keySet()) {
 			log.debug("WORKING on root: " + root.toString());
-			stringBuffer.append("\n{ \"root\":\"" + root.toString(-1) + "\",");
-			stringBuffer.append(" \"chords\":[\n" );
+			stringBuilder.append("\n{ \"root\":\"" + root.toString(-1) + "\",");
+			stringBuilder.append(" \"chords\":[\n" );
 			
 			Map<String, HarmonyChord> hcmap = harmonyChordsRootMap.get(root);
 			for(String name : hcmap.keySet()) {
 				HarmonyChord hc = hcmap.get(name);
 				exportChord(hc);
 			}
-			stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
-			stringBuffer.append("  ]\n},");
+			stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
+			stringBuilder.append("  ]\n},");
 		}
-		stringBuffer.deleteCharAt(stringBuffer.length()-1);		// drop the trailing comma
-		stringBuffer.append("\n]}\n");
-		return stringBuffer.toString();
+		stringBuilder.deleteCharAt(stringBuilder.length()-1);		// drop the trailing comma
+		stringBuilder.append("\n]}\n");
+		return stringBuilder.toString();
 	}
 	
 	private void exportChord(HarmonyChord harmonyChord) {
@@ -368,44 +411,44 @@ public class ChordManager {
 		 * write the chord as a JSON string according to the specified format
 		 */
 
-		if(jsonFormat.equalsIgnoreCase("mathJSON")) {
-			stringBuffer.append(harmonyChord.toJson(HarmonyChord.OutputFormat.FULL) + ",\n");
+		if(outputFormat.equalsIgnoreCase("mathJSON")) {
+			stringBuilder.append(harmonyChord.toJson(HarmonyChord.OutputFormat.FULL) + ",\n");
 		}
-		else if(jsonFormat.equalsIgnoreCase("JSON")) {
+		else if(outputFormat.equalsIgnoreCase("JSON")) {
 			String symbols = null;
 			String groups = null;
 			String formulaArrayString = null;
 			String intervalsArrayString = null;
 			ChordFormula chordFormula = harmonyChord.getChordFormula();
-			stringBuffer.append("  {\"name\":\"" + harmonyChord.getName() + "\", ");
+			stringBuilder.append("  {\"name\":\"" + harmonyChord.getName() + "\", ");
 			try {
 				if(!chordFormula.getSymbols().isEmpty()) {
 					symbols = mapper.writeValueAsString(chordFormula.getSymbols());
-					stringBuffer.append("\"symbols\":");
-					stringBuffer.append(symbols + ", ");
+					stringBuilder.append("\"symbols\":");
+					stringBuilder.append(symbols + ", ");
 				}
 				if(!chordFormula.getGroups().isEmpty()) {
 					groups = mapper.writeValueAsString(chordFormula.getGroups());
-					stringBuffer.append("\"groups\":");
-					stringBuffer.append(groups + ", ");
+					stringBuilder.append("\"groups\":");
+					stringBuilder.append(groups + ", ");
 				}
 				formulaArrayString = mapper.writeValueAsString(chordFormula.getFormula());
-				stringBuffer.append("\"formula\":");
-				stringBuffer.append(formulaArrayString + ", ");
+				stringBuilder.append("\"formula\":");
+				stringBuilder.append(formulaArrayString + ", ");
 				
 				intervalsArrayString = mapper.writeValueAsString(chordFormula.getIntervals());
-				stringBuffer.append("\"intervals\":");
-				stringBuffer.append(intervalsArrayString + ", ");
+				stringBuilder.append("\"intervals\":");
+				stringBuilder.append(intervalsArrayString + ", ");
 				
-				stringBuffer.append("\"spelling\":[ ");
-				harmonyChord.getChordPitches().forEach(p -> stringBuffer.append("\"" + p.toString(-1) + "\", "));
-				stringBuffer.deleteCharAt(stringBuffer.length()-2);		// drop the trailing comma
-				stringBuffer.append("]");
+				stringBuilder.append("\"spelling\":[ ");
+				harmonyChord.getChordPitches().forEach(p -> stringBuilder.append("\"" + p.toString(-1) + "\", "));
+				stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
+				stringBuilder.append("]");
 				
 			} catch(JsonProcessingException e) {
 				log.error("JsonProcessingException");
 			}
-			stringBuffer.append("},\n");
+			stringBuilder.append("},\n");
 		}
 		return;
 	}
@@ -435,6 +478,7 @@ public class ChordManager {
     			for(String s : chordFormula.getSymbols()) {
     				chordFormulasMap.put(s, chordFormula);
     			}
+    			chordFormulaNumberMap.put(chordFormula.getFormulaNumber(), chordFormula);
     		}
     	}
 		return;
@@ -488,16 +532,20 @@ public class ChordManager {
 		return chordFormulasMap;
 	}
 
+	public Map<Integer, ChordFormula> getChordFormulaNumberMap() {
+		return chordFormulaNumberMap;
+	}
+
 	public String getResourceFile() {
 		return resourceFile;
 	}
 
-	public String getJsonFormat() {
-		return jsonFormat;
+	public String getOutputFormat() {
+		return outputFormat;
 	}
 
-	public void setJsonFormat(String jsonFormat) {
-		this.jsonFormat = jsonFormat;
+	public void setOutputFormat(String outputFormat) {
+		this.outputFormat = outputFormat;
 	}
 
 	public Map<String, HarmonyChord> getHarmonyChords() {
@@ -519,6 +567,48 @@ public class ChordManager {
 	public void setExportUnique(boolean exportUnique) {
 		this.exportUnique = exportUnique;
 	}
+	
+	/**
+	 * Finds the ChordFormula for the specified Chord and if it exists, adds it to the Chord.<br>
+	 * Unlike a HarmonyChord, which is derived from a ChordFormula,<br>
+	 * a Chord is an arbitrary set of Notes (a Measureable) that can be added<br>
+	 * to a Measure and may or may not have a chord formula.
+	 * 
+	 * @param chord
+	 * @return the associated ChordFormula or null if none exists.
+	 */
+	public ChordFormula addChordFormulaToChord(Chord chord) {
+		ChordFormula chordFormula = null;
+		int size = chord.size();
+		int[] intervals = new int[size-1];
+		List<Note> chordNotes = chord.getChordNotes();
+		/*
+		 * find the intervals to determine the formula.
+		 */
+		Note prevNote = chord.getRoot();
+		int index = 0;
+		for(int i = 0; i< size; i++) {
+			Note note = chordNotes.get(i);
+			int interval = prevNote.absoluteDifference(note);
+			if(interval > 0) {
+				intervals[index++] = interval;
+			}
+			prevNote = note;
+		}
+		/*
+		 * Search chordFormulasMap for those intervals
+		 */
+		Integer formulaNumber = 0;
+		if(intervals.length > 0) {
+			formulaNumber = ChordFormula.computeFormulaNumber(intervals);
+			if(chordFormulaNumberMap.containsKey(formulaNumber)) {
+				chordFormula = chordFormulaNumberMap.get(formulaNumber);
+				chord.setChordFormula(chordFormula);
+			}
+		}
+		
+		return chordFormula;
+	}
 
 	/**
 	 * 
@@ -528,7 +618,7 @@ public class ChordManager {
 	public static void main(String[] args) throws IOException {
 		String[] roots = {"C"};
 		String resourceFile = "allChordFormulas.json";
-		String jsonFormat = "JSON";	// the default, for Mathematica use "mathJSON", "rawJSON" serializes ChordFormulas.
+		String outputFormat = "JSON";	// the default, for Mathematica use "mathJSON", "rawJSON" serializes ChordFormulas.
 		boolean printResults = false;
 		PrintStream ps = System.out;
 		String exportClass = null;		// chords or formulas
@@ -542,7 +632,7 @@ public class ChordManager {
 				roots = args[++i].split(",");
 			}
 			else if(args[i].startsWith("-format")) {
-				jsonFormat = args[++i];
+				outputFormat = args[++i];
 			}
 			else if(args[i].equalsIgnoreCase("-print")) {
 				printResults = true;
@@ -558,7 +648,7 @@ public class ChordManager {
 			}
 		}
 		ChordManager chordManager = (resourceFile != null) ? new ChordManager(resourceFile) : new ChordManager();
-		chordManager.setJsonFormat(jsonFormat);
+		chordManager.setOutputFormat(outputFormat);
 		chordManager.setExportUnique(uniq);
 		List<String> groupList = (groups != null) ? Arrays.asList(groups) : new ArrayList<String>();
 		chordManager.getGroupsFilter().addAll(groupList);

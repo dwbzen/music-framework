@@ -18,14 +18,14 @@ import org.dwbzen.music.element.Pitch;
 import org.dwbzen.util.music.ChordManager;
 
 /**
- * A HarmonyChord is a chord that has an associated ChordFormula rather than
- * an arbitrary array of notes.<br>
- * It is a realization of a particular ChordFormula with a root Pitch.
+ * A HarmonyChord is a chord that has an associated ChordFormula rather than an arbitrary array of notes.<br>
+ * It is a realization of a particular ChordFormula with a root Pitch.<br>
  * Because components are Pitch there is no implied duration and
- * instances can't be used in a Measure or Score (it's not a Measurable).
+ * instances can't be used in a Measure or Score (it's not a Measurable).<br>
  * The name is set to the root + symbol (the first one) without the octave#
- * if there is one. For example, "C9+11". Alternate names are created automatically
- * from other symbols if there is more than one.
+ * if there is one. For example, "C9+11". <br>
+ * 
+ * Alternate names are created automatically from other symbols if there is more than one.<br>
  * A "silent chord" is used when no chord is sounded.
  * In JSON: "harmony" : [ { "chord" : "0", "beat" : 1 } ]
  * 

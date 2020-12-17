@@ -362,7 +362,7 @@
   {"C7":{"symbols":["7"],"groups":["seventh"],"formula":[4,3,3],"spelling":[ "C", "E", "G", "Bb" ] } },
   {"C7#11":{"symbols":["7#11","7-11"],"groups":["altered"],"formula":[4,3,3,8],"spelling":[ "C", "E", "G", "Bb", "Gb" ] } },
   {"C7#5":{"symbols":["7#5","7-5"],"groups":["altered","seventh"],"formula":[4,4,2],"spelling":[ "C", "E", "Ab", "Bb" ] } },
-  {"C7#9":{"symbols":["7#9","7-9"],"groups":["altered","seventh"],"formula":[4,3,3,5],"spelling":[ "C", "E", "G", "Bb", "Eb" ] } },
+  {"C7#9":{"symbols":["7#9","7-9"],"groups":["altered","seventh"],"formula":[4,3,3,5],"spelling":[ "C", "E", "G", "Bb", "D#" ] } },
   {"C7b13":{"symbols":["7b13","7-13"],"groups":["altered"],"formula":[4,3,3,4,6],"spelling":[ "C", "E", "G", "Bb", "D", "Ab" ] } },
   {"C7b5":{"symbols":["7b5","7-5"],"groups":["altered","seventh"],"formula":[4,2,4],"spelling":[ "C", "E", "Gb", "Bb" ] } },
   {"C7b5#9":{"symbols":["7b5#9"],"groups":["altered","seventh"],"formula":[4,2,4,5],"spelling":[ "C", "E", "Gb", "Bb", "Eb" ] } },

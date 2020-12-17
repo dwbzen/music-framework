@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import org.dwbzen.common.util.IJson;
 import org.dwbzen.music.element.PitchElement.PitchElementType;
+import org.dwbzen.music.element.song.ChordFormula;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,11 +29,13 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	 * Notes in the Chord sorted in increasing Pitch order
 	 */
 	@JsonProperty	private SortedSet<Note> notes = new TreeSet<Note>();
+	@JsonIgnore		private List<Note> chordNotes = null;	// created when needed
 	@JsonProperty	private Note root = null;
 	@JsonProperty	private Chord tiedTo = null;		// the Chord this is tied to - occurs after this Chord
 	@JsonProperty	private Chord tiedFrom = null;		// the Chord this is tied from - occurs before this Chord
 	@JsonProperty	private int size = 0;
-	@JsonIgnore		private PitchSet pitchSet = null;		// the unique Pitches of the Notes in the Chord
+	@JsonIgnore		private PitchSet pitchSet = null;			// the unique Pitches of the Notes in the Chord
+	@JsonIgnore		private ChordFormula chordFormula = null;	// optional info about the chord if known.
 	
 	public Chord() {
 		pitchSet = new PitchSet();
@@ -304,13 +307,13 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	 * @param object
 	 * @return
 	 */
-	public int compareTo(Chord o) {
+	public int compareTo(Chord other) {
 		int cmp = 0;
-		int so = o.size();
+		int so = other.size();
 		int s = size();
 		if(s == so) {
 			Iterator<Note> it = notes.iterator();
-			Iterator<Note> ito = o.getNotes().iterator();
+			Iterator<Note> ito = other.getNotes().iterator();
 			int psum = 0;
 			int psumo = 0;
 			while(it.hasNext()) {
@@ -444,5 +447,22 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	public void invertTies() {
 		notes.stream().forEach(note -> note.invertTies());
 	}
+
+	public ChordFormula getChordFormula() {
+		return chordFormula;
+	}
+
+	public void setChordFormula(ChordFormula chordFormula) {
+		this.chordFormula = chordFormula;
+	}
+
+	public List<Note> getChordNotes() {
+		if(chordNotes == null) {
+			chordNotes = new ArrayList<>();
+			notes.forEach(n -> chordNotes.add(n));
+		}
+		return chordNotes;
+	}
+
 
 }
