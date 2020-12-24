@@ -36,6 +36,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	@JsonProperty	private int size = 0;
 	@JsonIgnore		private PitchSet pitchSet = null;			// the unique Pitches of the Notes in the Chord
 	@JsonIgnore		private ChordFormula chordFormula = null;	// optional info about the chord if known.
+	@JsonIgnore		private Pitch bassPitch = null;				// if not null, indicates a slash Chord, as in "C7/Bb" for example
 	
 	public Chord() {
 		pitchSet = new PitchSet();
@@ -297,6 +298,22 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		return sb.toString();
 	}
 	
+	public String toString(boolean useChordFormula) {
+		if(!useChordFormula || chordFormula == null) {
+			return toString();
+		}
+		else {
+			// format as root + symbol + bassPitch
+			StringBuilder sb = new StringBuilder(getRoot().getPitch().toString(-1));
+			sb.append(chordFormula.getSymbol());
+			if(chordFormula.getSlash() > 0 && getBassPitch() != null) {
+				sb.append("/");
+				sb.append(getBassPitch().toString(-1));
+			}
+			return sb.toString();
+		}
+	}
+	
 	@Override
 	/**
 	 * Chords are equal if they have the same notes and the same root.
@@ -462,6 +479,14 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 			notes.forEach(n -> chordNotes.add(n));
 		}
 		return chordNotes;
+	}
+
+	public Pitch getBassPitch() {
+		return bassPitch;
+	}
+
+	public void setBassPitch(Pitch bassPitch) {
+		this.bassPitch = bassPitch;
 	}
 
 

@@ -42,6 +42,7 @@ import org.dwbzen.music.element.song.HarmonyChord;
  * <p>
  * <code>
  * 	ChordManager -export formulas -format mathJSON<br>
+ *  ChirdManager -export formulas -format json -pretty true<br>
  *  ChordManager -export chords -root C,D<br>
  * 	ChordManager -print -root C -resource my_formulas.json<br>
  * 	ChordManager -print -group "altered" -root C4<br>
@@ -57,7 +58,7 @@ import org.dwbzen.music.element.song.HarmonyChord;
  * <p>Valid -format values are "JSON", "mathJSON",  "rawJSON" and "csv" (not case sensitive)<br>
  * JSON is the default for export. Results can be imported into MongoDB.<br>
  * Use mathJSON for importing the result into Mathematica.<br>
- * rawJSON deserializes ChordFormulas directly using the "pretty" option which indents the output for readability.<br>
+ * rawJSON deserializes ChordFormulas directly using the "pretty" option specified which if true indents the output for readability.<br>
  * Use csv to open with Excel.
  * </p>
  * 
@@ -85,6 +86,7 @@ public class ChordManager {
 	 * Otherwise exports a chord for each symbol. Default is true.
 	 */
 	private boolean exportUnique = true;
+	private boolean jsonPretty = false;			// JSON "pretty" format (indented)
 	
 	private ChordFormulas chordFormulas = null;
 	
@@ -273,7 +275,7 @@ public class ChordManager {
 	public String exportChordFormulas() {
 		stringBuilder = new StringBuilder();
 		if(outputFormat.equalsIgnoreCase("rawjson")) {
-			stringBuilder.append(this.chordFormulas.toJson(true));
+			stringBuilder.append(this.chordFormulas.toJson(jsonPretty));
 		}
 		else if(outputFormat.equalsIgnoreCase("csv")) {
 			stringBuilder.append("name,symbols,groups,formula,intervals,size,chord size,formula number,spelling\n");	// heading row
@@ -313,7 +315,7 @@ public class ChordManager {
 		 */
 
 		if(outputFormat.equalsIgnoreCase("mathJSON")) {
-			stringBuilder.append(chordFormula.toJson(true) + ",\n");
+			stringBuilder.append(chordFormula.toJson(jsonPretty) + ",\n");
 		}
 		else {
 			try {
@@ -568,6 +570,14 @@ public class ChordManager {
 		this.exportUnique = exportUnique;
 	}
 	
+	public boolean isJsonPretty() {
+		return jsonPretty;
+	}
+
+	public void setJsonPretty(boolean jsonPretty) {
+		this.jsonPretty = jsonPretty;
+	}
+
 	/**
 	 * Finds the ChordFormula for the specified Chord and if it exists, adds it to the Chord.<br>
 	 * Unlike a HarmonyChord, which is derived from a ChordFormula,<br>
@@ -605,6 +615,36 @@ public class ChordManager {
 				chordFormula = chordFormulaNumberMap.get(formulaNumber);
 				chord.setChordFormula(chordFormula);
 			}
+			else {
+				/*
+				 * may be an inversion or slash chord
+				 */
+				for(String symbol:chordFormulasMap.keySet()) {
+					ChordFormula cf = chordFormulasMap.get(symbol);
+					List<Integer> inversionFormulaNumbers = cf.getInversionFormulaNumbers();
+					for(int i = 0; i < inversionFormulaNumbers.size(); i++) {
+						if(formulaNumber.equals(inversionFormulaNumbers.get(i))) {
+							chordFormula = (ChordFormula)cf.clone();
+							if(chordFormula != null) {
+								chordFormula.setSlash(i);
+								Note bassNote = chord.getRoot();
+								Pitch bassPitch = bassNote.getPitch();
+								chord.setBassPitch(bassPitch);
+								List<Integer> inv = cf.getInversions().get(i);		// the inversion that matched
+								int step = inv.get(0);
+								Pitch rootPitch = bassPitch.increment(step, bassPitch.getAlteration());
+								Note rootNote = new Note(rootPitch, bassNote.getDuration());
+								chord.setRoot(rootNote);
+								break;
+							}
+						}
+					}
+					if(chordFormula != null) {
+						chord.setChordFormula(chordFormula);
+						break;
+					}
+				}
+			}
 		}
 		
 		return chordFormula;
@@ -624,6 +664,8 @@ public class ChordManager {
 		String exportClass = null;		// chords or formulas
 		String[] groups = null;			// optional chord formula group(s) to export
 		boolean uniq = true;
+		boolean pretty = false;
+		String[] chordNotes = null;
 		for(int i=0; i<args.length; i++) {
 			if(args[i].equalsIgnoreCase("-resource")) {
 				resourceFile = args[++i];
@@ -646,10 +688,32 @@ public class ChordManager {
 			else if(args[i].equalsIgnoreCase("-unique")) {
 				uniq = args[++i].equalsIgnoreCase("true");
 			}
+			else if(args[i].equalsIgnoreCase("-pretty")) {
+				pretty = args[++i].equalsIgnoreCase("true");
+			}
+			else if(args[i].equalsIgnoreCase("-find")) {	// find the chord symbol corresponding to given list of pitches
+				/*
+				 * -find "B4,Db5,F5,Ab5" for example
+				 */
+				chordNotes = args[++i].split(",");
+			}
 		}
 		ChordManager chordManager = (resourceFile != null) ? new ChordManager(resourceFile) : new ChordManager();
+		if(chordNotes != null) {
+			Chord chord = Chord.createChord(chordNotes, 60);
+			ChordFormula cf = chordManager.addChordFormulaToChord(chord);
+			if(cf != null) {
+				String symbol = chord.toString(true);
+				System.out.println(symbol);
+			}
+			else {
+				System.out.println("Symbol not found");
+			}
+			return;
+		}
 		chordManager.setOutputFormat(outputFormat);
 		chordManager.setExportUnique(uniq);
+		chordManager.setJsonPretty(pretty);
 		List<String> groupList = (groups != null) ? Arrays.asList(groups) : new ArrayList<String>();
 		chordManager.getGroupsFilter().addAll(groupList);
 		/*

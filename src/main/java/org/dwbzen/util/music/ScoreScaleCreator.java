@@ -422,6 +422,7 @@ public class ScoreScaleCreator  {
 		Chord chord = null;
 		int staffNumber = 1;
 		int index = 0;		// indexes pitchCollection PitchElements
+		String chordSymbol = null;
 		for(Measure measure : scaleMeasures) {
 			int nChords = 0;
 			while(nChords++ < notesPerMeasure && index < pitchCollection.size()) {
@@ -431,8 +432,9 @@ public class ScoreScaleCreator  {
 				chord.setStaff(staffNumber);
 				chordManager.addChordFormulaToChord(chord);		// finds and adds the ChordFormula if there is one
 				if(chord.getChordFormula() != null) {
-					ChordFormula cf = chord.getChordFormula();
-					System.out.println( cf.getName() + ": " + chord.getRoot().getPitch().toString(-1) + cf.getSymbol());
+					chordSymbol = chord.toString(true);
+					// add the symbol as a system direction below staff 1 (instead of a harmony element)
+					addScoreDirection(1, measure, chordSymbol, "below", false);
 				}
 				measure.accept(staffNumber, chord);
 				index++;
@@ -479,6 +481,22 @@ public class ScoreScaleCreator  {
 		 * chordPhrase.
 		 */
 		return chordsPhrase;
+	}
+	
+	public void addScoreDirection(int staffNumber, Measure measure, String directionTypeText, String placement, boolean newSystem) {
+		DisplayInfo displayInfo = new DisplayInfo();
+        ScoreDirection wordsScoreDirection = null;
+        
+		Words wordsDirectionType = new Words();
+		wordsDirectionType.setText(directionTypeText.toString() );
+		wordsScoreDirection = new ScoreDirection(staffNumber, wordsDirectionType);
+		if(placement != null) {			
+			wordsScoreDirection.setPlacement(placement);	// "above" or "below" or null
+		}
+		measure.addScoreDirection(wordsScoreDirection);
+		measure.getDisplayInfo().add(displayInfo);
+		displayInfo.setNewSystem(newSystem);
+		return;
 	}
 
 	/**

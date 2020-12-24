@@ -41,7 +41,7 @@
 { "name" : "mu major-2" , "symbols" : ["mu2"], "groups" : [ "added tone"] , "formula" : [ 14, 2, 3] , "intervals": ["M9", "M2", "m3"], "size" : 3, "chordSize" : 4 }
 { "name" : "Add fourth" , "symbols" : ["add11", "4"], "groups" : [ "added tone"] , "formula" : [4, 3, 10], "intervals": ["M3", "m3", "M9"], "size" : 3, "chordSize" : 4 }
 { "name" : "Add six" , "symbols" : ["6", "add6"], "groups" : [ "added tone"] , "formula" : [4, 3, 2], "intervals": ["M3", "m3", "M2"], "size" : 3, "chordSize" : 4 }
-{ "name" : "Six-nine" , "symbols" : ["6+9"], "groups" : [ "added tone"] , "formula" : [4, 3, 2, 5], "intervals": ["M3", "m3", "M2", "P4"], "size" : 4, "chordSize" : 5 }
+{ "name" : "Six-nine" , "symbols" : ["6add9"], "groups" : [ "added tone"] , "formula" : [4, 3, 2, 5], "intervals": ["M3", "m3", "M2", "P4"], "size" : 4, "chordSize" : 5 }
 { "name" : "Mixed third" , "symbols" : ["m add3"], "groups" : [ "added tone"] , "formula" : [3, 1, 3], "intervals": ["m3", "m2", "m3"], "size" : 3, "chordSize" : 4 }
 { "name" : "Minor sixth" , "symbols" : ["m6"], "groups" : [ "added tone"] , "formula" : [ 3, 4, 2 ] , "intervals": ["m3", "M3", "M2"], "size" : 3, "chordSize" : 4 }
 { "name" : "Sus2" , "symbols" : ["sus2"], "groups" : [ "suspended"] , "formula" : [ 2, 5] , "intervals": ["M2", "P5"], "size" : 2, "chordSize" : 3 }

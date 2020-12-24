@@ -352,8 +352,10 @@ public class MusicXMLHelper {
 					for(ScoreDirection  scoreDirection : measure.getScoreDirections()) {
 						if(scoreDirection.getDirectionType().getScoreDirectionType().equals(ScoreDirectionType.WORDS)) {
 							Words wdt = (Words)scoreDirection.getDirectionType();
+							String placement = scoreDirection.getPlacement();
+							AboveBelow _aboveBelow = (placement != null && placement.equalsIgnoreCase("below")) ? AboveBelow.BELOW : AboveBelow.ABOVE;
 							Direction _direction = new Direction();
-							_direction.setPlacement(AboveBelow.ABOVE);
+							_direction.setPlacement(_aboveBelow);
 							_direction.setStaff(BigInteger.ONE);
 							DirectionType _directionType = new DirectionType();
 							FormattedText _formattedText = new FormattedText();

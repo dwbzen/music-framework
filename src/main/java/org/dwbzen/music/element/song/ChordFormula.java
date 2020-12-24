@@ -3,9 +3,12 @@ package org.dwbzen.music.element.song;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.dwbzen.common.util.IJson;
@@ -30,7 +33,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * <dt>symbols</dt>  <dd>a List<String> of common symbols with the most common appearing first. "M", "M7#5", "9" etc.</dd>
  * <dt>groups</dt>  <dd>a List<String> of groups this chord belongs to, for example "triad", "seventh", "added tone" etc.</dd>
  * <dt>formula</dt>  <dd>a List<Integer> of #steps each note is from the previous.<br>
- * 			 For example, formula for a major chord is [4,3] or, from the root, 4 steps to the next note then 3 steps.</dd>
+ * 			 For example, formula for a major chord is [4,3] or, from the root, 4 steps to the next note then 3 steps.
+ * 			 Note that the formula does not include a final interval to double the root.</dd>
  * 
  * <dt>intervals</dt>  <dd>the formula expressed as intervals using the standard notation.<br>
  * 	<ul>
@@ -65,6 +69,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *  For example, a C7#9 played as C4, E4, G4, Bb4, D#5 <br>
  *  which would have a spelling number: 0x05081411</p>
  *  
+ *  <h3>Inversions</h3>
+ *  A chord having a note other than the root in the bass is an inversion of that chord.<br>
+ *  In tablature these are notated as so-called "slash" chords. For example, a C7 in root position is C,E,G,Bb<br>
+ *  C7/E is the first inversion, C7/G is the second and so on.<br>
+ *  Expressing these as a formula requires doubling the root. The inversions are then simply left rotations of that formula.
+ *  For example, C7 = [4,3,3,2] (or M3,m3,m3,M2), C7/E = [3,3,2,4] and so on<br>
+ *  This is important when trying to determine the formula for an arbitrary Chord which may or may not have an associated formula.<br>
+ *  This idea is captured in the inversions property which is a Map<Integer, List<Integer>>.<br>
+ *  The key is index of the pitch in root position that's in the bass (the lowest pitch).<br>
+ *  The List<Integer> is the inversion omitting the last number. <br>
+ *  For example, inversions for a 7th chord are {0, [4,3,3]}, {1, [3,3,2]}, {2, [3,2,4]}, {3, [2,4,3]}<br>
+ *  The inversions for the chord formula is created when the formula is loaded</p>
+ *  
  * Chord formulas are persisted in the "chord_formula" MongoDB collection<br>
  * and loaded from the resource file, "allChordFormulas.json"</p>
  * Wikipedia References:
@@ -77,7 +94,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author don_bacon
  *
  */
-public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
+public class ChordFormula implements IChordFormula, IJson, Cloneable, IMapped<String> {
 
 	private static final long serialVersionUID = 3941757049122502147L;
 	static final org.apache.log4j.Logger log = Logger.getLogger(ChordFormula.class);
@@ -89,6 +106,10 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	@JsonProperty("symbols")		private List<String> symbols = new ArrayList<String>();
 	@JsonProperty("groups")			private List<String> groups = new ArrayList<String>();
 	@JsonProperty("formula")		private List<Integer> formula = new ArrayList<Integer>();
+	@JsonIgnore						private List<Integer> doubleRootFormula = null;
+	@JsonProperty("inversions")		private Map<Integer, List<Integer>> inversions = null;
+	@JsonProperty					private List<Integer> inversionFormulaNumbers = null;
+	@JsonIgnore						private int slash = -1;	// if >=0, the index of the bass note
 
 	/**
 	 * Number of notes in the chord.
@@ -137,6 +158,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		setFormula(frmla);
 		template.addAll(createPitches(Pitch.C));
 		addSpelling();
+		getInversions();
 	}
 	
 	/**
@@ -156,6 +178,7 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		if(altNames != null && altNames.length > 0 ) { alternateNames = Arrays.asList(altNames); }
 		setFormulaNumber(computeFormulaNumber(frmla));
 		spellingNumber = computeSpellingNumber();
+		getInversions();
 	}
 	
 	/**
@@ -173,6 +196,17 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		if(intvls != null && intvls.length > 0) { intervals = Arrays.asList(intvls); }
 		setFormulaNumber(computeFormulaNumber(frmla));
 		spellingNumber = computeSpellingNumber();
+		getInversions();
+	}
+	
+	public Object clone() {
+		ChordFormula cf = null;
+		try {
+			cf = (ChordFormula)super.clone();
+		} catch (CloneNotSupportedException e) {
+			System.err.println("Clone not supported (ChordFormula)");
+		}
+		return cf;
 	}
 	
 	@JsonIgnore	
@@ -181,8 +215,12 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 	}
 
 	public int computeFormulaNumber() {
+		return computeFormulaNumber(getFormula());
+	}
+	
+	public int computeFormulaNumber(List<Integer> aformula) {
 		int fnum = 0;
-		List<Integer> ps = IFormula.formulaToPitchIndexes(getFormula());
+		List<Integer> ps = IFormula.formulaToPitchIndexes(aformula);
 		for(Integer i:ps) {
 			int shiftamt = (i>=12) ? i-12 : i;
 			fnum += (1<<shiftamt);
@@ -373,6 +411,73 @@ public class ChordFormula implements IChordFormula, IJson, IMapped<String> {
 		}
 		spelling = sb.substring(0, sb.length()-1);
 		setSpellingNotes(spelling);
+	}
+
+	public Map<Integer, List<Integer>> getInversions() {
+		if(inversions == null) {
+			createInversions();
+		}
+		return inversions;
+	}
+
+	public void addInversion(int key, List<Integer> value) {
+		getInversions().put(key, value);
+	}
+	
+	/**
+	 * Creates and inversions Map for this
+	 */
+	public void createInversions() {
+		if(inversions == null) {
+			inversions = new TreeMap<>();
+			inversionFormulaNumbers = new ArrayList<>();
+		}
+		if(doubleRootFormula == null) {
+			doubleRootFormula = new ArrayList<>();
+			int sum = 0;
+			for(int i=0; i<formula.size(); i++) {
+				doubleRootFormula.add(formula.get(i));
+				sum += formula.get(i);
+			}
+			if(sum <=12) {
+				doubleRootFormula.add(12-sum);
+			}
+			else {
+				doubleRootFormula.add(24-sum);
+			}
+		}
+		int nInversions = doubleRootFormula.size();
+		List<Integer> inversion = null;
+		/*
+		 * rotate the doubleRootFormula to the left for each inversion and calculate its formula number for easy lookup
+		 */
+		for(int index = 0; index<nInversions; index++) {
+			if(index == 0) {
+				inversions.put(index, doubleRootFormula);
+				inversionFormulaNumbers.add(computeFormulaNumber(doubleRootFormula.subList(0, nInversions-1)));
+			}
+			else {
+				inversion = new ArrayList<>(doubleRootFormula);
+				Collections.rotate(inversion, -index);
+				inversions.put(index, inversion);
+				inversionFormulaNumbers.add(computeFormulaNumber(inversion.subList(0, nInversions-1)));
+			}
+		}
+	}
+	
+	public List<Integer> getInversionFormulaNumbers() {
+		if(inversionFormulaNumbers == null) {
+			createInversions();
+		}
+		return inversionFormulaNumbers;
+	}
+
+	public int getSlash() {
+		return slash;
+	}
+
+	public void setSlash(int slash) {
+		this.slash = slash;
 	}
 
 	public String toString() {

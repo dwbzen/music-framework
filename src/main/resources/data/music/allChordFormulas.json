@@ -48,7 +48,7 @@
 {"name":"Seventh flat thirteenth","symbols":["7b13","7-13"],"groups":["altered"],"formula":[4,3,3,4,6],"intervals":["M3", "m3", "m3", "M3", "d5"], "size":5,"chordSize":6,"formulaNumber":1429,"spelling":"C E G Bb D Ab" },
 {"name":"Seventh raised fifth","symbols":["7#5","7-5"],"groups":["altered","seventh"],"formula":[4,4,2],"intervals":["M3", "M3", "M2"], "size":3,"chordSize":4,"formulaNumber":1297,"spelling":"C E Ab Bb" },
 {"name":"Seventh sharp ninth","symbols":["7#9","7-9"],"groups":["altered","seventh"],"formula":[4,3,3,5],"intervals":["M3", "m3", "m3", "P4"], "size":4,"chordSize":5,"formulaNumber":1177,"spelling":"C E G Bb D#" },
-{"name":"Six-nine","symbols":["6+9"],"groups":["added tone"],"formula":[4,3,2,5],"intervals":["M3", "m3", "M2", "P4"], "size":4,"chordSize":5,"formulaNumber":661,"spelling":"C E G A D" },
+{"name":"Six-nine","symbols":["6add9"],"groups":["added tone"],"formula":[4,3,2,5],"intervals":["M3", "m3", "M2", "P4"], "size":4,"chordSize":5,"formulaNumber":661,"spelling":"C E G A D" },
 {"name":"Sus-7","symbols":["sus-7"],"groups":[ "suspended"],"formula":[ 7, 3],"intervals":["P5", "m3"],"size" : 2,"chordSize":3,"spelling":"C G Bb" },
 {"name":"Sus2","symbols":["sus2"],"groups":["suspended"],"formula":[2,7],"intervals":["M2", "P5"], "size":2,"chordSize":3,"formulaNumber":517,"spelling":"C D A" },
 {"name":"Sus4","symbols":["sus4"],"groups":["suspended"],"formula":[5,2],"intervals":["P4", "M2"], "size":2,"chordSize":3,"formulaNumber":161,"spelling":"C F G" },

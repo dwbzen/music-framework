@@ -12,6 +12,9 @@ public class NoteTest  extends TestCase  {
 	static final org.apache.log4j.Logger log = Logger.getLogger(SongNoteTest.class);
 
 	Pitch c4 = new Pitch("C4");
+	Pitch cb5 = new Pitch("Cb5");
+	Pitch db4 = new Pitch("Db4");
+	Pitch b4 = new Pitch("B4");
 	Pitch c5 = new Pitch("C5");
 	Pitch d5 = new Pitch("D5");
 	Pitch d4 = new Pitch("D4");
@@ -48,6 +51,14 @@ public class NoteTest  extends TestCase  {
 		n2 = new Note(d4, 60);
 		compare = n2.compareTo(n1);		// D4 < C5
 		assertTrue(compare==-1);
+		
+		n1 = new Note(cb5, 60);
+		n2 = new Note(b4, 60);
+		assertTrue(n1.compareTo(n2) == 0);	// Cb5 == B4
+		
+		n2 = new Note(db4,60);
+		assertTrue(n2.compareTo(n1) == -1);		// Db4 < Cb5
+		
 	}
 	
 	public void testRemove() {
