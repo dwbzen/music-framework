@@ -16,12 +16,13 @@ import org.dwbzen.music.element.song.Songbook;
 import org.dwbzen.util.IMapped;
 
 /**
- * Collects chord progressions of a given length from Song instances.
+ * Collects chord progressions of a given length from Song instances.<br>
  * Similar to SongAnalyzer, the ChordProgressionCollector gathers statistics about
  * what HarmonyChord follows a HarmonyChord progression of length n (usually 2, but set
- * by the user). This info is saved as CollectorStats where it can
+ * by the user).<br>
+ * This info is saved as a MarkovChain where it can
  * be used by ChordProgressionProducer to generate chord progressions starting with
- * an initial seed HarmonyChord.
+ * an initial seed HarmonyChord.<br>
  * Note that the transposed ChordProgression (a List<HarmonyChord>) forms subsets. 
  * The SongManager adds the transposition to C-Major/A-Minor key to each Harmony instance.
  * 

@@ -25,7 +25,7 @@ import org.dwbzen.util.music.SongManager;
  * d. Absolute HarmonyChord (eg. Key E-Major: D, A, C, Am6, E )
  * Records #occurrences of each for lengths of 2,3,4,5
  * occurrences has 2 dimensions: #occurrences overall, and #songs
- * A given HarmonyChord progression may occurr for example 6 times, but only in 1 song.
+ * A given HarmonyChord progression may occur for example 6 times, but only in 1 song.
  * Example query strings:
  *   -query "artist:The Beatles"
  *   -query "name:Penny Lane"

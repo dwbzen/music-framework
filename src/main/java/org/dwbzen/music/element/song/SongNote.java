@@ -37,7 +37,7 @@ public class SongNote implements IJson, Comparable<SongNote> {
 	@JsonProperty("notations")			private Notation notation;
 	
 	@JsonIgnore	private int unitsPerMeasure = RhythmScale.defaultUnitsPerMeasure;	// typically 480
-	@JsonIgnore	private boolean rest = true;		// set automatically
+	@JsonIgnore	private boolean rest = false;		// set automatically
 	@JsonIgnore	protected Duration duration;		// calculated from Notation, TimeSignature and units/measure
 	@JsonIgnore	private Pitch notePitch = null;		// will be null for a rest
 	@JsonIgnore	private TimeSignature timeSignature = TimeSignature.FourFourTimeSignature;		// 4/4 with default units/measure
@@ -148,4 +148,7 @@ public class SongNote implements IJson, Comparable<SongNote> {
 		this.unitsPerMeasure = unitsPerMeasure;
 	}
 
+	public String toString() {
+		return toJson();
+	}
 }

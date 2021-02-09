@@ -123,7 +123,7 @@
 { "name" : "Dorian b5" , "groups" : [ "dorian","blues" ] , "formula" : [ 2 , 1 , 2 , 1 , 3 , 1 , 2] , "size" : 7}
 { "name" : "Dorian Pentatonic, Kumoi Japan" , "alternateNames" : [ "Akebono (Japan)"] , "groups" : [ "dorian"] , "formula" : [ 2 , 1 , 4 , 2 , 3] , "size" : 5}
 { "name" : "Dorian Tetrachord" , "groups" : [ "dorian"] , "formula" : [ 2 , 1 , 2 , 7] , "size" : 4}
-{ "name" : "Dorian, Kafi  D to C asc. naturals" , "alternateNames" : [ "\"Chord Cm69sus4 - Eskimo Heptatonic (N. America) Kafi Thaat (India)" , " Embulum (Sumerian)\""] , "groups" : [ "dorian"] , "formula" : [ 2 , 1 , 2 , 2 , 2 , 1 , 2] , "size" : 7}
+{ "name" : "Dorian Mode" , "alternateNames" : [ "Chord Cm69sus4", "Eskimo Heptatonic (N. America)", "Kafi Thaat (India)" , "Embulum (Sumerian)"] , "groups" : ["modes", "dorian"] , "formula" : [ 2 , 1 , 2 , 2 , 2 , 1 , 2] , "size" : 7}
 { "name" : "Double-Phrygian Hexatonic" , "groups" : [ "double"] , "formula" : [ 1 , 2 , 2 , 1 , 3 , 3] , "size" : 6}
 { "name" : "Egyptian , Suspended Pentatonic" , "groups" : [ "egyptian"] , "formula" : [ 2 , 3 , 2 , 3 , 2] , "size" : 5}
 { "name" : "Enigmatic" , "groups" : [ "enigmatic"] , "formula" : [ 1 , 3 , 1 , 1 , 2 , 2 , 1 , 1] , "size" : 8}
@@ -182,7 +182,7 @@
 { "name" : "Hungarian Minor b2" , "groups" : [ "hungarian"] , "formula" : [ 1 , 1 , 1 , 3 , 1 , 1 , 3 , 1] , "size" : 8}
 { "name" : "Indian, Phrygian dim 4th" , "groups" : [ "indian"] , "formula" : [ 1 , 2 , 1 , 3 , 1 , 2 , 2] , "size" : 7}
 { "name" : "Ionian Pentatonic Raga Gambhiranata (India)" , "alternateNames" : [ "Chord CMaj7sus4"] , "groups" : [ "ionian"] , "formula" : [ 4 , 1 , 2 , 4 , 1] , "size" : 5}
-{ "name" : "Ionian, Major, Bilaval  C to B asc.  nats." , "alternateNames" : [ "Chord CMaj69sus4 - Thaat" , " Nid Murub (Sumerian)"] , "groups" : [ "ionian"] , "formula" : [ 2 , 2 , 1 , 2 , 2 , 2 , 1] , "size" : 7}
+{ "name" : "Ionian" , "alternateNames" : ["Major", "Bilaval  C to B asc. nats.", "Chord CMaj69sus4 - Thaat" , " Nid Murub (Sumerian)"] , "groups" : ["modes", "ionian"] , "formula" : [ 2 , 2 , 1 , 2 , 2 , 2 , 1] , "size" : 7}
 { "name" : "Iwato Japan" , "groups" : [ "iwato"] , "formula" : [ 1 , 4 , 1 , 4 , 2] , "size" : 5}
 { "name" : "Japanese Pentachord (as 7/356/7 in 12edo)" , "groups" : [ "japanese"] , "formula" : [ 1 , 2 , 3 , 1 , 5] , "size" : 5}
 { "name" : "Japanese, Sakura Pentatonic Soft Descend" , "groups" : [ "japanese"] , "formula" : [ 1 , 4 , 2 , 1 , 4] , "size" : 5}
