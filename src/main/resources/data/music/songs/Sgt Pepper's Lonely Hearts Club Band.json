@@ -1,5 +1,7 @@
 { "name" : "Sgt. Pepper's Lonely Hearts Club Band", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
   "year" : 1967, "album" : "Sgt. Pepper's Lonely Hearts Club Band", "track" : 1,
+  "performanceKey" :  { "name" : "G-Major", "mode" : "MAJOR" },
+  "scoreKey" : { "name" : "G-Major", "mode" : "MAJOR" },
     "sections" : 
   	[
   		{ "name" : "intro",

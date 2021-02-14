@@ -13,13 +13,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * A pitch + Duration. Can also be a rest (no pitch).  A lite version of music.element.Note<br>
  * Some examples,<br>
- * 	{ "pitch" : "C5",  "notations" : { "type" : "eighth" }<br>
+ * 	{ "pitch" : "C5",  "chord" : "CM7", "notations" : { "type" : "eighth" }<br>
  *  { "pitch" : "0",   "notations" : { "type" : "eighth", "tuplet" : "3/2" }<br>
- *  { "pitch" : "Eb4", "notations" : { "type" : "eighth", "dots" : 1, "tie" : "start" } }<br>
- *  { "pitch" : "Eb4", "notations" : { "type" : "16th", "tie" : "stop" } }</p>
+ *  { "pitch" : "Eb4", "chord" : "Eb9b5#11", "notations" : { "type" : "eighth", "dots" : 1, "tie" : "start" } }<br>
+ *  { "pitch" : "Eb4", "chord" : "Cm7", notations" : { "type" : "16th", "tie" : "stop" } }</p>
  * 
  * A "0" Pitch indicates a rest. Duration is not set directly, but calculated from the type of note<br>
  * given by notations.type, the TimeSignature, and the number of units per measure (default is 480).<br>
+ * "chord" is the name of the chord backing the SongNote. If present it must be "0" (no chord) or<br>
+ * be a chord name in allChordFormulas.json.
  * 
  * 
  * @author don_bacon
@@ -35,6 +37,7 @@ public class SongNote implements IJson, Comparable<SongNote> {
 
 	@JsonProperty("pitch")				private String pitch = null;
 	@JsonProperty("notations")			private Notation notation;
+	@JsonProperty("chord")				private String chord = "0";
 	
 	@JsonIgnore	private int unitsPerMeasure = RhythmScale.defaultUnitsPerMeasure;	// typically 480
 	@JsonIgnore	private boolean rest = false;		// set automatically
@@ -146,6 +149,14 @@ public class SongNote implements IJson, Comparable<SongNote> {
 
 	public void setUnitsPerMeasure(int unitsPerMeasure) {
 		this.unitsPerMeasure = unitsPerMeasure;
+	}
+
+	public String getChord() {
+		return chord;
+	}
+
+	public void setChord(String chord) {
+		this.chord = chord;
 	}
 
 	public String toString() {

@@ -15,13 +15,16 @@ import org.dwbzen.common.util.INameable;
 
 /**
  * A Song encapsulates a song as it would appear in a Guitar Fake Book
- * which typically is a single melody line and chord changes.
- * Lyrics may or may not be present in a Fake Book and they are not
- * included in the Song class.
- * Chord changes are represented by HarmonyChord instances in a Harmony structure.
- * Measures are encapsulated as SongMeasure that contains Harmony and Melody structures.
- * The structures mirror those in Score but simplified (in the same way a Fake Book is simplified).
- * Song metadata can be added to facilitate searching by composer, year, performance group (Band) etc.
+ * which typically is a single melody line and chord changes.<br>
+ * Lyrics may or may not be present in a Fake Book and they are not included in the Song class.<br>
+ * Chord changes are represented by HarmonyChord instances in a Harmony structure.<br>
+ * Measures are encapsulated as SongMeasure that contains Harmony and Melody structures.<br>
+ * The structures mirror those in Score but simplified (in the same way a Fake Book is simplified).<br>
+ * Song metadata can be added to facilitate searching by composer, year, performance group (Band) etc.<br>
+ * The initial key of the song is scoreKey (KeyLite). The performanceKey may be different <br>
+ * than the written key. For example, the "Penny Lane" score is in Bb, but performed (on the album) in B major.<br>
+ * Key changes are indicated in the Measure in which they occur.
+ * 
  * 
  * @author don_bacon
  *
@@ -38,6 +41,7 @@ public class Song implements IJson, INameable, Supplier<ChordProgression> {
 	@JsonProperty("track")		private int track = 0;
 	@JsonProperty("sections")	private List<Section> sections = new ArrayList<Section>();
 	@JsonProperty				private KeyLite performanceKey = null;	// default Key for performance (could be different than score Key)
+	@JsonProperty				private KeyLite scoreKey = null;		// initial key of the score or the key as written
 	@JsonIgnore				private int index = -1;		// section counter for get()
 	@JsonIgnore				private int numberOfMeasures = 0;
 	@JsonIgnore				private int numberOfChords = 0;		// a sum of #Harmony in all the Sections in this song.
@@ -126,6 +130,14 @@ public class Song implements IJson, INameable, Supplier<ChordProgression> {
 
 	public void setTrack(int track) {
 		this.track = track;
+	}
+
+	public KeyLite getScoreKey() {
+		return scoreKey;
+	}
+
+	public void setScoreKey(KeyLite scoreKey) {
+		this.scoreKey = scoreKey;
 	}
 
 	public int getNumberOfChords() {

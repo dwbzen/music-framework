@@ -1,5 +1,7 @@
 { "name" : "When I'm Sixty-Four", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
   "year" : 1967, "album" : "Sgt. Pepper's Lonely Hearts Club Band", "track" : 9,
+  "performanceKey" :  { "name" : "C-Major", "mode" : "MAJOR" },
+  "scoreKey" : { "name" : "C-Major", "mode" : "MAJOR" },
     "sections" : 
   	[
   		{ "name" : "intro", "repeat" : 1, "next" : [ "verse" ],

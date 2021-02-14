@@ -1,5 +1,7 @@
 { "name" : "Fixing A Hole", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
   "year" : 1967, "album" : "Sgt. Pepper's Lonely Hearts Club Band", "track" : 5,
+  "performanceKey" :  { "name" : "F-Major", "mode" : "MAJOR" },
+  "scoreKey" : { "name" : "F-Major", "mode" : "MAJOR" },
     "sections" : 
   	[
   		{ "name" : "intro", "number" : 10, "repeat" : 1, "next" : [ "verse" ],

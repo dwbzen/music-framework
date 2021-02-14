@@ -1,5 +1,7 @@
 { "name" : "With A Little Help From My Friends", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
   "year" : 1967, "album" : "Sgt. Pepper's Lonely Hearts Club Band", "track" : 2,
+  "performanceKey" :  { "name" : "E-Major", "mode" : "MAJOR" },
+  "scoreKey" : { "name" : "E-Major", "mode" : "MAJOR" },
     "sections" : 
   	[
   		{ "name" : "intro",

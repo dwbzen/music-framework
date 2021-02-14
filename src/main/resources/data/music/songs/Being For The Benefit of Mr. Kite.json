@@ -1,5 +1,7 @@
 { "name" : "Being For The Benefit of Mr. Kite", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
   "year" : 1967, "album" : "Sgt. Pepper's Lonely Hearts Club Band", "track" : 7,
+  "performanceKey" :  { "name" : "D-Minor", "mode" : "MINOR" },
+  "scoreKey" : { "name" : "D-Minor", "mode" : "MINOR" },
     "sections" : 
   	[
   		{ "name" : "intro", "number" : 10, "repeat" : 1, "next" : [ "verse" ],

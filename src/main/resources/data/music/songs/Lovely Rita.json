@@ -1,6 +1,7 @@
 { "name" : "Lovely Rita", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
   "year" : 1967, "album" : "Sgt. Pepper's Lonely Hearts Club Band",  "track" : 10, 
   "performanceKey" :  { "name" : "E-Major", "mode" : "MAJOR" },
+  "scoreKey" : { "name" : "Eb-Major", "mode" : "MAJOR" },
     "sections" : 
   	[
   		{ "name" : "intro-one", "repeat" : 1, "next" : [ "intro-two" ],

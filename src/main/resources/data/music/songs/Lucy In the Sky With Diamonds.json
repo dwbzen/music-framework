@@ -1,5 +1,7 @@
 { "name" : "Lucy In the Sky With Diamonds", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
   "year" : 1967, "album" : "Sgt. Pepper's Lonely Hearts Club Band", "track" : 3,
+  "performanceKey" :  { "name" : "A-Major", "mode" : "MAJOR" },
+  "scoreKey" : { "name" : "A-Major", "mode" : "MAJOR" },
     "sections" : 
   	[
   		{ "name" : "intro",

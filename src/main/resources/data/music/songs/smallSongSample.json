@@ -1,5 +1,7 @@
 { "name" : "Small Song Sample" , "artist" : "The Samples" , "composers" : [ "Don Bacon" ] , 
   "year" : 2015 , "album" : "Meet The Samples" , 
+  "performanceKey" :  { "name" : "G-Major", "mode" : "MAJOR" },
+  "scoreKey" : { "name" : "Bb-Major", "mode" : "MAJOR" },
   "sections" : 
    [ 
   	{ "name" : "verse" , "number" : 10, "repeat" : 2, "next" : [ "chorus", "chorus" ],

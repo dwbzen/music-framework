@@ -1,5 +1,7 @@
 { "name" : "Strawberry Fields Forever", "artist" : "The Beatles", "composers" : [ "John Lennon", "Paul McCartney" ], 
   "year" : 1967, "album" : "Magical Mystery Tour",
+  "performanceKey" :  { "name" : "Bb-Major", "mode" : "MAJOR" },
+  "scoreKey" : { "name" : "Bb-Major", "mode" : "MAJOR" },
   "sections" : 
   [
       	{ "name" : "intro", "repeat" : 1, "number" : 10, "next" : [ "chorus1" ],
