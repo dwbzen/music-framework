@@ -1,0 +1,78 @@
+{
+  "keys":[
+	{"name" : "C-Major", "mode" : "MAJOR", "sharps" : [], "flats" : [], "scale" : "Major",
+		"relativeKey" : "A-Minor"},
+	{"name" : "A-Minor", "mode" : "MINOR", "sharps" : [], "flats" : [], "scale" : "Minor",
+		"relativeKey" : "C-Major"},
+		
+ 	{"name" : "G-Major", "mode" : "MAJOR", "sharps" : ["F#"], "flats" : [], "scale" : "Major",
+		"relativeKey" : "E-Minor"},
+	{"name" : "E-Minor", "mode" : "MINOR", "sharps" : ["F#"], "flats" : [], "scale" : "Minor",
+		"relativeKey" : "G-Major"},
+
+	{"name" : "D-Major", "mode" : "MAJOR", "sharps" : ["F#","C#"], "flats" : [], "scale" : "Major",
+		"relativeKey" : "B-Minor"},
+	{"name" : "B-Minor", "mode" : "MINOR", "sharps" : ["F#","C#"], "flats" : [], "scale" : "Minor",
+		"relativeKey" : "D-Major"},
+		
+	{"name" : "A-Major", "mode" : "MAJOR", "sharps" : ["F#","C#","G#"], "flats" : [], "scale" : "Major",
+		"relativeKey" : "F#-Minor"},
+	{"name" : "F#-Minor", "mode" : "MINOR", "sharps" : ["F#","C#","G#"], "flats" : [], "scale" : "Minor",
+		"relativeKey" : "A-Major"},
+
+	{"name" : "E-Major", "mode" : "MAJOR", "sharps" : ["F#","C#","G#","D#"], "flats" : [], "scale" : "Major",
+		"relativeKey" : "C#-Minor"},
+	{"name" : "C#-Minor", "mode" : "MINOR", "sharps" : ["F#","C#","G#","D#"], "flats" : [], "scale" : "Minor",
+		"relativeKey" : "E-Major"},
+		
+	{"name" : "B-Major", "mode" : "MAJOR", "sharps" : ["F#","C#","G#","D#","A#"], "flats" : [], "scale" : "Major",
+		"relativeKey" : "G#-Minor", "parallelKey" : "Cb-Major"},
+	{"name" : "G#-Minor", "mode" : "MINOR", "sharps" : ["F#","C#","G#","D#","A#"], "flats" : [], "scale" : "Minor",
+		"relativeKey" : "B-Major", "parallelKey" : "Ab-Minor"},
+
+	{"name" : "F#-Major", "mode" : "MAJOR", "sharps" : ["F#","C#","G#","D#","A#","E#"], "flats" : [], "scale" : "Major",
+		"relativeKey" : "D#-Minor", "parallelKey" : "Gb-Major"},
+	{"name" : "D#-Minor", "mode" : "MINOR", "sharps" : ["F#","C#","G#","D#","A#","E#"], "flats" : [], "scale" : "Minor",
+		"relativeKey" : "F#-Major", "parallelKey" : "Eb-Minor"},
+
+	{"name" : "C#-Major", "mode" : "MAJOR", "sharps" : ["F#","C#","G#","D#","A#","E#","B#"], "flats" : [], "scale" : "Major",
+		"relativeKey" : "A#-Minor", "parallelKey" : "Db-Major"},
+	{"name" : "A#-Minor", "mode" : "MINOR", "sharps" : ["F#","C#","G#","D#","A#","E#","B#"], "flats" : [], "scale" : "Minor",
+		"relativeKey" : "C#-Major", "parallelKey" : "Bb-Minor"},
+
+	{"name" : "F-Major", "mode" : "MAJOR", "sharps" : [], "flats" : ["Bb"], "scale" : "Major",
+		"relativeKey" : "D-Minor"},
+	{"name" : "D-Minor", "mode" : "MINOR", "sharps" : [], "flats" : ["Bb"], "scale" : "Minor",
+		"relativeKey" : "F-Major"},
+
+	{"name" : "Bb-Major", "mode" : "MAJOR", "sharps" : [], "flats" : ["Bb","Eb"], "scale" : "Major",
+		"relativeKey" : "G-Minor"},
+	{"name" : "G-Minor", "mode" : "MINOR", "sharps" : [], "flats" : ["Bb","Eb"], "scale" : "Minor",
+		"relativeKey" : "Bb-Major"},
+
+	{"name" : "Eb-Major", "mode" : "MAJOR", "sharps" : [], "flats" : ["Bb","Eb","Ab"], "scale" : "Major",
+		"relativeKey" : "C-Minor"},
+	{"name" : "C-Minor", "mode" : "MINOR", "sharps" : [], "flats" : ["Bb","Eb","Ab"], "scale" : "Minor",
+		"relativeKey" : "Eb-Major"},
+
+	{"name" : "Ab-Major", "mode" : "MAJOR", "sharps" : [], "flats" : ["Bb","Eb","Ab","Db"], "scale" : "Major",
+		"relativeKey" : "F-Minor"},
+	{"name" : "F-Minor", "mode" : "MINOR", "sharps" : [], "flats" : ["Bb","Eb","Ab","Db"], "scale" : "Minor",
+		"relativeKey" : "Ab-Major"},
+
+	{"name" : "Db-Major", "mode" : "MAJOR", "sharps" : [], "flats" : ["Bb","Eb","Ab","Db","Gb"], "scale" : "Major",
+		"relativeKey" : "Bb-Minor", "parallelKey" : "C#-Major"},
+	{"name" : "Bb-Minor", "mode" : "MINOR", "sharps" : [], "flats" : ["Bb","Eb","Ab","Db","Gb"], "scale" : "Minor",
+		"relativeKey" : "Db-Major", "parallelKey" : "A#-Minor"},
+
+	{"name" : "Gb-Major", "mode" : "MAJOR", "sharps" : [], "flats" : ["Bb","Eb","Ab","Db","Gb","Cb"], "scale" : "Major",
+		"relativeKey" : "Eb-Minor", "parallelKey" : "F#-Major"},
+	{"name" : "Eb-Minor", "mode" : "MINOR", "sharps" : [], "flats" : ["Bb","Eb","Ab","Db","Gb","Cb"], "scale" : "Minor",
+		"relativeKey" : "Gb-Major", "parallelKey" : "D#-Minor"},
+
+	{"name" : "Cb-Major", "mode" : "MAJOR", "sharps" : [], "flats" : ["Bb","Eb","Ab","Db","Gb","Cb","Fb"], "scale" : "Major",
+		"relativeKey" : "Ab-Minor", "parallelKey" : "B-Major"},
+	{"name" : "Ab-Minor", "mode" : "MINOR", "sharps" : [], "flats" : ["Bb","Eb","Ab","Db","Gb","Cb","Fb"], "scale" : "Minor",
+		"relativeKey" : "Cb-Major", "parallelKey" : "G#-Minor"}
+  ]
+}
