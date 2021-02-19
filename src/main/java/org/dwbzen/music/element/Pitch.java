@@ -290,7 +290,7 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 	 */
 	public void increment(int n)  {
 		if (n != 0) {
-			int rs = this.rangeStep + n;
+			int rs = rangeStep + n;
 			Pitch temp = null;
 			if(rs >= 0 && rs <= 120) {		// otherwise out of bounds
 				temp = allPitchesMap.get(alteration <= 0 ? Alteration.FLAT : Alteration.SHARP).getPitch(rs);
@@ -298,10 +298,9 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 			else {
 				temp = (rs < 0) ? minPitch : maxPitch;
 			}
-			if(this.octave == -1) {
-				temp.setOctave(-1);
-			}
+			int noctave = octave;	// retain existing octave#
 			copy(temp);
+			octave = noctave;
 		}
 	}
 	
@@ -338,10 +337,9 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 			else {
 				temp = (rs < 0) ? minPitch : maxPitch;
 			}
-			if(this.octave == -1) {
-				temp.setOctave(-1);
-			}
+			int noctave = octave;	// retain existing octave#
 			copy(temp);
+			octave = noctave;
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.dwbzen.common.util.IJson;
 import org.dwbzen.common.util.INameable;
 import org.dwbzen.music.element.Key.Mode;
@@ -27,7 +28,8 @@ public final class Scale implements IJson, INameable, Cloneable  {
 	private static final long serialVersionUID = -6449893042332225583L;
 	
 	@JsonIgnore	private  ObjectMapper mapper = new ObjectMapper();
-
+	static final org.apache.log4j.Logger log = Logger.getLogger(Scale.class);
+	
 	@JsonPropertyOrder({"name","notes","formulaName" })
 	@JsonProperty("name")		private String name;
 	@JsonProperty("mode")		private String mode;			// valid values: MAJOR, MINOR, MODE, can be null if N/A
@@ -59,10 +61,13 @@ public final class Scale implements IJson, INameable, Cloneable  {
 	 */
 	public Scale(String name, String mode, ScaleType type, Pitch root, ScaleFormula formula, Key key) {
 		this(name, mode, type, root, key);
+		log.trace("scale name: " + name);
 		pitches = IScaleFormula.createPitches(formula.getFormula(), root, key);
 		scaleFormula = formula;
 		formulaName = formula.getName();
 		notes = toString();
+		log.trace("formula: " + formulaName);
+		log.trace("notes: " + notes);
 		Scales.addScaleToScaleMap(name, this);
 	}
 	

@@ -105,7 +105,7 @@ public class PitchTest extends TestCase {
 		Pitch b1 = new Pitch("B1");
 		log.debug(cflat2 + " index: " + pitchHash.get(cflat2));
 		log.debug(b1 + " index: " + pitchHash.get(b1));
-		assertEquals(23, pitchHash.get(cflat2).intValue());
+		assertEquals(23, cflat2.getRangeStep());
 		assertEquals(23,  pitchHash.get(b1).intValue());
 		
 		for(Pitch tp : Scales.CHROMATIC_12TONE_SCALE.getPitches()) {

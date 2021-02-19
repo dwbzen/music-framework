@@ -313,7 +313,8 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 		PitchSet pc = (pref == Alteration.SHARP) ? allPitchesSharps : allPitchesFlats;
 		for(int octave = 0; octave <=9; octave++) {
 			for(String s : pitchArray) {
-				pc.pitches.add(new Pitch(s+octave));
+				Pitch p = new Pitch(s+octave);
+				pc.pitches.add(p);
 			}
 		}
 		pc.addPitch(new Pitch("C9"));
@@ -352,6 +353,8 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 	 * @param args
 	 */
 	public static void main(String... args) {
+		
+		generateAllPitches();
 		
 		Pitch low = Pitch.C0;
 		Pitch high = Pitch.C9;

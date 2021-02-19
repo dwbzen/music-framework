@@ -8,12 +8,12 @@ import org.junit.Test;
 
 public class PhraseTest {
 	
-	static String instruments = "flute,piano";
+	static String instruments = "Flute,Piano";
 	static InstrumentMaker instrumentMaker = new InstrumentMaker(instruments);
 
 	@Test
 	public void testCreatePhrase() {
-		Instrument instrument = instrumentMaker.getInstrument("flute");
+		Instrument instrument = instrumentMaker.getInstrument("Flute");
 		// TODO
 	}
 

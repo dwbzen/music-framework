@@ -76,14 +76,15 @@ public interface IFormula extends INameable, Serializable {
 	public static List<Pitch> createPitches(List<Integer>formula, Pitch root, Key key, Alteration altpref) {
 
 		List<Pitch> plist = new ArrayList<Pitch>();
-		plist.add(root);
+		Pitch nroot = new Pitch(root);
+		plist.add(nroot);
 		Pitch next = null;
 		int stepIncrement = 0;
 		int preference = (altpref != null) ? altpref.value() : 
 			(key != null && key.getSignature() != null && key.getSignature().length > 0) ? key.getSignature()[0].getAlteration() : 0;
 		for(int i: formula) {
 			stepIncrement += i;
-			next = root.increment(stepIncrement, preference);
+			next = nroot.increment(stepIncrement, preference);
 			plist.add(next);
 		}
 		return plist;
