@@ -23,6 +23,9 @@
 { "name" : "Major Seventh augmented eleventh", "symbols" : ["Maj7#11", "Maj7-11"], "groups" : [ "altered"] , "formula" : [ 4, 3, 4, 11 ] , "intervals": ["M3", "m3", "M3", "M7" ], "size" : 4, "chordSize" : 5, "template":["C", "E", "G", "B", "A#"] }
 { "name" : "Major ninth" , "symbols" : ["maj9", "M9"], "groups" : [ "extended"] , "formula" : [ 4, 3, 4, 3] , "intervals": ["M3", "m3", "M3", "m3"], "size" : 4, "chordSize" : 5 }
 { "name" : "Major seventh" , "symbols" : ["maj7", "M7"], "groups" : [ "seventh"] , "formula" : [ 4, 3, 4 ] , "intervals": ["M3", "m3", "M3"], "size" : 3, "chordSize" : 4 }
+{"name"  : "Major seventh flat fifth", "symbols":["maj7b5","M7b5"],"groups":["seventh"],"formula":[4,2,5], "intervals":["M3", "M2", "P4"],"size":3,"chordSize":4,", "template":["C", "E", "Gb", "B"] }
+{"name"  : "Major seventh sharp fifth", "symbols":["maj7#5","M7#5"],"groups":["seventh"],"formula":[4,4,3], "intervals":["M3", "M3", "m3"],"size":3,"chordSize":4, "template":["C", "E", "G#", "B"]}
+{"name"  : "Major add minor sixth", "symbols":["add-6"],"groups":["added tone"],"formula":[4,3,1], "intervals":["M3", "b3", "m2"],"size":3,"chordSize":4, "template":["E", "G", "B", "C"]}
 { "name" : "Major thirteenth" , "symbols" : ["Maj13"], "groups" : [ "extended"] , "formula" : [ 4, 3, 4, 3, 7 ] , "intervals": ["M3", "m3", "M3", "m3", "P5"], "size" : 5, "chordSize" : 6, "template":["C", "E", "G", "B", "D", "A"] }
 { "name" : "Major" , "symbols" : ["M"], "groups" : [ "triad"] , "formula" : [ 4 , 3 ] , "intervals": ["M3", "m3"], "size" : 2, "chordSize" : 3 }
 { "name" : "Minor Add nine" , "symbols" : ["madd9"], "groups" : [ "added tone"] , "formula" : [ 3, 4, 7] , "intervals": ["m3", "M3", "P5"], "size" : 3, "chordSize" : 4 }

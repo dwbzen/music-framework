@@ -1,16 +1,28 @@
 package org.dwbzen.music.element;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.dwbzen.music.element.Key.Mode;
 
-public final class Scales {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class Scales {
 
 	/**
 	 * All the defined scales in this Map
 	 */
 	private static Map<String, Scale> scaleMap = Collections.synchronizedMap(new HashMap<String, Scale>());
+	private static final String scaleResourceFile = "common_scaleFormulas.json";
+	static ObjectMapper mapper = new ObjectMapper();
 
 	public static final String MAJOR = "major";
 	public static final String MINOR = "minor";
@@ -198,4 +210,61 @@ public final class Scales {
 	public static Map<String, Scale> getScaleMap() {
 		return scaleMap;
 	}
+	
+	//***********************************
+	// Class section
+	//***********************************
+	
+	@JsonProperty("scales")		private List<ScaleFormula> scaleFormulas = null;
+	@JsonIgnore					private StringBuilder sb = new StringBuilder();
+	@JsonIgnore					private String resourceFileName = null;
+	
+	public Scales() {
+	}
+	
+	public Scales(String resourceFileName) {
+		this.resourceFileName = resourceFileName;
+		loadScales(resourceFileName);
+	}
+
+	public List<ScaleFormula> getScaleFormulas() {
+		return scaleFormulas;
+	}
+
+	public void setScales(List<ScaleFormula> scaleFormulas) {
+		this.scaleFormulas = scaleFormulas;
+	}
+	
+	/*
+	 * load scales from JSON resource file
+	 */
+	private Scales loadScales(String resourceFile) {
+		InputStream is = this.getClass().getResourceAsStream("/data/music/" + resourceFile);
+		Scales scales = null;
+		if(is != null) {
+			try(Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines()) {
+				stream.forEach(s -> sb.append(s));
+			}
+		}
+		try {
+			scales = mapper.readValue(sb.toString(), Scales.class);
+		} catch (IOException e) {
+			System.err.println("Cannot deserialize scales because " + e.toString());
+		}
+		if(scales != null && scales.getScaleFormulas().size() > 0) {
+			this.scaleFormulas = scales.scaleFormulas;
+		}
+		return scales;
+	}
+	
+	public static void main(String... args)  {
+		Scales scales = new Scales(scaleResourceFile);
+		if(scales != null && scales.getScaleFormulas().size() > 0) {
+			System.out.println(scales.getScaleFormulas().size() + " scales loaded");
+			for(ScaleFormula sf : scales.getScaleFormulas()) {
+				System.out.println("\"" + sf.getName() + "\"\t" + sf.getSize() + "\t" + sf.getFormulaString());
+			}
+		}
+	}
+	
 }

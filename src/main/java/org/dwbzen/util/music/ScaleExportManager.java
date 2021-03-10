@@ -1,9 +1,6 @@
 package org.dwbzen.util.music;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -110,7 +106,7 @@ public class ScaleExportManager  {
 		outputFormat = format;
 		this.size = size;
 		this.groups.addAll(groups);
-		loadScaleFormulas();
+		loadScaleFormulas(resource);
 	}
 	
 	private void configure() {
@@ -257,15 +253,16 @@ public class ScaleExportManager  {
 		rootPitches.add(p);
 	}
 	
-	public void loadScaleFormulas() {
+	public void loadScaleFormulas(String scaleResourceFile) {
 		
 		if(importFormat.equalsIgnoreCase("json")) {
-			InputStream is = this.getClass().getResourceAsStream("/data/music/" + resourceFile);
-			if(is != null) {
-				try(Stream<String> stream = new BufferedReader(new InputStreamReader(is)).lines()) {
-					stream.forEach(s -> accept(s));
-				}
+			Scales scales = new Scales(scaleResourceFile);
+			if(scales != null && scales.getScaleFormulas().size() > 0) {
+				log.debug(scales.getScaleFormulas().size() + " scales loaded");
+				
+				scales.getScaleFormulas().forEach( s -> accept(s));
 			}
+
 		}
 		else if(importFormat.equalsIgnoreCase("rawjson")) {
 			// TODO
@@ -565,16 +562,9 @@ public class ScaleExportManager  {
 	}
 	
 	/**
-	 * Deserializes a JSON ScaleFormula and adds to scaleFormulas Map
+	 * adds ScaleFormula to scaleFormulas and scaleFormulasGroupMap
 	 */
-	public void accept(String formulaString) {
-		ScaleFormula scaleFormula = null;
-		log.debug(formulaString);
-		try {
-			scaleFormula = ScaleFormula.deserialize(formulaString);
-		} catch (Exception e) {
-			log.error("Cannot deserialize " + formulaString + "\nbecause " + e.toString());
-		}
+	public void accept(ScaleFormula scaleFormula) {
 		if(scaleFormula != null) {	
 			scaleFormulas.put(scaleFormula.getName(), scaleFormula);
 			for(String group : scaleFormula.getGroups()) {
