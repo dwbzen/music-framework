@@ -44,12 +44,22 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 		{Step.C, Step.C, Step.D, Step.D, Step.E, Step.F, Step.F, Step.G, Step.G, Step.A, Step.A, Step.B, Step.C };
 	public static final Step[] PITCH_STEPS_CHROMATIC_FLAT =
 		{Step.C, Step.D, Step.D, Step.E, Step.E, Step.F, Step.G, Step.G, Step.A, Step.A, Step.B, Step.B, Step.C };
+	public static final Step[] PITCH_STEPS_CHROMATIC_MIXED =
+		{Step.C, Step.C, Step.D, Step.E, Step.E, Step.F, Step.F, Step.G, Step.G, Step.A, Step.B, Step.B, Step.C };
+
+	
 	public static final Alteration[] ALTERATION_CHROMATIC_SHARP =
 		{Alteration.NONE, Alteration.UP_ONE, Alteration.NONE, Alteration.UP_ONE, Alteration.NONE, Alteration.NONE,
 		 Alteration.UP_ONE, Alteration.NONE, Alteration.UP_ONE, Alteration.NONE, Alteration.UP_ONE, Alteration.NONE, Alteration.NONE };
+	
 	public static final Alteration[] ALTERATION_CHROMATIC_FLAT =
 		{Alteration.NONE, Alteration.DOWN_ONE, Alteration.NONE, Alteration.DOWN_ONE, Alteration.NONE, Alteration.NONE,
 		Alteration.DOWN_ONE, Alteration.NONE, Alteration.DOWN_ONE, Alteration.NONE, Alteration.DOWN_ONE, Alteration.NONE, Alteration.NONE};
+	
+	public static final Alteration[] ALTERATION_CHROMATIC_MIXED =
+		{Alteration.NONE, Alteration.UP_ONE, Alteration.NONE, Alteration.DOWN_ONE, Alteration.NONE, Alteration.NONE,
+		 Alteration.UP_ONE, Alteration.NONE, Alteration.UP_ONE, Alteration.NONE, Alteration.DOWN_ONE, Alteration.NONE, Alteration.NONE };
+
 	public static final String[] SHARP = {"", "#", "##"};		// {"", "\u266F", "\u1D12A"};
 	public static final String[] FLAT = {"", "b", "bb"};		// {"", "\u266D", "\u1D12B"};
 	
@@ -266,6 +276,17 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 	 */
 	public int absoluteDifference(Pitch other) {
 		return difference(other);
+	}
+	
+	/**
+	 * Starting with this pitch, this returns the number of steps it takes to reach other.<br>
+	 * 
+	 * @param Pitch other
+	 * @return int step difference between this and other
+	 */
+	public int stepDifference(Pitch other) {
+		int diff = other.rangeStep - rangeStep;
+		return diff >= 0 ? diff : diff + 12;
 	}
 
 	/**
@@ -706,7 +727,9 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 			}
 		}
 		else { // alteration == 0
-			
+			// F, C, G are sharps. B, E are flats
+			// Gb -> F#, Db -> C#, Ab -> G#
+			// A# -> Bb, D# -> Eb
 		}
 	}
 	

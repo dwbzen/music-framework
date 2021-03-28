@@ -16,7 +16,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * A Chord is a vertical arrangement of Notes.
  * All the notes in the same voice will have the same duration.<br>
- * The notes are maintained in a SortedSet, ordered by Note (pitch + octave).<br>
+ * The notes are maintained in a SortedSet, ordered by Note (pitch + octave),<br>
+ * and in a parallel List<Note> in the order added.<br>
+ * The root note names the Chord; the bassPitch is the lowest Pitch in the Chord.<br>
+ * For example the notes, "E,G,Bb,C" the root is C, the bassPitch is E<br>
+ * and so the Chord symbol would be "C7/E"<br>
  * For more information regarding chords, chord formulas and representing
  * chords in musicXML, see [Chords.md] for more information.
  * 
@@ -29,7 +33,10 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	 * Notes in the Chord sorted in increasing Pitch order
 	 */
 	@JsonProperty	private SortedSet<Note> notes = new TreeSet<Note>();
-	@JsonIgnore		private List<Note> chordNotes = null;	// created when needed
+	/**
+	 * Notes in the Chord unsorted, i.e. in the order added 
+	 */
+	@JsonIgnore		private List<Note> chordNotes = new ArrayList<>();
 	@JsonProperty	private Note root = null;
 	@JsonProperty	private Chord tiedTo = null;		// the Chord this is tied to - occurs after this Chord
 	@JsonProperty	private Chord tiedFrom = null;		// the Chord this is tied from - occurs before this Chord
@@ -192,6 +199,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 		}
 		boolean added = notes.add(note);
 		if(added) {
+			chordNotes.add(note);
 			size++;
 			note.setContainer(this);
 			getPitchSet().addUniquePitch(note.getPitch());
@@ -209,6 +217,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	public boolean removeNote(Note note) {
 		boolean removed = notes.remove(note);
 		if(removed) {
+			chordNotes.remove(note);
 			note.breakAllTies();
 			getPitchSet().remove(note.getPitch());
 		}
@@ -275,7 +284,7 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	
 	@Override
 	public String toString() {
-		Iterator<Note> noteit = notes.iterator();
+		Iterator<Note> noteit = chordNotes.iterator();
 		StringBuffer sb = new StringBuffer("Chord(" + notes.size() + "): {");
 		int n = 1;
 		while(noteit.hasNext()) {
@@ -359,16 +368,16 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	 */
 	public void setRoot(Note root) {
 		this.root = root;
-		notes.add(root);
+		addNote(root);
 	}
 
 	/**
-	 * If not set, the root is by definition the note with the lowest (smallest) pitch.
+	 * If not set, the root is the note added first. This may or may not be the note with the lowest (smallest) pitch.
 	 * @return root Note. Could be null if no notes in the chord yet.
 	 */
 	public Note getRoot() {
-		if(root == null && !notes.isEmpty()) {
-			root = notes.first();
+		if(root == null && !chordNotes.isEmpty()) {
+			root = chordNotes.get(0);
 		}
 		return root;
 	}
@@ -474,10 +483,6 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	}
 
 	public List<Note> getChordNotes() {
-		if(chordNotes == null) {
-			chordNotes = new ArrayList<>();
-			notes.forEach(n -> chordNotes.add(n));
-		}
 		return chordNotes;
 	}
 
@@ -488,6 +493,5 @@ public class Chord extends Measurable implements IJson, Comparable<Chord>, IMeas
 	public void setBassPitch(Pitch bassPitch) {
 		this.bassPitch = bassPitch;
 	}
-
 
 }

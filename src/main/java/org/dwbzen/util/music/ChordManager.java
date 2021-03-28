@@ -15,11 +15,6 @@ import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
-
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.dwbzen.music.element.Chord;
 import org.dwbzen.music.element.IFormula;
 import org.dwbzen.music.element.Key;
@@ -29,6 +24,10 @@ import org.dwbzen.music.element.song.ChordFormula;
 import org.dwbzen.music.element.song.ChordFormulas;
 import org.dwbzen.music.element.song.ChordInfo;
 import org.dwbzen.music.element.song.HarmonyChord;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Creates a JSON representation for chord formulas in all roots.</p>
@@ -124,6 +123,15 @@ public class ChordManager {
 		for(Integer i:ps) {
 			int shiftamt = (i>=12) ? i-12 : i;
 			fnum += (1<<shiftamt);
+		}
+		return fnum;
+	}
+	
+	public static int computeSpellingNumber(List<Integer> formula) {
+		int fnum = 0;
+		List<Integer> ps = IFormula.formulaToPitchIndexes(formula);
+		for(Integer i:ps) {
+			fnum += (1<<i);
 		}
 		return fnum;
 	}
@@ -476,9 +484,11 @@ public class ChordManager {
     	}
     	if(chordFormulas != null) {
     		for(ChordFormula chordFormula : chordFormulas.getChordFormulas()) {
+    			// adds inversions to this chord
+    			chordFormula.createInversions();
     			chordFormulasMap.put(chordFormula.getName(), chordFormula);
     			for(String s : chordFormula.getSymbols()) {
-    				chordFormulasMap.put(s, chordFormula);
+    				chordFormulasMap.put(s, chordFormula);	
     			}
     			chordFormulaNumberMap.put(chordFormula.getFormulaNumber(), chordFormula);
     		}
@@ -536,6 +546,14 @@ public class ChordManager {
 
 	public Map<Integer, ChordFormula> getChordFormulaNumberMap() {
 		return chordFormulaNumberMap;
+	}
+	
+	public ChordFormula find(int formulaNumber) {
+		ChordFormula cf = null;
+		if(chordFormulaNumberMap.containsKey(formulaNumber)) {
+			cf = chordFormulaNumberMap.get(formulaNumber);
+		}
+		return cf;
 	}
 
 	public String getResourceFile() {
@@ -599,9 +617,9 @@ public class ChordManager {
 		int index = 0;
 		for(int i = 0; i< size; i++) {
 			Note note = chordNotes.get(i);
-			int interval = prevNote.absoluteDifference(note);
-			if(interval > 0) {
-				intervals[index++] = interval;
+			int interval = prevNote.getPitch().stepDifference(note.getPitch());
+			if(interval != 0) {
+				intervals[index++] = (interval < 0) ? -interval : interval;
 			}
 			prevNote = note;
 		}
@@ -622,7 +640,8 @@ public class ChordManager {
 				for(String symbol:chordFormulasMap.keySet()) {
 					ChordFormula cf = chordFormulasMap.get(symbol);
 					List<Integer> inversionFormulaNumbers = cf.getInversionFormulaNumbers();
-					for(int i = 0; i < inversionFormulaNumbers.size(); i++) {
+					int numberOfInversions = inversionFormulaNumbers.size();
+					for(int i = 0; i < numberOfInversions; i++) {
 						if(formulaNumber.equals(inversionFormulaNumbers.get(i))) {
 							chordFormula = (ChordFormula)cf.clone();
 							if(chordFormula != null) {
@@ -630,9 +649,8 @@ public class ChordManager {
 								Note bassNote = chord.getRoot();
 								Pitch bassPitch = bassNote.getPitch();
 								chord.setBassPitch(bassPitch);
-								List<Integer> inv = cf.getInversions().get(i);		// the inversion that matched
-								int step = inv.get(0);
-								Pitch rootPitch = bassPitch.increment(step, bassPitch.getAlteration());
+								int rootPitchIndex = i==0 ? 0 : numberOfInversions - i;
+								Pitch rootPitch = chord.getChordNotes().get(rootPitchIndex).getPitch();
 								Note rootNote = new Note(rootPitch, bassNote.getDuration());
 								chord.setRoot(rootNote);
 								break;

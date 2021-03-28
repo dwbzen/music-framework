@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * <dt>symbols</dt>  <dd>a List<String> of common symbols with the most common appearing first. "M", "M7#5", "9" etc.</dd>
  * <dt>groups</dt>  <dd>a List<String> of groups this chord belongs to, for example "triad", "seventh", "added tone" etc.</dd>
  * <dt>formula</dt>  <dd>a List<Integer> of #steps each note is from the previous.<br>
- * 			 For example, formula for a major chord is [4,3] or, from the root, 4 steps to the next note then 3 steps.
+ * 			 For example, formula for a major chord is [4,3] or, from the root, 4 steps to the next note then 3 steps.<br>
  * 			 Note that the formula does not include a final interval to double the root.</dd>
  * 
  * <dt>intervals</dt>  <dd>the formula expressed as intervals using the standard notation.<br>
@@ -71,10 +71,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *  
  *  <h3>Inversions</h3>
  *  A chord having a note other than the root in the bass is an inversion of that chord.<br>
- *  In tablature these are notated as so-called "slash" chords. For example, a C7 in root position is C,E,G,Bb<br>
+ *  In chord tablature these are notated as "slash" chords. For example, a C7 in root position is C,E,G,Bb<br>
  *  C7/E is the first inversion, C7/G is the second and so on.<br>
- *  Expressing these as a formula requires doubling the root. The inversions are then simply left rotations of that formula.
- *  For example, C7 = [4,3,3,2] (or M3,m3,m3,M2), C7/E = [3,3,2,4] and so on<br>
+ *  Expressing these as a formula requires doubling the root. The inversions are then simply left rotations of that formula.<br>
+ *  For example doubling the root of C7 gives the formula [4,3,3,2] (or M3,m3,m3,M2), C7/E = [3,3,2,4] and so on<br>
  *  This is important when trying to determine the formula for an arbitrary Chord which may or may not have an associated formula.<br>
  *  This idea is captured in the inversions property which is a Map<Integer, List<Integer>>.<br>
  *  The key is index of the pitch in root position that's in the bass (the lowest pitch).<br>
@@ -89,7 +89,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * <li><a href="https://en.wikipedia.org/wiki/Chord_(music)">Chord (Music)</a></li>
  * <li><a href="https://en.wikipedia.org/wiki/Interval_(music)">Interval (Music)</a></li>
  * </ul>
- * 
+ *  
  * 
  * @author don_bacon
  *
@@ -425,7 +425,11 @@ public class ChordFormula implements IChordFormula, IJson, Cloneable, IMapped<St
 	}
 	
 	/**
-	 * Creates and inversions Map for this
+	 * Creates an inversions Map for this ChordFormula.<br>
+	 * Inversions all have the same formulaNumber as the chord in root position.<br>
+	 * The difference is the root note which is expressed as a slash chord.<br>
+	 * For example, the 1st inversion of C7 (E G Bb C) is C7/E.
+	 * 
 	 */
 	public void createInversions() {
 		if(inversions == null) {

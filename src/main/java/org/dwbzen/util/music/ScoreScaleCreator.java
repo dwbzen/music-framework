@@ -33,7 +33,6 @@ import org.dwbzen.music.element.Tempo;
 import org.dwbzen.music.element.direction.Metronome;
 import org.dwbzen.music.element.direction.ScoreDirection;
 import org.dwbzen.music.element.direction.Words;
-import org.dwbzen.music.element.song.ChordFormula;
 import org.dwbzen.music.instrument.Instrument;
 import org.dwbzen.music.musicxml.DisplayInfo;
 import org.dwbzen.util.Configuration;
@@ -434,6 +433,11 @@ public class ScoreScaleCreator  {
 				if(chord.getChordFormula() != null) {
 					chordSymbol = chord.toString(true);
 					// add the symbol as a system direction below staff 1 (instead of a harmony element)
+					addScoreDirection(1, measure, chordSymbol, "below", false);
+				}
+				else {
+					// don't recognize this chord
+					chordSymbol = chord.getChordNotes().get(0).getPitch().getStep().toString() + "???";
 					addScoreDirection(1, measure, chordSymbol, "below", false);
 				}
 				measure.accept(staffNumber, chord);

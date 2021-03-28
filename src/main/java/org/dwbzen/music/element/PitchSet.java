@@ -45,10 +45,13 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 	
 	private static PitchSet allPitchesSharps = new PitchSet();	// all pitches in the range C0 to C9, generated dynamically using sharps
 	private static PitchSet allPitchesFlats = new PitchSet();		// all pitches in the range C0 to C9, generated dynamically using flats
+	private static PitchSet allPitchesMixed = new PitchSet();		// all pitches in the range C0 to C9, generated dynamically using sharps and flats
+
 	public  static Map<Alteration, PitchSet> allPitches = new HashMap<>();
 	
 	public static final String[] octavePitchArraySharps =  { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 	public static final String[] octavePitchArrayFlats =   { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" };
+	public static final String[] octavePitchArrayMixed =   { "C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B" };
 	
 	static {
 		generateAllPitches();
@@ -186,7 +189,7 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 
 	
 	public static PitchSet getAllPitches() {
-		return getAllPitches(Alteration.SHARP);
+		return getAllPitches(Alteration.NONE);
 	}
 	
 	public static PitchSet getAllPitches(Alteration pref) {
@@ -201,7 +204,7 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 			pc = allPitches.get(Alteration.FLAT);
 		}
 		else {
-			pc = getAllPitches();
+			pc = allPitches.get(Alteration.NONE);
 		}
 		return pc;
 	}
@@ -306,11 +309,12 @@ public class PitchSet extends PitchElement implements Comparable<PitchSet> {
 	private static void generateAllPitches() {
 		generateAllPitches(Alteration.SHARP);
 		generateAllPitches(Alteration.FLAT);
+		generateAllPitches(Alteration.NONE);
 	}
 	
 	private static void generateAllPitches(Alteration pref) {
-		String[] pitchArray = (pref == Alteration.SHARP) ? octavePitchArraySharps : octavePitchArrayFlats;
-		PitchSet pc = (pref == Alteration.SHARP) ? allPitchesSharps : allPitchesFlats;
+		String[] pitchArray = (pref == Alteration.SHARP) ? octavePitchArraySharps : (pref == Alteration.FLAT) ? octavePitchArrayFlats : octavePitchArrayMixed;
+		PitchSet pc = (pref == Alteration.SHARP) ? allPitchesSharps :  (pref == Alteration.FLAT) ?  allPitchesFlats : allPitchesMixed;
 		for(int octave = 0; octave <=9; octave++) {
 			for(String s : pitchArray) {
 				Pitch p = new Pitch(s+octave);
