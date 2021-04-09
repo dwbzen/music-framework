@@ -478,4 +478,13 @@ public class Key implements IJson {
 		return (scale != null) ? scale.getScaleFormula() : null;
 	}
 	
+	@JsonIgnore
+	public Alteration getAlteration() {
+		Alteration alteration = Alteration.NONE;
+		if(signature != null && signature.length > 0) {
+			alteration = signature[0].getAlteration() == 1 ? Alteration.SHARP : Alteration.FLAT;
+		}
+		
+		return alteration;
+	}
 }

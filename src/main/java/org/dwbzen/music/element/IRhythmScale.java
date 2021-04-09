@@ -41,6 +41,11 @@ public interface IRhythmScale extends IJson, INameable {
 	 String getNoteType(Note note);
 	 
 	 /**
+	  * Generate a List of random Durations from the possible durations of this RhythmScale.
+	  */
+	 List<Duration> generateDurations(int num);
+	 
+	 /**
 	  * 
 	  * @return true if the RhythmScale supports Chordal texture, false otherwise
 	  */

@@ -131,11 +131,9 @@ public abstract class AbstractRhythmScaleFactory  implements IRhythmScaleFactory
 		return baseUnits;
 	}
 
-
 	public boolean isChordal() {
 		return chordal;
 	}
-
 
 	public void setChordal(boolean chordal) {
 		this.chordal = chordal;

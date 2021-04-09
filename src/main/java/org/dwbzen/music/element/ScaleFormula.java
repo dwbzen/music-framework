@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,14 +36,14 @@ public final class ScaleFormula implements IScaleFormula, IJson, IMapped<String>
 	static final Logger log = LogManager.getLogger(ScaleFormula.class);
 	static ObjectMapper mapper = new ObjectMapper();
 	
-	private String name;
-	private String description = null;
 	@JsonInclude(Include.NON_EMPTY)
-	private List<String> alternateNames = new ArrayList<String>();
-	private List<String> groups = new ArrayList<String>();
-	private List<Integer> formula = new ArrayList<Integer>();
-	private String formulaString = null;	// just the toString() of the formula
-	private int size;
+	@JsonProperty("name")			private String name;
+	@JsonProperty("description")	private String description = null;
+	@JsonProperty					private List<String> alternateNames = new ArrayList<String>();
+	@JsonProperty					private List<String> groups = new ArrayList<String>();
+	@JsonProperty					private List<Integer> formula = new ArrayList<Integer>();
+	@JsonIgnore						private String formulaString = null;	// just the toString() of the formula
+	@JsonProperty("size")	private int size;
 
 	static {
 		mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);

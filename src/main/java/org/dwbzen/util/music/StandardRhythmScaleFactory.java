@@ -3,12 +3,15 @@ package org.dwbzen.util.music;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.dwbzen.music.action.ExpressionSelector;
 import org.dwbzen.music.element.Duration;
 import org.dwbzen.music.element.IRhythmExpression;
+import org.dwbzen.music.element.Note;
+import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.RhythmExpression;
 import org.dwbzen.music.element.RhythmScale;
 import org.dwbzen.music.element.RhythmicUnitType;
@@ -131,6 +134,15 @@ public class StandardRhythmScaleFactory extends AbstractRhythmScaleFactory {
 		
 		IRhythmScaleFactory rsFactory = RhythmScaleFactory.getRhythmScaleFactory("StandardRhythmScale");
 		RhythmScale rs = rsFactory.createRhythmScale("StandardRhythmScale");
-		System.out.println(rs.toJson(true));
+		// System.out.println(rs.toJson(true));
+		int rootUnits = rs.getRoot();
+		Set<Integer> baseUnits = rs.getBaseUnits();
+		Note note = null;
+		for(Integer i : baseUnits) {
+			Duration dur = new Duration(i);
+			note = new Note(Pitch.A, dur);
+			String nt = RhythmScale.determineNoteType(note, rootUnits);
+			System.out.println("units: " + i + " note type: " + nt);
+		}
 	}
 }

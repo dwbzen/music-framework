@@ -9,13 +9,13 @@ import java.util.Map;
  * C(1), D(3), E(5), F(6), G(8), A(10), B(12)<br>
  * There is also a SILENT Step (logically where no pitch is sounded).<br>
  * 
- * @since 3.1 Added BSHARP, CFLAT, ESHARP, FFLAT
  * @author don_bacon
  *
  */
 public enum Step {
+	SILENT(0),
 	C(1), BSHARP(1),
-	CSHARP(2), DFLAT(2),	/* enharmonic equivalent */
+	CSHARP(2), DFLAT(2),	/* enharmonic equivalents */
 	D(3),
 	DSHARP(4), EFLAT(4),
 	E(5), FFLAT(5),
@@ -25,8 +25,7 @@ public enum Step {
 	GSHARP(9), AFLAT(9),
 	A(10),
 	ASHARP(11), BFLAT(11),
-	B(12), CFLAT(12),
-	SILENT(0);
+	B(12), CFLAT(12);
 	Step(int val) { this.value = val;}
 	private final int value;
     public int value() { return value; }

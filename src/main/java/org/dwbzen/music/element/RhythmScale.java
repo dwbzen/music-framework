@@ -20,43 +20,44 @@ import org.dwbzen.music.transform.ITransformer.Preference;
 
 
 /**
- * A RhythmScale is a list of time units, or simply units
- * A unit represents a time interval (duration) that is a division of
- * a whole note. This is independent of how long a unit actually lasts
- * (in seconds) since that depends on
- * the tempo marking and the root, to be time-independent.
+ * A RhythmScale is a list of time units, or simply units.<br>
+ * A unit represents a time interval (duration) that is a division of a whole note.<br>
+ * This is independent of how long a unit actually lasts (in seconds) since that depends on<br>
+ * the tempo marking and the root, to be time-independent.<p>
  * 
- * A "root rhythm" is the number of units in a Whole Note.
- * For example, consider a root duration of 480 (logically a whole note) 30 units represents in this case a 16th note.
+ * A "root rhythm" is the number of units in a Whole Note.<br>
+ * For example, consider a root duration of 480 (logically a whole note) 30 units represents in this case a 16th note.<p>
  * 
  * Broadly speaking, there are 2 categories of rhythmic Expression:
- *  	texture type - MONOPHONIC or CHORDAL
- * 		rhythmic unit type - METRIC (1 note per unit) EXTRAMETRIC (tuplets)
+ * <dl>
+ * <dt>texture type</dt><dd> - MONOPHONIC or CHORDAL</dd>
+ * <dt>rhythmic unit type</dt><dd> - METRIC (1 note per unit) or EXTRAMETRIC (tuplets)</dd>
+ * </dl>
  * 
- * Texture is instrument-dependent; rhythmic unit is independent of orchestration.
- * What they have in common is how data points are consumed. CHORDAL texture expression consumes
- * multiple notes and arranges them vertically,  METRIC/EXTRAMETRIC consumes 1..n notes and arranges them horizontally.
- * 
+ * Texture is instrument-dependent; rhythmic unit is independent of orchestration.<br>
+ * What they have in common is how data points are consumed.<br>
+ * CHORDAL texture expression consumes multiple notes and arranges them vertically,<br>
+ * METRIC/EXTRAMETRIC consumes 1..n notes and arranges them horizontally.
+ * <p>
  * EXTRAMETRIC Expression associates each unit with an
- * allowable tuplet representation of that duration, encapsulated in the util.Ratio class.
+ * allowable tuplet representation of that duration, encapsulated in the util.Ratio class.<br>
  * 16:  "units" : 120 , "ratio" : { "beats" : 3 , "timeOf" : 2}  says that 40 units can be represented as a triplet of 40-unit notes.
- *
+ * <p>
  * Given a root of 480, 120 units can be represented as a single quarter note,
  * a 3:2 eighth note tuplet, or a 5:4 sixteenth note tuplet.
- * 
- * CHORDAL texture Expression associates each allowable unit with expression(s) giving the number of notes
- * permitted in the chord. For example. {4, {2, 3, 4, 5} }
- * says that a chord consisting of 2 to 5 notes are valid for 4 units of duration.
- * CHORDAL works with tuplets as well. For example, 
+ * <p>
+ * CHORDAL texture Expression associates each allowable unit with expression(s) giving the number of notes permitted in the chord.<br>
+ * For example. {4, {2, 3, 4, 5} } says that a chord consisting of 2 to 5 notes are valid for 4 units of duration.<br>
+ * CHORDAL works with tuplets as well. For example, <br>
  * {4,  {{2, [3,2]}, {2, 3, 4, 5}}, ... } says that 4 units can be represented
  * as a 3:2 triplet having 2,3,4, or 5 notes.
- * 
- * chordal property defaults to false but can be overridden for individual
- * instruments as configured (chordalProbability > 0)
- * 
+ * <br>
+ * chordal property defaults to false but can be overridden for individual instruments as configured (chordalProbability > 0)
+ * <p>
  * Principle use of Rhythm scales is converting raw durations values in a data set
- * to a discrete value during music generation. A similar concept
- * is used when converting raw Pitch to a particular Scale pitch.
+ * to a discrete value during music generation,<br>
+ * and in the generation of random Durations (for example to assign to a tone row).<br>
+ * A similar concept is used when converting raw Pitch to a particular Scale pitch.<br>
  * Selection rules are not encoded in the RhythmScale itself, but as a Selector class.
  * 
  * @author don_bacon
@@ -78,9 +79,9 @@ public class RhythmScale  implements IRhythmScale {
 	
 	@JsonProperty("name")	private String name = null;
 	/**
-	 *  root = #divisions in a whole note. This defaults to 480 which allows easy divisions of n-tupples for n=3,5
-	 *  rootUnits = root / time signature beats per measure. In 4/4 time with root=480, this would be 120
-	 *  meaning a quarter note has 120 units.
+	 *  root = #divisions in a whole note. This defaults to 480 which allows easy divisions of n-tupples for n=3,5<br>
+	 *  rootUnits = root / time signature beats per measure. In 4/4 time with root=480, this would be 120<br>
+	 *  meaning a quarter note has 120 units.<br>
 	 *  
 	 *  TODO - refactor to support compound rhythms like 12/8 or 6/4.
 	 */
@@ -178,7 +179,7 @@ public class RhythmScale  implements IRhythmScale {
 		double diff = 0;
 		int low = 0;
 		int high = 0;
-		for(Integer bunits : baseUnits) {	//  {60, 120, 180, 240, 300, 360, 420, 480}
+		for(Integer bunits : baseUnits) {	// example:  {60, 120, 180, 240, 300, 360, 420, 480}
 			diff = bunits.doubleValue() - rawUnits;
 			if(diff == 0) {
 				nunits = bunits;
@@ -285,16 +286,16 @@ public class RhythmScale  implements IRhythmScale {
 	 * Example, root = 480, units = 180 -> "quarter" (120 for the quarter + 60 for the dot).<br>
 	 *          root = 480, units = 30  -> "16th"<br>
 	 * The calculation uses log base 2, for example:  6 - Log[2, 480] + Log[2, 30] // N // IntegerPart<br>
-	 * returns 2 which maps to a 16th NoteType. The constant 6 is the length of NoteTypes.
+	 * returns 2 which maps to a 16th NoteType. The constant 6 is the length(NoteTypes) -1 (the index of the last element).
 	 * @param Note
 	 * @param rootUnits
 	 * @return String note type
 	 */
 	public static String determineNoteType(Note note, int rootUnits) {
 		int baseUnits = note.getDuration().getBaseUnits();
-		int log2root = MathUtil.log2(rootUnits);
-		int log2Units = MathUtil.log2(baseUnits);
-		int ind = 6 - log2root + log2Units;
+		double log2root = MathUtil.log2((double)rootUnits);
+		double log2Units = MathUtil.log2((double)baseUnits);
+		int ind = (int)(6 - log2root + log2Units);
 		
 		return NoteTypes[ind];
 	}
@@ -322,6 +323,12 @@ public class RhythmScale  implements IRhythmScale {
 	@Override
 	public int getUnitsPerMeasure() {
 		return root;
+	}
+
+	@Override
+	public List<Duration> generateDurations(int num) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

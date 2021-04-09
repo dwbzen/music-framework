@@ -1,11 +1,10 @@
 package org.dwbzen.util.music;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -18,7 +17,7 @@ import org.dwbzen.music.element.ScaleFormula;
 import org.dwbzen.music.element.ScaleType;
 import org.dwbzen.music.element.Scales;
 import org.dwbzen.music.element.Score;
-import org.dwbzen.music.musicxml.MusicXMLHelper;
+import org.dwbzen.music.musicxml.ScoreBuilder;
 import org.dwbzen.util.Configuration;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -88,8 +87,9 @@ public class ScaleExportManager  {
 	ObjectMapper mapper = new ObjectMapper();
 	
 	private List<Pitch> rootPitches = new ArrayList<Pitch>();
-	private Map<String, ScaleFormula> scaleFormulas = new TreeMap<>();
-	private Map<String,  List<ScaleFormula>> scaleFormulasGroupMap = new TreeMap<>();
+	private List<ScaleFormula> scaleFormulas = new ArrayList<>();
+	private Map<String,  List<ScaleFormula>> scaleFormulasGroupMap = new HashMap<>();
+	private boolean sortScaleFormulas = false;
 	private String resourceFile = null;
 	private List<String> groups = new ArrayList<>();
 	private String outputFormat = null;
@@ -133,6 +133,7 @@ public class ScaleExportManager  {
 		boolean showStats = false;
 		boolean listFormulas = false;
 		boolean uniqueFormulas = true;
+		boolean sortscales = false;
 		String instrumentName = null;
 		String chords = null;
 		
@@ -158,6 +159,9 @@ public class ScaleExportManager  {
     			else if(args[i].equalsIgnoreCase("-unique")) {
     				// applies only to musicxml format
     				uniqueFormulas = Boolean.valueOf(args[++i]);
+    			}
+    			else if(args[i].equalsIgnoreCase("-sort")) {
+    				sortscales = Boolean.valueOf(args[++i]);
     			}
     			else if(args[i].equalsIgnoreCase("-importformat")) {
     				importFormat = args[++i];
@@ -195,6 +199,7 @@ public class ScaleExportManager  {
     	}
     	List<String> grouplist = groups != null ? Arrays.asList(groups) : new ArrayList<String>();
 		ScaleExportManager scaleExportManager = new ScaleExportManager(resourceFile, outputFormat, grouplist, size);
+		scaleExportManager.setSortScaleFormulas(sortscales);
 		if(showStats) {
 			String s = scaleExportManager.getStats(listFormulas);
 			System.out.println(s);
@@ -224,7 +229,7 @@ public class ScaleExportManager  {
 			Score score = scaleExportManager.exportScalesScore(uniqueFormulas, chords);
 			String outputFile = scaleExportManager.getOutputFileName();
 			log.info("*** Score created ***");
-			createXML(outputFile, score, scaleExportManager.getConfiguration());
+			ScoreBuilder.createXML(outputFile, score, scaleExportManager.getConfiguration());
 			log.info("*** musicXML written to " + outputFile + " ***");
 		}
 		else {
@@ -282,18 +287,17 @@ public class ScaleExportManager  {
 	public String exportScaleFormulas() {
 		stringBuilder = new StringBuilder("[\n");
 		for(String group : groups) {
-			scaleFormulas.keySet()
+			scaleFormulas
 			.stream()
-			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
-			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
-			.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().equals(scaleName))
-			.forEach(s ->  exportScaleFormula(scaleFormulas.get(s)));
+			.filter(s -> size == 0 || s.getSize() == size)
+			.filter(s -> group == null || s.getGroups().contains(group))
+			.filter(s -> scaleName == null || s.getName().toLowerCase().equals(scaleName))
+			.forEach(s ->  exportScaleFormula(s));
 		}
 		stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
 		stringBuilder.append("]");
 		return(stringBuilder.toString());
 	}
-	
 
 	private void exportScaleFormula(ScaleFormula sf) {
 		String names = null;
@@ -303,7 +307,9 @@ public class ScaleExportManager  {
 			stringBuilder.append(sf.toJson() + ",\n");
 		}
 		else if(outputFormat.equalsIgnoreCase("RawJSON")) {
-			// sample: {"Minor Melodic":{ "alternateNames" : [ "Jazz Minor"], "groups":["minor"], "formula":[2,1,2,2,2,2,1],"size":7} }
+			/*
+			 *  sample: {"Minor Melodic":{ "alternateNames" : [ "Jazz Minor"], "groups":["minor"], "formula":[2,1,2,2,2,2,1],"size":7} }
+			 */
 			stringBuilder.append("{\"" + sf.getName() + "\":{");
 			
 			try {
@@ -345,13 +351,23 @@ public class ScaleExportManager  {
 	public List<ScaleFormula> findScaleFormulas() {
 		List<ScaleFormula> formulas = new ArrayList<ScaleFormula>();
 		for(String group : groups) {
-			scaleFormulas.keySet()
-			.stream()
-			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
-			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
-			.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().equals(scaleName))
-			.sorted()
-			.forEach(s ->  formulas.add(scaleFormulas.get(s)));
+			if(sortScaleFormulas) {
+				scaleFormulas
+				.stream()
+				.filter(s -> size == 0 || s.getSize() == size)
+				.filter(s -> group == null || s.getGroups().contains(group))
+				.filter(s -> scaleName == null || s.getName().toLowerCase().equals(scaleName))
+				.sorted()
+				.forEach(s ->  formulas.add(s));
+			}
+			else {
+				scaleFormulas
+				.stream()
+				.filter(s -> size == 0 || s.getSize() == size)
+				.filter(s -> group == null || s.getGroups().contains(group))
+				.filter(s -> scaleName == null || s.getName().toLowerCase().equals(scaleName))
+				.forEach(s ->  formulas.add(s));
+			}
 		}
 		return formulas;
 	}
@@ -359,12 +375,12 @@ public class ScaleExportManager  {
 	public String exportScales() {
 		stringBuilder = new StringBuilder("[\n");
 		for(String group : groups) {
-			scaleFormulas.keySet()
+			scaleFormulas
 			.stream()
-			.filter(s -> size == 0 || scaleFormulas.get(s).getSize() == size)
-			.filter(s -> group == null || scaleFormulas.get(s).getGroups().contains(group))
-			.filter(s -> scaleName == null || scaleFormulas.get(s).getName().toLowerCase().equals(scaleName))
-			.forEach(s ->  exportScales(scaleFormulas.get(s)));
+			.filter(s -> size == 0 || s.getSize() == size)
+			.filter(s -> group == null || s.getGroups().contains(group))
+			.filter(s -> scaleName == null || s.getName().toLowerCase().equals(scaleName))
+			.forEach(s ->  exportScales(s));
 		}
 		stringBuilder.deleteCharAt(stringBuilder.length()-2);		// drop the trailing comma
 		stringBuilder.append("]");
@@ -404,7 +420,9 @@ public class ScaleExportManager  {
 			rootPitches.add(Pitch.C);
 		}
 		String scoreTitle = "Scales_"  + dateFormat.format(new Date());
-		// if scalesInstrumentName is null, ScoreScaleCreator uses Piano as the default
+		/*
+		 * if scalesInstrumentName is null, ScoreScaleCreator uses Piano as the default
+		 */
 		scaleCreator = new ScoreScaleCreator(scoreTitle, scalesInstrumentName, unique);
 		if(chords != null) {
 			boolean createTriadChords = chords.contains("triad");
@@ -458,12 +476,8 @@ public class ScaleExportManager  {
 		return st;
 	}
 
-	public Map<String, ScaleFormula> getScaleFormulas() {
+	public List<ScaleFormula> getScaleFormulas() {
 		return scaleFormulas;
-	}
-
-	public void setScaleFormulas(Map<String, ScaleFormula> scaleFormulas) {
-		this.scaleFormulas = scaleFormulas;
 	}
 
 	public List<Pitch> getRootPitches() {
@@ -535,6 +549,14 @@ public class ScaleExportManager  {
 		this.scalesInstrumentName = scalesInstrumentName;
 	}
 
+	public boolean isSortScaleFormulas() {
+		return sortScaleFormulas;
+	}
+
+	public void setSortScaleFormulas(boolean sortScaleFormulas) {
+		this.sortScaleFormulas = sortScaleFormulas;
+	}
+
 	/**
 	 * Gets group stats - number of scales in each group.<br>
 	 * If listFormulas is true, also lists the scale names in the group.
@@ -565,8 +587,10 @@ public class ScaleExportManager  {
 	 * adds ScaleFormula to scaleFormulas and scaleFormulasGroupMap
 	 */
 	public void accept(ScaleFormula scaleFormula) {
+
 		if(scaleFormula != null) {	
-			scaleFormulas.put(scaleFormula.getName(), scaleFormula);
+			log.debug("accept: " + scaleFormula.getName());
+			scaleFormulas.add(scaleFormula);
 			for(String group : scaleFormula.getGroups()) {
 				if(scaleFormulasGroupMap.containsKey(group)) {
 					scaleFormulasGroupMap.get(group).add(scaleFormula);
@@ -580,22 +604,5 @@ public class ScaleExportManager  {
 		}
 	}
 	
-	public static void createXML(String filename, Score score,  Configuration config) {
-		MusicXMLHelper helper = new MusicXMLHelper(score, config.getProperties());
-		helper.setSuppressTempoMarking(true);
-		helper.convert();	// creates and returns a com.audiveris.proxymusic.ScorePartwise
-		PrintStream ps = System.out;
-		if(filename != null) {
-			try {
-				ps = new PrintStream(new FileOutputStream(filename));
-			}
-			catch(FileNotFoundException e) {
-				log.warn(filename + " not available. Writing to System.out");
-			}
-		}
-		helper.marshall(ps);	// marshals the ScorePartwise instance to an XML file
-		if(filename != null) {
-			ps.close();
-		}
-	}
+
 }

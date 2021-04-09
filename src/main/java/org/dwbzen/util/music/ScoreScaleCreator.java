@@ -29,6 +29,7 @@ import org.dwbzen.music.element.ScaleFormula;
 import org.dwbzen.music.element.ScaleType;
 import org.dwbzen.music.element.Score;
 import org.dwbzen.music.element.ScorePartEntity;
+import org.dwbzen.music.element.Step;
 import org.dwbzen.music.element.Tempo;
 import org.dwbzen.music.element.direction.Metronome;
 import org.dwbzen.music.element.direction.ScoreDirection;
@@ -67,6 +68,7 @@ public class ScoreScaleCreator  {
 	public static final String CONFIG_FILENAME = "/config.properties";
 	public static final String ORCHESTRA_CONFIG_FILENAME="/orchestra.properties";
 	public static final String defaultInstrumentName = "Piano";
+	public static String symbolForMajorChord = "";
 	static ChordManager chordManager = new ChordManager();	// used to determine chord formula and symbol
 	
 	private Properties configProperties = null;
@@ -80,7 +82,7 @@ public class ScoreScaleCreator  {
     private int notesPerMeasure = 8;	// eighth notes, 4/4 time signature
     private int measureCounter = 0;	// global counter of measures added
 	private Key scoreKey;
-	private IRhythmScale rhythmScale = null;	// deteremined by the Intrument
+	private IRhythmScale rhythmScale = null;	// determined by the Instrument
 	
 	private List<ScaleFormula> scaleFormulas = new ArrayList<>();
 	private List<Pitch> rootPitches = new ArrayList<>();
@@ -220,7 +222,9 @@ public class ScoreScaleCreator  {
 				}
 
 				ScaleType scaleType = ScaleExportManager.getScaleType(formula);
-				Scale scale = new Scale(name, null, scaleType, pitch, formula, Key.C_MAJOR, Alteration.FLAT);
+				String pitchString = pitch.toString(-1);
+				scoreKey = Key.rootKeyMap.containsKey(pitchString) ? Key.rootKeyMap.get(pitchString) :  Key.C_MAJOR;
+				Scale scale = new Scale(name, null, scaleType, pitch, formula, scoreKey, scoreKey.getAlteration());
 				/*
 				 * scalePitches are octave neutral (i.e. octave = -1) and includes a repeat of the root note.
 				 * For example: C, D, Eb, F, Gb, A, C  formula=[2, 1, 2, 1, 3, 3] ("Pyramid Hexatonic")
@@ -432,6 +436,9 @@ public class ScoreScaleCreator  {
 				chordManager.addChordFormulaToChord(chord);		// finds and adds the ChordFormula if there is one
 				if(chord.getChordFormula() != null) {
 					chordSymbol = chord.toString(true);
+					if(chordSymbol.endsWith("M")) {		// drop the "M" for Major and use the symbolForMajorChord instead (which could be empty string)
+						chordSymbol = chordSymbol.substring(0, chordSymbol.length()-1) + symbolForMajorChord;
+					}
 					// add the symbol as a system direction below staff 1 (instead of a harmony element)
 					addScoreDirection(1, measure, chordSymbol, "below", false);
 				}
@@ -514,13 +521,16 @@ public class ScoreScaleCreator  {
 		int scaleLength = scale.size() - 1;
 		List<Pitch> scalePitches = scale.getPitches(descending).subList(0, scaleLength);
 		Pitch scaleRootPitch = scalePitches.get(0);
-		
+		Step scaleRootPitchStep = scaleRootPitch.getStep();
 		List<Pitch> scorePitches = new ArrayList<Pitch>();
 		int octaveNumber = descending ? 6 : 4;
+		
 		for(int octnum = 0; octnum <nOctaves; octnum++) {
 			int pc = 0;
+			Step prevStep = Step.SILENT;
 			for(Pitch p : scalePitches) {
 				Pitch scorePitch = new Pitch(p);
+				Step pitchStep = scorePitch.getStep();
 				if(descending) {
 					scorePitch.setOctave(octaveNumber);
 					if(pc == 0) {
@@ -529,19 +539,15 @@ public class ScoreScaleCreator  {
 					pc++;
 				}
 				else {
-					if(pc < scaleLength) {
-						scorePitch.setOctave(octaveNumber);
-						pc++;
+					if(pitchStep.compareTo(prevStep) < 0) {
+						octaveNumber++;
 					}
-					else {
-						pc = 0;
-						octaveNumber = octaveNumber + 1;
-						scorePitch.setOctave(octaveNumber);
-					}
+					scorePitch.setOctave(octaveNumber);
+					prevStep = pitchStep;
 				}
 				scorePitches.add(scorePitch);
 			}
-			if(!descending) {
+			if(!descending && scaleRootPitchStep.compareTo(Step.C) == 0 ) {
 				octaveNumber++;
 			}
 		}

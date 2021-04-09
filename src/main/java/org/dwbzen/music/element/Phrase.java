@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Certain instruments require a Grand Staff (2 staves). By default, operations apply to all staves,<br>
  * or optionally constrained to a specific staff.</p>
  * Note that Measure encapsulates the staves required for the Instrument.
+ * 
  * @author don_bacon
  *
  */
@@ -52,11 +53,10 @@ public class Phrase implements IJson, Cloneable {
 	/**
 	 * Appends a given Phrase to the end of this Phrase<br>
 	 * <b>Note</b> this assumes that the Measures in each Phrase are complete with respect to the units per measure.
-	 * @param phrase
+	 * @param phrase the Phrase to add
 	 */
 	public void add(Phrase phrase) {
-		// TODO
-		
+		measures.addAll(phrase.getMeasures());
 	}
 
 	@Override
@@ -85,9 +85,10 @@ public class Phrase implements IJson, Cloneable {
 	}
 	
 	/**
-	 * 
+	 * Create a new Phrase from a given Phrase with the notes in reverse order.<br>
+	 * This assumes the Measures in the Phrase are all complete with respect to number of units.
 	 * @param notesOnly - if true, only the pitches are reversed, the durations, ties remain the same.
-	 * @return  Phrase with the designated staff/staves in retrograde.
+	 * @return  Phrase with the designated staff/staves in retrograde (i.e. backwards)
 	 */
 	public Phrase getRetrograde(boolean notesOnly) {
 		Phrase phrase = null;
@@ -128,7 +129,7 @@ public class Phrase implements IJson, Cloneable {
 	private Phrase getRetrogradeNotesOnly() {
 		/*
 		 * keep the same note durations/types; update pitches to retrograde
-		 * TODO
+		 * TODO finish this
 		 */
 		StaffPitchCollection spc = getStaffPitches().getRetrograde();	// all the pitches on all staves
 		Phrase phrase = clone();
