@@ -53,8 +53,8 @@ import org.dwbzen.util.music.InstrumentMaker;
  * <p>
  * The ScoreBuilderRunner class can be used or sub-classed to get client input and create/output a score.<br>
  * Note - Measure(s) are not checked for errors (except null) before adding<br>
- * as they are assumed to be complete and correct.<p/>
- * Note - currently this supports building a score for a single instrument only!<p/>
+ * as they are assumed to be complete (includes all score instruments) and correct (durations add up).<p/>
+ * 
  * Note - currently supports a "4/4" time signature only.
  *
  * @author don_bacon

@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.dwbzen.music.IScoreFactory;
 import org.dwbzen.music.ScoreFactory;
 import org.dwbzen.music.ScorePart;
-import org.dwbzen.music.element.Alteration;
 import org.dwbzen.music.element.Barline;
 import org.dwbzen.music.element.Chord;
 import org.dwbzen.music.element.Duration;
@@ -52,10 +51,21 @@ import org.dwbzen.util.Configuration;
  * For more examples, see ScaleGroups.xlsx in the doc folder.<br>
  * By default duplicates do not appear in the created score. If this is not the desired behavior<br>
  * set unique = true when invoking the constructor or set "-unique true" when running ScaleExportManager.<p>
- * TODO add chord names. When a Chord is created, determine the intervals. For example given ["C4", "Eb4", "G4", "B4"]<br>
- * the formula is [3, 4, 4] intervals {"m3", "M3", "M3"}. Find the corresponding ChordFormula<br>
- * by formula or intervals. In this example the chord name is "Minor major seventh", the chord symbol is "Cm(M7)"<br>
- * The chord symbol can then be added to the score. It would be omitted if there is no corresponding chord formula.<br>
+ * 
+ * If the boolean chordSymbols flag is true, this will try to find the corresponding ChordFormula<br>
+ * from the intervals in the chord notes (triad of 7th).<br>
+ * If the chord formula is found, the chord symbol is added to the score as block text.<br>
+ * This is to avoid a conflict with certain MuseScore plug-ins that can also <br>
+ * add chord symbols as a Harmony element associated with each individual chord<br>
+ * If the chord formula can't be found the text will appear as "<root>??", for example "E??"<br>
+ * It can recognize chord inversions and these are added as slash chords, for example "Ab7/C"</p>
+ * 
+ * The "M" is dropped from the chord symbol for Major triads and the value of symbolForMajorChord<br>
+ * is used instead. The default value is a blank, so if you really want "CM" instead of "C" (for example)<br>
+ * just set symbolForMajorChord = "M" or whatever string you want.</p>
+ * 
+ * For more information on chord symbols see the Wikipedia article 
+ *  <A HREF="https://en.wikipedia.org/wiki/Chord_(music)#Notation">Chord (music)</A>
  * 
  * @author don_bacon
  *
@@ -93,6 +103,7 @@ public class ScoreScaleCreator  {
 	private boolean uniqueFormulas = true;		//  eliminates duplicate formulas by default
 	private boolean createTriadChords = false;
 	private boolean create7thChords = false;
+	private boolean chordSymbols = false;
 	
 	public ScoreScaleCreator(String title) {
 		scoreTitle = title;
@@ -434,18 +445,21 @@ public class ScoreScaleCreator  {
 				chord.setNoteType("eighth");
 				chord.setStaff(staffNumber);
 				chordManager.addChordFormulaToChord(chord);		// finds and adds the ChordFormula if there is one
-				if(chord.getChordFormula() != null) {
-					chordSymbol = chord.toString(true);
-					if(chordSymbol.endsWith("M")) {		// drop the "M" for Major and use the symbolForMajorChord instead (which could be empty string)
-						chordSymbol = chordSymbol.substring(0, chordSymbol.length()-1) + symbolForMajorChord;
+				if(isChordSymbols()) {
+					// add chord symbols if known
+					if(chord.getChordFormula() != null) {
+						chordSymbol = chord.toString(true);
+						if(chordSymbol.endsWith("M")) {		// drop the "M" for Major and use the symbolForMajorChord instead (which could be empty string)
+							chordSymbol = chordSymbol.substring(0, chordSymbol.length()-1) + symbolForMajorChord;
+						}
+						// add the symbol as a system direction below staff 1 (instead of a harmony element)
+						addScoreDirection(1, measure, chordSymbol, "below", false);
 					}
-					// add the symbol as a system direction below staff 1 (instead of a harmony element)
-					addScoreDirection(1, measure, chordSymbol, "below", false);
-				}
-				else {
-					// don't recognize this chord
-					chordSymbol = chord.getChordNotes().get(0).getPitch().getStep().toString() + "???";
-					addScoreDirection(1, measure, chordSymbol, "below", false);
+					else {
+						// don't recognize this chord
+						chordSymbol = chord.getChordNotes().get(0).getPitch().getStep().toString() + "??";
+						addScoreDirection(1, measure, chordSymbol, "below", false);
+					}
 				}
 				measure.accept(staffNumber, chord);
 				index++;
@@ -612,9 +626,11 @@ public class ScoreScaleCreator  {
 		}
 	}
 	
+	/*
 	private void padMeasure_lastChord(Chord chord, int staffNumber, Measure lastMeasure, int remainingUnits) {
-		// TODO finish me
+		//  finish me
 	}
+	*/
 
 	/**
 	 * 
@@ -711,6 +727,14 @@ public class ScoreScaleCreator  {
 
 	public void setCreate7thChords(boolean create7thChords) {
 		this.create7thChords = create7thChords;
+	}
+
+	public boolean isChordSymbols() {
+		return chordSymbols;
+	}
+
+	public void setChordSymbols(boolean chordSymbols) {
+		this.chordSymbols = chordSymbols;
 	}
 
 }

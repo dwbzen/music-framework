@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,6 +52,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * <dt>-file file_name</dt> <dd>Output to file: &lt;file_name>+yyyy-MM-dd.&lt;extension> where extension is ".json" or ".musicxml" </dd>
  * <dt>-name scale_name</dt>  <dd>export only the named scale (case insensitive)</dd>
  * <dt>-chords chords</dt>  <dd>create 7th and/or triad chords along with the scale. Applies only to -format "musicxml"</dd>
+ * <dt>-symbols true|false</dt> <dd>When creating triads and/or 7th chords, add chord symbols if known. Default is false</dd>
  * </dl>
  * When using -resource, specify the filename only, as in "myResourceFile.json" Files are assumed to be in /data/music project folder.</p>
  * JSON out put can be imported into MongoDB or Mathematica depending on specified format</p>
@@ -78,6 +78,7 @@ public class ScaleExportManager  {
 	static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	public static final String CONFIG_FILENAME = "/config.properties";
 	public static final String ORCHESTRA_CONFIG_FILENAME="/orchestra.properties";
+	public static final String default_title = "Scales";
 	
 	private Configuration configuration = null;
 	
@@ -98,6 +99,7 @@ public class ScaleExportManager  {
 	private String scaleName = null;	// regex scale name matching
 	private int size = 0;
 	private String outputFileName = null;
+	private String scoreTitle = null;
 	private String scalesInstrumentName = null;
 	
 	public ScaleExportManager(String resource, String format, List<String> groups, int size) {
@@ -130,12 +132,14 @@ public class ScaleExportManager  {
 		boolean exportFormulas = false;
 		boolean scales = false;
 		String fileName = null;
+		String scoreTitle = null;
 		boolean showStats = false;
 		boolean listFormulas = false;
 		boolean uniqueFormulas = true;
 		boolean sortscales = false;
 		String instrumentName = null;
 		String chords = null;
+		boolean chordSymbols = false;
 		
     	if(args.length > 0) {
     		for(int i = 0; i<args.length; i++) {
@@ -189,11 +193,18 @@ public class ScaleExportManager  {
     				// applies to musicXML output
     				chords = args[++i];
     			}
+    			else if(args[i].equalsIgnoreCase("-symbols")) {
+    				// include chord symbols (names) for triads/7th chords
+    				// applies to musicXML output if -chords are also included
+    				chordSymbols = Boolean.valueOf(args[++i]);
+    			}
     			else if(args[i].equalsIgnoreCase("-file")) {
     				// base filename including the full path - extension added later depending on output format
     				// for example, "/Users/DWBZe/Documents/Music/Scores/musicXML/Scales"
+    				int n = args[++i].lastIndexOf('/');
+    				scoreTitle = n>=0 ? args[i].substring(n+1) : ScaleExportManager.default_title;
     				String date = dateFormat.format(new Date());
-    				fileName = args[++i] + date;
+    				fileName = args[i] + date;
     			}
     		}
     	}
@@ -225,8 +236,8 @@ public class ScaleExportManager  {
 		
 		if(isMusicXML) {
 			scaleExportManager.setScalesInstrumentName(instrumentName);
-			
-			Score score = scaleExportManager.exportScalesScore(uniqueFormulas, chords);
+			scaleExportManager.setScoreTitle(scoreTitle);
+			Score score = scaleExportManager.exportScalesScore(uniqueFormulas, chords, chordSymbols);
 			String outputFile = scaleExportManager.getOutputFileName();
 			log.info("*** Score created ***");
 			ScoreBuilder.createXML(outputFile, score, scaleExportManager.getConfiguration());
@@ -414,21 +425,22 @@ public class ScaleExportManager  {
 	 * 
 	 * @return musicXML String.
 	 */
-	public Score exportScalesScore(boolean unique, String chords) {
+	public Score exportScalesScore(boolean unique, String chords, boolean chordSymbols) {
 		List<ScaleFormula> scaleFormulas =  findScaleFormulas();
 		if(rootPitches.isEmpty()) {
 			rootPitches.add(Pitch.C);
 		}
-		String scoreTitle = "Scales_"  + dateFormat.format(new Date());
+		String title = getScoreTitle() + "_"  + dateFormat.format(new Date());
 		/*
 		 * if scalesInstrumentName is null, ScoreScaleCreator uses Piano as the default
 		 */
-		scaleCreator = new ScoreScaleCreator(scoreTitle, scalesInstrumentName, unique);
+		scaleCreator = new ScoreScaleCreator(title, scalesInstrumentName, unique);
 		if(chords != null) {
 			boolean createTriadChords = chords.contains("triad");
 			boolean create7thChords = chords.contains("7");
 			scaleCreator.setCreate7thChords(create7thChords);
 			scaleCreator.setCreateTriadChords(createTriadChords);
+			scaleCreator.setChordSymbols(chordSymbols);
 		}
 		Score theScore = scaleCreator.createScore(scaleFormulas, rootPitches);
 		return theScore;
@@ -536,6 +548,13 @@ public class ScaleExportManager  {
 		return configuration;
 	}
 
+	public String getScoreTitle() {
+		return scoreTitle;
+	}
+
+	public void setScoreTitle(String scoreTitle) {
+		this.scoreTitle = scoreTitle;
+	}
 
 	public Map<String, List<ScaleFormula>> getScaleFormulasGroupMap() {
 		return scaleFormulasGroupMap;
