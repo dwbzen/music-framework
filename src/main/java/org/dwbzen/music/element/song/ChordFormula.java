@@ -242,7 +242,8 @@ public class ChordFormula implements IChordFormula, IJson, Cloneable, IMapped<St
 		List<Integer> ps = IFormula.formulaToPitchIndexes(formula);
 		for(Integer i:ps) {
 			int shiftamt = (i>=12) ? i-12 : i;
-			fnum += (1<<shiftamt);
+			int amt = (1<<shiftamt);
+			fnum += amt;
 		}
 		return fnum;
 	}

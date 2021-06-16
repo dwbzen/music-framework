@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dwbzen.music.element.Key;
 import org.dwbzen.music.element.Pitch;
 import org.dwbzen.music.element.ScaleFormula;
+import org.dwbzen.music.element.song.ChordFormula;
 
 public class ScaleFormulaTest {
 	static ObjectMapper mapper = new ObjectMapper();
@@ -61,6 +62,14 @@ public class ScaleFormulaTest {
 		root = new Pitch("F4");
 		Key key = Key.F_MINOR;
 		createPitches(scaleFormula, root, key);
+		
+		/*
+		 * scale formula number
+		 */
+		int[] scaleFormula2 = {1, 2, 1, 2, 1, 2, 2, 1};
+		int sfnumber = ChordFormula.computeFormulaNumber(scaleFormula2);
+		System.out.println(sfnumber);
+		
 	}
 	
 	static void createPitches(ScaleFormula sf, Pitch root, Key key) {
