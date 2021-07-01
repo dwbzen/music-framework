@@ -71,11 +71,25 @@ public class PitchTest extends TestCase {
 		assertEquals(res.compareTo(fsharp3), 0);	// F#3 == Gb3
 		assertEquals(res.getAlteration(), -1);
 		
-		// boundry conditions
+		// boundary conditions
 		Pitch D0 = new Pitch("D0");
 		res = D0.decrement(3, 0);
 		Pitch C0 = Pitch.C0;
 		assertEquals(res.compareTo(C0), 0);
+		
+		// test that octave is adjusted correctly
+		Pitch p1 = new Pitch("D2");
+		p1.decrement(3);	// should be B1
+		Pitch p2 = new Pitch("B1");
+		assertEquals(p1.compareTo(p2),0);
+		log.info("p1 == p2:" + p1.toString() + "==" + p2.toString());
+		
+		// test that octave is not decremented
+		p1 = new Pitch("D2");
+		Pitch p1Dec = p1.decrementPitchOnly(3, -1);
+		assertEquals(p1Dec.getOctave(), 2);
+		assertEquals(p2.getStep().compareTo(p1Dec.getStep()),0);
+		log.info("p1, p1Dec:" + p1.toString() + " " + p1Dec.toString());
 	}
 	
 	@Test
@@ -87,6 +101,20 @@ public class PitchTest extends TestCase {
 		assertEquals(res.compareTo(gsharp4), 0);
 		c4.adjustPitch(20);
 		assertEquals(c4.compareTo(gsharp5), 0);
+		
+		// test that octave is incremented
+		Pitch p1 = new Pitch("B1");
+		p1.increment(3);	// should be D2
+		Pitch p2 = new Pitch("D2");
+		assertEquals(p1.compareTo(p2),0);
+		log.info("p1 == p2:" + p1.toString() + "==" + p2.toString());
+		
+		// test that octave is not incremented
+		p1 = new Pitch("B1");
+		Pitch p1Inc = p1.incrementPitchOnly(3, -1);
+		assertEquals(p1Inc.getOctave(), 1);
+		assertEquals(p2.getStep().compareTo(p1Inc.getStep()),0);
+		log.info("p1, p1Inc:" + p1.toString() + " " + p1Inc.toString());
 	}
 	
 	@Test

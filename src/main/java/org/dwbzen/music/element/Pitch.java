@@ -142,7 +142,9 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 		step = s;
 		octave = oct;
 		alteration = alt.value();
-		setRangeStep();
+		if(octave >= 0) {		// if not octave-neutral set the range step, otherwise it's 0
+			setRangeStep();
+		}
 	}
 	
 	public Pitch(Step s, int oct, int alt) {
@@ -150,7 +152,9 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 		step = s;
 		octave = oct;
 		alteration = alt;
-		setRangeStep();
+		if(octave >= 0) {		// if not octave-neutral set the range step, otherwise it's 0
+			setRangeStep();
+		}
 	}
 
 	public  Pitch(Step s, int oct) {
@@ -194,8 +198,8 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 		step =  other.getStep();
 		octave = other.getOctave();
 		alteration = other.getAlteration();
-		adjustPitch(transposeSteps, alterationPreference);
 		setRangeStep();
+		adjustPitch(transposeSteps, alterationPreference);
 	}
 	
 	/**
@@ -290,7 +294,9 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 	}
 
 	/**
-	 * Increments this by n chromatic steps and insures the alteration preference is honored.
+	 * Adds n steps to this. If this is octave neutral, the resulting Pitch will also have octave == -1.<br>
+	 * Also adjusts the octave if needed and insures the alteration preference is honored.
+	 * NOTE - this is not altered.
 	 * @param n #steps to increment, must be >= 0
 	 * @param altPref 0 = no preference, -1 = flats, 1 = sharps
 	 * @return a new Pitch altered
@@ -306,7 +312,8 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 	
 	@Override
 	/**
-	 * Adds n steps to this. If this is octave neutral, the resulting Pitch will also have octave == -1.
+	 * Adds n steps to this. If this is octave neutral, the resulting Pitch will also have octave == -1.<br>
+	 * Also adjusts the octave if needed.
 	 * @param n number of steps to increment. If < 0, decrements by that amount.
 	 */
 	public void increment(int n)  {
@@ -319,16 +326,28 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 			else {
 				temp = (rs < 0) ? minPitch : maxPitch;
 			}
-			int noctave = octave;	// retain existing octave#
 			copy(temp);
-			octave = noctave;
 		}
 	}
 	
 	/**
-	 * Lowers this by n steps,  adjusts the range step
-	 * and sets the enharmonic equivalent of the adjusted pitch.
-	 * 
+	 * Adds n steps to this. If this is octave neutral, the resulting Pitch will also have octave == -1.<br>
+	 * This retains the existing octave. For example  B1.incrementingPitchOnly(3,0) is D1 instead of D2.
+	 * NOTE - this is not altered.
+	 * @param n number of steps to increment. If < 0, decrements by that amount.
+	 * @param altPref alteration preference: 0 = no preference, 1 = sharps, -1 = flats)
+	 * @return a new Pitch altered
+	 */
+	public Pitch incrementPitchOnly(int n, int altPref)  {
+		int myOctave = this.octave;
+		Pitch p = increment(n, altPref);
+		p.setOctave(myOctave);
+		return p;
+	}
+	
+	/**
+	 * Lowers this by n steps,  adjusts the range step and sets the enharmonic equivalent of the adjusted pitch.<br>
+	 * Also adjusts the octave if needed.
 	 * @param n number of steps to decrement, must be >= 0
 	 * @param altPref new alteration preference: 0 = no preference, 1 = sharps, -1 = flats)
 	 * @return a new Pitch altered
@@ -345,7 +364,7 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 	@Override
 	/**
 	 * Lowers this by n steps.
-	 * 
+	 * Also adjusts the octave if needed.
 	 * @param n  number of steps to decrement, if < 0 increments by that amount.
 	 */
 	public void decrement(int n) {
@@ -358,10 +377,23 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 			else {
 				temp = (rs < 0) ? minPitch : maxPitch;
 			}
-			int noctave = octave;	// retain existing octave#
 			copy(temp);
-			octave = noctave;
 		}
+	}
+	
+	/**
+	 * Lowers this by n steps. If this is octave neutral, the resulting Pitch will also have octave == -1.<br>
+	 * This retains the existing octave. For example  D2.decrementPitchOnly(3, -1) is Bb2 instead of Bb1.
+	 * NOTE - this is not altered.
+	 * @param n number of steps to increment. If < 0, decrements by that amount.
+	 * @param altPref alteration preference: 0 = no preference, 1 = sharps, -1 = flats)
+	 * @return a new Pitch altered
+	 */
+	public Pitch decrementPitchOnly(int n, int altPref)  {
+		int myOctave = this.octave;
+		Pitch p = decrement(n, altPref);
+		p.setOctave(myOctave);
+		return p;
 	}
 
 	/**

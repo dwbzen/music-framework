@@ -66,6 +66,7 @@ public interface IFormula extends INameable, Serializable {
 	/**
 	 * Creates a List of Pitch for a Scale/Chord with a given formula and root
 	 * A Scale may consist of a single note. In that case the formula is [0].
+	 * If the root note is octave neutral (i.e. octave = -1), the resulting pitches will also be.
 	 * 
 	 * @param formula an int[] formula
 	 * @param root root Pitch of the scale
@@ -80,11 +81,17 @@ public interface IFormula extends INameable, Serializable {
 		plist.add(nroot);
 		Pitch next = null;
 		int stepIncrement = 0;
+		boolean octaveNeutral = (root.getOctave() < 0);
 		int preference = (altpref != null) ? altpref.value() : 
 			(key != null && key.getSignature() != null && key.getSignature().length > 0) ? key.getSignature()[0].getAlteration() : 0;
 		for(int i: formula) {
 			stepIncrement += i;
-			next = nroot.increment(stepIncrement, preference);
+			if(octaveNeutral) {
+				next = nroot.incrementPitchOnly(stepIncrement, preference);
+			}
+			else {
+				next = nroot.increment(stepIncrement, preference);
+			}
 			plist.add(next);
 		}
 		return plist;

@@ -28,7 +28,7 @@ public class ChordManagerTest extends TestCase {
 		chordFormulas = chordManager.getChordFormulas();
 		int nchords = chordFormulas.getChordFormulas().size();
 		log.debug(nchords + " chords loaded");
-		assertEquals(57, nchords);
+		assertEquals(67, nchords);
 	}
 	
 	
