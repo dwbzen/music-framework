@@ -554,7 +554,8 @@ public class ScaleTransformer extends Transformer {
 		 */
 		Scale cscale = Scales.FULL_RANGE_CHROMATIC_SCALE;
 		for(Pitch p : cscale.getPitches()) {
-			Pitch pNeutral = new Pitch(p.getStep(), -1, p.getAlteration());
+			int rangestep = p.getRangeStep() %12;
+			Pitch pNeutral = new Pitch(p.getStep(), rangestep, -1, p.getAlteration());
 			int octaveAdj = octaveAdjustMapTemp.get(pNeutral);
 			int octaveAdjUP = (octaveAdj > 0) ? octaveAdj : 0;
 			int octaveAdjDOWN = (octaveAdj < 0) ? octaveAdj : 0;
@@ -562,6 +563,7 @@ public class ScaleTransformer extends Transformer {
 			Pitch mpdown = transformMapDOWNTemp.get(pNeutral);
 			Pitch mappedUp = new Pitch(mpup.getStep(),  p.getOctave() + octaveAdjUP, mpup.getAlteration());
 			Pitch mappedDown =  new Pitch(mpdown.getStep(),  p.getOctave() + octaveAdjDOWN, mpdown.getAlteration());
+			log.info("pitch: " + p.toString(true) + " mappedUp, mappedDown: " + mappedUp.toString(true) + " " + mappedDown.toString(true));
 			transformMapUP.put(p, mappedUp);
 			transformMapDOWN.put(p, mappedDown);
 		}

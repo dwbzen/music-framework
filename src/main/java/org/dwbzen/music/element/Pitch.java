@@ -147,6 +147,14 @@ public final class Pitch  extends PitchElement implements Comparable<Pitch> {
 		}
 	}
 	
+	public Pitch(Step s, int rangestep, int oct, int alt) {
+		this();
+		step = s;
+		octave = oct;
+		alteration = alt;
+		rangeStep = rangestep;
+	}
+	
 	public Pitch(Step s, int oct, int alt) {
 		this();
 		step = s;
