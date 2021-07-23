@@ -116,11 +116,10 @@ public class Monophonic16StandardRhythmScaleFactory  extends AbstractRhythmScale
 		/*
 		 * EXTRAMETRIC expression
 		 */
-		expressions.get(60).addRhythmExpression(TextureType.MONOPHONIC, new RhythmExpression(30, Ratio.THREE_TO_TWO, rhythmScale));		// 16th
-		expressions.get(120).addRhythmExpression(TextureType.MONOPHONIC, new RhythmExpression(30, Ratio.FIVE_TO_FOUR, rhythmScale));
+		//expressions.get(60).addRhythmExpression(TextureType.MONOPHONIC, new RhythmExpression(30, Ratio.THREE_TO_TWO, rhythmScale));		// 16th
+		//expressions.get(120).addRhythmExpression(TextureType.MONOPHONIC, new RhythmExpression(30, Ratio.FIVE_TO_FOUR, rhythmScale));
 		
-		RhythmExpression re120_3in2 =  new RhythmExpression(60, Ratio.THREE_TO_TWO, rhythmScale);										// 8th
-		expressions.get(120).addRhythmExpression(TextureType.MONOPHONIC, re120_3in2);		
+		expressions.get(120).addRhythmExpression(TextureType.MONOPHONIC, new RhythmExpression(60, Ratio.THREE_TO_TWO, rhythmScale));	// eighth
 		expressions.get(240).addRhythmExpression(TextureType.MONOPHONIC, new RhythmExpression(60, Ratio.FIVE_TO_FOUR, rhythmScale));
 		
 		expressions.get(240).addRhythmExpression(TextureType.MONOPHONIC, new RhythmExpression(120, Ratio.THREE_TO_TWO, rhythmScale));	// quarter

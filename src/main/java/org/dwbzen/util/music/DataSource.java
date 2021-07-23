@@ -17,7 +17,7 @@ import org.dwbzen.util.Configuration;
  * Configuration parameter selectionMode determines how records are selected.
  * If sequential, data records loaded sequentially, none are skipped. So instruments using
  * the same data set will have identical scoring.
- * If random, from 2 to 20 records are skipped on each selection. So the entire data
+ * If random, from 2 to 10 records are skipped on each selection. So the entire data
  * set must be large enough to accommodate worse case scenario. 
  * random selectionMode should be used when multiple instruments use the same
  * fractal data set.
@@ -48,7 +48,7 @@ public abstract class DataSource implements IDataSource {
 	/**
 	 * Sets configuration properties that are common across data sources: instrumentNames, randomSelection
 	 * Then invokes configure() in derived class.</br>
-	 * Maximum number of records to read is estimated as the #measures x score divisions x 2
+	 * Maximum number of records to read is estimated as the #measures x 8<br>
 	 * @param config global Configuration
 	 * @param String instrumentName
 	 */
@@ -60,7 +60,7 @@ public abstract class DataSource implements IDataSource {
 		randomSelection = configProperties.getProperty("selectionMode", SEQUENTIAL).equals(RANDOM);
 		measures = Integer.valueOf( configProperties.getProperty("measures", "20")).intValue();
 		divisionsPerMeasure = Integer.parseInt(configProperties.getProperty("score.measure.divisions", "480"));
-		maxSize = measures * divisionsPerMeasure * 3;
+		maxSize = measures * 8;
 		randomPredicate = new Random(ThreadLocalRandom.current());
 		configure();
 	}

@@ -24,7 +24,7 @@ public class DataLoader  implements Runnable {
 	private MessageProducer producer = null;
 	private String dataSourceName = null;
 	private Configuration configuration = null;
-	
+	private int nrec = 0;
 	private Session session = null;
 	
 	private ScorePart.State state = State.UNKNOWN;
@@ -87,9 +87,11 @@ public class DataLoader  implements Runnable {
 			else if(instrumentSource.equalsIgnoreCase("ifs")) {
 				// ds = new IfsDataSource(configuration, instrumentName);
 			}
+			
 			ds.stream().forEach(rec ->{
 				try {
 					producer.send(session.createTextMessage(rec));
+					nrec++;
 				} catch (JMSException e) {
 					// this is bad, this is VERY bad
 					log.error("JMSException " + e.toString() + " rec: " + rec);
@@ -99,6 +101,7 @@ public class DataLoader  implements Runnable {
 			});
 			ds.close();
 			updateState(State.COMPLETE);
+			log.info(nrec + " records read");
 		} catch (Exception e) {
 			log.error("loadData exception: " +e.toString());
 			e.printStackTrace(System.err);

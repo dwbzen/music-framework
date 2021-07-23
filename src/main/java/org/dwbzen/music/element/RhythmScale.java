@@ -296,7 +296,10 @@ public class RhythmScale  implements IRhythmScale {
 		double log2root = MathUtil.log2((double)rootUnits);
 		double log2Units = MathUtil.log2((double)baseUnits);
 		int ind = (int)(6 - log2root + log2Units);
-		
+		if(note.getDuration().getRatio().getBeats() > 1) {
+			// indicates a tuplet - so select the next highest duration note type
+			++ind;
+		}
 		return NoteTypes[ind];
 	}
 

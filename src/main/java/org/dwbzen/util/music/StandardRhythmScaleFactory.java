@@ -18,6 +18,7 @@ import org.dwbzen.music.element.RhythmicUnitType;
 import org.dwbzen.music.element.TextureType;
 import org.dwbzen.music.element.rhythm.BaseRhythmTextureMap;
 import org.dwbzen.music.element.rhythm.IRhythmTextureMap;
+import org.dwbzen.util.Ratio;
 
 /**
  * A slimmed-down version of Monophonic16StandardRhythmScaleFactory that includes only whole, half, quarter, eighth, <br>
@@ -84,13 +85,21 @@ public class StandardRhythmScaleFactory extends AbstractRhythmScaleFactory {
 			expressions.put(units, textureMap );
 		}
 	}
+	
+	@Override
+	public void addExtrametricExpressions(RhythmScale rhythmScale) {
+		Map<Integer, IRhythmTextureMap> expressions = rhythmScale.getExpressions();
+		
+		expressions.get(240).addRhythmExpression(TextureType.MONOPHONIC, new RhythmExpression(120, Ratio.THREE_TO_TWO, rhythmScale));	// quarter
+		expressions.get(120).addRhythmExpression(TextureType.MONOPHONIC, new RhythmExpression(60, Ratio.THREE_TO_TWO, rhythmScale));	// eighth
+	}
 
 	@Override
 	public ExpressionSelector createRhythmScaleSelector(RhythmScale rhythmScale) {
 		ExpressionSelector selector = new ExpressionSelector(rhythmScale);
 		Map<Integer, IRhythmTextureMap> expressions = rhythmScale.getExpressions();
 
-		// set MONOPONIC texture probabilities to 1
+		// set MONOPONIC texture probabilities to 1 since there are no chords
 		for(Integer units : rhythmScale.getBaseUnits()) {
 			selector.setTextureTypeProbability(units, TextureType.MONOPHONIC, 1.0);
 			// 
@@ -100,7 +109,7 @@ public class StandardRhythmScaleFactory extends AbstractRhythmScaleFactory {
 	}
 
 	/**
-	 * Assigns probabilities to METRIC expressions, and EXTRAMETRIC for 60, 120, 240 and 480 units
+	 * Assigns probabilities to METRIC expressions, and EXTRAMETRIC for 240 units (3 quarter notes in the time of 2)
 	 * @param selector
 	 * @param expressions
 	 * @param units
@@ -110,10 +119,12 @@ public class StandardRhythmScaleFactory extends AbstractRhythmScaleFactory {
 		for(IRhythmExpression unitExpression : exps) {
 			if(units%60 == 0) {		// eighth, quarter, half, whole notes
 				if(unitExpression.getRhythmicUnitType().equals(RhythmicUnitType.METRIC)) {
-					selector.setRhythmicUnitTypeProbability(units, unitExpression, 1.0);
+					selector.setRhythmicUnitTypeProbability(units, unitExpression, 0.8);
 				}
-				else {
-					// no Extrametric expressions
+				else { // EXTRAMETRIC
+					int nnotes = unitExpression.getRatio().getNumberOfNotes();
+					double prob = (nnotes==3) ? 0.2 : 0.1;
+					selector.setRhythmicUnitTypeProbability(units, unitExpression, prob);
 				}
 			}
 			else {

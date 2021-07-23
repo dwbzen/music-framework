@@ -95,6 +95,7 @@ public class ProductionFlow implements Runnable {
     private Connection connection = null;
     private String xmlFileName = null;
     private boolean createXML = false;
+    private boolean showScore = false;
     private String xmlBaseFileName = null;
     private boolean randomSelection = false;
     private int measures = 0;
@@ -149,6 +150,7 @@ public class ProductionFlow implements Runnable {
     	boolean createScore = true;
     	boolean createXML = false;
     	boolean saveScore = false;	// save Score to MongoDB
+    	boolean showScore = false;	// show in MuseScore if also creating musicxml file
     	boolean analyze = false;	// analyze generated score and produce statistics
     	String analyzeFileName = null;
     	String host = defaultHost;
@@ -169,9 +171,13 @@ public class ProductionFlow implements Runnable {
     			else if(args[i].startsWith("-saveinter")) {
     				saveintermediate = args[++i].equalsIgnoreCase("true");
     			}    			
-    			else  if(args[i].equalsIgnoreCase("-xml")) {
+    			else if(args[i].equalsIgnoreCase("-xml")) {
     				createXML = true;
     				xmlFileName = args[++i];
+    			}
+    			else if(args[i].equalsIgnoreCase("-show")) {
+    				// display the score in MuseScore3, if createXML is also true
+    				showScore = true;
     			}
     			else if(args[i].equalsIgnoreCase("-createxml")) {
     				// suppress musicXML file creation.
@@ -216,6 +222,7 @@ public class ProductionFlow implements Runnable {
     	pf.setAnalyzeMode(analyze);
     	pf.setAnalyzeFileName(analyzeFileName);
     	pf.setCreateXML(createXML);
+    	pf.setShowScore(showScore);
     	pf.run(loadData, createScore, createXML);
     }
     
@@ -248,6 +255,9 @@ public class ProductionFlow implements Runnable {
 		}
 		if(createXML) {
 			createXML(xmlFileName);
+			if(showScore) {
+				displayMusicXML(xmlFileName);
+			}
 		}
 		if(saveScore) {
 			saveCollection();
@@ -274,6 +284,13 @@ public class ProductionFlow implements Runnable {
 		} catch (JMSException e) {
 			log.error("JMS Exception on close");
 		}
+	}
+
+	private void displayMusicXML(String xmlFileName) {
+		// TODO Auto-generated method stub
+		// fork MuseScore with the filename provided
+		String displayXMLProgram = configProperties.getProperty("musicxmlPath");
+		
 	}
 
 	private void createXML(String filename) {
@@ -789,6 +806,14 @@ public class ProductionFlow implements Runnable {
 
 	public void setSaveIntermediateXML(boolean saveIntermediateXML) {
 		this.saveIntermediateXML = saveIntermediateXML;
+	}
+
+	public boolean isShowScore() {
+		return showScore;
+	}
+
+	public void setShowScore(boolean showScore) {
+		this.showScore = showScore;
 	}
     
 }
