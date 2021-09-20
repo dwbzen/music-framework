@@ -12,11 +12,11 @@ GitHub project: [music-framework](https://github.com/dwbzen/music-framework)
     
 **commonlib**
 
-* gradlew build uploadArchives
+* gradlew build publish
 
 **music-framework**
 
-* gradlew build uploadArchives
+* gradlew build publish
 
 ## Required Components
 * MongoDB - download and install the latest version (4.4.0) of the [MongoDB Community Server](https://www.mongodb.com/try/download/community)
@@ -32,7 +32,7 @@ GitHub project: [music-framework](https://github.com/dwbzen/music-framework)
 
 # Additional Documentation
 The src/docs folder contains documentation on the musical structures used and music generation.
-* [Known Issues and Future Enhancements](KnownIssues_Enhancements.md)
+* [Known Issues and Future Enhancements](src/docs/KnownIssues_Enhancements.md)
 
 * [Chords](src/docs/Chords.md) - Chord design and handling chords in musicXML
 

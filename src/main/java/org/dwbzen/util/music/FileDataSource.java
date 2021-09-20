@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import org.dwbzen.util.Configuration;
 
 /**
- * Streams text data, line by line with no trailing delimiters, from a Json File
+ * Streams text data, line by line with no trailing delimiters from a JSON File
  * 
  * @author don_bacon
  *
@@ -57,8 +57,8 @@ public class FileDataSource extends DataSource {
 		Stream<String> stream3 = null;
 		try {
 			stream1 = Files.lines(path).filter(w -> (w.contains(filters[0]) || w.contains(filters[3])) );	// "type":"IFS" or "type":"stats"
-			if(randomSelection) {	// "type":"Point2D"
-				stream2 = Files.lines(path).filter(w -> w.contains(filters[1])).skip(randomPredicate.getAsInt()).limit(maxSize);
+			if(randomSelection) {
+				stream2 = Files.lines(path).filter(w -> w.contains(filters[1])).skip(randomPredicate.getAsInt()).limit(maxSize);	// "type":"Point2D"
 			}
 			else {
 				stream2 = Files.lines(path).filter(w -> w.contains(filters[1])).limit(maxSize);

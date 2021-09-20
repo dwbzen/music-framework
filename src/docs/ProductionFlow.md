@@ -1,7 +1,10 @@
 ## ProductionFlow
-The ProductionFlow class executes a workflow that produces a [musicXML](https://github.com/w3c/musicxml) file from random or fractal data (in JSON format).
-The resulting musicXML file can be imported into music composition software such as [MuseScore](https://musescore.org/en), Sibelius or Finale.
-ProductionFlow is driven primarily by configuration, in particular config.properties, orchestra.properties, and mongo.properties.
+The ProductionFlow class executes a workflow that produces a [musicXML](https://github.com/w3c/musicxml) file from random or fractal data (in JSON format).<br>
+The resulting musicXML file can be imported into or immediately displayed <br>
+by any music composition software capable of rendering musicxml.<br>
+For example, [MuseScore](https://musescore.org/en), Sibelius or Finale.
+ProductionFlow is driven primarily by configuration, in particular<br>
+config.properties, orchestra.properties, and mongo.properties.<br>
 See the javadoc for a description of command line options.
 
 **config.properties**

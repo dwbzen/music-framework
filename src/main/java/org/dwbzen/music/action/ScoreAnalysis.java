@@ -12,44 +12,50 @@ import org.dwbzen.music.element.Note;
 import org.dwbzen.music.element.Pitch;
 
 /**
- * ScoreAnalysis consists of two interval maps, Note and Pitch frequencies, and Durations.
- * Results are comma-separated suitable for importing into Excel.
+ * ScoreAnalysis consists of two interval maps, Note and Pitch frequencies, and Durations.<br>
+ * Results are comma-separated suitable for importing into Excel.</p>
  * 
- * Each map is keyed by the interval (absolute value of #steps separating a note from its predecessor)
- * The intervals map is a map of relative intervals, i.e. within an octave, so the rage is 0 - 11
- * The absoluteIntervals map takes octaves into account.
+ * Each map is keyed by the interval (absolute value of #steps separating a note from its predecessor).<br>
+ * The intervals map is a map of relative intervals, i.e. within an octave, so the rage is 0 - 11.<br>
+ * The absoluteIntervals map takes octaves into account.<br>
  * 
- * There are 4 counts for each interval key.
- * count[0] = Direction.Down
- * count[1] = Direction.Up
- * count[3] = no change
- * count[4] = sum of counts[0..3]
- * For example 7,7,12,0,19 relative interval means for a interval of 7 steps,
- * 	there are 7 where the direction is Down, 12 where the direction is Up, an 0 where there is no change.
- * Simiarly for absolute intervals, 17,1,4,0,5 specifies the interval direction for an
- *  absolute interval of 17 steps.
- * 
- * Note and Pitch frequencies are useful in analyzing the note spread of a particular scale transform.
+ * There are 4 counts for each interval key.<br>
+ * <ul>
+ * <li>count[0] = Direction.Down</li>
+ * <li>count[1] = Direction.Up</li>
+ * <li>count[3] = no change</li>
+ * <li>count[4] = sum of counts[0..3]</li>
+ * </ul>
+ * </p>
+ * For example 7,7,12,0,19 relative interval means for a interval of 7 steps,<br>
+ * 	there are 7 where the direction is Down, 12 where the direction is Up, an 0 where there is no change.<br>
+ * Simiarly for absolute intervals, 17,1,4,0,5 specifies the interval direction for an absolute interval of 17 steps.
+ * </p>
+ * Note and Pitch frequencies are useful in analyzing the note spread of a particular scale transform.<br>
  * Note Frequency - gives the #occurrences of each note in the score. For example:
- * 	A4,9
- *  A5,4
- *  Bb4,7
- * 
- * Pitch frequency - gives the #occurrences of each pitch in the score. For example (scale was Hirajosji Japan, root D)
- *  A,13
- *  Bb,9
- *  D,42
- *  E,16
- *  F,24
- *  
+ * <ul>
+ * <li>	A4,9</li>
+ * <li> A5,4</li>
+ * <li> Bb4,7</li>
+ * </ul>
+ * Pitch frequency - gives the #occurrences of each pitch in the score. For example ("Hirajosji Japan" scale, root D)
+ * <ul>
+ * <li> A,13</li>
+ * <li> Bb,9</li>
+ * <li> D,42</li>
+ * <li> E,16</li>
+ * <li> F,24</li>
+ *  </ul>
  * Durations - gives the #occurrences of the unique note durations. Useful in analyzing RhythmScales. For example,
- *  { "units" : 1 , "baseUnits" : 1 , "ratio" : { "beats" : 1 , "timeOf" : 1} , "dots" : 0}, 28
- *  { "units" : 12 , "baseUnits" : 8 , "ratio" : { "beats" : 1 , "timeOf" : 1} , "dots" : 1}, 2
- *  { "units" : 16 , "baseUnits" : 16 , "ratio" : { "beats" : 1 , "timeOf" : 1} , "dots" : 0}, 1
- *  { "units" : 2 , "baseUnits" : 2 , "ratio" : { "beats" : 1 , "timeOf" : 1} , "dots" : 0}, 17
- *
+ * <ul>
+ *  <li>{ "units" : 1 , "baseUnits" : 1 , "ratio" : { "beats" : 1 , "timeOf" : 1} , "dots" : 0}, 28</li>
+ *  <li>{ "units" : 12 , "baseUnits" : 8 , "ratio" : { "beats" : 1 , "timeOf" : 1} , "dots" : 1}, 2</li>
+ *  <li>{ "units" : 16 , "baseUnits" : 16 , "ratio" : { "beats" : 1 , "timeOf" : 1} , "dots" : 0}, 1</li>
+ *  <li>{ "units" : 2 , "baseUnits" : 2 , "ratio" : { "beats" : 1 , "timeOf" : 1} , "dots" : 0}, 17</li>
+ * </ul>
+ * 
  * Derived statistics such as %usage, std. dev. etc. not included as that kind of data
- * can be obtained easily by importing into a spreadsheet.
+ * can be obtained easily by importing into a spreadsheet.<br>
  * 
  * partName is "Score" if the analysis is for the Score as a whole,
  * or the name of the part from the configuration, as in Clarinet.partName=Clarinet for example

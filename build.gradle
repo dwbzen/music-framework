@@ -7,17 +7,19 @@
  */
  plugins {
   id "java"
-  id "ivy-publish"
+  id "maven-publish"
 }
 
+// Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
-apply plugin: 'maven-publish'
+apply plugin: 'java-library-distribution'
 apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 15
 targetCompatibility = 15
 group = 'org.dwbzen.music-framework'
-version = '3.1'
+version = '3.2'
 description = 'Music Framework'
 
 jar {
@@ -28,9 +30,7 @@ jar {
 }
 
 repositories {
-    // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
     mavenCentral()
 	mavenLocal()
 	flatDir {
@@ -43,12 +43,17 @@ repositories {
     }	
 }
 
-uploadArchives {
-    repositories {
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			artifactId="music-framework"
+			from components.java
+		}
+	}
+	repositories {
 		add project.repositories.jarRepository
-		add project.repositories.commonlibLib
 		mavenLocal()
-    }
+	}
 }
 
 dependencies {

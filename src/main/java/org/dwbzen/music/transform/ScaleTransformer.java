@@ -68,6 +68,7 @@ public class ScaleTransformer extends Transformer {
 	private Preference preference = Preference.Up;
 	private boolean tied = false;	// global flag to prevent messing up tied notes
 	private Pitch tiedPitch = null;	// global pitch set on START tie
+	private boolean showMappings = true;	// log message showing how a pitch is mapped up/down
 	/*
 	 * Key to use for a given instrument
 	 * will be the same as transformKey for non-transposing
@@ -398,6 +399,14 @@ public class ScaleTransformer extends Transformer {
 		this.scaleName = scaleName;
 	}
 
+	public boolean isShowMappings() {
+		return showMappings;
+	}
+
+	public void setShowMappings(boolean showMappings) {
+		this.showMappings = showMappings;
+	}
+
 	@Override
 	public void configure(Properties props, Instrument instrument) {
 		setDataSourceName(props.getProperty("dataSource", "file"));
@@ -407,6 +416,7 @@ public class ScaleTransformer extends Transformer {
 		Scale scale = null;
 		Pitch rootPitch = null;
 		String scaleKey = "score.transformers." + instrument.getName() + ".ScaleTransformer.scale";
+		showMappings = Boolean.parseBoolean(props.getProperty("score.transformers.showMappings", "true"));
 		if(props.containsKey(scaleKey)) {
 			scaleName = props.getProperty(scaleKey);
 			prefKey =  "score.transformers." + instrument.getName() + ".ScaleTransformer.preference";
@@ -563,7 +573,9 @@ public class ScaleTransformer extends Transformer {
 			Pitch mpdown = transformMapDOWNTemp.get(pNeutral);
 			Pitch mappedUp = new Pitch(mpup.getStep(),  p.getOctave() + octaveAdjUP, mpup.getAlteration());
 			Pitch mappedDown =  new Pitch(mpdown.getStep(),  p.getOctave() + octaveAdjDOWN, mpdown.getAlteration());
-			log.info("pitch: " + p.toString(true) + " mappedUp, mappedDown: " + mappedUp.toString(true) + " " + mappedDown.toString(true));
+			if(showMappings) {
+				log.info("pitch: " + p.toString(true) + " mappedUp, mappedDown: " + mappedUp.toString(true) + " " + mappedDown.toString(true));
+			}
 			transformMapUP.put(p, mappedUp);
 			transformMapDOWN.put(p, mappedDown);
 		}

@@ -13,14 +13,16 @@ import org.dwbzen.util.Configuration;
 
 /**
  * DataSource base class. There is a DataSource concrete instance for each
- * instrument in the score configuration.
- * Configuration parameter selectionMode determines how records are selected.
- * If sequential, data records loaded sequentially, none are skipped. So instruments using
- * the same data set will have identical scoring.
- * If random, from 2 to 10 records are skipped on each selection. So the entire data
- * set must be large enough to accommodate worse case scenario. 
- * random selectionMode should be used when multiple instruments use the same
- * fractal data set.
+ * instrument in the score configuration.<br>
+ * The dataSource.selectionMode configuration parameter determines how records are selected: random or sequential.<br>
+ * This can also be set on the ProductionFlow command line with "-rand true|false"<br>
+ * If sequential, data records loaded sequentially, none are skipped. <br>
+ * So instruments using the same data set will have (nearly) identical scoring.<br>
+ * 
+ * If random, from 2 to n records are initially skipped, where n is the value of the dataSource.skipFactor config parameter.<br>
+ * maxSize (the maximum number of records to read) is estimated as numberOfMeasures * skipFactor.<br>
+ * numberOfMeasures default is a configuration parameter and can be set on the ProductionFlow command line with "-measures n"<br>
+ * Random selectionMode should be used when multiple instruments use the same fractal data set.
  * 
  * @author don_bacon
  *
@@ -40,7 +42,7 @@ public abstract class DataSource implements IDataSource {
 	protected Stream<String> stream;
 	protected Random randomPredicate = null;
 	protected String instrumentName;
-	protected int skipFactor = 10;		// How many records to initially skip for RANDOM selection
+	protected int skipFactor = 2;
 
 	static final String SEQUENTIAL = "sequential";
 	static final String RANDOM = "random";
@@ -57,10 +59,11 @@ public abstract class DataSource implements IDataSource {
 		this.instrumentName = instrumentName;
 		configProperties = config.getProperties();
 		instrumentNames = configProperties.getProperty("score.instruments").split(",");
-		randomSelection = configProperties.getProperty("selectionMode", SEQUENTIAL).equals(RANDOM);
+		randomSelection = configProperties.getProperty("dataSource.selectionMode", SEQUENTIAL).equals(RANDOM);
 		measures = Integer.valueOf( configProperties.getProperty("measures", "20")).intValue();
+		skipFactor = Integer.valueOf( configProperties.getProperty("dataSource.skipFactor", "11")).intValue();
 		divisionsPerMeasure = Integer.parseInt(configProperties.getProperty("score.measure.divisions", "480"));
-		maxSize = measures * 8;
+		maxSize = measures * skipFactor;
 		randomPredicate = new Random(ThreadLocalRandom.current());
 		configure();
 	}
@@ -116,7 +119,7 @@ public abstract class DataSource implements IDataSource {
 
 	
 	/**
-     * Used to filter data points in a Stream for random selection.
+     * Random class is used to filter data points in a Stream for random selection.<br>
      * Does not apply (obviously) to RandomDataSource as that data
      * is generated on the fly and is already random.
      * 
@@ -136,7 +139,9 @@ public abstract class DataSource implements IDataSource {
 		@Override
 		public int getAsInt() {
 			// How many records to skip for RANDOM selection
-			return random.nextInt(2, skipFactor);
+			int skip = random.nextInt(2, skipFactor);
+			log.debug("skipping " + skip);
+			return skip;
 		}
     	
     }

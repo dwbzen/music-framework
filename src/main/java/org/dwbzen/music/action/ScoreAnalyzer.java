@@ -105,37 +105,36 @@ public class ScoreAnalyzer {
 		Map<String, Integer> pitchCounts = sa.getPitchCounts();
 		Map<String, Integer> noteCounts = sa.getNoteCounts();
 		Map<String, Integer> durCounts = sa.getDurationCounts();
-		
-		printStream.println(sa.getPartName());
+		String partName = sa.getPartName();
 		
 		if(showIntervals) {
-			printStream.println("intervals");
+			printStream.println(partName + " intervals");
 			for(Integer i : intervals.keySet()) {
 				Integer[] counts = intervals.get(i);
 				printStream.println(i + "," + counts[0] + "," + counts[1] + "," + counts[2] + "," + counts[3]);
 			}
 		}
 		if(showAbsoluteIntervals) {
-			printStream.println("absoluteIntervals");
+			printStream.println(partName + " absoluteIntervals");
 			for(Integer i : absoluteIntervals.keySet()) {
 				Integer[] counts = absoluteIntervals.get(i);
 				printStream.println(i + "," + counts[0] + "," + counts[1] + "," + counts[2] + "," + counts[3]);
 			}
 		}
 		if(showNoteFrequency) {
-			printStream.println("note frequency");
+			printStream.println(partName + " note frequency");
 			for(String key: noteCounts.keySet()) {
 				printStream.println(key + "," + noteCounts.get(key));
 			}
 		}
 		if(showPitchFrequency) {
-			printStream.println("pitch frequency");
+			printStream.println(partName + " pitch frequency");
 			for(String key: pitchCounts.keySet()) {
 				printStream.println(key + "," + pitchCounts.get(key));
 			}
 		}
 		if(showDurations) {
-			printStream.println("Durations");
+			printStream.println(partName + " Durations");
 			for(String d : durCounts.keySet()) {
 				printStream.println(d + ", " + durCounts.get(d));
 			}

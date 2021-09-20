@@ -45,8 +45,8 @@ import com.mongodb.client.MongoDatabase;
  * This creates and executes a workflow to produce a MusicXML file.</p>
  * 
  * Example usage: </p>
- * <code>ProductionFlow -measures 20 -score -xml "score20200910.xml" -analyze -random</code></p>
- * <code>ProductionFlow -measures 30 -rand  -xml "C:\\Music\\Scores\\musicXML\\score20200909.xml" -analyze</code></p>
+ * <code>ProductionFlow -measures 20 -xml "score20200910.xml" -analyze true -rand true</code></p>
+ * <code>ProductionFlow -measures 30 -xml "C:\\Music\\Scores\\musicXML\\score20200909.xml" -analyze true -rand false</code></p>
  * <dl>
  * <dt>-measures</dt> <dd>number of measures to create</dd>
  * <dt>-analyze  true|false</dt> <dd>display score analysis upon completion. Default is False.</dd>
@@ -56,14 +56,20 @@ import com.mongodb.client.MongoDatabase;
  * <dt>-save  true|false</dt> <dd>save JSON score for import into MongoDB</dd>
  * <dt>-score  true|false</dt>  <dd>if false, do not produce score files. Default is true.</dd>
  * <dt>-load  true|false</dt>  <dd>if false, do not load data. Default is true.</dd>
+ * <dt>-show  true|false</dt>  <dd>if true, show the generated score in MuseScore3</dd>
  * </dl>
+ * In order to use the "-show true" option, MuseScore must be installed locally<br>
+ * and the path to the executable set in the config parameter 'musicxmlPath',<br>
+ * for example, musicxmlPath=C:/Program Files/MuseScore 3/bin/MuseScore3.exe<br>
+ * Any scoring package that can render musicxml, Sibelius for example, can also be used.
  * <p>
  * Normally data points are selected from the data set sequentially.
- * Set -rand to select points at random (skips 2 to 20 points each iteration).
+ * Set -rand to select points at random (skips the first 2 to 11 points).<br>
+ * The skip factor is set by the configuration parameter dataSource.skipFactor
  * </p>
  * Analysis usage: </p>
  * <code>
- * ProductionFlow -measures 20 -analyze -analyzeFile "C:\\data\\music\\testScore.csv" -rand
+ * ProductionFlow -measures 20 -analyze true -analyzeFile "C:\\data\\music\\testScore.csv" -rand true
  * </code></p>
  * 
  * This will create a Score instance and analyze pitches and durations.<br>
@@ -256,7 +262,8 @@ public class ProductionFlow implements Runnable {
 		if(createXML) {
 			createXML(xmlFileName);
 			if(showScore) {
-				displayMusicXML(xmlFileName);
+				String command = configProperties.getProperty("musicxmlPath", "");
+				displayMusicXML(command, xmlFileName);
 			}
 		}
 		if(saveScore) {
@@ -286,11 +293,20 @@ public class ProductionFlow implements Runnable {
 		}
 	}
 
-	private void displayMusicXML(String xmlFileName) {
-		// TODO Auto-generated method stub
+	public static void displayMusicXML(String musicxmlProgram, String xmlFileName) {
 		// fork MuseScore with the filename provided
-		String displayXMLProgram = configProperties.getProperty("musicxmlPath");
-		
+		if(!musicxmlProgram.isEmpty()) {
+			String command = musicxmlProgram + " " + xmlFileName;
+			try {
+	            // Running the above command
+	            Runtime run  = Runtime.getRuntime();
+	            Process proc = run.exec(command);
+			}
+			catch(Exception e) {
+				System.err.println("Could not run '" + musicxmlProgram + "' because\n");
+				System.err.println(e.getMessage());
+			}
+		}	
 	}
 
 	private void createXML(String filename) {
