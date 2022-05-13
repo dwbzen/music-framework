@@ -19,7 +19,7 @@ apply plugin: 'maven-publish'
 sourceCompatibility = 15
 targetCompatibility = 15
 group = 'org.dwbzen.music-framework'
-version = '3.2'
+version = '4.0'
 description = 'Music Framework'
 
 jar {
@@ -72,7 +72,7 @@ dependencies {
     implementation  'org.apache.logging.log4j:log4j-api:2.11.2'
     implementation  'org.apache.logging.log4j:log4j-core:2.11.2'
     implementation  'org.apache.activemq:activemq-all:5.16.0'
-	implementation  'commonlib:commonlib:2.0'
+	implementation  'commonlib:commonlib:3.0'
     implementation  'com.fasterxml.jackson.core:jackson-core:2.12.0'
     implementation  'com.fasterxml.jackson.core:jackson-annotations:2.12.0'
     implementation  'com.fasterxml.jackson.core:jackson-databind:2.12.0'
