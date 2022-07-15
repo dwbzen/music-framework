@@ -61,6 +61,8 @@
 		{ "name" : "Blues Minor Maj7", "groups" : [ "blues"], "formula" : [ 3, 2, 1, 1, 4, 1], "size" : 6},
 		{ "name" : "Blues Modified", "groups" : [ "blues"], "formula" : [ 2, 1, 2, 1, 1, 3, 2], "size" : 7},
 		{ "name" : "Blues Octatonic", "groups" : [ "blues", "octatonic"], "formula" : [ 2, 1, 2, 1, 1, 2, 1, 2], "size" : 8},
+		{ "name" : "Blues Gershwin Octatonic" , "groups" : [ "blues", "octatonic"] , "formula" : [ 1, 2, 2, 2, 1, 2, 1, 1] , "size" : 8},
+		{ "name" : "Blues Heptatonic flat 6" , "groups" : [ "blues"] , "formula" : [ 3 , 2 , 1 , 1 , 1 , 2 , 2] , "size" : 7},
 		{ "name" : "Blues Pentacluster", "groups" : [ "blues"], "formula" : [ 1, 1, 1, 3, 6], "size" : 5},
 		{ "name" : "Blues PentaCluster 2b's 1#", "groups" : [ "blues"], "formula" : [ 1, 1, 1, 2, 7], "size" : 5},
 		{ "name" : "Blues PentaCluster", "groups" : [ "blues"], "formula" : [ 1, 1, 1, 3, 6], "size" : 5},
